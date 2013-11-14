@@ -217,7 +217,7 @@ class ControllerLanguageEditorLanguageEditor extends Controller {
             }
         }
 
-        $current_entry = '$_[\''.$str.'\']'.$line_spacing."= '".$current_var_value."';";
+        $current_entry = '$_[\''.$str.'\']'.$line_spacing."= '".addslashes($current_var_value)."';";
         $content = implode($file_array);
 
         $content = str_replace($current_entry, $replacement_entry, $content);
