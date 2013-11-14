@@ -6,6 +6,8 @@
 # System Cache Files
 /upload/system/cache/*
 !/upload/system/cache/index.html
+!/upload/system/seo/index.html
+!/upload/system/min/index.html
 
 # Image File
 !/upload/image/no_image.jpg
