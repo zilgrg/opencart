@@ -10,7 +10,7 @@ function vat_validation($prefix, $number) {
 		'FX' => 'FR', //France métropolitaine
 		'DE' => 'DE', //Germany
 		'GR' => 'EL', //Greece
-		'IE' => 'IE', //Irland
+		'IE' => 'IE', //Ireland
 		'IT' => 'IT', //Italy
 		'LU' => 'LU', //Luxembourg
 		'NL' => 'NL', //Netherlands
