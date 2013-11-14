@@ -38,5 +38,8 @@
 
 # If you want to ignore install file use following lines [on development mode]
 # /upload/backup.install/*
-# /upload/install/*
+# /upload/install/
+
+# vqmod Cache Files
+/upload/vqmod/vqcache/*
 
