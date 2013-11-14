@@ -12,15 +12,15 @@
 !/upload/system/cache/min/index.html
 
 # Image File
-!/upload/image/no_image.jpg
+#!/upload/image/no_image.jpg
 
 # Image Cache Files
 /upload/image/cache/*
 !/upload/image/cache/index.html
 
 # Templates Files
-/upload/image/templates/*
-/upload/image/templates/default.jpg
+#/upload/image/templates/*
+#/upload/image/templates/default.jpg
 
 # Download Files
 /upload/download/*
