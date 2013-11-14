@@ -15,17 +15,21 @@ if (!defined('DIR_APPLICATION')) {
 	exit;
 }
 
-// Startup
-require_once(DIR_SYSTEM . 'startup.php');
+// VirtualQMOD
+require_once('./vqmod/vqmod.php');
+VQMod::bootup();
+
+// VQMODDED Startup
+require_once(VQMod::modCheck(DIR_SYSTEM . 'startup.php'));
 
 // Application Classes
-require_once(DIR_SYSTEM . 'library/customer.php');
-require_once(DIR_SYSTEM . 'library/affiliate.php');
-require_once(DIR_SYSTEM . 'library/currency.php');
-require_once(DIR_SYSTEM . 'library/tax.php');
-require_once(DIR_SYSTEM . 'library/weight.php');
-require_once(DIR_SYSTEM . 'library/length.php');
-require_once(DIR_SYSTEM . 'library/cart.php');
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/customer.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/affiliate.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/currency.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/tax.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/weight.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/length.php'));
+require_once(VQMod::modCheck(DIR_SYSTEM . 'library/cart.php'));
 
 // Registry
 $registry = new Registry();
@@ -110,20 +114,20 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 	return true;
 }
-
+	
 // Error Handler
 set_error_handler('error_handler');
 
 // Request
 $request = new Request();
 $registry->set('request', $request);
-
+ 
 // Response
 $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
 $registry->set('response', $response); 
-
+		
 // Cache
 $cache = new Cache();
 $registry->set('cache', $cache); 
@@ -215,6 +219,10 @@ $registry->set('cart', new Cart($registry));
 
 //OpenBay Pro
 $registry->set('openbay', new Openbay($registry));
+$registry->set('play', new Play($registry));
+$registry->set('ebay', new Ebay($registry));
+$registry->set('amazon', new Amazon($registry));
+$registry->set('amazonus', new Amazonus($registry));
 
 // Encryption
 $registry->set('encryption', new Encryption($config->get('config_encryption')));
@@ -222,11 +230,11 @@ $registry->set('encryption', new Encryption($config->get('config_encryption')));
 // Front Controller 
 $controller = new Front($registry);
 
-// Maintenance Mode
-$controller->addPreAction(new Action('common/maintenance'));
-
 // SEO URL's
 $controller->addPreAction(new Action('common/seo_url'));	
+
+// Maintenance Mode
+$controller->addPreAction(new Action('common/maintenance'));
 	
 // Router
 if (isset($request->get['route'])) {
