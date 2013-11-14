@@ -33,7 +33,7 @@ p {
 	margin-bottom: 20px;
 }
 a, a:visited, a b {
-	color: #38B0E3;
+	color: #3b5998;
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -98,8 +98,8 @@ label {
 }
 #header #logo {
 	position: absolute;
-	top: 25px;
-	left: 15px;
+	top: 12px;
+	left: 7px;
 }
 #language {
 	position: absolute;
@@ -162,7 +162,7 @@ label {
 	margin-bottom: 3px;
 }
 #header #cart .heading a {
-	color: #38B0E3;
+	color: #3b5998;
 	text-decoration: none;
 }
 #header #cart .heading a span {
@@ -307,7 +307,7 @@ label {
 	float: left;
 	display: block;
 	padding: 0px 0px 0px 7px;
-	color: #38B0E3;
+	color: #3b5998;
 	text-decoration: none;
 	font-size: 12px;
 }
@@ -695,7 +695,7 @@ a.button:hover, input.button:hover {
 	border: 1px solid #E7E7E7;
 }
 .box-product .name a {
-	color: #38B0E3;
+	color: #3b5998;
 	font-weight: bold;
 	text-decoration: none;
 	display: block;
@@ -888,7 +888,7 @@ ul.box-filter > li ul {
 	margin-bottom: 3px;
 }
 .product-list .name a {
-	color: #38B0E3;
+	color: #3b5998;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -963,7 +963,7 @@ ul.box-filter > li ul {
 	border: 1px solid #E7E7E7;
 }
 .product-grid .name a {
-	color: #38B0E3;
+	color: #3b5998;
 	font-weight: bold;
 	text-decoration: none;
 	display: block;
@@ -1055,7 +1055,7 @@ ul.box-filter > li ul {
 	color: #4D4D4D;
 }
 .product-info .description span {
-	color: #38B0E3;
+	color: #3b5998;
 }
 .product-info .description a {
 	color: #4D4D4D;
@@ -1142,7 +1142,7 @@ ul.box-filter > li ul {
 	line-height: 20px;
 }
 .product-info .review > div > span {
-	color: #38B0E3;
+	color: #3b5998;
 }
 .product-info .review .share {
 	overflow: auto;
