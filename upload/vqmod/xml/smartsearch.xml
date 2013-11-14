@@ -1,0 +1,126 @@
+<modification>
+	
+	<id>Smart Search</id>
+	<version>156.4</version>
+	<vqmver>2.4.1</vqmver>
+	<author>Clear Thinking, LLC</author>
+	<email>johnathan@getclearthinking.com</email>
+	<website>http://www.getclearthinking.com</website>
+	
+	<file name="*/view/template/common/header.tpl" error="skip">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+				<li id="reports"><a class="top"><?php echo $text_reports; ?></a>
+			]]></search>
+			<add trim="true"><![CDATA[
+				<li><a href="<?php echo HTTPS_SERVER . 'index.php?route=report/smartsearch&token=' . $this->session->data['token']; ?>">Smart Search History</a></li>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/controller/product/search.php" error="skip">
+		<!-- All Versions -->
+		<operation error="skip">
+			<search position="before"><![CDATA[
+				_total =
+			]]></search>
+			<add trim="true"><![CDATA[
+				// Clear Thinking: Smart Search
+				if (!$this->config->get('smartsearch_status')) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after"><![CDATA[
+				_total =
+			]]></search>
+			<add trim="true"><![CDATA[
+				}
+				// end Smart Search
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[
+				results = $this->model_catalog_product
+			]]></search>
+			<add trim="true"><![CDATA[
+				// Clear Thinking: Smart Search
+				if (!$this->config->get('smartsearch_status')) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after"><![CDATA[
+				results = $this->model_catalog_product
+			]]></search>
+			<add trim="true"><![CDATA[
+				}
+				// end Smart Search
+			]]></add>
+		</operation>
+		
+		<!-- v1.5.x -->
+		<operation error="skip">
+			<search position="after" offset="2"><![CDATA[
+				'limit'               => $limit
+			]]></search>
+			<add trim="true"><![CDATA[
+				// Clear Thinking: Smart Search
+				if ($this->config->get('smartsearch_status')) {
+					$this->load->model('catalog/smartsearch');
+					$smartsearch_results = $this->model_catalog_smartsearch->smartsearch($data);
+					$product_total = count($smartsearch_results);
+					$results = $this->model_catalog_smartsearch->getProducts($smartsearch_results, $data);
+				}
+				// end Smart Search
+			]]></add>
+		</operation>
+		
+		<!-- v1.4.x -->
+		<operation error="skip">
+			<search position="before"><![CDATA[
+				if ($product_total) {
+			]]></search>
+			<add trim="true"><![CDATA[
+				// Clear Thinking: Smart Search
+				if ($this->config->get('smartsearch_status')) {
+					$this->load->model('catalog/smartsearch');
+					$limit = ($this->config->get('config_catalog_limit')) ? $this->config->get('config_catalog_limit') : 12;
+					$data = array(
+						'filter_name'			=> $this->data['keyword'],
+						'filter_description'	=> $this->data['description'],
+						'filter_model'			=> (isset($this->data['model'])) ? $this->data['model'] : $this->config->get('smartsearch_models'),
+						'filter_category_id'	=> (isset($this->data['category_id'])) ? $this->data['category_id'] : 0,
+						'sort'					=> $sort,
+						'order'					=> $order,
+						'start'					=> ($page - 1) * $limit,
+						'limit'					=> $limit
+					);
+					$smartsearch_results = $this->model_catalog_smartsearch->smartsearch($data);
+					$product_total = count($smartsearch_results);
+					$results = $this->model_catalog_smartsearch->getProducts($smartsearch_results, $data);
+				}
+				// end Smart Search
+			]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/common/header.tpl" error="skip">
+		<operation error="skip">
+			<search position="before"><![CDATA[
+				</head>
+			]]></search>
+			<add trim="true"><![CDATA[
+				<?php include_once(DIR_APPLICATION . 'view/theme/default/template/module/smartsearch.tpl'); ?>
+			]]></add>
+		</operation>
+		<!-- MijoShop fix -->
+		<operation error="skip">
+			<search position="after" index="4" offset="1"><![CDATA[
+				MijoShop::getClass
+			]]></search>
+			<add trim="true"><![CDATA[
+				<?php include_once(DIR_APPLICATION . 'view/theme/default/template/module/smartsearch.tpl'); ?>
+			]]></add>
+		</operation>
+	</file>
+	
+</modification>
