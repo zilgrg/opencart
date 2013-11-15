@@ -1,0 +1,242 @@
+/******************************
+ WIDE LAYOUT - 1220px
+*******************************/
+
+#journal-header,
+#container,
+#footer,
+#powered div {
+    width: 1220px;
+    }
+
+#content,
+.breadcrumb,
+.journal-filter,
+.filter-container {
+    max-width: 1220px;
+    }
+
+.ie8 .breadcrumb {
+    width: 1220px;
+    }
+
+#journal-header .welcome,
+.top-links,
+.safari #journal-header .welcome {
+    width: 720px;
+    }
+
+.ie8 .product-info > .left {
+    width: 440px;
+    }
+
+#logo {
+    width: 220px;
+    }
+
+#journal-header .menu {
+    width: 1000px;
+    }
+
+.product-grid > div,
+#content .box-product > div {
+    width: 219px;
+    margin-right: 17px;
+    }
+
+.journal-filter .product-grid > div {
+    margin-right: 21px;
+    }
+
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 229px;
+    margin-right: 17px;
+    }
+
+#column-right + #content .journal-filter .product-grid > div,
+#column-left + #content .journal-filter .product-grid > div {
+    width: 229px;
+    margin-right: 21px;
+    }
+
+.product-info .image a img,
+.gallery_text {
+    max-width: 420px;
+    }
+
+.product-info .image-additional a img {
+    max-width: 76px;
+    }
+
+/*Search Auto-suggest*/
+
+.autocompletesearch-suggestions {
+    margin-left: 330px;
+    }
+
+@media only screen and (max-width: 1220px) {
+.autocompletesearch-suggestions {
+    margin-left: 210px;
+    }
+
+}
+
+/*Mega-Menu*/
+
+.super-menu > li > div {
+    width: 1220px;
+    left: -220px;
+    }
+
+.product-menu-item {
+    width: 185px;
+    }
+
+@media only screen and (max-width: 1220px) {
+.super-menu > li > div {
+    width: 980px;
+    left: -200px;
+    }
+
+.product-menu-item {
+    width: 178px;
+    }
+
+.product-menu-item img {
+    width: 155px;
+    }
+
+}
+
+@media only screen and (max-width: 980px) {
+.super-menu > li > div {
+    width: 100%;
+    left: 0;
+    }
+
+.product-menu-item {
+    width: 173px;
+    }
+
+.product-menu-item img {
+    max-width: 150px;
+    }
+
+}
+
+@media only screen and (max-width: 760px) {
+.product-menu-item {
+    width: 217px;
+    }
+
+}
+
+@media only screen and (max-width: 470px) {
+.product-menu-item {
+    width: 137px;
+    }
+
+.product-menu-item img {
+    max-width: 115px;
+    }
+
+}
+
+
+/******************************
+ Photo gallery
+*******************************/
+
+#content .journal-gallery .box-heading{
+    margin-bottom: 18px;
+}
+
+.journal-gallery a{
+    display: inline-block;
+    margin-right: 17px;
+    margin-bottom: 17px;
+}
+
+.journal-gallery a img{
+   max-width: 150px;
+}
+
+@media only screen and (max-width: 1220px) {
+    #content .journal-gallery .box-heading{
+        margin-bottom: 14px;
+    }
+
+    .journal-gallery a{
+        display: inline-block;
+        margin-right: 12px;
+        margin-bottom: 12px;
+    }
+    .journal-gallery a img{
+        max-width: 143px;
+    }  
+}
+
+@media only screen and (max-width: 980px) {
+    .journal-gallery a img{
+        max-width: 133px;
+    } 
+}
+
+@media only screen and (max-width: 760px) {
+    .journal-gallery a img{
+        max-width: 136px;
+    } 
+}
+
+@media only screen and (max-width: 470px) {
+    .journal-gallery a img{
+        max-width: 132px;
+    } 
+}
+
+/*Side + Center*/
+
+
+#column-left + #content .journal-gallery a img,
+#column-right + #content .journal-gallery a img{
+   max-width: 146px;
+}
+
+@media only screen and (max-width: 1220px) {
+    #column-left + #content .journal-gallery a img,
+    #column-right + #content .journal-gallery a img{
+        max-width: 135px;
+    } 
+}
+
+@media only screen and (max-width: 980px) {
+    #column-left + #content .journal-gallery a img,
+    #column-right + #content .journal-gallery a img{
+        max-width: 120px;
+    } 
+}
+@media only screen and (max-width: 760px) {
+    #column-left + #content .journal-gallery a img,
+    #column-right + #content .journal-gallery a img{
+        max-width: 136px;
+    } 
+}
+
+@media only screen and (max-width: 470px) {
+    #column-left + #content .journal-gallery a img,
+    #column-right + #content .journal-gallery a img{
+        max-width: 132px;
+    } 
+}
+
+
+
+
+
+
+
+
+

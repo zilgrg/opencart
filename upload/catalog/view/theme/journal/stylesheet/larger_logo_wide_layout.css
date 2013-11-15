@@ -1,0 +1,260 @@
+/*Larger Logo Option*/
+
+#logo {
+    width: 350px;
+    height: 100px;
+    }
+
+#logo a img {
+    max-width: 343px;
+    max-height: 98px;
+    }
+
+header,
+#journal-header {
+    height: 140px;
+    }
+
+#cart,
+#cart .heading a,
+#search .button-search,
+header .top-header {
+    height: 50px;
+    }
+
+#cart .heading:before {
+    top: 10px;
+    }
+
+#journal-header .menu {
+    width: 1220px;
+    }
+
+#journal-header .welcome,
+.top-links,
+.safari #journal-header .welcome {
+    width: 570px;
+    height: 50px;
+    }
+
+#journal-header .cart,
+#search {
+    width: 300px;
+    height: 50px;
+    }
+
+#search input {
+    width: 260px;
+    min-width: 260px;
+    height: 50px;
+    }
+
+#journal-header .welcome form {
+    max-width: 45px;
+    }
+
+.theme_journal_iv .top-header {
+    height: 40px;
+    top: 100px;
+    }
+
+.autocompletesearch-suggestions {
+    margin-left: 310px;
+    width: 300px !important;
+    }
+
+.safari #journal-header .welcome,
+.safari #journal-header .top-links {
+    width: 570px !important;
+    height: 50px;
+    }
+
+.safari #search {
+    height: 50px;
+    }
+
+.theme_journal_iv.safari #journal-header .welcome,
+.theme_journal_iv.safari .top-links, .theme_journal_iv.safari #search {
+    height: 49px;
+    }
+
+@media only screen and (max-width: 1220px) {
+.autocompletesearch-suggestions {
+    margin-left: 260px;
+    width: 230px !important;
+    }
+
+#journal-header .menu {
+    width: 980px;
+    }
+
+#journal-header .welcome,
+.top-links,
+.safari #journal-header .welcome,
+.safari .top-links {
+    width: 400px;
+    height: 50px;
+    }
+
+#journal-header .cart,
+#search {
+    width: 230px;
+    height: 50px;
+    }
+
+#search input {
+    width: 190px;
+    min-width: 190px;
+    height: 50px;
+    }
+
+.safari #journal-header .welcome,
+.safari #journal-header .top-links {
+    width: 400px !important;
+    }
+.theme_journal_iv.safari #journal-header .welcome,
+.theme_journal_iv.safari .top-links, .theme_journal_iv.safari #search {
+    height: 49px;
+    }
+}
+
+@media only screen and (max-width: 980px) {
+#logo {
+    width: 300px;
+    height: 120px;
+    }
+
+#logo a img {
+    max-width: 300px;
+    }
+
+#journal-header .welcome,
+#journal-header .top-links,
+.safari #journal-header .welcome,
+.safari .top-links {
+    width: 469px;
+    height: 40px;
+    }
+
+header,
+#journal-header {
+    height: 160px;
+    }
+
+.theme_journal_iv .top-header {
+    top: 120px;
+    }
+
+#journal-header .cart,
+#search,
+#search input {
+    height: 40px;
+    }
+
+#cart,
+#cart .heading a,
+#search .button-search,
+header .top-header {
+    height: 40px;
+    }
+
+#journal-header .cart,
+#cart,
+#cart .heading a {
+    width: 239px;
+    }
+
+#cart .heading:before {
+    top: 6px;
+    }
+
+.safari #journal-header .welcome,
+.safari #journal-header .top-links {
+    width: 469px !important;
+    height: 40px;
+    }
+
+.safari #search,
+.safari #journal-header .cart {
+    height: 40px;
+    }
+    .theme_journal_iv.safari #journal-header .welcome,
+.theme_journal_iv.safari .top-links, .theme_journal_iv.safari #search {
+    height: 39px;
+    }
+
+}
+
+@media only screen and (max-width: 760px) {
+header,
+#journal-header {
+    height: 240px;
+    }
+
+#logo {
+    width: 480px;
+    }
+
+#logo a img {
+    max-width: 480px;
+    }
+
+#search {
+    width: 480px;
+    }
+
+#search input {
+    min-width: 430px;
+    }
+
+#journal-header .cart,
+#cart,
+#cart .heading a {
+    width: 480px;
+    }
+
+#journal-header .welcome form {
+    max-width: 40px;
+    }
+
+.safari #journal-header .welcome,
+.safari #journal-header .top-links {
+    width: 480px !important;
+    }
+
+}
+
+@media only screen and (max-width: 470px) {
+header,
+#journal-header {
+    height: 320px;
+    }
+
+#logo a img {
+    max-width: 320px;
+    }
+
+#logo {
+    width: 320px;
+    }
+
+#search {
+    width: 320px;
+    }
+
+#search input {
+    min-width: 275px;
+    }
+
+#journal-header .cart,
+#cart,
+#cart .heading a {
+    width: 320px;
+    }
+
+.safari #journal-header .welcome,
+.safari #journal-header .top-links {
+    width: 320px !important;
+    }
+
+}

@@ -1,0 +1,106 @@
+/*
+Document   : jquery.pnotify.default.css
+Created on : Nov 23, 2009, 3:14:10 PM
+Author     : Hunter Perrin
+Version    : 1.2.0
+Link       : http://pinesframework.org/pnotify/
+Description:Default styling for Pines Notify jQuery plugin.
+*/
+
+.ui-pnotify {
+top:18px;
+right:18px;
+position:absolute;
+height:auto;
+z-index:999999999;
+}
+
+html > body .ui-pnotify {
+position:fixed;
+max-width:320px;
+}
+
+.ui-pnotify .ui-pnotify-shadow {
+box-shadow:none;
+}
+
+.ui-pnotify-container {
+background-position:0 0;
+height:100%;
+margin:0;
+padding:12px 14px 14px;
+}
+
+.ui-pnotify-sharp {
+-webkit-border-radius:0;
+-moz-border-radius:0;
+border-radius:0;
+}
+
+.ui-pnotify-closer,.ui-pnotify-sticker {
+float:right;
+margin-left:.2em;
+}
+
+.ui-pnotify-closer {
+width:20px;
+height:20px;
+background:url(noti-close.png) no-repeat;
+}
+
+.ui-pnotify-title {
+display:block;
+margin-bottom:.4em;
+font-size:15px;
+padding-top:2px;
+margin-left:28px;
+}
+
+.ui-pnotify-text {
+display:block;
+line-height:1.3;
+padding-top:4px;
+}
+
+.ui-pnotify-icon,.ui-pnotify-icon span {
+display:block;
+float:left;
+margin-right:.2em;
+width:20px;
+height:20px;
+}
+
+.ui-pnotify-icon {
+background:url(noti-ok.png) no-repeat;
+}
+
+.ui-pnotify-history-container {
+position:absolute;
+top:0;
+right:18px;
+width:70px;
+border-top:none;
+-webkit-border-top-left-radius:0;
+-moz-border-top-left-radius:0;
+border-top-left-radius:0;
+-webkit-border-top-right-radius:0;
+-moz-border-top-right-radius:0;
+border-top-right-radius:0;
+z-index:10000;
+padding:0;
+}
+
+.ui-pnotify-history-container .ui-pnotify-history-header {
+padding:2px;
+}
+
+.ui-pnotify-history-container button {
+cursor:pointer;
+display:block;
+width:100%;
+}
+
+.ui-pnotify-history-container .ui-pnotify-history-pulldown {
+display:block;
+margin:0 auto;
+}

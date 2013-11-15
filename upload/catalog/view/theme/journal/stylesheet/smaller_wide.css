@@ -1,0 +1,218 @@
+/******************************
+ Smaller Product grid - 5 per row
+*******************************/
+
+.product-grid > div,
+#content .box-product > div {
+    width: 179px;
+    }
+
+.product-grid .wishlist a {
+    text-align: center;
+    padding: 0;
+    border-right: none;
+    border-bottom: 1px solid #dbdbdb;
+    display: inline-block;
+    padding-bottom: 5px;
+    }
+
+.product-grid .compare a {
+    text-align: center;
+    padding: 0;
+    }
+
+.product-grid .wishlist,
+.product-grid .compare,
+#content .box-product .wishlist,
+#content .box-product .compare {
+    float: none;
+    width: 100%;
+    display: none !important;
+    }
+
+.product-grid .wishlist {
+    margin-top: 8px;
+    margin-bottom: -6px;
+    }
+
+.journal-filter .product-grid > div,
+.product-grid .image,
+#content .box-product .image {
+    min-height: 100px;
+    }
+
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 179px;
+    }
+
+.home-container .product-grid > div,
+.home-container #content .box-product > div {
+    width: 180px;
+    margin-right: 16px;
+    }
+
+.home .journal-filter .product-grid > div {
+    width: 180px;
+    margin-right: 20px;
+    }
+
+.home-container #column-right + #content .product-grid > div,
+.home-container #column-right + #content .box-product > div,
+.home-container #column-left + #content .product-grid > div,
+.home-container #column-left + #content .box-product > div,
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 179px;
+    }
+
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 179px;
+    }
+
+.product-grid > div .cart {
+    margin-bottom: 17px;
+    }
+
+@media only screen and (max-width: 1220px) {
+.home-container .product-grid > div,
+.home-container #content .box-product > div {
+    width: 172px;
+    }
+
+.home .journal-filter .product-grid > div {
+    width: 172px;
+    }
+
+.product-grid > div,
+#content .box-product > div {
+    width: 172px;
+    }
+
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 169px;
+    }
+
+.home-container #column-right + #content .product-grid > div,
+.home-container #column-right + #content .box-product > div,
+.home-container #column-left + #content .product-grid > div,
+.home-container #column-left + #content .box-product > div,
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 169px;
+    }
+
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 168px;
+    }
+
+}
+
+@media only screen and (max-width: 980px) {
+.home-container .product-grid > div,
+.home-container #content .box-product > div {
+    width: 167px;
+    }
+
+.home .journal-filter .product-grid > div {
+    width: 167px;
+    }
+
+.product-grid > div,
+#content .box-product > div {
+    width: 167px;
+    }
+
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 162px;
+    }
+
+.home-container #column-right + #content .product-grid > div,
+.home-container #column-right + #content .box-product > div,
+.home-container #column-left + #content .product-grid > div,
+.home-container #column-left + #content .box-product > div,
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 162px;
+    }
+
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 161px;
+    }
+
+}
+
+@media only screen and (max-width: 760px) {
+.product-grid > div,
+#content .box-product > div,
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 132px;
+    }
+
+.home-container .product-grid > div,
+.home-container #content .box-product > div {
+    width: 133px;
+    }
+
+.home .journal-filter .product-grid > div {
+    width: 133px;
+    }
+
+.home-container #column-right + #content .product-grid > div,
+.home-container #column-right + #content .box-product > div,
+.home-container #column-left + #content .product-grid > div,
+.home-container #column-left + #content .box-product > div {
+    width: 133px;
+    }
+
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 134px;
+    }
+
+}
+
+@media only screen and (max-width: 470px) {
+.product-grid > div,
+#content .box-product > div,
+#column-right + #content .product-grid > div,
+#column-right + #content .box-product > div,
+#column-left + #content .product-grid > div,
+#column-left + #content .box-product > div {
+    width: 130px;
+    }
+
+.home-container .journal-filter .product-grid > div,
+.home-container #content .box-product > div {
+    margin-left: 0;
+    margin-right: 18px;
+    width: 129px;
+    }
+
+.home-container #column-right + #content .product-grid > div,
+.home-container #column-right + #content .box-product > div,
+.home-container #column-left + #content .product-grid > div,
+.home-container #column-left + #content .box-product > div {
+    width: 130px;
+    }
+
+.home-container #column-right + #content .journal-filter .product-grid > div,
+.home-container #column-left + #content .journal-filter .product-grid > div {
+    width: 130px;
+    }
+
+}
