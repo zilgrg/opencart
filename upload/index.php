@@ -1,6 +1,6 @@
 <?php
 // Version
-define('VERSION', '1.5.6');
+define('VERSION', '1.5.6.1 z');
 
 /* Testing non-beta */
 
@@ -229,6 +229,8 @@ $registry->set('encryption', new Encryption($config->get('config_encryption')));
 		
 // Front Controller 
 $controller = new Front($registry);
+
+$controller->addPreAction(new Action('module/journal_cp'));
 
 // Maintenance Mode
 $controller->addPreAction(new Action('common/maintenance'));
