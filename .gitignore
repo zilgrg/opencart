@@ -7,9 +7,9 @@
 /upload/system/cache/*
 !/upload/system/cache/index.html
 /upload/system/cache/seo/*
-/upload/system/cache/min/*
+#/upload/system/cache/min/*
 !/upload/system/cache/seo/index.html
-!/upload/system/cache/min/index.html
+#!/upload/system/cache/min/index.html
 
 # Image File
 #!/upload/image/no_image.jpg

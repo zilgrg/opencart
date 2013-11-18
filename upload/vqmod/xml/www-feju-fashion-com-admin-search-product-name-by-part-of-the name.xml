@@ -1,0 +1,12 @@
+<modification>
+	<id>Admin - Search Product Name by Part of the Name</id>
+	<version>1</version>
+	<vqmver>2.4.1</vqmver>
+	<author>www.feju-fashion.com</author>
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="replace"><![CDATA[$sql .= " AND pd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";]]></search>
+			<add><![CDATA[$sql .= " AND pd.name LIKE '%" . $this->db->escape($data['filter_name']) . "%'";]]></add>
+		</operation>
+	</file>
+</modification>
