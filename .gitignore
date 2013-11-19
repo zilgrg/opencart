@@ -14,6 +14,8 @@
 !/upload/image/.htaccess
 /upload/image/data/*
 !/upload/image/data/index.html
+/upload/image/data/demo/*
+!/upload/image/data/demo/index.html
 
 # Image Cache Files
 /upload/image/cache/*
