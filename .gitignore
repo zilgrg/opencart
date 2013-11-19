@@ -30,7 +30,7 @@
 
 # Flags 
 # remove sharp char if you want to add flags to gitignore
-/upload/image/flags/*
+#/upload/image/flags/*
 
 # System Log Files
 /upload/system/logs/*
