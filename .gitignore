@@ -44,4 +44,6 @@
 
 # vqmod Cache and Log Files
 /upload/vqmod/vqcache/*
+/upload/vqmod/vqcache/index.html
 /upload/vqmod/logs/*
+/upload/vqmod/logs/index.html
