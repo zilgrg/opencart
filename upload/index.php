@@ -1,6 +1,10 @@
 <?php
 // Version
+<<<<<<< HEAD
 define('VERSION', '1.5.6.1 z');
+=======
+define('VERSION', '1.5.6.1');
+>>>>>>> 3f5db747dba935d9f570117dd00cdfba1bcccfbd
 
 /* Testing non-beta */
 
