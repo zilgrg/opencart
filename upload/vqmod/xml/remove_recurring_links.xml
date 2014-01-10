@@ -1,0 +1,24 @@
+<modification>
+   <id><![CDATA[Remove Recurring payment Links from My Account Page]]></id>
+   <version><![CDATA[1.0]]></version>
+   <vqmver><![CDATA[2.1.6+]]></vqmver>
+   <author><![CDATA[stokeyblokey - with credits to beattie]]></author>
+   <file name="catalog/view/theme/*/template/account/account.tpl">
+      <operation error="log">
+         <search position="replace"><![CDATA[
+     <li><a href="<?php echo $recurring; ?>"><?php echo $text_recurring; ?></a></li>
+         ]]></search>
+         <add><![CDATA[
+         ]]></add>
+      </operation>
+   </file>
+   <file name="catalog/view/theme/*/template/module/account.tpl">
+      <operation error="log">
+         <search position="replace"><![CDATA[
+      <li><a href="<?php echo $recurring; ?>"><?php echo $text_recurring; ?></a></li>
+         ]]></search>
+         <add><![CDATA[
+         ]]></add>
+      </operation>
+   </file>
+</modification>
