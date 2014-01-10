@@ -11,7 +11,7 @@
 				<search position="after"><![CDATA[$controller = new $class($this->registry);]]></search>
 				<add><![CDATA[$ignore_class = array("Controlleraffiliateaccount","Controlleraffiliateedit",
 "Controlleraffiliateforgotten","Controlleraffiliatelogin","Controlleraffiliatepassword","Controlleraffiliatepayment",
-"Controlleraffiliateregister","Controlleraffiliatesuccesstracking","Controlleraffiliatetransaction","Controlleraccountvoucher","Controllerproductmanufacturer","Controllerproductspecial");
+"Controlleraffiliateregister","Controlleraffiliatesuccesstracking","Controlleraffiliatetransaction","Controllerproductmanufacturer");
 if (in_array($class, $ignore_class)){
                             $action = $this->error;
                             $this->error = '';
