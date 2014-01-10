@@ -1,0 +1,33 @@
+<modification>
+	<id><![CDATA[Removes all links in Extras column.
+                     Also modifies the front to disable direct access.]]></id>
+	<version><![CDATA[1]]></version>
+	<vqmver><![CDATA[1.0]]></vqmver>
+	<author><![CDATA[Rockambole]]></author>
+
+        <file name="system/engine/front.php">
+			<operation>
+				<ignoreif><![CDATA[$ignore_class = array();]]></ignoreif>
+				<search position="after"><![CDATA[$controller = new $class($this->registry);]]></search>
+				<add><![CDATA[$ignore_class = array("Controlleraffiliateaccount","Controlleraffiliateedit",
+"Controlleraffiliateforgotten","Controlleraffiliatelogin","Controlleraffiliatepassword","Controlleraffiliatepayment",
+"Controlleraffiliateregister","Controlleraffiliatesuccesstracking","Controlleraffiliatetransaction","Controlleraccountvoucher","Controllerproductmanufacturer","Controllerproductspecial");
+if (in_array($class, $ignore_class)){
+                            $action = $this->error;
+                            $this->error = '';
+                            return $action;
+                        }]]></add>
+			</operation>
+        </file>
+        
+        <file name="catalog/view/theme/*/template/common/footer.tpl">
+			<operation>
+				<search position="replace" offset="5"><![CDATA[<li><a href="<?php echo $manufacturer; ?>"><?php echo $text_manufacturer; ?></a></li>]]></search>
+				<add></add>
+			</operation>
+			<operation>
+				<search position="replace" index="3" offset="2"><![CDATA[<div class="column">]]></search>
+				<add></add>
+			</operation>
+		</file>
+</modification>
