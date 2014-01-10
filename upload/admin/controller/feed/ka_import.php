@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 63 $)
+  Version: 3 ($Revision: 65 $)
 
 */
 
@@ -12,7 +12,7 @@ require_once(DIR_SYSTEM . 'engine/ka_controller.php');
 class ControllerFeedKaImport extends KaController {
 
 	private $error;
-	private $extension_version = '3.5.0';
+	private $extension_version = '3.5.1';
 	private $min_store_version = '1.5.1';
 	private $max_store_version = '1.5.6.9';
 	private $tables;

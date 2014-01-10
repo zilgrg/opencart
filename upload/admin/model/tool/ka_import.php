@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 64 $)
+  Version: 3 ($Revision: 65 $)
 
 */
 
@@ -1328,18 +1328,20 @@ class ModelToolKaImport extends Model {
 		if (isset($data['layout'])) {
 			$qry = $this->db->query('SELECT * FROM ' . DB_PREFIX . "layout WHERE
 				name = '" . $this->db->escape($data['layout']) . "'"
-			);
-			if (empty($qry->row['layout_id'])) {
-				$this->addImportMessage($this->product_mark . "Product layout is not found $data[layout]");
-			} else {
+			);			
 			
-				foreach ($this->params['store_ids'] as $store_id) {
-					$this->db->query("REPLACE INTO " . DB_PREFIX . "product_to_layout SET 
-						product_id = '" . (int)$product_id . "', 
-						store_id   = '" . (int)$store_id . "', 
-						layout_id  = '" . (int)$qry->row['layout_id'] . "'"
-					);
-				}
+			if (!empty($qry->row['layout_id'])) {
+				$layout_id = $qry->row['layout_id'];
+			} else {
+				$layout_id = 0;
+			}
+			
+			foreach ($this->params['store_ids'] as $store_id) {
+				$this->db->query("REPLACE INTO " . DB_PREFIX . "product_to_layout SET 
+					product_id = '" . (int)$product_id . "', 
+					store_id   = '" . (int)$store_id . "', 
+					layout_id  = '" . (int)$layout_id . "'"
+				);
 			}
 		}
 
@@ -1921,7 +1923,7 @@ class ModelToolKaImport extends Model {
 			$val = $row[$av['column']-1];
 
 			if ($av['field'] == 'price') {
-				if (strlen(trim($val) > 0)) {
+				if (strlen(trim($val)) > 0) {
 					$record_valid = true;
 				}
 				$val = $this->formatPrice($val);
