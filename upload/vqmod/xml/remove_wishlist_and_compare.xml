@@ -1,0 +1,250 @@
+<!-- Created by Xyph3r 
+	 http://shopthemer.com
+	
+	This vQmod is for 1.5.5.x (contact me if you have problems or just delele this xml file)
+	
+	-->
+<modification>
+	<id><![CDATA[Remove Add To Wishlist and Add To Compare From OpenCart]]></id>
+	<version><![CDATA[1.0]]></version>
+	<vqmver><![CDATA[2.3.2]]></vqmver>
+	<author><![CDATA[Xyph3r(OpenCart user) http://shopthemer.com]]></author>
+	
+	<file name="catalog/view/theme/*/template/common/header.tpl">
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<a href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a>]]></search>
+			<add>
+				<![CDATA[<!--<a href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a>-->]]></add>
+		</operation>
+	</file>	
+	
+	<file name="catalog/view/theme/*/template/product/category.tpl">
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<br /><!--<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+	</file>		
+	
+	<file name="catalog/view/theme/*/template/product/manufacturer_info.tpl">
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<br /><!--<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+	</file>		
+	
+	<file name="catalog/view/theme/*/template/product/search.tpl">
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<br /><!--<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+	</file>	
+
+	<file name="catalog/view/theme/*/template/product/special.tpl">
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<br /><!--<div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>]]></search>
+			<add>
+				<![CDATA[<!--<div class="product-compare"><a href="<?php echo $compare; ?>" id="compare-total"><?php echo $text_compare; ?></a></div>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></search>
+			<add>
+				<![CDATA[// html += '<div class="compare">' + $(element).find('.compare').html() + '</div>';]]></add>
+		</operation>
+	</file>		
+	
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+	<operation error="log">
+			<search position="replace">
+				<![CDATA[<?php echo $text_or; ?>]]></search>
+			<add>
+				<![CDATA[<!--<?php echo $text_or; ?>-->]]></add>
+		</operation>
+	<operation error="log">
+			<search position="replace">
+				<![CDATA[<a onclick="addToWishList('<?php echo $product_id; ?>');"><?php echo $button_wishlist; ?></a>]]></search>
+			<add>
+				<![CDATA[<!--<a onclick="addToWishList('<?php echo $product_id; ?>');"><?php echo $button_wishlist; ?></a>-->]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">
+				<![CDATA[<a onclick="addToCompare('<?php echo $product_id; ?>');"><?php echo $button_compare; ?></a>]]></search>
+			<add>
+				<![CDATA[<!--<a onclick="addToCompare('<?php echo $product_id; ?>');"><?php echo $button_compare; ?></a>-->]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/common/footer.tpl">
+	<operation error="log">
+			<search position="replace">
+				<![CDATA[<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>]]></search>
+			<add>
+				<![CDATA[<!--<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>-->]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/account/account.tpl">
+	<operation error="log">
+			<search position="replace">
+				<![CDATA[<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>]]></search>
+			<add>
+				<![CDATA[<!--<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>-->]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/module/account.tpl">
+	<operation error="log">
+			<search position="replace">
+				<![CDATA[<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>]]></search>
+			<add>
+				<![CDATA[<!--<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>-->]]></add>
+		</operation>
+	</file>
+			
+</modification>
