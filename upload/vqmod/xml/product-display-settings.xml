@@ -232,7 +232,7 @@ $this->data['pds_location'] = $this->language->get('pds_location');
 		<span><?php echo $pds_upc; ?> </span> <?php echo $upc; ?><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_locationp') && $location) { ?>
-		<span><?php echo $pds_location; ?> </span> <?php echo $location; ?><br />
+		<span><?php echo $pds_location; ?> </span> <a href="<?php echo $location; ?>"><?php echo $location; ?></a><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_pweight') && $weight) { ?>
 		<span><?php echo $pds_weight; ?> </span> <?php echo $weight; ?><br />
