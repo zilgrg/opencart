@@ -80,9 +80,7 @@ function iever($compare=false, $to=NULL){
         <span><?php echo $text_reward; ?></span> <?php echo $reward; ?><br />
         <?php } ?>
         <span><?php echo $text_stock; ?></span> <?php echo $stock; ?></div>
-		<?php if ($model) { ?>
-        <span><?php echo $text_model; ?></span> <a href="<?php echo $model; ?>"><?php echo $model; ?></a><br />
-		<?php } ?>
+
       <?php if ($price) { ?>
        <div class="price">
         <?php if (!$special) { ?>
