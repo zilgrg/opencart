@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<modification>
+	<id>Store Logo to Invoice</id>
+	<version>1.1</version>
+	<vqmver>2.2.1</vqmver>
+	<author>manskkl@gmail.com</author>
+	<file name="admin/view/template/sale/order_invoice.tpl">
+		<operation error="skip">
+			<search position="replace"><![CDATA[
+			<h1><?php echo $text_invoice; ?></h1>
+			]]></search>
+			<add trim="true"><![CDATA[
+			<style type="text/css">
+			.store_logo {
+				width:100%;
+				height:auto;
+				text-align:right;
+				border-bottom: 1px solid #CDDDDD;
+				padding-bottom:15px;
+			}
+			.store_logo .logo {
+				width:auto;
+			}
+			.store_logo .logo img {
+				margin-right:20px;
+				width:200px;
+				margin-bottom:-10px;
+			}
+			.store_logo .title {
+				font-size:24px;
+				text-transform: uppercase;
+				color:#666;
+				border-left: 1px solid #CDDDDD;
+				padding-left:20px;
+			}
+			</style>
+			
+			<div class="store_logo">
+			<div class="logo"><img src="<?php echo $logo; ?>" title="<?php echo $order['store_name']; ?>" />
+			<span class="title"><?php echo $text_invoice; ?></span></div>
+			</div><br>
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/sale/order.php">
+		<operation error="skip">
+			<search position="after"><![CDATA[
+			$this->load->model('setting/setting');
+			]]></search>
+			<add><![CDATA[
+			$this->load->model('tool/image');
+			if ($this->config->get('config_logo') && file_exists(DIR_IMAGE . $this->config->get('config_logo')) && is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
+				$this->data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), 250, 50);		
+			} else {
+				$this->data['logo'] = $this->model_tool_image->resize('no_image.jpg', 100, 100);
+			}
+			]]></add>
+		</operation>
+	</file>
+</modification>
