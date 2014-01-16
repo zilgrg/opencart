@@ -30,6 +30,8 @@ RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
 ### RewriteCond %{HTTPS} off
 ### RewriteRule (.*) https://yama.lt/admin/ [R]
 ### ZGRewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]RewriteRule ^(.*)$ http://%1/$1 [R=301,L]### ZG
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 ### Additional Settings that may need to be enabled for some servers 
 ### Uncomment the commands by removing the # sign in front of it.
 ### If you get an "Internal Server Error 500" after enabling any of the following settings, restore the # as this means your host doesn't allow that.
