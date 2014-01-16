@@ -1,0 +1,16 @@
+<modification>
+   <id><![CDATA[Remove Continue Button from Information Pages]]></id>
+   <version><![CDATA[1.0]]></version>
+   <vqmver><![CDATA[2.1.6+]]></vqmver>
+   <author><![CDATA[stokeyblokey]]></author>
+   <file name="catalog/view/theme/*/template/information/information.tpl">
+      <operation error="log">
+         <search position="replace" offset="2"><![CDATA[
+     <div class="buttons">
+         ]]></search>
+         <add><![CDATA[
+  <!-- vQmod remove_continue_button_information_pages.xml - remove Continue button from Information pages by stokeyblokey  -->
+         ]]></add>
+      </operation>
+   </file>
+ </modification>
