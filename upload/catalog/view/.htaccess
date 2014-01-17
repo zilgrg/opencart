@@ -3,7 +3,7 @@
 Order allow,deny
 Deny from all
 </Files>
-# BEGIN Browser Caching/Headers
+#  BEGIN Browser Caching/Headers
 <IfModule mod_mime.c>
     AddType text/css .css
     AddType application/x-javascript .js
