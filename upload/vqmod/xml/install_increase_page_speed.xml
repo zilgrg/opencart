@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id><![CDATA[Increase Page Speed Package Installer]]></id>
+	<version><![CDATA[3.2]]></version>
+	<vqmver><![CDATA[2.1]]></vqmver>
+	<author><![CDATA[<a onclick="window.open('http://www.opencart.com/index.php?route=extension/extension&filter_username=Tcalp');" title="View all OpenCart Mods by Tcalp">Jeff Hunter aka Tcalp</a>]]></author>
+
+	<file name="admin/view/template/common/home.tpl">
+		<operation> <!-- ADD SUCCESS NOTIFICATION OUTPUT TO HOME -->
+			<search position="before"><![CDATA[<?php if ($error_logs) { ?>]]></search>
+			<add><![CDATA[
+			<?php 
+			$changes = array();
+			$errors = array();
+			
+			//PRODUCT_REWARD INDEX CREATION
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "product_reward` ADD INDEX (`product_id`);");
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "product_reward` ADD INDEX (`customer_group_id`);");
+			$changes[] = '\'<i>product_id</i>\' field index has been added to the \'<i>product_reward</i>\' database table.';
+			$changes[] = '\'<i>customer_group_id</i>\' field index has been added to the \'<i>product_reward</i>\' database table.';
+
+			
+			//CATEGORY COUNTS CREATION
+			$query = $this->db->query("DESC " . DB_PREFIX . "category_to_store product_count");
+			if (!$query->num_rows) {
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "category_to_store ADD product_count INT(11) NOT NULL DEFAULT '0';");
+				$changes[] = '\'<i>product_count</i>\' field has been added to the \'<i>category_to_store</i>\' database table.';
+			} else {
+				$changes[] = '\'<i>product_count</i>\' field in \'<i>category_to_store</i>\' database table was pre-existing and did not require creation.';
+			}
+			
+			// APPLY CHANGES TO HTACCESS FILE
+			if (file_exists(DIR_CATALOG . '../.htaccess')) {
+				$htdoc = file_get_contents(DIR_CATALOG . '../.htaccess');
+				if (!preg_match("/INCREASE PAGE SPEED HTACCESS MODIFICATION/i", $htdoc)) {
+					$ht  = "\r\n";
+					$ht .= '## INCREASE PAGE SPEED HTACCESS MODIFICATION ##' . "\r\n";
+					$ht .= '<ifModule mod_headers.c>' . "\r\n";
+					$ht .= '    Header set Connection keep-alive' . "\r\n";
+					$ht .= '</ifModule>' . "\r\n";
+
+					$ht .= 'AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/x-javascript' . "\r\n";
+					$ht .= 'BrowserMatch ^Mozilla/4 gzip-only-text/html' . "\r\n";
+					$ht .= 'BrowserMatch ^Mozilla/4\\.0[678] no-gzip' . "\r\n";
+					$ht .= 'BrowserMatch \\bMSIE !no-gzip !gzip-only-text/html' . "\r\n";
+
+					$ht .= '<ifModule mod_headers.c>' . "\r\n";
+					$ht .= '    Header append Vary User-Agent' . "\r\n"; 
+					$ht .= '</ifModule>' . "\r\n";
+					$ht .= '## END INCREASE PAGE SPEED HTACCESS MODIFICATION ##' . "\r\n";
+					file_put_contents(DIR_CATALOG . '../.htaccess',$ht, FILE_APPEND);
+					$changes[] = 'Primary \'<i>.htaccess</i>\' was modified successfully.';
+				} else {
+					$changes[] = 'Primary \'<i>.htaccess</i>\' file already contained required the changes and no modification was performed.';
+				}
+			} else {
+				$errors[] = 'Primary \'<i>.htaccess</i>\' file does not exist, unable to create \'<i>.htaccess</i>\' file modifications.';
+			}
+
+			// CHECK THAT THE SEO CACHE DIRECTORY IS WRITABLE
+			if (file_put_contents(DIR_CACHE . '/seo/writetest.php', '<?php ?>')) {
+				unlink(DIR_CACHE . '/seo/writetest.php');
+				$changes[] = 'Verified Writable: \'./system/cache/seo\'.';
+			} else {
+				$errors[] = 'Write permissions check failed on folder \'./system/cache/seo\', please review installation documentation.';
+			}
+			
+			// CHECK THAT THE MIN DIRECTORY IS WRITABLE
+			if (file_put_contents(DIR_CACHE . '/min/writetest.php', '<?php ?>')) {
+				unlink(DIR_CACHE . '/min/writetest.php');
+				$changes[] = 'Verified write permissions on folder \'./system/cache/min\'.';
+			} else {
+				$errors[] = 'Write permissions check failed on folder \'./system/cache/min\', please review installation documentation.';
+			}
+
+			// CHECK THAT THE MIN.CONFIG FILE IS WRITABLE
+			if (file_put_contents(DIR_CATALOG . '../min/min.config', '<?php // WRITE TEST ?>', FILE_APPEND)) {
+				$changes[] = 'Verified write permissions on file \'./min/min.config\'.';
+			} else {
+				$errors[] = 'Write permissions check failed on file \'./min/min.config\', please review installation documentation.';
+			}
+			
+			// CLEAR VQMOD CACHE
+			$files = glob(DIR_SYSTEM . '../vqmod/vqcache/*');
+			foreach($files as $file){ @unlink($file); }
+			if (file_exists(DIR_SYSTEM . '../vqmod/mods.cache')) { 	@unlink(DIR_SYSTEM . '../vqmod/mods.cache'); 			}
+			$changes[] = 'VQMod cache has been cleared successfully.';
+			
+			// REMOVE INSTALLER FILE IF ERROR FREE
+			if (!$errors) {
+				if (file_exists(DIR_SYSTEM . '../vqmod/xml/install_increase_page_speed.xml')) {
+					if (unlink(DIR_SYSTEM . '../vqmod/xml/install_increase_page_speed.xml')) {
+						$changes[] = 'Increase Page Speed automated installer has been removed.';
+					} else {
+						$errors[] = 'Unable to remove \'<i>./vqmod/xml/install_increase_page_speed.xml</i>\', please manually delete or disable this vqmod.';
+					}
+				}
+			}
+			
+			?>
+			
+			
+			<div class="<?php echo ($errors) ? 'warning' : 'success' ?>"><strong>Increase Page Speed Installation</strong><br />
+			<?php if ($changes) { ?>
+			The following changes have been made:
+			<ul>
+			<?php foreach ($changes as $change) {
+				echo '<li>' . $change . '</li>';
+			} ?>
+			</ul>
+			<?php } ?>
+			<?php if ($errors) { ?>
+				The followed errors occured during installation:
+				<ul>
+				<?php foreach ($errors as $error) {
+					echo '<li>' . $error . '</li>';
+				} ?>
+				</ul>
+				Please review installation documentation to resolve installation errors and re-visit the admin dashboard page.
+			<?php } ?>
+			</div>
+			]]></add>
+		</operation>
+	</file>
+
+</modification>
