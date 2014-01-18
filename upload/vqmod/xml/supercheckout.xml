@@ -1,0 +1,40 @@
+<modification>
+	<id>Super Checkout V1.0 BY Velocity</id>
+	<version>1.5.x</version>
+	<vqmver>2.2.1</vqmver>
+	<author>Mohit Kochhar</author>        
+	<file name="catalog/controller/checkout/checkout.php">
+		<operation>
+			<search position="after"><![CDATA[public function index() {]]></search>
+			<add><![CDATA[
+			$this->load->model('setting/setting');
+                        $result = $this->model_setting_setting->getSetting('velocity_supercheckout', $this->config->get('config_store_id'));
+                        if(!empty($result)){
+                            $this->settings = $result['supercheckout'];
+                            $this->data['settings']=$result['supercheckout'];
+                            if(empty($this->data['settings'])){
+                                        $settings = $this->model_setting_setting->getSetting('default_supercheckout', 0);            
+                                        $this->data['settings'] = $settings['default_supercheckout'];
+                                        $this->data['supercheckout']=$settings['default_supercheckout'];
+                            }
+                            if($this->data['settings']['general']['enable'] && !empty($this->data['settings'])){
+                                $this->redirect($this->url->link('supercheckout/supercheckout','','SSL'));
+                            }
+                        }
+			]]></add>
+		</operation>		
+	</file>
+	<!-- opencart 1.5.1x issue-->
+	<file name="catalog/model/setting/setting.php">
+		<operation error="skip">
+			<search position="replace"><![CDATA[$data[$result['key']] = unserialize($setting['value']);]]></search>
+			<add><![CDATA[$data[$result['key']] = unserialize($result['value']);]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/setting/setting.php">
+		<operation  error="skip">
+			<search position="replace"><![CDATA[$data[$result['key']] = unserialize($setting['value']);]]></search>
+			<add><![CDATA[$data[$result['key']] = unserialize($result['value']);]]></add>
+		</operation>
+	</file>	
+</modification>
