@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 65 $)
+  Version: 3 ($Revision: 66 $)
 
 */
 
@@ -60,6 +60,7 @@ class ModelToolKaImport extends Model {
 	protected $product_mark = ''; // current product identfier in format like '(model: MK1233): '
 	
 	protected $key_fields = null;
+	protected $org_error_handler = null;
 
 	function __construct(&$registry) {
 		parent::__construct($registry);
@@ -87,6 +88,22 @@ class ModelToolKaImport extends Model {
 			$key_fields = array('model');
 		}
 		$this->key_fields = $key_fields;
+		
+		$this->org_error_handler = set_error_handler(array($this, 'import_error_handler'));
+	}
+	
+	/*
+		Never give up :)
+	*/
+	public function import_error_handler($errno, $errstr, $errfile, $errline) {
+
+		if ($errno == E_WARNING) {
+			if (preg_match("/iconv stream filter.*invalid multibyte/", $errstr)) {
+				return true;
+			}
+		}
+		
+		return $this->org_error_handler;
 	}
 
  	/*
@@ -390,15 +407,16 @@ class ModelToolKaImport extends Model {
 			return false;
 		}
 		$this->columns = fgetcsv($handle, 0, $sep, $this->enclosure);
+		fclose($handle);
 
-		if (!empty($this->columns)) {
-			foreach ($this->columns as &$cv) {
-				$cv = trim($cv);
-			}
+		if (empty($this->columns)) {
+			return false;
+		}
+				
+		foreach ($this->columns as &$cv) {
+			$cv = trim($cv);
 		}
 
-    	fclose($handle);
-	
     	return true;
 	}
 
@@ -610,7 +628,7 @@ class ModelToolKaImport extends Model {
 				$curl = curl_init($tmp_url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($curl, CURLOPT_HEADER, true);
-				curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 23);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 				$response = curl_exec($curl);
@@ -898,10 +916,10 @@ class ModelToolKaImport extends Model {
 		$this->params = $params;
 
 		if (!$this->readColumns($params['file'], $params['delimiter'])) {
-			$this->lastError = 'Invalid file header';
+			$this->lastError = 'Column names cannot be read. Please try another charset.';
 			return false;
 		}
-
+		
 		$this->params['columns'] = $this->columns;
 
 		return true;
@@ -1915,7 +1933,7 @@ class ModelToolKaImport extends Model {
 		$data = array();
 
 		$record_valid = false;		
-		foreach ($this->params['matches']['discounts'] as $ak => $av) {		
+		foreach ($this->params['matches']['discounts'] as $ak => $av) {
 		
 			if (empty($av['column']))
 				continue;
