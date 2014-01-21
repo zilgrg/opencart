@@ -1,0 +1,14 @@
+<modification>
+    <id>Hide OpenCart version number</id>
+    <version>1</version>
+    <vqmver>2.4.1</vqmver>
+    <author>Welford Media http://shop.openbaypro.com/</author>
+    <file name="admin/view/template/common/footer.tpl">
+        <operation>
+            <search position="replace"><![CDATA[<div id="footer"><?php echo $text_footer; ?></div>]]></search>
+            <add><![CDATA[<?php if ($this->user->isLogged()) { ?>
+<div id="footer"><?php echo $text_footer; ?></div>
+<?php } ?>]]></add>
+        </operation>
+    </file>
+</modification>
