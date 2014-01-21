@@ -2,7 +2,7 @@
 	<id>Checkout Confirrm Addresses</id>
 	<version>1.1</version>
 	<vqmver>1.2.3</vqmver>
-	<author>grgr</author>
+	<author>ZG modified</author>
 	<file name="catalog/controller/checkout/confirm.php">
         <operation>
             <search position="before"><![CDATA[
@@ -105,18 +105,6 @@ $this->data['column_total'] = $this->language->get('column_total');
 		<?php echo $shipping_address;?>
 </div>
 <div style="clear:both; margin-top: 10px;">&nbsp;</div>
-			]]></add>
-        </operation>
-	</file>
-
-	<file name="catalog/language/english/checkout/checkout.php">
-        <operation>
-            <search position="after"><![CDATA[
-$_['text_payment_method']            = 'Please select the preferred payment method to use on this order.';
-			]]>	</search>
-            <add><![CDATA[
-$_['text_payment_address']			 = 'Payment Address';
-$_['text_shipping_address']		 = 'Shipping Address';
 			]]></add>
         </operation>
 	</file>

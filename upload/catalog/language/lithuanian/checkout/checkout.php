@@ -28,6 +28,8 @@ $_['text_address_new']               = 'I want to use a new address';
 $_['text_address_existing']          = 'I want to use an existing address';
 $_['text_shipping_method']           = 'Please select the preferred shipping method to use on this order.';
 $_['text_payment_method']            = 'Please select the preferred payment method to use on this order.';
+$_['text_payment_address']           = 'Payment Address';
+$_['text_shipping_address']          = 'Shipping Address';
 $_['text_comments']                  = 'Add Comments About Your Order';
 
 $_['text_recurring_item']            = 'Recurring item';
