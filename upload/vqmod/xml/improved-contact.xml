@@ -1,0 +1,195 @@
+<modification>
+
+
+
+	<id>Dijitul Improved Contact Page</id>
+
+	<version>1.0</version>
+
+	<vqmver>2.1.6</vqmver>
+
+	<author>Ben Lumley @abenlumley - Dijitul.com</author>
+
+	<file name="admin/controller/setting/setting.php">
+
+		<operation>
+			<search position="after"><![CDATA[$this->data['entry_fax'] = $this->language->get('entry_fax');]]></search>
+
+			<add>
+				<![CDATA[
+				$this->data['entry_compinfo'] = $this->language->get('entry_compinfo');
+				$this->data['entry_contactem'] = $this->language->get('entry_contactem');
+				$this->data['entry_cmap'] = $this->language->get('entry_cmap');
+				]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after" offset="5"><![CDATA[if (isset($this->request->post['config_address'])) {]]></search>
+
+			<add>
+				<![CDATA[
+				if (isset($this->request->post['config_compinfo'])) {
+					$this->data['config_compinfo'] = $this->request->post['config_compinfo'];
+				} else {
+					$this->data['config_compinfo'] = $this->config->get('config_compinfo');
+				}
+
+				]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after" offset="5"><![CDATA[if (isset($this->request->post['config_fax'])) {]]></search>
+
+			<add>
+				<![CDATA[
+				if (isset($this->request->post['config_contactem'])) {
+					$this->data['config_contactem'] = $this->request->post['config_contactem'];
+				} else {
+					$this->data['config_contactem'] = $this->config->get('config_contactem');
+				}
+				]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after" offset="5"><![CDATA[if (isset($this->request->post['config_contactem'])) {]]></search>
+
+			<add>
+				<![CDATA[
+				if (isset($this->request->post['config_cmap'])) {
+					$this->data['config_cmap'] = $this->request->post['config_cmap'];
+				} else {
+					$this->data['config_cmap'] = $this->config->get('config_cmap');
+				}
+				]]>
+			</add>
+		</operation>
+
+
+	</file>
+
+	<file name="admin/view/template/setting/setting.tpl">
+		<operation>
+			<search position="after"><![CDATA[<input type="text" name="config_fax" value="<?php echo $config_fax; ?>" />]]></search>
+
+			<add>
+
+			<![CDATA[
+			<tr>
+
+              <td>Company Info:</td>
+
+              <td><textarea name="config_compinfo" cols="40" rows="5"><?php echo $config_compinfo; ?></textarea></td>
+
+            </tr>
+			<tr>
+
+              <td>Contact E-Mail:</td>
+
+              <td><input type="text" name="config_contactem" value="<?php echo $config_contactem; ?>" size="40"/></td>
+
+            </tr>
+
+            <tr>
+
+              <td>Map (full iframe link):</td>
+
+              <td><input type="text" name="config_cmap" value="<?php echo $config_cmap; ?>" size="40"/></td>
+
+            </tr>
+            ]]>
+			</add>
+		</operation>
+
+	</file>
+
+	<file name="catalog/controller/information/contact.php">
+		<operation>
+			<search position="after"><![CDATA[$this->data['text_fax'] = $this->language->get('text_fax');]]></search>
+
+			<add>
+				<![CDATA[
+				$this->data['text_compinfo'] = $this->language->get('text_compinfo');
+
+				$this->data['text_contactem'] = $this->language->get('text_contactem');
+
+				$this->data['text_cmap'] = $this->language->get('text_cmap');
+				]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after"><![CDATA[$this->data['fax'] = $this->config->get('config_fax');]]></search>
+
+			<add>
+				<![CDATA[
+				$this->data['compinfo'] = $this->config->get('config_compinfo');
+
+				$this->data['contactem'] = $this->config->get('config_contactem');
+
+				$this->data['cmap'] = $this->config->get('config_cmap');
+				]]>
+			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/view/theme/*/template/information/contact.tpl">
+
+	<operation>
+		<search position="replace"><![CDATA[<?php echo $address; ?></div>]]></search>
+
+		<add>
+			<![CDATA[
+			<?php echo $address; ?>
+			<br />
+	        <br />
+
+	        <strong style="margin-bottom: 5px;">Company Information:</strong><br />
+
+
+	        <?php echo nl2br($compinfo); ?>
+	        </div>
+			]]>
+		</add>
+	</operation>
+
+	<operation>
+		<search position="after" offset="1"><![CDATA[<?php echo $fax; ?>]]></search>
+		<add>
+			<![CDATA[
+
+	        <br />
+	        <br />
+
+	        <b>Our Email: </b><br />
+
+	        <a href="mailto:<?php echo $contactem; ?>" title="Contact Us by Email"><?php echo $contactem; ?></a>
+			]]>
+		</add>
+	</operation>
+
+	<operation>
+		<search position="replace"><![CDATA[<textarea name="enquiry" cols="40" rows="10" style="width: 99%;">]]></search>
+
+		<add>
+			<![CDATA[
+				<textarea name="enquiry" cols="40" rows="10" style="width: 40%;">
+			]]>
+		</add>
+	</operation>
+
+	<operation>
+		<search position="after"><![CDATA[<img src="index.php?route=information/contact/captcha" alt="" />]]></search>
+
+		<add>
+			<![CDATA[
+			<div style="float: right; margin-top: -388px;"><?php echo html_entity_decode($cmap); ?></div>
+			]]>
+		</add>
+	</operation>
+
+	</file>
+
+</modification>
