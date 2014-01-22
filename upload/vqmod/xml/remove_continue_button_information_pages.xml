@@ -9,7 +9,7 @@
      <div class="buttons">
          ]]></search>
          <add><![CDATA[
-  <!-- vQmod remove_continue_button_information_pages.xml - remove Continue button from Information pages by stokeyblokey  -->
+  <!-- remove Continue button from Information pages  -->
          ]]></add>
       </operation>
    </file>
