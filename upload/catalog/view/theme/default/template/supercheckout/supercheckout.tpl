@@ -6,7 +6,7 @@
 <fieldset class="group-select" style="margin: 0;border:none;">
 <?php if($settings['general']['layout']=='3-Column'){ ?>    
     <div class="supercheckout-threecolumns supercheckout-container supercheckout-skin-generic " id="supercheckout-columnleft">
-        <div class="supercheckout-column-left columnleftsort" id="columnleft-1" style="width:<?php $i= $settings['general']['column_width']['three-column'][1]*.92; echo $i; ?>%"> 
+        <div class="supercheckout-column-left columnleftsort" id="columnleft-1" style="width:<?php $i= $settings['general']['column_width']['three-column'][1]*.90; echo $i; ?>%"> 
             <div  class="supercheckout-blocks" data-column="<?php echo $sort_block['login']['three-column']['column']; ?>" data-row="<?php echo $sort_block['login']['three-column']['row']; ?>"  >
                 <ul class="headingCheckout">
                     <li>
@@ -287,7 +287,7 @@
             </div>
         </div>
 
-        <div class="supercheckout-column-middle columnleftsort" id="columnleft-2"  style="width:<?php $i= $settings['general']['column_width']['three-column'][2]*.89; echo $i; ?>%">
+        <div class="supercheckout-column-middle columnleftsort" id="columnleft-2"  style="width:<?php $i= $settings['general']['column_width']['three-column'][2]*.91; echo $i; ?>%">
             
             <?php if($settings['step']['shipping_method']['display_options']){ ?>
             <div  class="supercheckout-blocks" data-column="<?php echo $sort_block['shipping_method']['three-column']['column']; ?>" data-row="<?php echo $sort_block['shipping_method']['three-column']['row']; ?>" >
@@ -301,6 +301,11 @@
                 
                 
                 <div id="shipping-method">
+                    <?php if(!$shipping_required){ ?>
+                    <div class="checkout-content" style="display:block">
+                        <div class="permanent-warning" style="display: block;">No shipping required with these product(s).<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+                    </div>
+                <?php } ?> 
                     <?php if($error_warning_shipping){ ?>
                     <div class="checkout-content" style="display:block">
                         <div class="warning" style="display: block;"><?php echo $error_warning_shipping; ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
@@ -312,7 +317,7 @@
                     <?php if ($error_warning) { ?>
                     <div class="warning"><?php echo $error_warning; ?></div>
                     <?php } ?>
-                    <?php if ($shipping_methods) { ?>
+                    <?php if ($shipping_methods && $shipping_required) { ?>
 
                     <table class="radio">
                         <?php foreach ($shipping_methods as $shipping_method) { ?>
@@ -384,7 +389,7 @@
             </div>
             <?php } ?>
         </div>
-        <div class="supercheckout-column-right columnleftsort" id="columnleft-3" style="width:<?php $i= $settings['general']['column_width']['three-column'][3]*.92; echo $i; ?>%">
+        <div class="supercheckout-column-right columnleftsort" id="columnleft-3" style="width:<?php $i= $settings['general']['column_width']['three-column'][3]*.91; echo $i; ?>%">
             <div class="supercheckout-blocks confirmCheckoutBack" data-column="<?php echo $sort_block['cart']['three-column']['column']; ?>" data-row="<?php echo $sort_block['cart']['three-column']['row']; ?>" style="display:<?php if($logged){ if($settings['option']['logged']['cart']['display']){ echo' ';}else{ echo'none';} }else{ if($settings['option']['guest']['cart']['display']){ echo' ';}else{ echo'none';}} ?>;">
                 <ul>
                     <li>
@@ -506,7 +511,7 @@
     </div>
     <?php }elseif($settings['general']['layout']=='2-Column'){ ?>
     <div class="supercheckout-threecolumns supercheckout-container supercheckout-skin-generic " id="supercheckout-columnleft">
-        <div class="supercheckout-column-left columnleftsort" id="columnleft-1" style="width:<?php $i= $settings['general']['column_width']['two-column']['out'][1]*.92; echo $i; ?>%"> 
+        <div class="supercheckout-column-left columnleftsort" id="columnleft-1" style="width:<?php $i= $settings['general']['column_width']['two-column']['out'][1]*.89; echo $i; ?>%"> 
             <div  class="supercheckout-blocks" data-column="<?php echo $sort_block['login']['two-column']['column']; ?>" data-row="<?php echo $sort_block['login']['two-column']['row']; ?>" data-column-inside="<?php echo $sort_block['login']['two-column']['column-inside']; ?>"  >
                 <ul class="headingCheckout">
                     <li>
@@ -803,8 +808,13 @@
                     </li>                
                 </ul>
                 
-                
+                               
                 <div id="shipping-method">
+                    <?php if(!$shipping_required){ ?>
+                    <div class="checkout-content" style="display:block">
+                        <div class="permanent-warning" style="display: block;">No shipping required with these product(s).<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+                    </div>
+                <?php } ?> 
                     <?php if($error_warning_shipping){ ?>
                     <div class="checkout-content" style="display:block">
                         <div class="warning" style="display: block;"><?php echo $error_warning_shipping; ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
@@ -816,7 +826,7 @@
                     <?php if ($error_warning) { ?>
                     <div class="warning"><?php echo $error_warning; ?></div>
                     <?php } ?>
-                    <?php if ($shipping_methods) { ?>
+                    <?php if ($shipping_methods && $shipping_required) { ?>
 
                     <table class="radio">
                         <?php foreach ($shipping_methods as $shipping_method) { ?>
@@ -1319,6 +1329,11 @@
                 
                 
                 <div id="shipping-method">
+                    <?php if(!$shipping_required){ ?>
+                    <div class="checkout-content" style="display:block">
+                        <div class="permanent-warning" style="display: block;">No shipping required with these product(s).<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+                    </div>
+                <?php } ?> 
                     <?php if($error_warning_shipping){ ?>
                     <div class="checkout-content" style="display:block">
                         <div class="warning" style="display: block;"><?php echo $error_warning_shipping; ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
@@ -1330,7 +1345,7 @@
                     <?php if ($error_warning) { ?>
                     <div class="warning"><?php echo $error_warning; ?></div>
                     <?php } ?>
-                    <?php if ($shipping_methods) { ?>
+                    <?php if ($shipping_methods && $shipping_required) { ?>
 
                     <table class="radio">
                         <?php foreach ($shipping_methods as $shipping_method) { ?>
@@ -2188,6 +2203,7 @@ function validateGuestPaymentAddress(){
                         if (json['error']['zone']) {
                             $('#payment-new select[name=\'zone_id\']').after('<span class="errorsmall">' + json['error']['zone'] + '</span>');
                         }
+                        goToByScroll('checkoutBillingAddress');
                     } 
                     else {
                         checkGuestShippingAddress();
@@ -2267,6 +2283,7 @@ function validateGuestPaymentAddress(){
                         if (json['error']['zone']) {
                             $('#payment-new select[name=\'zone_id\']').after('<span class="errorsmall">' + json['error']['zone'] + '</span>');
                         }
+                        goToByScroll('checkoutBillingAddress');
                     } 
                     else {
                         checkGuestShippingAddress();
@@ -2336,6 +2353,7 @@ function validateGuestShippingAddress(){
                 if (json['error']['zone']) {
                     $('#shipping-new select[name=\'zone_id\']').after('<span class="errorsmall">' + json['error']['zone'] + '</span>');
                 }
+                goToByScroll('checkoutShippingAddress');
             } else {
                 var checkGuestRegisterEnable="<?php echo $settings['general']['guestenable']; ?>";
                 if(checkGuestRegisterEnable==1){
@@ -2796,6 +2814,11 @@ $('#payment-new select[name=\'country_id\']').bind('change', function() {
 <script>
 //ON CHECKING - UNCHECKING USE FOR SHIPPING CHECKBOX
     $(document).ready(function(){
+var shipping_display="<?php  echo $settings['option']['guest']['payment_address']['fields']['shipping']['display'] ?>";
+var loggedIn="<?php echo $logged; ?>";//271
+if(shipping_display=="0" && loggedIn==""){
+    $('#checkoutShippingAddress').slideDown('slow');
+}
         $("#shipping_use").change(function(){ 
             if($(this).is(":checked"))
             {
@@ -3042,6 +3065,17 @@ function redeem(id){
                         class_name:'gritter-success',
                         sticky: false,
                         time: '2000'
+                });
+                $.ajax({
+                    url: 'index.php?route=supercheckout/shipping_method',
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#shipping-method').html(html);
+                        $('#shippingMethodLoader').hide();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
                 });
 //                            $('#paymentDisable').html("");
 //                            $('#confirmCheckout .checkout-content').prepend('<div class="success"><?php echo $text_remove; ?></div>');

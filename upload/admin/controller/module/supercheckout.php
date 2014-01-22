@@ -365,11 +365,13 @@ class ControllerModuleSupercheckout extends Controller {
         $this->data['shipping_methods'] = array();
         $shipping_methods = $this->model_setting_extension->getInstalled('shipping');        
         foreach ($shipping_methods as $shipping) {
-            $this->load->language('shipping/' . $shipping);
-            $this->data['shipping_methods'][] = array(
-                'code' => $shipping,
-                'title' => $this->language->get('heading_title')
-            );
+            if ($this->config->get($shipping . '_status')) {
+                $this->load->language('shipping/' . $shipping);
+                $this->data['shipping_methods'][] = array(
+                    'code' => $shipping,
+                    'title' => $this->language->get('heading_title')
+                );
+            }
         }
 
         //Get Payment methods
@@ -377,11 +379,13 @@ class ControllerModuleSupercheckout extends Controller {
         $this->data['payment_methods'] = array();
         $payment_methods = $this->model_setting_extension->getInstalled('payment');
         foreach ($payment_methods as $payment) {
-            $this->load->language('payment/' . $payment);
-            $this->data['payment_methods'][] = array(
-                'code' => $payment,
-                'title' => $this->language->get('heading_title')
-            );
+            if ($this->config->get($payment . '_status')) {
+                $this->load->language('payment/' . $payment);
+                $this->data['payment_methods'][] = array(
+                    'code' => $payment,
+                    'title' => $this->language->get('heading_title')
+                );
+            }
         }
         
         
@@ -480,7 +484,7 @@ class ControllerModuleSupercheckout extends Controller {
 
         public function install() {
             $this->load->model('setting/setting');
-$default_settings = array('default_supercheckout' => array('general' => array(
+        $default_settings = array('default_supercheckout' => array('general' => array(
         'enable' => 0,
         'guestenable' => 0,
         'layout' => '3-Column',

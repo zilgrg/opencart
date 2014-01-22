@@ -1,7 +1,12 @@
+<?php if(!$shipping_required){ ?>
+                    <div class="checkout-content" style="display:block">
+                        <div class="permanent-warning" style="display: block;">No shipping required with these product(s).<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+                    </div>
+                <?php } ?>
 <?php if ($error_warning) { ?>
 <div class="warning"><?php echo $error_warning; ?></div>
 <?php } ?>
-<?php if ($shipping_methods) { ?>
+<?php if ($shipping_methods && $shipping_required) { ?>
 <table class="radio">
     <?php foreach ($shipping_methods as $shipping_method) { ?>
     <?php if (!$shipping_method['error']) { ?>

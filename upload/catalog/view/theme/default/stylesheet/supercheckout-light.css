@@ -1426,3 +1426,27 @@ table.radio tr.highlight:hover td {
     border-bottom: 1px solid #F2F2F2;
     border-right: 1px solid #F2F2F2;
 }
+.permanent-warning{
+    background: url("../image/warning.png") no-repeat scroll 10px center #FFD1D1;
+    border: 1px solid #F8ACAC;
+    border-radius: 5px;
+    position: static;
+    height: 25px;
+    width: 100%;
+    color: #555555;
+    margin-bottom: 15px;
+    padding: 10px 10px 10px 33px;
+}
+.warning{
+    
+    background: url("../image/warning.png") no-repeat scroll 10px center #FFD1D1;
+    border: 1px solid #F8ACAC;
+    border-radius: 5px;
+    position: static;
+    height: 25px;
+    width: 100%;
+    color: #555555;
+    margin-bottom: 15px;
+    padding: 10px 10px 10px 33px;
+
+}

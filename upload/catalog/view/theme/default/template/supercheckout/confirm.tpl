@@ -78,7 +78,20 @@ $('#columnleft-3').css('min-height', a+'px');
         </tr>
     </tbody>
 
-</table>            
+</table>     
+            <script>
+var a= $('#supercheckout-columnleft').height();
+var b= $('#column-1-inside').height();
+var c= $('#column-2-inside').height();
+$('#columnleft-1').css('min-height', a+'px');
+$('#columnleft-3').css('min-height', a+'px');
+if(c>b){
+    $('#column-1-inside').css('min-height', c+'px');
+}else{
+    $('#column-2-inside').css('min-height', b+'px');
+}
+//$('#columnleft-1').height(a);
+</script>
 <?php } else { ?>
 <script type="text/javascript"><!--
     location = '<?php echo $redirect; ?>';

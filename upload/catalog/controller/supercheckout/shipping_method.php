@@ -74,6 +74,7 @@ class ControllerSupercheckoutShippingMethod extends Controller {
         $this->data['text_shipping_method'] = $this->language->get('text_shipping_method');
         $this->data['text_comments'] = $this->language->get('text_comments');
         $this->data['button_continue'] = $this->language->get('button_continue');
+        $this->data['shipping_required'] = $this->cart->hasShipping();
 
         if (empty($this->session->data['shipping_methods'])) {
 
@@ -212,28 +213,29 @@ class ControllerSupercheckoutShippingMethod extends Controller {
                 break;
             }
         }
+        if($this->cart->hasShipping()){
+                if (!$json) {
+                    if (!isset($this->request->post['shipping_method'])) {
 
-        if (!$json) {
-            if (!isset($this->request->post['shipping_method'])) {
+                        $json['error']['warning'] = $this->language->get('error_shipping');
 
-                $json['error']['warning'] = $this->language->get('error_shipping');
+                    } else {
 
-            } else {
+                        $shipping = explode('.', $this->request->post['shipping_method']);
 
-                $shipping = explode('.', $this->request->post['shipping_method']);
+                        if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]])) {
 
-                if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]])) {
+                            $json['error']['warning'] = $this->language->get('error_shipping');
 
-                    $json['error']['warning'] = $this->language->get('error_shipping');
+                        }
+                    }
 
+                    if (!$json) {
+                        $shipping = explode('.', $this->request->post['shipping_method']);
+
+                        $this->session->data['shipping_method'] = $this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]];
+                    }
                 }
-            }
-
-            if (!$json) {
-                $shipping = explode('.', $this->request->post['shipping_method']);
-
-                $this->session->data['shipping_method'] = $this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]];
-            }
         }
 
         $this->response->setOutput(json_encode($json));
