@@ -1,0 +1,265 @@
+<modification>
+	<id>Remove region and state for OC 1.5.5.1</id>
+	<version>3.0</version>
+	<vqmver>2.1.6</vqmver>
+	<author>jhb, mirek, thbr02</author>
+	
+	<!--This VQMod is made to suit a custom theme. If it won't work you have to change the search string to suit your theme-->
+	
+	<!--Remove from guest checkout-->
+	<file name="catalog/controller/checkout/guest.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/guest_shipping.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/guest.tpl">
+		<operation>
+			<search position="before" offset="2"><![CDATA[<span class="required">*</span> <?php echo $entry_zone; ?><br />]]></search>
+			<add><![CDATA[<div style="display:none;">]]></add>
+		</operation>
+		<operation>
+			<search position="after" offset="2"><![CDATA[<span class="required">*</span> <?php echo $entry_zone; ?><br />]]></search>
+			<add><![CDATA[</div>]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/guest_shipping.tpl">
+		<operation>
+			<search position="replace" index="1" offset="2"><![CDATA[</select></td>]]></search>
+			<add><![CDATA[</select></td>
+  </tr>
+  <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+
+	<!--Remove from account creation during checkout-->
+	<file name="catalog/controller/checkout/register.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/payment_address.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/shipping_address.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/register.tpl">
+		<operation>
+			<search position="before" offset="2"><![CDATA[<span class="required">*</span> <?php echo $entry_zone; ?><br />]]></search>
+			<add><![CDATA[<div style="display:none;">]]></add>
+		</operation>
+		<operation>
+			<search position="after" offset="2"><![CDATA[<span class="required">*</span> <?php echo $entry_zone; ?><br />]]></search>
+			<add><![CDATA[</div>]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/payment_address.tpl">
+		<operation>
+			<search position="replace" index="1" offset="2"><![CDATA[</select></td>]]></search>
+			<add><![CDATA[</select></td>
+  </tr>
+  <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/shipping_address.tpl">
+		<operation>
+			<search position="replace" index="1" offset="2"><![CDATA[</select></td>]]></search>
+			<add><![CDATA[</select></td>
+  </tr>
+  <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+  
+	<!--Remove from account creation without checkout-->
+	<file name="catalog/controller/account/register.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/account/address.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/account/register.tpl">
+		<operation>
+			<search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_country; ?></span>]]></search>
+			<add><![CDATA[<span class="error"><?php echo $error_country; ?></span>
+            <?php } ?></td>
+        </tr>
+        <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/account/address_form.tpl">
+		<operation>
+			<search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_country; ?></span>]]></search>
+			<add><![CDATA[<span class="error"><?php echo $error_country; ?></span>
+            <?php } ?></td>
+        </tr>
+        <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+	
+	<!-- Remove from customer admin-->
+	<file name="admin/controller/sale/customer.php">
+		<operation error="log">
+            <search position="replace" offset="2"><![CDATA[if (!isset($value['zone_id']) || $value['zone_id'] == '') {]]></search>
+            <add><![CDATA[$value['zone_id'] = '';/*if (!isset($value['zone_id']) || $value['zone_id'] == '') {
+					$this->error['address_zone'][$key] = $this->language->get('error_zone');
+					}*/
+			]]></add>
+        </operation>
+	</file>
+	
+	<file name="admin/view/template/sale/customer_form.tpl">		
+		<operation error="log">
+            <search position="replace" offset="5"><![CDATA[html += '         <option value="<?php echo $country['country_id']; ?>"><?php echo addslashes($country['name']); ?></option>';]]></search>
+            <add><![CDATA[html += '         <option value="<?php echo $country['country_id']; ?>"><?php echo addslashes($country['name']); ?></option>';
+                  <?php } ?>
+    html += '      </select></td>';
+    html += '    </tr>';
+    html += '    <tr style="display:none;">';
+    html += '      <td><?php echo $entry_zone; ?></td>';
+			]]></add>
+        </operation>
+		
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_address_country[$address_row]; ?></span>]]></search>
+            <add><![CDATA[<span class="error"><?php echo $error_address_country[$address_row]; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr style="display:none;">
+			]]></add>
+        </operation>
+		
+	</file>
+	
+	<!-- Remove from order admin-->
+	<file name="admin/view/template/sale/order_form.tpl">		
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_shipping_country; ?></span>]]></search>
+            <add><![CDATA[<span class="error"><?php echo $error_shipping_country; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr style="display:none;">
+			]]></add>
+        </operation>
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_payment_country; ?></span>]]></search>
+            <add><![CDATA[<span class="error"><?php echo $error_payment_country; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr style="display:none;">
+			]]></add>
+        </operation>
+	</file>
+	
+	<file name="admin/view/template/sale/order_info.tpl">		
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<td><?php echo $payment_postcode; ?></td>]]></search>
+            <add><![CDATA[<td><?php echo $payment_postcode; ?></td>
+                  </tr>
+				  <?php } ?>              
+              <tr style="display:none;">
+			]]></add>
+        </operation>
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<td><?php echo $shipping_postcode; ?></td>]]></search>
+            <add><![CDATA[<td><?php echo $shipping_postcode; ?></td>
+                  </tr>
+				  <?php } ?>              
+              <tr style="display:none;">
+			]]></add>
+        </operation>
+	</file>	
+	
+		<!--Remove from affiliate creation-->
+	<file name="catalog/controller/affiliate/register.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>		
+		</operation>
+	</file>
+
+	<file name="catalog/view/theme/*/template/affiliate/register.tpl">
+		<operation>
+			<search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_country; ?></span>]]></search>
+			<add><![CDATA[<span class="error"><?php echo $error_country; ?></span>
+            <?php } ?></td>
+        </tr>
+        <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+	
+	<file name="catalog/controller/affiliate/edit.php">
+		<operation>
+			<search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>		
+		</operation>
+	</file>
+	
+	<file name="catalog/view/theme/*/template/affiliate/edit.tpl">
+		<operation>
+			<search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_country; ?></span>]]></search>
+			<add><![CDATA[<span class="error"><?php echo $error_country; ?></span>
+            <?php } ?></td>
+        </tr>
+        <tr style="display:none;">]]></add>
+		</operation>
+	</file>
+	
+	<!-- Remove from affiliate admin-->
+	<file name="admin/controller/sale/affiliate.php">
+		<operation error="log">
+            <search position="replace" offset="2"><![CDATA[if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {]]></search>
+			<add><![CDATA[$this->request->post['zone_id'] = ''; /*if (!isset($this->request->post['zone_id']) || $this->request->post['zone_id'] == '') {
+					$json['error']['zone'] = $this->language->get('error_zone');
+				}*/]]></add>
+        </operation>
+	</file>	
+	
+	<file name="admin/view/template/sale/affiliate_form.tpl">		
+		<operation error="log">
+            <search position="replace" offset="3"><![CDATA[<span class="error"><?php echo $error_country; ?></span>]]></search>
+            <add><![CDATA[<span class="error"><?php echo $error_country; ?></span>
+                <?php } ?></td>
+            </tr>
+            <tr style="display:none;">
+			]]></add>
+        </operation>
+	</file>	
+</modification>
