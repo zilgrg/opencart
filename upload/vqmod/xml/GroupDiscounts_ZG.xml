@@ -1,0 +1,951 @@
+<modification>
+	<id><![CDATA[Customer Group Discounts]]></id>
+	<version><![CDATA[v1.0.7]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[ZG modified]]></author>
+	<file name="admin/controller/catalog/category.php" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[$this->data['heading_title'] = $this->language->get('heading_title');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Customer Group Discounts (un-)installer
+		$this->data['undiscount'] = str_replace('&amp;', '&', $this->url->link('catalog/category', 'token=' . $this->session->data['token'] . '&undiscount', 'SSL'));
+		if (isset($result) && isset($result['category_id'])) {
+			$result = $this->model_catalog_category->getCategory($result['category_id']);
+			$installed = ($result && isset($result['discounts']));
+			if (!$installed) {
+				if (isset($this->request->get['go'])) {
+					$installed = $this->model_catalog_category->installDiscounts();
+					if ($installed) {
+						$this->session->data['success'] = 'Group Discounts database changes are made!<br/>'.
+							'You should be good to go!';
+					} else {
+						$this->error['warning'] = 'Could not make Group Discounts Database changes!<br/>'.
+							'Seems like Group Discounts was already installed??';
+					}
+				} else {
+					$this->error['warning'] = 'Customer Group Discount Database changes not in place!<br/>'.
+						'Do you want to install now?<br/>'.
+						'<b><a href="'.$this->url->link('catalog/category', 'token=' . $this->session->data['token'] . '&go=1', 'SSL').'" alt="Make Database Changes">Yes!</a></b>';
+				}
+			} elseif ($installed && isset($this->request->get['undiscount'])) {
+				if (isset($this->request->get['go'])) {
+					$installed = $this->model_catalog_category->installDiscounts(false);
+					if ($installed) {
+						$this->session->data['success'] = 'Group Discounts database changes are removed!<br/>'.
+						'To remove your Customer Group Discounts installation:<br/>'.
+						'<b>vQmod:</b> Remove the GroupDiscounts.xml from vQmod.<br/>'.
+						'<b>Manual Installation:</b> Undo the Group Discount File Changes';
+					} else {
+						$this->error['warning'] = 'Could not remove Group Discounts Database changes!<br/>'.
+							'Seems like Group Discounts was already un-installed??';
+					}
+				} else {
+					$this->error['warning'] = 'This will undo Group Discounts database changes!<br/>'.
+						'ARE YOU SURE?<br/>'.
+						'<b><a href="'.$this->url->link('catalog/category', 'token=' . $this->session->data['token'] . '&undiscount&go=1', 'SSL').'" alt="Undo Database Changes">Yes!</a></b>';
+				}
+			}
+		}
+// EOF - Zappo - Group Discounts - Customer Group Discounts (un-)installer
+]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[if (isset($this->error['warning'])) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Text definitions, Update Link, and Get Customer Groups
+		$this->data['button_save'] = $this->language->get('button_save');
+		$this->data['button_cancel'] = $this->language->get('button_cancel');
+		$this->data['text_group_discount'] = $this->language->get('text_group_discount');
+		$this->data['text_discounts'] = $this->language->get('text_discounts');
+		$this->data['text_default_discount'] = $this->language->get('text_default_discount');
+		$this->data['text_discounts_warning'] = $this->language->get('text_discounts_warning');
+		$this->data['groups'] = $this->model_catalog_category->getCustomerGroups();
+		$this->data['discounts_link'] = htmlspecialchars_decode($this->url->link('catalog/category/discounts', 'token=' . $this->session->data['token'], 'SSL'));
+// EOF - Zappo - Group Discounts - Text definitions, Update Link, and Get Customer Groups
+]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['text_amount'] = $this->language->get('text_amount');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Text Definitions
+		$this->data['text_group_discount'] = $this->language->get('text_group_discount');
+		$this->data['text_discounts'] = $this->language->get('text_discounts');]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[$this->load->model('setting/store');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Get Group Discounts
+		$this->data['discounts'] = array();
+		if (isset($this->request->post['discounts'])) {
+			$this->data['discounts'] = $this->request->post['discounts'];
+		} elseif (!empty($category_info)) {
+			if ($category_info['discounts'] && strpos($category_info['discounts'], '|')) {
+				$discounts = explode(' ', $category_info['discounts']);
+				foreach ($discounts as $group) {
+					$group = explode('|', $group);
+					$this->data['discounts'][$group[0]] = $group[1];
+				}
+			}
+		}
+		$this->data['groups'] = $this->model_catalog_category->getCustomerGroups();
+		foreach ($this->data['groups'] as $group) {
+			if (!isset($this->data['discounts'][$group['customer_group_id']])) {
+				$this->data['discounts'][$group['customer_group_id']] = '';
+			}
+			$this->data['group_discounts'][$group['customer_group_id']] = $this->language->get('text_default_discount') . $group['discount'] . '%';
+		}
+// EOF - Zappo - Group Discounts - Get Group Discounts
+]]></add>
+		</operation>
+		<operation>
+			<search position="before" offset="1" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Group Discount Functions
+	// BOF - Zappo - Group Discounts - Save Category Discounts
+	public function discounts() {
+		$this->load->language('catalog/category');
+
+		$this->load->model('catalog/category');
+
+		$categories = (isset($this->request->get['selected'])) ? $this->request->get['selected'] : false;
+		$discounts = (isset($this->request->get['discounts'])) ? $this->request->get['discounts'] : array();
+
+		if (!$this->user->hasPermission('modify', 'catalog/category')) {
+			$json['error'] = $this->language->get('error_permission');
+		} elseif (!$categories) {
+			$json['error'] = $this->language->get('error_warning');
+		} else {
+			$discount = '';
+			foreach ($discounts as $gId => $dc) $discount .= ' '.$gId.'|'.$dc;
+			foreach ($categories as $cId) {
+				$this->model_catalog_category->setDiscount($cId, substr($discount,1));
+			}
+			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->setOutput(json_encode($json));
+	}
+// EOF - Zappo - Group Discounts - Group Discount Functions]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/option.php" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[$this->data['heading_title'] = $this->language->get('heading_title');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Check if Customer Group Discounts is installed
+		if (isset($result) && !isset($result['discounts'])) {
+			$this->redirect($this->url->link('catalog/category', 'token=' . $this->session->data['token'], 'SSL'));
+		}
+// EOF - Zappo - Group Discounts - Check if Customer Group Discounts is installed
+]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['button_delete'] = $this->language->get('button_delete');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Text definitions, Update Link, and Get Customer Groups
+		$this->data['button_save'] = $this->language->get('button_save');
+		$this->data['button_cancel'] = $this->language->get('button_cancel');
+		$this->data['text_group_discount'] = $this->language->get('text_group_discount') . $this->language->get('text_discount_help');
+		$this->data['text_discounts'] = $this->language->get('text_discounts');
+		$this->data['text_default_discount'] = $this->language->get('text_default_discount');
+		$this->data['text_discounts_warning'] = $this->language->get('text_discounts_warning');
+		$this->data['groups'] = $this->model_catalog_option->getCustomerGroups();
+		$this->data['discounts_link'] = htmlspecialchars_decode($this->url->link('catalog/option/discounts', 'token=' . $this->session->data['token'], 'SSL'));
+// EOF - Zappo - Group Discounts - Text definitions, Update Link, and Get Customer Groups
+]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['text_time'] = $this->language->get('text_time');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Text definition
+		$this->data['text_group_discount'] = $this->language->get('text_discount_help');
+		$this->data['text_discounts'] = $this->language->get('text_discounts');
+]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[if (isset($this->request->post['option_value'])) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Get Group Discounts
+		$this->data['discounts'] = array();
+		if (isset($this->request->post['discounts'])) {
+			$this->data['discounts'] = $this->request->post['discounts'];
+		} elseif (!empty($option_info)) {
+			if ($option_info['discounts'] && strpos($option_info['discounts'], '|')) {
+				$discounts = explode(' ', $option_info['discounts']);
+				foreach ($discounts as $group) {
+					$group = explode('|', $group);
+					$this->data['discounts'][$group[0]] = $group[1];
+				}
+			}
+		}
+		$this->data['groups'] = $this->model_catalog_option->getCustomerGroups();
+		foreach ($this->data['groups'] as $group) {
+			if (!isset($this->data['discounts'][$group['customer_group_id']])) {
+				$this->data['discounts'][$group['customer_group_id']] = '';
+			}
+			$this->data['group_discounts'][$group['customer_group_id']] = $this->language->get('text_default_discount') . $group['discount'] . '%';
+		}
+// EOF - Zappo - Group Discounts - Get Group Discounts
+]]></add>
+		</operation>
+		<operation>
+			<search position="bottom" offset="2"><![CDATA[Add to Bottom of File]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Save Option Discounts
+	public function discounts() {
+		$this->load->language('catalog/option');
+
+		$this->load->model('catalog/option');
+
+		$options = (isset($this->request->get['selected'])) ? $this->request->get['selected'] : false;
+		$discounts = (isset($this->request->get['discounts'])) ? $this->request->get['discounts'] : array();
+
+		if (!$this->user->hasPermission('modify', 'catalog/option')) {
+			$json['error'] = $this->language->get('error_permission');
+		} elseif (!$options) {
+			$json['error'] = $this->language->get('error_type');
+		} else {
+			$discount = '';
+			foreach ($discounts as $gId => $dc) $discount .= ' '.$gId.'|'.$dc;
+			foreach ($options as $cId) {
+				$this->model_catalog_option->setDiscount($cId, substr($discount,1));
+			}
+			$json['success'] = $this->language->get('text_success');
+		}
+
+		$this->response->setOutput(json_encode($json));
+	}
+// EOF - Zappo - Group Discounts - Save Option Discounts]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/sale/customer_group.php" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA['action'            => $action]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Added Discounts
+				'discount'          => ((isset($result['discount']) && $result['discount']) ? $result['discount'] : 0) . '%',]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[$this->data['heading_title'] = $this->language->get('heading_title');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Check if Customer Group Discounts is installed
+		if (isset($result) && !isset($result['discount'])) {
+			$this->redirect($this->url->link('catalog/category', 'token=' . $this->session->data['token'], 'SSL'));
+		}
+// EOF - Zappo - Group Discounts - Check if Customer Group Discounts is installed
+]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['column_action'] = $this->language->get('column_action');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Added Discounts
+		$this->data['column_discount'] = $this->language->get('column_discount');]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[$this->template = 'sale/customer_group_form.tpl';]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added Discount
+		$this->data['entry_discount'] = $this->language->get('entry_discount');
+		if (isset($this->request->post['discount'])) {
+			$this->data['discount'] = $this->request->post['discount'];
+		} elseif (isset($customer_group_info)) {
+			$this->data['discount'] = $customer_group_info['discount'];
+		} else {
+			$this->data['discount'] = '';
+		}
+// EOF - Zappo - Group Discounts - Added Discount
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/setting/setting.php" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[if (isset($this->request->post['config_account_id'])) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added Discount Display Settings
+		$this->data['entry_discount_display'] = $this->language->get('entry_discount_display');
+		$this->data['entry_discount_login'] = $this->language->get('entry_discount_login');
+		if (isset($this->request->post['config_discount_display'])) {
+			$this->data['config_discount_display'] = $this->request->post['config_discount_display'];
+		} else {
+			$this->data['config_discount_display'] = $this->config->get('config_discount_display');
+		}
+		if (isset($this->request->post['config_discount_login'])) {
+			$this->data['config_discount_login'] = $this->request->post['config_discount_login'];
+		} else {
+			$this->data['config_discount_login'] = $this->config->get('config_discount_login');
+		}
+// EOF - Zappo - Group Discounts - Added Discounts Display Settings
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/setting/store.php" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[if (isset($this->request->post['config_account_id'])) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added Discount Display Settings
+		$this->data['entry_discount_display'] = $this->language->get('entry_discount_display');
+		$this->data['entry_discount_login'] = $this->language->get('entry_discount_login');
+		if (isset($this->request->post['config_discount_display'])) {
+			$this->data['config_discount_display'] = $this->request->post['config_discount_display'];
+		} else {
+			$this->data['config_discount_display'] = $this->config->get('config_discount_display');
+		}
+		if (isset($this->request->post['config_discount_login'])) {
+			$this->data['config_discount_login'] = $this->request->post['config_discount_login'];
+		} else {
+			$this->data['config_discount_login'] = $this->config->get('config_discount_login');
+		}
+// EOF - Zappo - Group Discounts - Added Discounts Display Settings
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/catalog/category.php">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Text Definitions
+$_['text_group_discount']    = '<b>Enter the Discount for each Customer Group.</b><br/>'.
+	'- Set to <b>0.0000</b> for no discount.<br/>'.
+	'- Make empty to inherit parent category\'s, or Group\'s discount.<br/>'.
+	'- This applies to all products in selected category, AND child categories.<br/>'.
+	'- Child category\'s discounts override the parent\'s discount.<br/>';
+$_['text_discounts_warning'] = '<b>Warning!</b><br/>'.
+	'This will set all the selected categories to the entered Discounts!<br/>'.
+	'Do you want to Continue?';
+$_['text_discounts']          = 'Discounts';
+$_['text_default_discount']   = 'Default Group Discount: ';
+// EOF - Zappo - Group Discounts - Text Definitions
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/catalog/option.php">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Text Definitions
+$_['text_group_discount'] = '<b>Enter the Discount for each Customer Group.</b><br/>';
+$_['text_discount_help']  = '- Set to <b>0.0000</b> for no discount.<br/>'.
+	'- Make empty to inherit product\'s, category\'s, or Group\'s discount.<br/>';
+$_['text_discounts']      = 'Discounts';
+$_['text_discounts_warning'] = '<b>Warning!</b><br/>'.
+	'This will set all the selected options to the entered Discounts!<br/>'.
+	'Do you want to Continue?';
+$_['text_default_discount']  = 'Default Group Discount: ';
+// EOF - Zappo - Group Discounts - Text Definitions
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/sale/customer_group.php">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Added Discounts
+$_['column_discount']  = 'Discount';
+$_['entry_discount']   = 'Default Group Discount';
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/setting/setting.php">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Added Discounts
+$_['entry_discount_display']     = 'Show Group Discounts as Special Price?<span class="help">Shows default price in red.</span>';
+$_['entry_discount_login']       = 'Login for Group Discounts?:<br /><span class="help">Requires Login to see discount prices.</span>';
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/*/setting/store.php">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Added Discounts
+$_['entry_discount_display']     = 'Show Group Discounts as Special Price?<span class="help">Shows default price in red.</span>';
+$_['entry_discount_login']       = 'Login for Group Discounts?:<br /><span class="help">Requires Login to see discount prices.</span>';
+]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/catalog/category.php" error="abort">
+		<operation>
+			<search position="after" index="1"><![CDATA[public function addCategory($data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added Database column Discounts
+		$discounts = '';
+		foreach ($data['discounts'] as $gId => $dc) $discounts .= ' '.$gId.'|'.$dc;]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[sort_order = '" . (int)$data['sort_order'] . "']]></search>
+			<add><![CDATA[sort_order = '" . (int)$data['sort_order'] . "', discounts = '" . trim($discounts) . "']]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[$this->cache->delete('category');]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Clear Product cache
+		$this->cache->delete('product');]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[public function editCategory($category_id, $data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added Database column Discounts
+		$discounts = '';
+		foreach ($data['discounts'] as $gId => $dc) $discounts .= ' '.$gId.'|'.$dc;]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA['sort_order'  => $result['sort_order']]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Added Check if Customer Group Discounts is installed
+					'discounts'   => (isset($result['discounts']) ? $result['discounts'] : false),]]></add>
+		</operation>
+		<operation>
+			<search position="bottom" offset="2"><![CDATA[Add to Bottom of File]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Group Discount Functions
+	// Get Customer Groups
+	public function getCustomerGroups() {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_group");
+		if (!isset($query->row['name'])) {
+			foreach ($query->rows as $row_id => $group) {
+				$name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "customer_group_description WHERE customer_group_id = '" . $group['customer_group_id'] . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$query->rows[$row_id]['name'] = $name_query->row['name'];
+			}
+		}
+		return $query->rows;
+	}
+
+	// Set Customer Group Discounts
+	public function setDiscount($cId, $discounts) {
+		if ($cId) {
+			$query = $this->db->query("UPDATE `" . DB_PREFIX . "category` SET discounts = '" . $discounts . "' WHERE category_id = '" . (int)$cId . "'");
+			$this->cache->delete('product');
+			return $query;
+		}
+		return false;
+	}
+
+	// (Un-)Install Customer Group Discounts
+	public function installDiscounts($install = true) {
+		$this->cache->delete('category');
+		// Check if table columns x-ists, if not, Add it...
+		$QryCheck = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "category");
+		foreach ($QryCheck->rows as $Field) $Fields[] = $Field['Field']; // Build array of all table columns
+		if (!in_array('discounts', $Fields) && $install) { // Database entry not found, and wanted...
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "customer_group` ADD discount varchar(6) NOT NULL DEFAULT ''");
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "category` ADD discounts varchar(255) NOT NULL DEFAULT '' AFTER sort_order");
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "option` ADD discounts varchar(255) NOT NULL DEFAULT '' AFTER sort_order");
+			return true;
+		} elseif (in_array('discounts', $Fields) && !$install) { // Database entry found, but unwanted...
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "category` DROP discounts");
+			$this->db->query("ALTER TABLE `" . DB_PREFIX . "option` DROP discounts");
+			$QryCheck = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "customer_group");
+			foreach ($QryCheck->rows as $Field) $Fields[] = $Field['Field']; // Build array of all table columns
+			if (in_array('discount', $Fields)) $this->db->query("ALTER TABLE `" . DB_PREFIX . "customer_group` DROP discount");
+			return true;
+		}
+		return false;
+	}
+// EOF - Zappo - Group Discounts - Group Discount Functions]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/catalog/option.php" error="abort">
+		<operation>
+			<search position="after" index="1"><![CDATA[public function addOption($data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - "implode" Discounts into string
+		$discounts = '';
+		foreach ($data['discounts'] as $gId => $dc) $discounts .= ' '.$gId.'|'.$dc;]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[public function editOption($option_id, $data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - "implode" Discounts into string
+		$discounts = '';
+		foreach ($data['discounts'] as $gId => $dc) $discounts .= ' '.$gId.'|'.$dc;]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[sort_order = '" . (int)$data['sort_order'] . "']]></search>
+			<add><![CDATA[sort_order = '" . (int)$data['sort_order'] . "', discounts = '" . trim($discounts) . "']]></add>
+		</operation>
+		<operation>
+			<search position="before" offset="1"><![CDATA[?>]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Group Discount Functions
+	// BOF - Zappo - Group Discounts - Get Customer Groups
+	public function getCustomerGroups() {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_group");
+		if (!isset($query->row['name'])) {
+			foreach ($query->rows as $row_id => $group) {
+				$name_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "customer_group_description WHERE customer_group_id = '" . $group['customer_group_id'] . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$query->rows[$row_id]['name'] = $name_query->row['name'];
+			}
+		}
+		return $query->rows;
+	}
+	// BOF - Zappo - Group Discounts - Set Customer Group Discounts
+	public function setDiscount($oId, $discounts) {
+		if ($oId) {
+			$query = $this->db->query("UPDATE `" . DB_PREFIX . "option` SET discounts = '" . $discounts . "' WHERE option_id = '" . (int)$oId . "'");
+			return $query;
+		}
+		return false;
+	}
+// EOF - Zappo - Group Discounts - Group Discount Functions]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/sale/customer_group.php" error="abort">
+		<operation>
+			<search position="replace"><![CDATA[customer_group SET]]></search>
+			<add><![CDATA[customer_group SET discount = '" . (($data['discount'] != '') ? (float)$data['discount'] : '') . "',]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[public function addCustomerGroup($data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Clear Product Cache
+		$this->cache->delete('product');]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[public function editCustomerGroup($customer_group_id, $data) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Clear Product Cache
+		$this->cache->delete('product');]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/category_form.tpl" error="abort">
+		<operation>
+			<search position="replace" index="1"><![CDATA[<a href="#tab-design">]]></search>
+			<add><![CDATA[<a href="#tab-discounts"><?php echo $text_discounts; ?></a><a href="#tab-design">]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[<div id="tab-design">]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Discounts Tab ?>
+        <div id="tab-discounts">
+          <table class="form">
+            <tr>
+              <td colspan="2"><?php echo $text_group_discount; ?></td>
+            </tr>
+          <?php foreach ($groups as $group) { ?>
+            <tr>
+              <td><span title="<?php echo $group_discounts[$group['customer_group_id']]; ?>" style="cursor:help;"><?php echo $group['name']; ?>:</span></td>
+              <td><input type="text" name="discounts[<?php echo $group['customer_group_id']; ?>]" value="<?php echo $discounts[$group['customer_group_id']]; ?>" size="5" />%</td>
+            </tr>
+          <?php } ?>
+          </table>
+        </div>
+<?php // EOF - Zappo - Group Discounts - Discounts Tab ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/category_list.tpl" error="abort">
+		<operation>
+			<search position="replace" index="1"><![CDATA[<div class="buttons">]]></search>
+			<add><![CDATA[<div class="buttons"><a onclick="setDiscounts();return false;" class="button discounts-button"><?php echo $text_discounts; ?></a>]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[<?php echo $footer; ?>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Discounts Dialog ?>
+<div id="dialog-confirm" style="display:none;"><?php echo $text_discounts_warning;?></div>
+<div id="discounts" style="display:none;">
+  <table class="form">
+    <tr>
+      <td colspan="2"><?php echo $text_group_discount;?></td>
+    </tr>
+  <?php foreach ($groups as $group) { ?>
+	<tr>
+	  <td><span title="<?php echo $text_default_discount . ($group['discount'] ? $group['discount'] : 0); ?>%" style="cursor:help;"><?php echo $group['name']; ?>:</span></td>
+	  <td><nobr><input type="text" name="discounts[<?php echo $group['customer_group_id']; ?>]" value="" size="5" />%</nobr></td>
+	</tr>
+  <?php } ?>
+	<tr>
+      <td></td>
+      <td><a href="#" class="button-discounts" /><?php echo $button_save; ?></a></td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript"><!--
+	function setDiscounts() {
+		if ($('.discounts-button').hasClass('undiscount')) {
+			window.location = '<?php echo $undiscount;?>';
+		} else {
+			$('#discounts').dialog({
+				title: '<?php echo $text_discounts; ?>',
+				width: 450,
+				autoOpen:true
+			});
+		}
+	}
+
+	var btncol = $('.discounts-button').css('background-color');
+	$('.discounts-button').live({
+		mouseenter: function() {
+			var btn = $(this);
+			$(document).keydown(function(e) {
+				if (e.shiftKey && !btn.hasClass('undiscount')) {
+					btn.addClass('undiscount').css('background-color', 'red').html('UNINSTALL');
+				}
+			}).keyup(function() {
+				btn.removeClass('undiscount').css('background-color', btncol).html('<?php echo $text_discounts;?>');
+			});
+		},
+		mouseleave: function() {
+			$(this).removeClass('undiscount').css('background-color', btncol).html('<?php echo $text_discounts;?>');
+			$(document).unbind("keydown").unbind("keyup");
+		}
+	});
+
+	$('.button-discounts').button().live('click', function() {
+		$(this).append('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+		$( "#dialog-confirm" ).dialog({
+			resizable: false,
+			height: 250,
+			modal: true,
+			buttons: {
+				"<?php echo $button_save;?>": function() {
+					$.ajax({
+						url: '<?php echo $discounts_link;?>',
+						data: $(':input[name="selected[]"]:checked, :input[name^="discounts"]').serialize(),
+						dataType: 'json',
+						success: function(json) {
+							$('.loading').remove();
+							$('.success').remove();
+							$('.warning').remove();
+
+							if (json['error']) {
+								$('#discounts').prepend('<div class="warning" style="display: none;">' + json['error'] + '</div>');
+								$('.warning').fadeIn('slow');
+							}
+
+							if (json['success']) {
+								$('#discounts').prepend('<div class="success" style="display: none;">' + json['success'] + '</div>');
+								$('.success').fadeIn('slow');
+							}
+						}
+					});
+					$(this).dialog("close");
+				},
+				"<?php echo $button_cancel;?>": function() {
+					$('.loading').remove();
+					$(this).dialog("close");
+				}
+			}
+		});
+		return false;
+	});
+</script>
+<?php // EOF - Zappo - Group Discounts - Discounts Dialog ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/option_form.tpl" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[</table>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Discounts ?>
+          <tr>
+            <td><?php echo $text_discounts; ?>:<br/><span class="help"><small><?php echo $text_group_discount; ?></small></span></td>
+            <td>
+          <?php foreach ($groups as $group) { ?>
+			<span title="<?php echo $group_discounts[$group['customer_group_id']]; ?>" style="cursor:help;"><?php echo $group['name']; ?>:</span><input type="text" name="discounts[<?php echo $group['customer_group_id']; ?>]" value="<?php echo $discounts[$group['customer_group_id']]; ?>" size="5" />% &nbsp;
+          <?php } ?>
+            </td>
+          </tr>
+<?php // EOF - Zappo - Group Discounts - Discounts ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/option_list.tpl" error="abort">
+		<operation>
+			<search position="replace"><![CDATA[<div class="buttons">]]></search>
+			<add><![CDATA[<div class="buttons"><a onclick="setDiscounts();return false;" class="button"><?php echo $text_discounts; ?></a>]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[<?php echo $footer; ?>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Discounts Dialog ?>
+<div id="dialog-confirm" style="display:none;"><?php echo $text_discounts_warning;?></div>
+<div id="discounts" style="display:none;">
+  <table class="form">
+    <tr>
+      <td colspan="2"><?php echo $text_group_discount; ?></td>
+    </tr>
+  <?php foreach ($groups as $group) { ?>
+	<tr>
+	  <td><span title="<?php echo $text_default_discount . ($group['discount'] ? $group['discount'] : 0); ?>%" style="cursor:help;"><?php echo $group['name']; ?>:</span></td>
+	  <td><nobr><input type="text" name="discounts[<?php echo $group['customer_group_id']; ?>]" value="" size="5" />%</nobr></td>
+	</tr>
+  <?php } ?>
+	<tr>
+      <td></td>
+      <td><a href="#" class="button-discounts" /><?php echo $button_save; ?></a></td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript"><!--
+	function setDiscounts() {
+		$('#discounts').dialog({
+			title: '<?php echo $text_discounts; ?>',
+			width: 450,
+			autoOpen:true
+		});
+	}
+
+	$('.button-discounts').button().live('click', function() {
+		$(this).append('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+		$( "#dialog-confirm" ).dialog({
+			resizable: false,
+			height: 250,
+			modal: true,
+			buttons: {
+				"<?php echo $button_save;?>": function() {
+					$.ajax({
+						url: '<?php echo $discounts_link;?>',
+						data: $(':input[name="selected[]"]:checked, :input[name^="discounts"]').serialize(),
+						dataType: 'json',
+						success: function(json) {
+							$('.loading').remove();
+							$('.success').remove();
+							$('.warning').remove();
+
+							if (json['error']) {
+								$('#discounts').prepend('<div class="warning" style="display: none;">' + json['error'] + '</div>');
+								$('.warning').fadeIn('slow');
+							}
+
+							if (json['success']) {
+								$('#discounts').prepend('<div class="success" style="display: none;">' + json['success'] + '</div>');
+								$('.success').fadeIn('slow');
+							}
+						}
+					});
+					$(this).dialog("close");
+				},
+				"<?php echo $button_cancel;?>": function() {
+					$('.loading').remove();
+					$(this).dialog("close");
+				}
+			}
+		});
+		return false;
+	});
+</script>
+<?php // EOF - Zappo - Group Discounts - Discounts Dialog ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/sale/customer_group_form.tpl" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[</table>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Added Discount ?>
+          <tr>
+            <td><span class="required"></span> <?php echo $entry_discount; ?></td>
+            <td><input type="text" name="discount" value="<?php echo $discount; ?>" size="5" />%</td>
+          </tr>
+<?php // EOF - Zappo - Group Discounts - Added Discount ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/sale/customer_group_list.tpl" error="abort">
+		<operation>
+			<search position="before" index="1"><![CDATA[<td class="right"><?php echo $column_action; ?></td>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - ONE LINE - Added Discounts ?>
+              <td class="right"><?php echo $column_discount; ?></td>]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1"><![CDATA[<td class="right"><?php foreach ($customer_group['action'] as $action) { ?>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - ONE LINE - Added Discounts ?>
+              <td class="right"><?php echo $customer_group['discount']; ?>%</td>]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace" index="1"><![CDATA[colspan="3"]]></search>
+			<add><![CDATA[colspan="5"]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace" index="1"><![CDATA[colspan="4"]]></search>
+			<add><![CDATA[colspan="5"]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/setting/setting.tpl">
+		<operation>
+			<search position="before" index="1"><![CDATA[<td><?php echo $entry_account; ?></td>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Added Discounts ?>
+              <td><?php echo $entry_discount_login; ?></td>
+              <td><?php if ($config_discount_login) { ?>
+                <input type="radio" name="config_discount_login" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_login" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_discount_login" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_login" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+            <tr>
+              <td><?php echo $entry_discount_display; ?></td>
+              <td><?php if ($config_discount_display) { ?>
+                <input type="radio" name="config_discount_display" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_display" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_discount_display" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_display" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+            <tr>
+<?php // EOF - Zappo - Group Discounts - Added Discounts ?>]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/setting/store_form.tpl">
+		<operation>
+			<search position="before" index="1"><![CDATA[<td><?php echo $entry_account; ?></td>]]></search>
+			<add><![CDATA[<?php // BOF - Zappo - Group Discounts - Added Discounts ?>
+              <td><?php echo $entry_discount_login; ?></td>
+              <td><?php if ($config_discount_login) { ?>
+                <input type="radio" name="config_discount_login" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_login" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_discount_login" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_login" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+            <tr>
+              <td><?php echo $entry_discount_display; ?></td>
+              <td><?php if ($config_discount_display) { ?>
+                <input type="radio" name="config_discount_display" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_display" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_discount_display" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_discount_display" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+            <tr>
+<?php // EOF - Zappo - Group Discounts - Added Discounts ?>]]></add>
+		</operation>
+	</file>
+	<file name="catalog/model/catalog/product.php" error="abort">
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[return array(]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Get & Set Discount
+			$discount = $query->row['price'] * $this->customer->getDiscount($product_id);
+			if (!$query->row['special'] && !$query->row['discount'] && $discount != $query->row['price']) {
+				if ($this->config->get('config_discount_display')) {
+					$query->row['special'] = $discount;
+				} else {
+					$query->row['price'] = $discount;
+				}
+			}
+// EOF - Zappo - Group Discounts - Get & Set Discount]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before" index="1"><![CDATA[$query->row['rating'] = (int)$query->row['rating'];]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Get & Set Discount
+			$discount = $query->row['price'] * $this->customer->getDiscount($product_id);
+			if (!$query->row['special'] && !$query->row['discount'] && $discount != $query->row['price']) {
+				if ($this->config->get('config_discount_display')) {
+					$query->row['special'] = $discount;
+				} else {
+					$query->row['price'] = $discount;
+				}
+			}
+// EOF - Zappo - Group Discounts - Get & Set Discount]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . $limit);]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added group for Logged(-out) Customer to cache name
+		if ($this->customer->isLogged()) {
+			$customer_group_id = $this->customer->getCustomerGroupId();
+		} else {
+			$customer_group_id = $this->config->get('config_customer_group_id');
+		}
+		$group_id = ($this->customer->isLogged() || !$this->config->get('config_discount_login')) ? '-' . $customer_group_id : '';
+// EOF - Zappo - Group Discounts - Added group for Logged(-out) Customer to cache name
+]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . $limit]]></search>
+			<add><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . $customer_group_id . $group_id . '.' . (int)$limit]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$limit);]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Added group for Logged(-out) Customer to cache name
+		if ($this->customer->isLogged()) {
+			$customer_group_id = $this->customer->getCustomerGroupId();
+		} else {
+			$customer_group_id = $this->config->get('config_customer_group_id');
+		}
+		$group_id = ($this->customer->isLogged() || !$this->config->get('config_discount_login')) ? '-' . $customer_group_id : '';
+// EOF - Zappo - Group Discounts - Added group for Logged(-out) Customer to cache name
+]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$limit]]></search>
+			<add><![CDATA[ . '.' . (int)$this->config->get('config_store_id') . '.' . $customer_group_id . $group_id . '.' . (int)$limit]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[. '.' . $customer_group_id . '.' . (int)$limit);]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Added group for Logged(-out) Customer to cache name
+		$group_id = ($this->customer->isLogged() || !$this->config->get('config_discount_login')) ? '-' . $customer_group_id : '';]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[. '.' . $customer_group_id . '.' . (int)$limit]]></search>
+			<add><![CDATA[. '.' . $customer_group_id . $group_id . '.' . (int)$limit]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after" index="1"><![CDATA[foreach ($product_option_query->rows as $product_option) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Get Option Discount
+			$discount = $this->customer->getOptionDiscount($product_option['option_id']);
+			if ($discount === false) $discount = $this->customer->getDiscount($product_id);]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace" index="1"><![CDATA[$product_option_value['price']]]></search>
+			<add><![CDATA[($product_option_value['price'] * $discount)]]></add>
+		</operation>
+	</file>
+	<file name="system/library/cart.php" error="abort">
+		<operation>
+			<search position="after" index="1"><![CDATA[$option_weight = 0;]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - ONE LINE - Get Discount
+					$discount = $this->customer->getDiscount($product_id);]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[if ($option_query->num_rows) {]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - TWO LINES - Get Options Discount
+							$odiscount = $this->customer->getOptionDiscount($option_query->row['option_id']);
+							if ($odiscount === false) $odiscount = $discount;]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[$option_value_query->row['price'];]]></search>
+			<add><![CDATA[($option_value_query->row['price'] * $odiscount);]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[$product_query->row['price']]]></search>
+			<add><![CDATA[($product_query->row['price'] * $discount)]]></add>
+		</operation>
+	</file>
+	<file name="system/library/customer.php" error="abort">
+		<operation>
+			<search position="bottom" offset="2"><![CDATA[Add to Bottom of File]]></search>
+			<add><![CDATA[// BOF - Zappo - Group Discounts - Group Discount Functions
+	// Get Discount from ProductId
+	public function getDiscount($pId, $cId = false) {
+		$discount = false;
+		$group_id = ($this->customer_group_id) ? $this->customer_group_id : (!$this->config->get('config_discount_login') ? $this->config->get('config_customer_group_id') : false);
+		if (!$cId) {
+			$query = $this->db->query("SELECT DISTINCT category_id as id FROM " . DB_PREFIX . "product_to_category WHERE product_id = '" . (int)$pId . "'");
+			if ($query->num_rows && $group_id) $cId = (int)$query->row['id'];
+		}
+		if ($cId && $group_id !== false) {
+			$query = $this->db->query("SELECT DISTINCT discounts, parent_id as cid FROM " . DB_PREFIX . "category WHERE category_id = '" . $cId . "'");
+			if ($query->num_rows) $cId = $query->row['cid'];
+			if ($query->row['discounts'] && strpos($query->row['discounts'], '|')) {
+				$discounts = explode(' ', $query->row['discounts']);
+				foreach ($discounts as $group) {
+					$group = explode('|', $group);
+					if ($group[0] == $group_id && $group[1] != '') $discount = 1 - ((float)$group[1] / 100);
+				}
+			}
+		}
+		if (!$discount) {
+			if ($cId) {
+				$discount = $this->getDiscount($pId, $cId);
+			} else {
+				$discount = 1;
+				if ($group_id) {
+					$query = $this->db->query("SELECT DISTINCT discount FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$group_id . "'");
+					if ($query->num_rows) $discount = 1 - ((float)$query->row['discount'] / 100);
+				}
+			}
+		}
+		return $discount;
+  	}
+	// Get Discount from OptionId
+	public function getOptionDiscount($oId) {
+		$discount = false;
+		$group_id = ($this->customer_group_id) ? $this->customer_group_id : (!$this->config->get('config_discount_login') ? $this->config->get('config_customer_group_id') : false);
+		$query = $this->db->query("SELECT DISTINCT discounts FROM `" . DB_PREFIX . "option` WHERE option_id = '" . (int)$oId . "'");
+		if ($query->row['discounts'] && strpos($query->row['discounts'], '|') && $group_id) {
+			$discounts = explode(' ', $query->row['discounts']);
+			foreach ($discounts as $group) {
+				$group = explode('|', $group);
+				if ($group[1] === '') $discount = false;
+				elseif ($group[0] == $group_id) $discount = 1 - ((float)$group[1] / 100);
+			}
+		}
+		return $discount;
+  	}
+// EOF - Zappo - Group Discounts - Group Discount Functions]]></add>
+		</operation>
+	</file>
+</modification>
