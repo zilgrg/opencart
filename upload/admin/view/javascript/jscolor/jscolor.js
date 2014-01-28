@@ -1,6 +1,6 @@
 /**
  * jscolor, JavaScript Color Picker
- *
+ * Z
  * @version 1.3.13
  * @license GNU Lesser General Public License, http://www.gnu.org/copyleft/lesser.html
  * @author  Jan Odvarko, http://odvarko.cz
