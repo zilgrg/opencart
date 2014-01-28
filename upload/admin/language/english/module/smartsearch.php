@@ -1,13 +1,13 @@
 <?php
 //==============================================================================
-// Smart Search v156.4
+// Smart Search v156.5
 // 
 // Author: Clear Thinking, LLC
 // E-mail: johnathan@getclearthinking.com
 // Website: http://www.getclearthinking.com
 //==============================================================================
 
-$version = 'v156.4';
+$version = 'v156.5';
 
 // Heading
 $_['heading_title']					= 'Smart Search';
@@ -21,7 +21,7 @@ $_['text_saved']					= 'Saved!';
 // General Settings
 $_['entry_smartsearch_explanation']	= 'Smart Search always returns the most relevant results, by performing a search of the selected product fields in four phases:<br />&bull; Phase 1: Finding products that contain the keywords as an exact phrase. If nothing is found, it will move on to Phase 2.<br />&bull; Phase 2: Finding products that contain ALL of the keywords, correctly spelled. If nothing is found, it will move on to Phase 3.<br />&bull; Phase 3: Finding products that contain ALL of the keywords, within the misspelling tolerance level. If nothing is found, it will move on to Phase 4.<br />&bull; Phase 4: Finding products that contain ANY of the keywords, within the misspelling tolerance level.';
 $_['entry_status']					= 'Status:';
-$_['entry_testing_mode']			= 'Testing Mode:<span class="help">Enabling this will display on the front-end how long each search query takes, for logged-in admin users only. Setting to "Assume No Individual Caching" will display times for both the individual search cache, and how long a first-time search would take.</span>';
+$_['entry_testing_mode']			= 'Testing Mode:<span class="help">Enabling this will display on the front-end how long each search query takes, for logged-in admin users only. It will also log all database queries into your error log, for reference purposes. Setting to "Assume No Individual Caching" will display times for both the individual search cache, and how long a first-time search would take.</span>';
 $_['text_enabled_run_as_normal']	= 'Enabled, Run as Normal';
 $_['text_enabled_assume_no']		= 'Enabled, Assume No Individual Caching';
 $_['button_view_report']			= 'View Smart Search History';

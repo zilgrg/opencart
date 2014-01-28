@@ -1,6 +1,6 @@
 <?php
 //==============================================================================
-// Smart Search v156.4
+// Smart Search v156.5
 // 
 // Author: Clear Thinking, LLC
 // E-mail: johnathan@getclearthinking.com
@@ -366,6 +366,8 @@ class ModelCatalogSmartsearch extends Model {
 			// Phases 3 and 4
 			$matches = array();
 			$cache_files = glob(DIR_CACHE . $this->name . '.*.' . $store_id . '.' . $language_id . '.*');
+			if (empty($cache_files)) $cache_files = array();
+			
 			foreach ($cache_files as $cache_file) {
 				if (!file_exists($cache_file)) continue;
 				$cache = unserialize(file_get_contents($cache_file));
@@ -399,6 +401,7 @@ class ModelCatalogSmartsearch extends Model {
 	}
 	
 	private function likeRegexp($column, $keyword) {
+		$keyword = htmlentities($keyword, ENT_COMPAT, 'UTF-8', false);
 		$like_sql = "LCASE(" . $column . ") LIKE '%" . $this->db->escape($keyword) . "%'";
 		$like_sql .= ($this->settings['partials']) ? "" : " AND LCASE(" . $column . ") REGEXP '[[:<:]]" . $this->db->escape($keyword) . "[[:>:]]'";
 		return "(" . $like_sql . ")";
@@ -416,7 +419,7 @@ class ModelCatalogSmartsearch extends Model {
 	}
 	
 	private function isFinished($phase) {
-		if (count($this->results) > (int)$this->settings['min_results'] || $phase == 4 || ((int)$this->settings['tolerance'] == 100 && $phase == 2)) {
+		if (count($this->results) >= (int)$this->settings['min_results'] || $phase == 4 || ((int)$this->settings['tolerance'] == 100 && $phase == 2)) {
 			if ($this->settings['record_search'] != '') {
 				$this->db->query("INSERT INTO " . DB_PREFIX . $this->name . " SET date_added = NOW(), search = '" . $this->db->escape($this->settings['record_search']) . "', phase = " . (int)$phase . ", results = " . (int)count($this->results) . ", customer_id = " . (int)$this->customer->getId() . ", ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "'");
 			}
@@ -469,7 +472,8 @@ class ModelCatalogSmartsearch extends Model {
 		$this->load->model('catalog/product');
 		$products = array();
 		foreach ($results as $result) {
-			$products[$result] = $this->model_catalog_product->getProduct($result);
+			$product = $this->model_catalog_product->getProduct($result);
+			if (!empty($product)) $products[$result] = $product;
 		}
 		
 		if (!empty($this->session->data[$this->name . '_time'])) {

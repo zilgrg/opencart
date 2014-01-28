@@ -1,6 +1,6 @@
 <?php
 //==============================================================================
-// Smart Search v156.4
+// Smart Search v156.5
 // 
 // Author: Clear Thinking, LLC
 // E-mail: johnathan@getclearthinking.com

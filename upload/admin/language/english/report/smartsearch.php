@@ -1,13 +1,13 @@
 <?php
 //==============================================================================
-// Smart Search v156.4
+// Smart Search v156.5
 //
 // Author: Clear Thinking, LLC
 // E-mail: johnathan@getclearthinking.com
 // Website: http://www.getclearthinking.com
 //==============================================================================
 
-$version = 'v156.4';
+$version = 'v156.5';
 
 // Heading
 $_['heading_title']					= 'Smart Search History';
