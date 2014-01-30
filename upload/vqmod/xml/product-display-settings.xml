@@ -3,7 +3,7 @@
 	<id><![CDATA[Product Display Settings]]></id>
 	<version><![CDATA[1.0]]></version>
 	<vqmver><![CDATA[2.1.5]]></vqmver>
-	<author><![CDATA[Flo from shopencart.com]]></author>
+	<author><![CDATA[Modified by ZG]]></author>
 	<file name="admin/controller/setting/setting.php">
 		<operation>
 			<search position="before" error="log"><![CDATA[if (isset($this->request->post['config_logo'])) {]]></search>
@@ -229,10 +229,10 @@ $this->data['pds_location'] = $this->language->get('pds_location');
 		<span><?php echo $pds_sku; ?> </span> <?php echo $sku; ?><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_upcp') && $upc) { ?>
-		<span><?php echo $pds_upc; ?> </span> <?php echo $upc; ?><br />
+		<span><?php echo $pds_upc; ?> </span> <a href="<?php echo $upc; ?>"> <?php echo $upc; ?></a><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_locationp') && $location) { ?>
-		<span><?php echo $pds_location; ?> </span> <a href="<?php echo $location; ?>"><?php echo $location; ?></a><br />
+		<span><?php echo $pds_location; ?> </span> <?php echo $location; ?><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_pweight') && $weight) { ?>
 		<span><?php echo $pds_weight; ?> </span> <?php echo $weight; ?><br />
@@ -411,7 +411,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a><br />
 
 	  <?php } ?>
 
@@ -463,7 +463,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -515,7 +515,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -567,7 +567,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -653,7 +653,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -732,7 +732,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -811,7 +811,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
@@ -890,7 +890,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
 
 	  <?php } ?>
 
