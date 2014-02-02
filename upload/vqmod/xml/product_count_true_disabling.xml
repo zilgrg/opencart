@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Category Product Count True Disabling / Speed Up</id>
+	<version>1.0.0</version>
+	<vqmver>2.3.2</vqmver>
+	<author>rph - OpenCartHelp.com</author>
+	<!-- Category product count queries are still run even when the feature is disabled in Admin.  This can lead to poor page speed. -->
+	<!-- This script prevents the queries from ever being run when the count is disabled. -->
+	<file name="catalog/controller/module/category.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[$total = $this->model_catalog_product->getTotalProducts(array('filter_category_id' => $category['category_id']));]]></search>
+			<add><![CDATA[if ($this->config->get('config_product_count')) {
+				$total = $this->model_catalog_product->getTotalProducts(array('filter_category_id' => $category['category_id']));
+			} else {
+				$total = 0;
+			}]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace"><![CDATA[$product_total = $this->model_catalog_product->getTotalProducts($data);]]></search>
+			<add><![CDATA[if ($this->config->get('config_product_count')) {
+					$product_total = $this->model_catalog_product->getTotalProducts($data);
+				} else {
+					$product_total = 0;
+				}]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/common/header.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[$product_total = $this->model_catalog_product->getTotalProducts($data);]]></search>
+			<add><![CDATA[if ($this->config->get('config_product_count')) {
+						$product_total = $this->model_catalog_product->getTotalProducts($data);
+					} else {
+						$product_total = 0;
+					}]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/category.php">
+		<operation error="log">
+			<!-- Target $product_total in the categories loop, preserve $product_total used for pagination -->
+			<search position="replace" index="1"><![CDATA[$product_total = $this->model_catalog_product->getTotalProducts($data);]]></search>
+			<add><![CDATA[if ($this->config->get('config_product_count')) {
+					$product_total = $this->model_catalog_product->getTotalProducts($data);
+				} else {
+					$product_total = 0;
+				}]]></add>
+		</operation>
+	</file>
+</modification>
