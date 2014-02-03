@@ -57,7 +57,7 @@ class ControllerPaymentPaysera extends Controller {
                 'lang'          => $language,
 
                 'accepturl'     => HTTPS_SERVER . 'index.php?route=payment/paysera/accept',
-                'cancelurl'     => HTTPS_SERVER . 'index.php?route=checkout/checkout',
+                'cancelurl'     => HTTPS_SERVER . 'index.php?route=payment/paysera/cancel',
                 'callbackurl'   => HTTPS_SERVER . 'index.php?route=payment/paysera/callback',
                 'payment'       => (isset($_REQUEST['payment'])) ? $_REQUEST['payment'] : '',
                 'country'       => $order['payment_iso_code_2'],
@@ -115,11 +115,11 @@ class ControllerPaymentPaysera extends Controller {
         $this->language->load('payment/paysera');
 
         $this->data['title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_store'));
-
-        if (@$this->request->server['HTTPS'] != 'on') {
-            $this->data['base'] = HTTP_SERVER;
-        } else {
+        
+        if(isset($this->request->server['HTTPS']) and $this->request->server['HTTPS'] == 'on') {
             $this->data['base'] = HTTPS_SERVER;
+        } else {
+            $this->data['base'] = HTTP_SERVER;
         }
 
         $this->data['charset']   = $this->language->get('charset');
@@ -130,17 +130,17 @@ class ControllerPaymentPaysera extends Controller {
 
         $this->data['text_response']     = $this->language->get('text_response');
         $this->data['text_success']      = $this->language->get('text_success');
-        $this->data['text_success_wait'] = sprintf($this->language->get('text_success_wait'), HTTPS_SERVER . 'index.php?route=checkout/success');
+        $this->data['text_success_wait'] = sprintf($this->language->get('text_success_wait'), $this->data['base'] . 'index.php?route=checkout/success');
         $this->data['text_failure']      = $this->language->get('text_failure');
-        $this->data['text_failure_wait'] = sprintf($this->language->get('text_failure_wait'), HTTPS_SERVER . 'index.php?route=checkout/payment');
+        $this->data['text_failure_wait'] = sprintf($this->language->get('text_failure_wait'), $this->data['base'] . 'index.php?route=checkout/cart');
 
         $this->data['button_continue'] = $this->language->get('button_continue');
 
-        $this->data['continue'] = HTTPS_SERVER . 'index.php?route=checkout/payment';
+        $this->data['continue'] = $this->data['base'] . 'index.php?route=checkout/cart';
 
-        $this->template = $this->config->get('config_template') . 'payment/paysera_failure.tpl';
+        $this->template = $this->config->get('config_template') . '/template/payment/paysera_failure.tpl';
 
-        $this->render();
+        $this->response->setOutput($this->render());
     }
 
     public function callback() {

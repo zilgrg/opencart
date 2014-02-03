@@ -5,7 +5,7 @@ class ControllerPaymentPaysera extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('payment/paysera');
+		$this->language->load('payment/paysera');
 		$this->load->model('setting/setting');
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
