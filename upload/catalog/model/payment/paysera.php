@@ -1,10 +1,10 @@
 <?php
 
 class ModelPaymentPaysera extends Model {
-    public function getMethod($address) {
+    public function getMethod($address, $total) {
         $this->load->language('payment/paysera');
 
-        if ($this->config->get('paysera_status')) {
+        if ($this->config->get('paysera_status') && ($total > 0)) {
             $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('paysera_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 
             if (!$this->config->get('paysera_geo_zone_id')) {
