@@ -1,25 +1,25 @@
 <modification>
-	<id><![CDATA[@tik Savings Note]]></id>
+	<id><![CDATA[rodyti procentine nuolaida jei kaina < 100 ir sumine nuolaida jei kaina >100]]></id>
 	<version><![CDATA[1.1]]></version>
 	<vqmver><![CDATA[2.1.7]]></vqmver>
-	<author><![CDATA[OC2PS ZG modified]]></author>
+	<author><![CDATA[OC2PS ZG modified v2]]></author>
 	<file name="catalog/view/theme/*/template/product/product.tpl">
 		<operation>
 			<search position="before" offset="2" error="log"><![CDATA[<?php if ($tax) { ?>]]></search>
-			<add><![CDATA[<br /><span class="you-save"><?php echo $text_yousave; ?> <?php echo $yousave . ' (' . $yousavepercent . '%)'; ?></span>]]></add>
+			<add><![CDATA[<?php if ($tax <= 100) { ?><br /><span class="you-save"><?php echo $text_yousave; ?> <?php echo '-' .$yousavepercent . '%'; ?></span><?php } else { ?><br /><span class="you-save"><?php echo $text_yousave; ?> <?php echo '-' .$yousave; ?></span><?php } ?>]]></add>
 		</operation>
 	</file>
 	<file name="catalog/language/english/product/product.php">
 		<operation>
 			<search position="replace" error="log"><![CDATA[// Entry]]></search>
-			<add><![CDATA[$_['text_yousave']        = 'You save:';
+			<add><![CDATA[$_['text_yousave']        = 'Discount:';
 // Entry]]></add>
 		</operation>
 	</file>
 	<file name="catalog/language/lithuanian/product/product.php">
 		<operation>
 			<search position="replace" error="skip"><![CDATA[// Entry]]></search>
-			<add><![CDATA[$_['text_yousave']        = 'Sutaupote:';
+			<add><![CDATA[$_['text_yousave']        = 'Nuolaida:';
 // Entry]]></add>
 		</operation>
 	</file>
