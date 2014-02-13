@@ -5,7 +5,7 @@
 	INSERT INTO `setting` (`setting_id` ,`store_id` ,`group` ,`key` ,`value` ,`serialized`) VALUES (NULL , '0', 'config', 'config_ipscron_status', 'NOT YET RUN', '0');
 	]]></sql>
 	<id><![CDATA[Increase Page Speed For Open Cart]]></id>
-	<version><![CDATA[4.0]]></version>
+	<version><![CDATA[4.3]]></version>
 	<vqmver><![CDATA[2.1]]></vqmver>
 	<author><![CDATA[<a onclick="window.open('http://www.opencart.com/index.php?route=extension/extension&filter_username=Tcalp');" title="View all OpenCart Mods by Tcalp">Jeff Hunter aka Tcalp</a>]]></author>
 	
@@ -63,8 +63,11 @@
 			<search position="after"><![CDATA[public function delete($key) {]]></search>
 			<add><![CDATA[
 			global $config;
-			if (extension_loaded('apc') && $config->get('config_memory_cache') == 1) { 
+			if (extension_loaded('apc') && $config->get('config_memory_cache') == 1) {			
 				apc_delete($key); 
+				// delete all keys beginning with a regex match on MY_APC_TESTA
+				$toDelete = new APCIterator('user', '/^' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '/', APC_ITER_VALUE);
+				apc_delete($toDelete);
 			} else if (extension_loaded('xcache') && $config->get('config_memory_cache') == 2) {
 				xcache_unset($key);
 			} else {
@@ -151,7 +154,7 @@
 				$start = explode(' ', $GLOBALS['start']);
 				$start = $start[1] + $start[0];
 				$GLOBALS['total_time'] = round(($finish - $start), 4);
-				FB::log('INCREASE PAGE SPEED ANALYZER V4.0');
+				FB::log('INCREASE PAGE SPEED ANALYZER V4.3');
 				FB::info('Total Database Queries : ' . $db->total_queries);
 				FB::info('Time Spent Database Querying : ' . round($db->total_query_time,4) . ' seconds.');
 				if ($db->total_slow_queries) {
@@ -1073,27 +1076,4 @@
 		</operation>
 	</file>	
 	
-	<file name="catalog/controller/module/latest.php">
-		<operation> <!-- ADD DATA CACHE TO LATEST -->
-			<search position="before"><![CDATA[$results = $this->model_catalog_product]]></search>
-			<add><![CDATA[
-			if ($this->customer->isLogged()) {
-				$customer_group_id = $this->customer->getCustomerGroupId();
-			} else {
-				$customer_group_id = $this->config->get('config_customer_group_id');
-			}
-			$cache_name = 'latestmodule' . $customer_group_id;
-			if ($this->cache->get($cache_name)) {
-				$this->data['products'] = $this->cache->get($cache_name);
-			} else {
-			]]></add>
-		</operation>
-		<operation> <!-- ADD DATA CACHE TO LATEST -->
-			<search position="before"><![CDATA[if (file_exists(DIR_TEMPLATE]]></search>
-			<add><![CDATA[
-				$this->cache->set($cache_name, $this->data['products']);
-			}
-			]]></add>
-		</operation>
-	</file>
 </modification>
