@@ -1,0 +1,390 @@
+<modification>
+	<id>Product attribute group adding</id>
+	<version></version>
+	<vqmver></vqmver>
+	<author>kizmo</author>
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation error="log">
+			<search position="after"><![CDATA[
+				<div id="tab-attribute">
+				]]></search>
+				<add><![CDATA[
+				<div style="padding-left:16px;padding-bottom:12px;">Attribute Group 
+					<select id="product_group_attributes">
+						<?php $group_index = 0; ?>
+						<?php foreach ($attribute_groups as $group) { ?>
+						<option value="<?php echo $group['attribute_group_id']; ?>"><?php echo $group['name']; ?></option>
+							<?php $group_index++; ?>
+						<?php } ?>
+					</select>
+					<a id="product_group_attributes_button" class="button"><span>Load Attribute Group</span></a>
+				</div>
+				]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation error="log">
+			<search position="replace" offset="14"><![CDATA[
+				<?php $attribute_row = 0; ?>
+				]]></search>
+				<add><![CDATA[
+				<?php $attribute_row = 0; ?>
+				<?php foreach ($product_attributes as $product_attribute) { ?>
+				<tbody id="attribute-row<?php echo $attribute_row; ?>">
+				  <tr>
+					<td class="left">
+						<span class="product-attribute-group-name" name="product_attribute_group[<?php echo $attribute_row; ?>][name]">Attribute Group: <em style="font-weight:bold;font-style:normal;"><?php echo $product_attribute['product_attribute_group_name'][$language['language_id']]['name']; ?></em></span>
+						<br />
+						<input type="text" name="product_attribute[<?php echo $attribute_row; ?>][name]" value="<?php echo $product_attribute['name']; ?>" />
+					  <input type="hidden" name="product_attribute[<?php echo $attribute_row; ?>][attribute_id]" value="<?php echo $product_attribute['attribute_id']; ?>" /></td>
+					<td class="left" valign="middle"><?php foreach ($languages as $language) { ?>
+						<div style="display:inline-block;">
+							<select id="product_attribute_values_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>_<?php echo $product_attribute['attribute_id']; ?>" onchange="attributeValueFiller('product_attribute_values_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>_<?php echo $product_attribute['attribute_id']; ?>','product_attribute_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>','product_attribute_editor_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>')" style="width:250px;">
+									<option value="">Values</option>
+								<?php
+								if(isset($product_attribute['product_attribute_description'][$language['language_id']])){
+									foreach($product_attribute['product_attribute_description'][$language['language_id']]['values'] as $value){
+								?>
+									<option value="<?php echo $value; ?>" <?php echo ($value==$product_attribute['product_attribute_description'][$language['language_id']]['text'])?'selected="selected"':''; ?>><?php echo $value; ?></option>
+								<?php
+									}
+								}
+								?>
+							</select>
+							<a class="button" onclick="restoreAttribute('<?php echo isset($product_attribute['product_attribute_description'][$language['language_id']]) ? $product_attribute['product_attribute_description'][$language['language_id']]['text'] : ''; ?>','product_attribute_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>')"><span>Restore</span></a>
+							<br>
+							<select id="product_attribute_editor_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>" onchange="attributeProductEditor('product_attribute_editor_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>')"
+							style="width:318px;">
+								<option value="">Products</option>
+							</select>
+							<br /><br />
+						</div>
+						<div style="display:inline-block;">
+							<textarea id="product_attribute_<?php echo $attribute_row; ?>_<?php echo $language['language_id']; ?>" name="product_attribute[<?php echo $attribute_row; ?>][product_attribute_description][<?php echo $language['language_id']; ?>][text]" cols="40" rows="5"><?php echo isset($product_attribute['product_attribute_description'][$language['language_id']]) ? $product_attribute['product_attribute_description'][$language['language_id']]['text'] : ''; ?></textarea>
+							<img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" />
+						</div>
+						<br />
+					  <?php } ?></td>
+					<td class="left"><a onclick="$('#attribute-row<?php echo $attribute_row; ?>').remove();" class="button"><span><?php echo $button_remove; ?></span></a></td>
+				  </tr>
+				</tbody>
+				<?php $attribute_row++; ?>
+				<?php } ?>
+				]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation error="log">
+			<search position="after"><![CDATA[
+				var attribute_row = <?php echo $attribute_row; ?>;
+				]]></search>
+				<add><![CDATA[
+				function attributeValueFiller(source,target,product){
+					var v = $('select#'+source).val();
+					$('textarea#'+target).attr("value",v);
+					var a = source.split('_');
+					var a_id = 0;
+					var a_language = 0;
+					if(a.length>0){
+						a_id = a[a.length-1];
+						a_language = a[a.length-2];
+					}
+					
+					$.ajax({
+						url: 'index.php?route=catalog/product/getProductsByAttribute&token=<?php echo $token; ?>',
+						type: 'GET',
+						dataType: 'json',
+						data: 'attribute=' + v + '&language=' + a_language,
+						error: function(data, textStatus) {
+							alert('Add Attribute Group ERROR: '+data.responseText+', readyStatus: '+data.readyState+', status: '+data.status+', status: '+textStatus+', group_id: '+$('#product_group_attributes').val());
+						},
+						success: function(data) {
+							var i=0;
+							//alert('success');
+							var r='';
+							var html = '<select id="'+product+'" onchange="attributeProductEditor(\''+product+'\')" style="width:318px;">';
+							html += '<option value="">Products</option>';
+							for (i=0;i<data.length;i++){
+								html += '<option value="'+data[i].product_id+'">'+data[i].name+'</option>';
+							}
+							html += '</select>';
+							$('select#'+product).replaceWith(html);
+						}
+					});
+				}
+				function attributeProductEditor(target){
+					if($('#'+target).val()!=''){
+						window.open('<?php echo HTTP_SERVER.'index.php?route=catalog/product/update&token='.$token.'&product_id='; ?>'+$('#'+target).val(),'_blank')
+					}
+				}
+				function restoreAttribute(value, target) {
+					$('textarea#'+target).attr("value",value);
+				}
+				
+				$('#product_group_attributes_button').click(function(){
+					$.ajax({
+						url: 'index.php?route=catalog/attribute/getListByGroup&token=<?php echo $token; ?>',		type: 'POST',		dataType: 'json',
+						data: 'group=' + $('#product_group_attributes').val(),
+						error: function(data, textStatus) {
+							alert('Add Attribute Group ERROR: '+data.responseText+', readyStatus: '+data.readyState+', status: '+data.status+', status: '+textStatus+', group_id: '+$('#product_group_attributes').val());
+						},
+						success: function(data) {
+							var i=0;
+							for (i=0;i<data.length;i++){
+								var html  = '<tbody id="attribute-row' + attribute_row + '">';
+								html += '  <tr>';
+								html += '    <td class="left">';
+								html += '		<span class="product-attribute-group-name" name="product_attribute_group[' + attribute_row + '][name]">Attribute Group: <em style="font-weight:bold;font-style:normal;">' + data[i].attribute_group + '</em></span>';
+								html += '		<br />';
+								html += '		<input type="text" name="product_attribute[' + attribute_row + '][name]" value="' + data[i].name + '" />';
+								html += '    	<input type="hidden" name="product_attribute[' + attribute_row + '][attribute_id]" value="' + data[i].attribute_id + '" />';
+								html += '	 </td>';
+								html += '    <td class="left">';
+								<?php foreach ($languages as $language) { ?>
+								
+								html += '		<div style="display:inline-block;">';
+								html += '			<select id="product_attribute_values_' + attribute_row + '_<?php echo $language['language_id']; ?>_' + data[i].attribute_id + '" ';
+								html += 'onchange="attributeValueFiller(';
+								html += "'product_attribute_values_" + attribute_row + "_<?php echo $language['language_id']; ?>_" + data[i].attribute_id + "',";
+								html += "'product_attribute_" + attribute_row + "_<?php echo $language['language_id']; ?>',";
+								html += "'product_attribute_editor_" + attribute_row + "_<?php echo $language['language_id']; ?>'";
+								html += ')" style="width:250px;">';
+								html += '				<option value="">Values</option>';
+								if(data[i].attribute_current_values[<?php echo $language['language_id']; ?>]){
+									for(var avi=0;avi<data[i].attribute_current_values[<?php echo $language['language_id']; ?>].length;avi++){
+										html += '		<option value="' + data[i].attribute_current_values[<?php echo $language['language_id']; ?>][avi] + '">' + data[i].attribute_current_values[<?php echo $language['language_id']; ?>][avi] + '</option>';
+									}
+								}
+								html += '			</select>';
+								html += '			<a class="button" onclick="restoreAttribute(\'\',\'product_attribute_' + attribute_row + '_<?php echo $language['language_id']; ?>\')"><span>Restore</span></a>';
+								html += '			<br>';
+								html += '			<select id="product_attribute_editor_' + attribute_row + '_<?php echo $language['language_id']; ?>" onchange="attributeProductEditor(\'product_attribute_editor_' + attribute_row + '_<?php echo $language['language_id']; ?>\')" style="width:318px;">';
+								html += '				<option value="">Products</option>';
+								
+								html += '			</select>';
+								html += '			<br /><br />';
+								html += '		</div>';
+								html += '		<div style="display:inline-block;">';
+								html += '			<textarea id="product_attribute_' + attribute_row + '_<?php echo $language['language_id']; ?>" name="product_attribute[' + attribute_row + '][product_attribute_description][<?php echo $language['language_id']; ?>][text]" cols="40" rows="5"></textarea><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /><br />';
+								html += '		</div>';
+								html += '		<br />';
+								
+								<?php } ?>
+								html += '    </td>';
+								html += '    <td class="left"><a onclick="$(\'#attribute-row' + attribute_row + '\').remove();" class="button"><span><?php echo $button_remove; ?></span></a></td>';
+								html += '  </tr>';
+								html += '</tbody>';
+								$('#attribute tfoot').before(html);
+								attributeautocomplete(attribute_row);
+								attribute_row++;
+							}
+						}
+					});
+				});
+				]]></add>
+		</operation>
+	</file>
+	
+	
+	
+	<file name="admin/controller/catalog/product.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+				if (isset($this->request->post['product_attribute'])) {
+				]]></search>
+				<add><![CDATA[
+				//LOAD ALL ATTRIBUTE GROUPS
+				$this->load->model('catalog/attribute_group');
+				if (isset($this->request->post['attribute_groups'])) {
+					$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
+				} elseif (isset($product_info)) {
+					$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
+				} else {
+					$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
+				}
+				]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+				protected function getForm() {
+				]]></search>
+				<add><![CDATA[
+				public function getProductsByAttribute() {
+					$json = array();
+					if (isset($this->request->get['attribute'])&&isset($this->request->get['language'])) {
+						$this->load->model('catalog/product');
+						$json = $this->model_catalog_product->getProductsByAttribute($this->request->get['attribute'],$this->request->get['language']);
+					}
+					$this->response->setOutput(json_encode($json));
+				}
+				]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+					'name'                          => $attribute_info['name'],
+				]]></search>
+				<add><![CDATA[
+					'product_attribute_group_name' => $product_attribute['product_attribute_group_name'],
+				]]></add>
+		</operation>
+	</file>
+	
+	
+	
+	<file name="admin/controller/catalog/attribute.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+				protected function getForm()
+				]]></search>
+				<add><![CDATA[
+				public function getListByGroup() {
+					$json = array();
+					if (isset($this->request->post['group'])) {
+						$this->load->model('catalog/attribute');
+						$data = array('filter_attribute_group_id' => $this->request->post['group']);
+						$json = $this->model_catalog_attribute->getAttributes($data);
+					}
+					$sort_order = array();
+					foreach ($json as $key => $value) {
+						$sort_order[$key] = $value['sort_order'];
+					}
+					array_multisort($sort_order, SORT_ASC, $json);
+					
+					$this->response->setOutput(json_encode($json));
+				}
+				]]></add>
+		</operation>
+	</file>
+	
+	
+	
+	<file name="admin/model/catalog/product.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[ 
+				$product_attribute_query = $this->db->query("SELECT attribute_id FROM " . DB_PREFIX . "product_attribute WHERE product_id = '" . (int)$product_id . "' GROUP BY attribute_id");
+				]]></search> 
+				<add><![CDATA[
+					$product_attribute_query = $this->db->query(
+						"SELECT pa.attribute_id, ad.name FROM ".DB_PREFIX."product_attribute pa ".
+							"LEFT JOIN ".DB_PREFIX."attribute a ON (pa.attribute_id = a.attribute_id) ".
+							"LEFT JOIN ".DB_PREFIX."attribute_description ad ON (a.attribute_id = ad.attribute_id) ".
+							"LEFT JOIN ".DB_PREFIX."attribute_group ag ON (ag.attribute_group_id = a.attribute_group_id) ".
+						"WHERE pa.product_id = '".(int)$product_id."' AND ad.language_id = '".(int)$this->config->get('config_language_id')."' ".
+						"GROUP BY pa.attribute_id ORDER BY ag.sort_order, a.sort_order"
+					);
+					]]></add> 
+		</operation>
+	</file>
+	
+	<file name="admin/model/catalog/product.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[ 
+				$product_attribute_description_data[$product_attribute_description['language_id']] = array('text' => $product_attribute_description['text']);
+				]]></search> 
+				<add><![CDATA[
+					$product_attribute_values_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_attribute WHERE attribute_id = '".(int)$product_attribute['attribute_id']."' AND language_id='".$product_attribute_description['language_id']."'");
+					$product_attribute_values_data = array();
+					foreach ($product_attribute_values_query->rows as $product_attribute_value){
+						if(!in_array($product_attribute_value['text'],$product_attribute_values_data)&&trim($product_attribute_value['text'])!=''){
+							$product_attribute_values_data[] = $product_attribute_value['text'];
+						}
+					}
+					$product_attribute_description_data[$product_attribute_description['language_id']] = array('text' => $product_attribute_description['text'],'values'=>$product_attribute_values_data);
+					]]></add> 
+		</operation>
+	</file>
+	<file name="admin/model/catalog/product.php">
+		<operation error="log">
+			<search position="before"><![CDATA[ 
+				public function getProductsByCategoryId($category_id) {
+				]]></search> 
+				<add><![CDATA[
+					public function getProductsByAttribute($attribute,$language) {
+						$query = $this->db->query("
+							SELECT p.*, pd.* FROM " . DB_PREFIX . "product p 
+							LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) 
+							LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (p.product_id=pa.product_id) 
+							WHERE pa.text='".$this->db->escape(trim($attribute))."' AND pa.language_id=".(int)$language." AND pd.language_id=".(int)$language."
+							GROUP BY p.product_id 
+							ORDER BY p.product_id, pd.name ASC
+						");
+						return $query->rows;
+					}
+					]]></add> 
+		</operation>
+	</file>
+	
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="before"><![CDATA[
+				$product_attribute_data[] = array(
+				]]></search>
+				<add><![CDATA[
+					$product_attribute_group_name_data = array();
+					$product_attribute_group_name_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "attribute_group_description agd LEFT JOIN " . DB_PREFIX . "attribute a ON a.attribute_group_id = agd.attribute_group_id LEFT JOIN " . DB_PREFIX . "product_attribute pa ON pa.attribute_id = a.attribute_id WHERE pa.product_id = '" . (int)$product_id . "' AND pa.attribute_id = '" . (int)$product_attribute['attribute_id'] . "'");
+
+					foreach ($product_attribute_group_name_query->rows as $product_attribute_group_name) {
+						$product_attribute_group_name_data[$product_attribute_group_name['language_id']] = array('name' => $product_attribute_group_name['name']);
+					}
+					]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[
+				$product_attribute_data[] = array(
+				]]></search>
+				<add><![CDATA[
+					'product_attribute_group_name' => $product_attribute_group_name_data,
+					]]></add>
+		</operation>
+	</file>
+	
+	<file name="admin/model/catalog/attribute.php">
+		<operation error="log">
+			<search position="before"><![CDATA[ 
+				public function getAttributes($data = array()) {
+				]]></search> 
+				<add><![CDATA[
+					public function getAttributeValues($attribute){
+						$sql = "SELECT * FROM " . DB_PREFIX . "product_attribute pa WHERE pa.attribute_id = '" . (int)$attribute . "' ORDER BY attribute_id";
+						$query = $this->db->query($sql);
+						$results = $query->rows;
+						$result = array();
+						for($i=0;$i<count($results);$i++){
+							if(trim($results[$i]['text'])!=''){
+								if(isset($result[$results[$i]['language_id']])){
+									if(!in_array($results[$i]['text'],$result[$results[$i]['language_id']])){
+										$result[$results[$i]['language_id']][] = $results[$i]['text'];
+									}
+								}else{
+									$result[$results[$i]['language_id']][] = $results[$i]['text'];
+								}
+							}
+						}
+						return $result;
+					}
+					]]></add> 
+		</operation>
+	</file>
+	<file name="admin/model/catalog/attribute.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[ 
+				return $query->rows;
+				]]></search> 
+				<add><![CDATA[
+					$results = $query->rows;
+					$result = array();
+					if(count($results)>0){
+						for($ri=0;$ri<count($results);$ri++){
+							$result[$ri] = $results[$ri];
+							$result[$ri]['attribute_current_values'] = $this->getAttributeValues($results[$ri]['attribute_id']);
+						}
+					}
+					return $result;
+					]]></add> 
+		</operation>
+	</file>
+</modification>
