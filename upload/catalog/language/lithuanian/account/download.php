@@ -1,14 +1,14 @@
 <?php
 // Heading 
-$_['heading_title']   = 'Account Downloads';
+$_['heading_title']   = 'Detalių schemos ir dokumentai parsisiuntimui';
 
 // Text
-$_['text_account']    = 'Account';
-$_['text_downloads']  = 'Downloads';
-$_['text_order']      = 'Order ID:';
-$_['text_date_added'] = 'Date Added:';
-$_['text_name']       = 'Name:';
-$_['text_remaining']  = 'Remaining:';
-$_['text_size']       = 'Size:';
-$_['text_empty']      = 'You have not made any previous downloadable orders!';
+$_['text_account']    = 'Paskyra';
+$_['text_downloads']  = 'Detalių schemos ir dokumentai';
+$_['text_order']      = 'Užsakymo numeris:';
+$_['text_date_added'] = 'Pateikimo data:';
+$_['text_name']       = 'Pavadinimas:';
+$_['text_remaining']  = 'Likęs parsisiuntimų skaičius:';
+$_['text_size']       = 'Bylos dydis:';
+$_['text_empty']      = 'Nebuvo užsakymų su detalių schemomis ar dokumentais!';
 ?>

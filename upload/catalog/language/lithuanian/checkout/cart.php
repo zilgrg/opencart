@@ -1,6 +1,6 @@
 <?php
 // Heading  
-$_['heading_title']          = 'Prekių krepšelis';
+$_['heading_title']          = 'Krepšelis';
 
 // Text
 $_['text_success']           = 'Success: You have added <a href="%s">%s</a> to your <a href="%s">shopping cart</a>!';
@@ -11,16 +11,16 @@ $_['text_reward']            = 'Success: Your reward points discount has been ap
 $_['text_shipping']          = 'Success: Your shipping estimate has been applied!';
 $_['text_login']             = 'Attention: You must <a href="%s">login</a> or <a href="%s">create an account</a> to view prices!';
 $_['text_points']            = 'Reward Points: %s';
-$_['text_items']             = '%s item(s) - %s';
-$_['text_next']              = 'What would you like to do next?';
-$_['text_next_choice']       = 'Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.';
-$_['text_use_coupon']        = 'Use Coupon Code';
-$_['text_use_voucher']       = 'Use Gift Voucher';
+$_['text_items']             = '%s vnt. - %s';
+$_['text_next']              = 'Turite nuolaidos kodą ar dovanų kuponą?';
+$_['text_next_choice']       = 'Įveskite nuolaidos kodą arba dovanų kupono kodą.';
+$_['text_use_coupon']        = 'Pasirinkite, jei norite įvesti nuolaidos kodą';
+$_['text_use_voucher']       = 'Pasirinkite, jei norite įvesti dovanų kupono kodą';
 $_['text_use_reward']        = 'Use Reward Points (Available %s)';
 $_['text_shipping_estimate'] = 'Estimate Shipping & Taxes';
 $_['text_shipping_detail']   = 'Enter your destination to get a shipping estimate.';
 $_['text_shipping_method']   = 'Please select the preferred shipping method to use on this order.';
-$_['text_empty']             = 'Your shopping cart is empty!';
+$_['text_empty']             = 'Krepšelis tuščias!';
 $_['text_until_cancelled']   = 'until cancelled';
 $_['text_recurring_item']    = 'Recurring item';
 $_['text_payment_profile']   = 'Payment Profile';
@@ -34,25 +34,25 @@ $_['text_month']             = 'month';
 $_['text_year']              = 'year';
 
 // Column
-$_['column_image']           = 'Paveiksliukas';
-$_['column_name']            = 'Prekė';
-$_['column_model']           = 'Prekės kodas';
-$_['column_quantity']        = 'Kiekis';
-$_['column_price']           = 'Vnt. kaina';
-$_['column_total']           = 'Iš viso';
+$_['column_image']           = 'Paveikslėlis';
+$_['column_name']            = 'Pavadinimas';
+$_['column_model']           = 'Kodas';
+$_['column_quantity']        = 'Kiekis vienetais';
+$_['column_price']           = 'Vnt. kaina su PVM';
+$_['column_total']           = 'Suma su PVM';
 
 // Entry
-$_['entry_coupon']           = 'Enter your coupon here:';
-$_['entry_voucher']          = 'Enter your gift voucher code here:';
+$_['entry_coupon']           = 'Nuolaidos kodas:';
+$_['entry_voucher']          = 'Dovanų kupono kodas:';
 $_['entry_reward']           = 'Points to use (Max %s):';
 $_['entry_country']          = 'Šalis:';
-$_['entry_zone']             = 'Region / State:';
-$_['entry_postcode']         = 'Post Code:';
+$_['entry_zone']             = 'Savivaldybė / regionas:';
+$_['entry_postcode']         = 'Pašto kodas (<a href="http://www.post.lt/lt/pagalba/pasto-kodu-paieska" target="_blank">pašto kodo paieška</a>):';
 
 // Error
 $_['error_stock']            = 'Products marked with *** are not available in the desired quantity or not in stock!';
-$_['error_minimum']          = 'Minimum order amount for %s is %s!';	
-$_['error_required']         = '%s required!';	
+$_['error_minimum']          = 'Minimalus užsakomas prekės "%s" kiekis yra %s vnt. pakuotėje. Didesni kiekiai užsakomi minimalų kiekį dauginant iš reikalingų pakuočių skaičiaus.';	
+$_['error_required']         = '%s privalomas laukas!';	
 $_['error_product']          = 'Warning: There are no products in your cart!';	
 $_['error_coupon']           = 'Warning: Coupon is either invalid, expired or reached it\'s usage limit!';
 $_['error_voucher']          = 'Warning: Gift Voucher is either invalid or the balance has been used up!';

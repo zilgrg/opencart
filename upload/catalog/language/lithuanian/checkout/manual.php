@@ -10,7 +10,7 @@ $_['error_customer']    = 'Warning: Can not find selected customer!';
 $_['error_email']       = 'E-Mail Address does not appear to be valid!';
 $_['error_postcode']    = 'Postcode must be between 2 and 10 characters!';
 $_['error_country']     = 'Please select a country!';
-$_['error_zone']        = 'Please select a region / state!';
+$_['error_zone']        = 'Pasirinkite savivaldybę / regioną!';
 $_['error_stock']       = 'Products marked with *** are not available in the desired quantity or not in stock!';
 $_['error_minimum']     = 'Minimum order amount for %s is %s!';	
 $_['error_required']    = '%s required!';
@@ -25,5 +25,5 @@ $_['error_points']      = 'Warning: You don\'t have %s reward points!';
 $_['error_maximum']     = 'Warning: The maximum number of points that can be applied is %s!';
 $_['error_to_name']     = 'Recipient\'s Name must be between 1 and 64 characters!';
 $_['error_from_name']   = 'Your Name must be between 1 and 64 characters!';
-$_['error_amount']      = 'Amount must be between %s and %s!';
+$_['error_amount']      = 'Kiekis turi būti nuo %s iki %s!';
 ?>

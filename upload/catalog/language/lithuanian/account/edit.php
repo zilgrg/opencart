@@ -1,18 +1,18 @@
 <?php
 // Heading 
-$_['heading_title']     = 'Mano paskyros informacija';
+$_['heading_title']     = 'Mano duomenys';
 
 // Text
-$_['text_account']      = 'Account';
-$_['text_edit']         = 'Edit Information';
+$_['text_account']      = 'Paskyra';
+$_['text_edit']         = 'Redaguoti duomenis';
 $_['text_your_details'] = 'Your Personal Details';
 $_['text_success']      = 'Success: Your account has been successfully updated.';
 
 // Entry
 $_['entry_firstname']  = 'Vardas:';
 $_['entry_lastname']   = 'Pavardė:';
-$_['entry_email']      = 'E-Mail:';
-$_['entry_telephone']  = 'Telephone:';
+$_['entry_email']      = 'El. paštas:';
+$_['entry_telephone']  = 'Telefonas:';
 $_['entry_fax']        = 'Fax:';
 
 // Error

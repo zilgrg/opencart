@@ -5,14 +5,14 @@ $_['heading_title']    = 'Svetainės medis';
 // Text
 $_['text_special']     = 'Specialūs pasiūlymai';
 $_['text_account']     = 'Mano paskyra';
-$_['text_edit']        = 'Paskyros informacija';
-$_['text_password']    = 'Slaptažodis';
-$_['text_address']     = 'Adresų knygutė';
+$_['text_edit']        = 'Mano duomenys';
+$_['text_password']    = 'Keisti slaptažodį';
+$_['text_address']     = 'Mano adresai';
 $_['text_history']     = 'Užsakymų istorija';
-$_['text_download']    = 'Parsisiuntimai';
+$_['text_download']    = 'Detalių schemos ir dokumentai';
 $_['text_cart']        = 'Prekių krepšelis';
 $_['text_checkout']    = 'Pirkti prekes';
-$_['text_search']      = 'Paieška';
+$_['text_search']      = 'Detalių paieška';
 $_['text_information'] = 'Informacija';
 $_['text_contact']     = 'Kontaktai';
 ?>

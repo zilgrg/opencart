@@ -1,3 +1,3 @@
 <?php
-$_['text_total'] = 'Viso užsakymo suma';
+$_['text_total'] = 'Galutinė užsakymo suma';
 ?>

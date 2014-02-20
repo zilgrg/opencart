@@ -1,11 +1,11 @@
 <?php
 // Heading
-$_['heading_title'] = 'Your Order Has Been Processed!';
+$_['heading_title'] = 'Užsakymas sėkmingas!';
 
 // Text
-$_['text_customer'] = '<p>Your order has been successfully processed!</p><p>You can view your order history by going to the <a href="%s">my account</a> page and by clicking on <a href="%s">history</a>.</p><p>If your purchase has an associated download, you can go to the account <a href="%s">downloads</a> page to view them.</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for shopping with us online!</p>';
-$_['text_guest']    = '<p>Your order has been successfully processed!</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for shopping with us online!</p>';
-$_['text_basket']   = 'Shopping Cart';
-$_['text_checkout'] = 'Checkout';
-$_['text_success']  = 'Success';
+$_['text_customer'] = '<h2>Užsakymo patvirtinimas</h2><p>Užsakymas priimtas ir po apmokėjimo patvirtinimo bus pradėtas vykdyti nedelsiant!</p><p>Pasirinkus mokėjimo būdą  "Banko pavedimu", užsakymo pristatymo terminas skaičiuojamas nuo pinigų užskaitymo į mūsų sąskaitą dienos. Neapmokėjus užsakymo per 48h jis anuliuojamas.</p><p>Galite peržiūrėti užsakymų istoriją savo <a href="%s">paskyroje</a> paspausdami ant nuorodos <a href="%s">Užsakymų istorija</a>.</p><p>Jei užsakymas turi susijusių bylų parsisiuntimui pvz. detalių schemų, jas galite peržiūrėti ir parsisiųsti savo paskyros skyrelyje <a href="%s">Detalių schemos ir kt. dokumentai</a>.</p><p>Jei turite klausimų dėl šio užsakymo prašome susisiekti su <a href="%s">mumis</a>.</p><h2>Sąskaitos rekvizitai</h2><p>Gavėjas: <em>UAB „Yamaha atstovas“</em><br>A/S: <em>LT067300010107483611</em><br>Bankas: <em>Bankas „Swedbank“ AB</em><br>Įmonės kodas: <em>123925130</em><br>Mokėjimo paskirtis: <em>reikia nurodyti tik užsakymo numerį</em><br></p><p>Dėkojame, kad perkate!</p>';
+$_['text_guest']    = '<h2>Užsakymo patvirtinimas</h2><p>Užsakymas priimtas ir po apmokėjimo patvirtinimo bus pradėtas vykdyti nedelsiant!</p><p>Pasirinkus mokėjimo būdą  "Banko pavedimu", užsakymo pristatymo terminas skaičiuojamas nuo pinigų užskaitymo į mūsų sąskaitą dienos. Neapmokėjus užsakymo per 48h jis anuliuojamas.</p><p>Galite peržiūrėti užsakymų istoriją savo <a href="%s">paskyroje</a> paspausdami ant nuorodos <a href="%s">Užsakymų istorija</a>.</p><p>Jei užsakymas turi susijusių bylų parsisiuntimui pvz. detalių schemų, jas galite peržiūrėti ir parsisiųsti savo paskyros skyrelyje <a href="%s">Detalių schemos ir kt. dokumentai</a>.</p><p>Jei turite klausimų dėl šio užsakymo prašome susisiekti su <a href="%s">mumis</a>.</p><h2>Sąskaitos rekvizitai</h2><p>Gavėjas: <em>UAB „Yamaha atstovas“</em><br>A/S: <em>LT067300010107483611</em><br>Bankas: <em>Bankas „Swedbank“ AB</em><br>Įmonės kodas: <em>123925130</em><br>Mokėjimo paskirtis: <em>reikia nurodyti tik užsakymo numerį</em><br></p><p>Dėkojame, kad perkate!</p>';
+$_['text_basket']   = 'Krepšelis';
+$_['text_checkout'] = 'Užsakymo formavimas';
+$_['text_success']  = 'Užsakymas sėkmingas';
 ?>

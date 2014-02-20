@@ -13,7 +13,7 @@ $_['text_ship_same_address']         = 'Ship to the same address';
 
 //method
 $_['text_shipping_method']           = 'Shipping Method';
-$_['text_payment_method']            = 'Payment Method';
+$_['text_payment_method']            = 'Mokėjimo būdas';
 
 $_['text_cart']                      = 'Shopping Cart';
 $_['text_voucher_success']           = 'Success: Your gift voucher discount has been applied!';
@@ -23,13 +23,13 @@ $_['entry_voucher']                  = 'Enter your gift voucher code here:';
 
 $_['entry_reward']                   = 'Points to use (Max %s):';
 $_['text_checkout_option']           = 'Step 1: Checkout Options';
-$_['text_checkout_account']          = 'Step 2: Account &amp; Billing Details';
+$_['text_checkout_account']          = 'Step 2: Account & Billing Details';
 $_['text_checkout_payment_address']  = 'Step 2: Billing Details';
 $_['text_checkout_shipping_address'] = 'Step 3: Delivery Details';
 $_['text_checkout_shipping_method']  = 'Step 4: Delivery Method';
 $_['text_checkout_payment_method']   = 'Step 5: Payment Method';
 $_['text_checkout_confirm']          = 'Step 6: Confirm Order';
-$_['text_modify']                    = 'Modify &raquo;';
+$_['text_modify']                    = 'Modify »';
 $_['text_new_customer']              = 'New Customer';
 $_['text_returning_customer']        = 'Returning Customer';
 $_['text_checkout']                  = 'Checkout Options:';
@@ -68,7 +68,7 @@ $_['button_paynow']        ='Pay Now';
 
 // Column
 $_['column_name']                    = 'Product Name';
-$_['column_model']                   = 'Model';
+$_['column_model']                   = 'Modelis';
 $_['column_quantity']                = 'Quantity';
 $_['column_price']                   = 'Price';
 $_['column_total']                   = 'Total';
@@ -82,7 +82,7 @@ $_['entry_customer_group']           = 'Business Type:';
 $_['entry_company_id']               = 'Company ID:';
 $_['entry_tax_id']                   = 'Tax ID:';
 $_['entry_confirm']                  = 'Password Confirm:';
-$_['entry_firstname']                = 'First Name:';
+$_['entry_firstname']                = 'Vardas:';
 $_['entry_lastname']                 = 'Last Name:';
 $_['entry_telephone']                = 'Telephone:';
 $_['entry_fax']                      = 'Fax:';

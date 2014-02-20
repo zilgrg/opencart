@@ -1,10 +1,10 @@
 <?php
-$_['pds_model']      = 'Model:';
+$_['pds_model']      = 'Kodas:';
 $_['pds_sku']        = 'SKU:';
-$_['pds_brand']      = 'Brand:';
-$_['pds_upc']        = 'UPC:';
-$_['pds_location']   = 'Location:';
-$_['pds_stock']      = 'Availability:';
-$_['pds_instock']    = 'In Stock';
-$_['pds_weight']     = 'Weight:';
+$_['pds_brand']      = 'Gamintojas:';
+$_['pds_upc']        = 'Atnaujintas kodas:';
+$_['pds_location']   = 'Lokacija:';
+$_['pds_stock']      = 'Pristatymo terminas:';
+$_['pds_instock']    = '2-3 d.d. yra sandėlyje Vilniuje';
+$_['pds_weight']     = 'Svoris:';
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_title']       = 'Shipping rate';
-$_['text_flat_description'] = 'Shipping Rate';
-$_['text_description'] = 'Free shipping';
+$_['text_title']       = 'Pristatymas';
+$_['text_flat_description'] = 'Pristatymas per DPD';
+$_['text_description'] = 'Nemokamas pristatymas per DPD';
 ?>
