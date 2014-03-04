@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 62 $)
+  Version: 3 ($Revision: 69 $)
 
 */
 
@@ -131,7 +131,6 @@ class ControllerToolKaImport extends KaController {
 			$this->params = array(
 				'update_mode'         => 'add',
 				'cat_separator'       => '///',
-				'delimiter'           => 's',
 				'location'            => 'local',
 				'language_id'         => $this->config->get('config_language_id'),
 				'store_ids'           => array(0),
@@ -141,10 +140,12 @@ class ControllerToolKaImport extends KaController {
 				'default_category_id' => 0,
 				'charset'             => 'ISO-8859-1',
 				'charset_option'      => 'predefined',
+				'delimiter'           => ';',
+				'delimiter_option'    => 'predefined',
 				'profile_name'        => '', // for the second step
 				'profile_id'          => '', // for the first step
 				'file_path'           => '',
-				'rename_file'         => true,				
+				'rename_file'         => true,
 				'price_multiplier'    => '',
 				'disable_not_imported_products' => false,
 				'skip_new_products'   => false,
@@ -200,7 +201,6 @@ class ControllerToolKaImport extends KaController {
 			$this->params['images_dir']          = $this->request->post['images_dir'];
 			$this->params['incoming_images_dir'] = $this->request->post['incoming_images_dir'];
 
-			$this->params['delimiter']           = $this->request->post['delimiter'];
 			$this->params['location']            = $this->request->post['location'];
 			$this->params['language_id']         = $this->request->post['language_id'];
 			$this->params['cat_separator']       = $this->request->post['cat_separator']; 
@@ -209,11 +209,18 @@ class ControllerToolKaImport extends KaController {
 			$this->params['rename_file']         = (!empty($this->request->post['rename_file'])) ? true:false;
 			
 
-			$this->params['charset_option'] = $this->request->post['charset_option']; 
-			if ($this->params['charset_option'] == 'predefined') {
-				$this->params['charset']        = $this->request->post['charset']; 
+			$this->params['delimiter_option'] = $this->request->post['delimiter_option'];
+			if ($this->params['delimiter_option'] == 'predefined') {
+				$this->params['delimiter'] = $this->request->post['delimiter']; 
 			} else {
-				$this->params['charset'] = $this->request->post['custom_charset']; 
+				$this->params['delimiter'] = trim($this->request->post['custom_delimiter']); 
+			}
+			
+			$this->params['charset_option'] = $this->request->post['charset_option'];
+			if ($this->params['charset_option'] == 'predefined') {
+				$this->params['charset']        = $this->request->post['charset'];
+			} else {
+				$this->params['charset'] = $this->request->post['custom_charset'];
 			}
 
 			if (!empty($this->request->post['store_ids'])) {
@@ -227,11 +234,8 @@ class ControllerToolKaImport extends KaController {
 			$this->params['download_source_dir'] = $this->request->post['download_source_dir'];
 			$this->params['file_name_postfix']   = $this->request->post['file_name_postfix'];
 
-			if (empty($this->request->post['default_category_id'])) {
-				$this->addTopMessage("Please define the default category. This category will contain products with no categories in the file.", 'E');
-				return $this->redirect($this->url->link('tool/ka_import', 'token=' . $this->session->data['token'], 'SSL'));
-			} else {
-				$this->params['default_category_id'] = $this->request->post['default_category_id'];
+			if (isset($this->request->post['default_category_id'])) {
+				$this->params['default_category_id'] = (int) $this->request->post['default_category_id'];
 			}
 
 			if ($this->params['location'] == 'server') {
@@ -258,9 +262,11 @@ class ControllerToolKaImport extends KaController {
 
 		 	if (empty($msg)) {
 				$params = $this->params;
-				$params['delimiter'] = strtr($params['delimiter'], array('c'=>',', 's'=>';', 't'=>"\t"));
 				if ($this->model_tool_ka_import->loadFile($params)) {
-					$this->params['columns']    = $this->model_tool_ka_import->getColumns();
+					$this->params['columns'] = $this->model_tool_ka_import->getColumns();
+					if (count($this->params['columns']) == 1) {
+						$msg .= "Wrong field separator or incorrect file format.";
+					}
 				} else {
 					$msg .= $this->model_tool_ka_import->getLastError();
 				}
@@ -281,8 +287,13 @@ class ControllerToolKaImport extends KaController {
 		$this->data['stores'] = $this->getStores();
 
 		$this->load->model('catalog/category');
-		$this->data['categories'] = $this->model_catalog_category->getCategories(0);
+		if ($this->model_catalog_category->getTotalCategories() < 700) {
+			$this->data['categories'] = $this->model_catalog_category->getCategories(0);
+		} else {
+			$this->data['categories'] = array();
+		}
 		$this->data['charsets']   = $this->model_tool_ka_import->getCharsets();
+		$this->data['delimiters'] = $this->model_tool_ka_import->getDelimiters();
 
 		$this->load->model('localisation/language');
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
@@ -477,7 +488,6 @@ class ControllerToolKaImport extends KaController {
 		$this->load->model('tool/ka_import');
 
 		$params = $this->params;
-		$params['delimiter'] = strtr($params['delimiter'], array('c'=>',', 's'=>';', 't'=>"\t"));
 		if (!$this->model_tool_ka_import->initImport($params)) {
 			$this->addTopMessage($this->model_tool_ka_import->getLastError(), 'E');
 			return $this->redirect($this->url->link('tool/ka_import/step2', 'token=' . $this->session->data['token'], 'SSL'));

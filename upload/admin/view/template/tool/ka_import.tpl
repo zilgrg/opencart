@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 62 $)
+  Version: 3 ($Revision: 69 $)
 
 */
 
@@ -128,14 +128,28 @@ span.note {
 
           <tr>
             <td width="25%">Field Delimiter</td>
-            <td>
-              <select name="delimiter" style="width: 300px">
-                <option <?php if ($params['delimiter'] == 't') { ?>selected="selected" <?php } ?>value="t">tab</option>
-                <option <?php if ($params['delimiter'] == 's') { ?>selected="selected" <?php } ?>value="s">semicolon ";"</option>
-                <option <?php if ($params['delimiter'] == 'c') { ?>selected="selected" <?php } ?>value="c">comma ","</option>
-              </select>
+            <td colspan="2">
+              <input type="hidden" id="delimiter_option" name="delimiter_option" value="<?php echo $params['delimiter_option']; ?>" />
+              <table width="600px">
+
+                <tr id="predefined_delimiter_row" <?php if ($params['delimiter_option'] != 'predefined') { ?> style="display:none" <?php } ?>>
+                  <td width="280px">
+                    <?php echo $this->showSelector("delimiter", $delimiters, $params['delimiter'], 'style="width:300px;"'); ?>
+                  </td>
+                  <td><a href="javascript: void(0);" onclick="javascript: activateDelimiter('custom');">define manually</a></td>
+                </tr>
+
+                <tr id="custom_delimiter_row" <?php if ($params['delimiter_option'] == 'predefined') { ?> style="display:none" <?php } ?>>
+                  <td width="250px">
+                    <input type="text" style="width: 290px" id="custom_delimiter" name="custom_delimiter" value="<?php echo $params['delimiter']; ?>" />
+                  </td>
+                  <td><a href="javascript: void(0);" onclick="javascript: activateDelimiter('predefined');">select from predefined values</a></td>
+                </tr>
+
+              </table>
+              <span class="help"></span>
             </td>
-            <td width="50%">&nbsp;</td>
+            
           </tr>
 
           <tr>
@@ -148,7 +162,7 @@ span.note {
                   <td width="280px">
                     <?php echo $this->showSelector("charset", $charsets, $params['charset'], 'style="width:300px;"'); ?>
                   </td>
-                  <td><a href="javascript: void(0);" onclick="javascript: activateCharset('custom');">make editable</a></td>
+                  <td><a href="javascript: void(0);" onclick="javascript: activateCharset('custom');">define manually</a></td>
                 </tr>
 
                 <tr id="custom_charset_row" <?php if ($params['charset_option'] == 'predefined') { ?> style="display:none" <?php } ?>>
@@ -222,28 +236,38 @@ span.note {
           <tr>
             <td width="25%">Language</td>
             <td>
-              <select name="language_id" style="width: 300px">
-                <?php foreach ($languages as $language) { ?>
-                  <option value="<?php echo $language['language_id']; ?>" <?php if ($language['language_id'] == $params['language_id']) { ?>selected="selected"<?php } ?>><?php echo $language['name']; ?></option>
-                <?php } ?>
-              </select>
+              <?php if (count($languages) > 1) { ?>
+                <select name="language_id" style="width: 300px">
+                  <?php foreach ($languages as $language) { ?>
+                    <option value="<?php echo $language['language_id']; ?>" <?php if ($language['language_id'] == $params['language_id']) { ?>selected="selected"<?php } ?>><?php echo $language['name']; ?></option>
+                  <?php } ?>
+                </select>
+              <?php } else { ?>
+                <?php $language = reset($languages); echo $language['name']; ?>
+                <input type="hidden" name="language_id" value="<?php echo $language['language_id']; ?>" />
+              <?php } ?>
             </td>
             <td width="50%">&nbsp;</td>
           </tr>
           
           <tr>
             <td width="25%">Store</td>
-            <td>              
-              <select name="store_ids[]" multiple="multiple" size="5" style="width: 300px">
-                <?php foreach($stores as $store) { ?>
-                  <option <?php if (in_array($store['store_id'], $params['store_ids'])) { ?>selected="selected" <?php } ?>value="<?php echo $store['store_id']; ?>"><?php echo $store['name']; ?></option>
-                <?php } ?>
-              </select>
+            <td>
+              <?php if (count($stores) > 1) { ?>
+                <select name="store_ids[]" multiple="multiple" size="5" style="width: 300px">
+                  <?php foreach($stores as $store) { ?>
+                    <option <?php if (in_array($store['store_id'], $params['store_ids'])) { ?>selected="selected" <?php } ?>value="<?php echo $store['store_id']; ?>"><?php echo $store['name']; ?></option>
+                  <?php } ?>
+                </select>
+              <?php } else { ?>
+                <?php $store = reset($stores); echo $store['name']; ?>
+                <input type="hidden" name="store_id" value="<?php echo $store['store_id']; ?>" />
+              <?php } ?>
             </td>
             <td width="50%">&nbsp;</td>
           </tr>
 
-
+          <?php if (!empty($categories)) { ?>
           <tr>
             <td width="25%">Default Category</td>
             <td colspan="2">
@@ -255,6 +279,7 @@ span.note {
               <span class="help">New products will be placed into this category if another one is not specified in the file.</span>
             </td>            
           </tr>
+          <?php } ?>
         </table>
       </div>
 
@@ -339,6 +364,19 @@ function activateCharset(id) {
     $('#predefined_charset_row').hide();
     $('#custom_charset_row').show();
     $('#charset_option').val('custom');
+  }
+}
+
+function activateDelimiter(id) {
+  if (id == 'predefined') {
+    $('#predefined_delimiter_row').show();
+    $('#custom_delimiter_row').hide();
+    $('#delimiter_option').val('predefined');
+
+  } else if (id == 'custom') {
+    $('#predefined_delimiter_row').hide();
+    $('#custom_delimiter_row').show();
+    $('#delimiter_option').val('custom');
   }
 }
 

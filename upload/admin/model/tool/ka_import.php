@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 66 $)
+  Version: 3 ($Revision: 69 $)
 
 */
 
@@ -46,6 +46,14 @@ class ModelToolKaImport extends Model {
 	protected $options_with_images     = array('select', 'radio', 'checkbox', 'image');
 	
 	protected $filter = null;
+	
+	protected $delimiters = array(
+		"\t"   => 'tab',
+		";"  => 'semicolon ";"',
+		','  => 'comma ","',
+		'|'  => 'pipe "|"',
+		' '  => 'space " "',
+	);
 	
 	// session variables
 	protected $params;
@@ -898,11 +906,6 @@ class ModelToolKaImport extends Model {
 	*/
 	public function loadFile($params) {
 
-		if (!in_array($params['delimiter'], array(',',';',"\t"))) {
-			$this->lastError = 'Wrong delimiter';
-			return false;
-		}
-
 		if (empty($params['file'])) {
 			$this->lastError = "File not defined";
 			return false;
@@ -1437,11 +1440,13 @@ class ModelToolKaImport extends Model {
 		// assign the default category for new products if no categories were assigned
 		//
 		if (!$category_assigned && $is_new) {
-			$category_id = $this->params['default_category_id'];
-			$rec = array(
-				'product_id'  => $product_id,
-				'category_id' => $category_id,
-			);
+			if (!empty($this->params['default_category_id'])) {
+				$category_id = $this->params['default_category_id'];
+				$rec = array(
+					'product_id'  => $product_id,
+					'category_id' => $category_id,
+				);
+			}
 			$this->kadb->queryInsert('product_to_category', $rec, true);			
 		}
 		
@@ -1888,7 +1893,7 @@ class ModelToolKaImport extends Model {
 				if (!empty($this->params['ka_pi_options_separator'])) {
 				
 					$multi_options = array();
-					$option_keys = array('value', 'quantity', 'subtract', 'price', 'points', 'weight', 'sort_order');
+					$option_keys = array('value', 'quantity', 'subtract', 'image', 'price', 'points', 'weight', 'sort_order');
 
 					$max_option_length = 0;
 					foreach ($option_keys as $key) {
@@ -3320,7 +3325,12 @@ class ModelToolKaImport extends Model {
 		return $arr;
 	}
 
+	
+	public function getDelimiters() {
+		return $this->delimiters;
+	}
 
+	
 	/*
 		
 	
@@ -3374,8 +3384,6 @@ class ModelToolKaImport extends Model {
 			$this->lastError = "Profile not found";
 			return false;
 		}
-		
-		$params['delimiter'] = strtr($params['delimiter'], array('c'=>',', 's'=>';', 't'=>"\t"));
 		
 		if (!$this->initImport($params)) {
 			return false;
@@ -3444,7 +3452,7 @@ class ModelToolKaImport extends Model {
 		}
 
 		return $ret;
-	}	
+	}
 }
 
 ?>
