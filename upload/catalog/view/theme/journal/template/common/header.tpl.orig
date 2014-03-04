@@ -826,6 +826,11 @@ $(document).ready(function(){
 <header <?php echo isset($this->document->journal_header_type) && $this->document->journal_header_type === 'yes' ? 'class="header_ii"' : ''; ?>>
   <div class="top-header"></div>
   <div id="journal-header">
+        <?php if ($logo) { ?>
+        <div id="logo"><a href="<?php echo $home; ?>">
+          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
+        </div>
+        <?php } ?>
 
         <div class="top-links">
           <?php if(isset($this->document->journal_top_menu)): ?>
@@ -848,6 +853,12 @@ $(document).ready(function(){
           <a class="link" href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a>
           <?php endif; ?>
         </div>
+
+        <?php if(!$is_responsive || !$detect->isMobile() || ($detect->isMobile() && $detect->isTablet())): ?>
+        <section class="cart">
+            <?php echo $cart; ?>
+        </section>
+        <?php endif; ?>
 
         <section class="welcome">
             <?php if (strlen($language) > 0): ?>
@@ -875,11 +886,6 @@ $(document).ready(function(){
           </div>
         </section>
 
-        <?php if(!$is_responsive || !$detect->isMobile() || ($detect->isMobile() && $detect->isTablet())): ?>
-        <section class="cart">
-            <?php echo $cart; ?>
-        </section>
-        <?php endif; ?>
 
         <div id="search">
            <div class="button-search"></div>
@@ -904,11 +910,6 @@ $(document).ready(function(){
         </section>
         <?php endif; ?>
 
-		<?php if ($logo) { ?>
-        <div id="logo"><a href="<?php echo $home; ?>">
-          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
-        </div>
-        <?php } ?>
 <!-- navigation starts -->
 
 <nav class="menu">

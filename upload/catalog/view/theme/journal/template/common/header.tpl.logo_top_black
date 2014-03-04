@@ -826,6 +826,11 @@ $(document).ready(function(){
 <header <?php echo isset($this->document->journal_header_type) && $this->document->journal_header_type === 'yes' ? 'class="header_ii"' : ''; ?>>
   <div class="top-header"></div>
   <div id="journal-header">
+        <?php if ($logo) { ?>
+        <div id="logo"><a href="<?php echo $home; ?>">
+          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
+        </div>
+        <?php } ?>
 
         <div class="top-links">
           <?php if(isset($this->document->journal_top_menu)): ?>
@@ -875,28 +880,13 @@ $(document).ready(function(){
           </div>
         </section>
 
+
         <?php if(!$is_responsive || !$detect->isMobile() || ($detect->isMobile() && $detect->isTablet())): ?>
         <section class="cart">
             <?php echo $cart; ?>
         </section>
         <?php endif; ?>
 
-        <div id="search">
-           <div class="button-search"></div>
-          <?php if (isset($filter_name)): ?>
-
-            <?php if ($filter_name) { ?>
-            <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" />
-            <?php } else { ?>
-            <input type="text" name="filter_name" value="<?php echo $text_search; ?>" onclick="this.value = '';" onkeydown="this.style.color = '#000000';" />
-            <?php } ?>
-
-          <?php else: ?>
-
-          <input type="text" name="search" placeholder="<?php echo $text_search; ?>" value="<?php echo $search; ?>" />
-
-          <?php endif; ?>
-        </div>
 
         <?php if($is_responsive && $detect->isMobile() && !$detect->isTablet()): ?>
         <section class="cart">
@@ -904,11 +894,6 @@ $(document).ready(function(){
         </section>
         <?php endif; ?>
 
-		<?php if ($logo) { ?>
-        <div id="logo"><a href="<?php echo $home; ?>">
-          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
-        </div>
-        <?php } ?>
 <!-- navigation starts -->
 
 <nav class="menu">
@@ -1136,6 +1121,22 @@ $(document).ready(function(){
 
 
 </nav>
+        <div id="search">
+           <div class="button-search"></div>
+          <?php if (isset($filter_name)): ?>
+
+            <?php if ($filter_name) { ?>
+            <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" />
+            <?php } else { ?>
+            <input type="text" name="filter_name" value="<?php echo $text_search; ?>" onclick="this.value = '';" onkeydown="this.style.color = '#000000';" />
+            <?php } ?>
+
+          <?php else: ?>
+
+          <input type="text" name="search" placeholder="<?php echo $text_search; ?>" value="<?php echo $search; ?>" />
+
+          <?php endif; ?>
+        </div>
 </div> <!-- End #journal-header -->
 
 </header>

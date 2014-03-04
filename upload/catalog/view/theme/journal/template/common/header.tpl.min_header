@@ -827,6 +827,12 @@ $(document).ready(function(){
   <div class="top-header"></div>
   <div id="journal-header">
 
+  <?php if ($logo) { ?>
+        <div id="logo"><a href="<?php echo $home; ?>">
+          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
+        </div>
+        <?php } ?>
+
         <div class="top-links">
           <?php if(isset($this->document->journal_top_menu)): ?>
           <?php foreach ($this->document->journal_top_menu as $menu_item): ?>
@@ -875,12 +881,6 @@ $(document).ready(function(){
           </div>
         </section>
 
-        <?php if(!$is_responsive || !$detect->isMobile() || ($detect->isMobile() && $detect->isTablet())): ?>
-        <section class="cart">
-            <?php echo $cart; ?>
-        </section>
-        <?php endif; ?>
-
         <div id="search">
            <div class="button-search"></div>
           <?php if (isset($filter_name)): ?>
@@ -898,17 +898,12 @@ $(document).ready(function(){
           <?php endif; ?>
         </div>
 
-        <?php if($is_responsive && $detect->isMobile() && !$detect->isTablet()): ?>
+        <?php if(!$is_responsive || !$detect->isMobile() || ($detect->isMobile() && $detect->isTablet())): ?>
         <section class="cart">
             <?php echo $cart; ?>
         </section>
         <?php endif; ?>
 
-		<?php if ($logo) { ?>
-        <div id="logo"><a href="<?php echo $home; ?>">
-          <img src="<?php echo $logo; ?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" /></a>
-        </div>
-        <?php } ?>
 <!-- navigation starts -->
 
 <nav class="menu">
@@ -1136,8 +1131,15 @@ $(document).ready(function(){
 
 
 </nav>
+
 </div> <!-- End #journal-header -->
 
+        <?php if($is_responsive && $detect->isMobile() && !$detect->isTablet()): ?>
+        <section class="cart">
+            <?php echo $cart; ?>
+        </section>
+        <?php endif; ?>
+		
 </header>
 <div id="container">
   <?php if (isset($error)): ?>
