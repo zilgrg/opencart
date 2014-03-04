@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-advancedmenu</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="after" index="1">
+			<![CDATA[} elseif (isset($this->request->get['path'])) {]]>
+			</search>
+			<add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+
+			if(isset($this->request->get['dnd'])){
+
+			$this->request->get['route'] = 'module/supercategorymenuadvancedseemore';
+
+			}elseif (isset($this->request->get['filter']) or isset($this->request->get['PRICERANGE']) or $this->request->get['path']==0){
+
+			$this->request->get['route'] = 'product/asearch';
+
+			}else{]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="after" index="1">
+			<![CDATA[$this->request->get['route'] = 'product/category';]]>
+			</search>
+			<add>
+			<![CDATA[}]]>
+			</add>
+		</operation>		
+	</file>
+</modification>
