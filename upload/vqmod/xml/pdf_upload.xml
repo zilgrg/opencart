@@ -1,0 +1,34 @@
+<modification>
+	<id>PDF File Uploader</id>
+	<version>1.2</version>
+	<vqmver>2.1.5</vqmver>
+	<author>Hydrowire ZG modified</author>
+	<file name="admin/controller/common/filemanager.php">
+		<operation>
+			<search position="before"><![CDATA[if (isset($this->request->get['image'])) {]]></search>
+			<add><![CDATA[$ext = strrchr($this->request->get['image'], '.');
+                if(strtolower($ext) == '.pdf') {
+                    $this->request->get['image'] = 'pdf_icon.png';
+                }]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA['.jpg',]]></search>
+			<add><![CDATA['.pdf',]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[300000]]></search>
+			<add><![CDATA[3000000]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA['image/jpeg',]]></search>
+			<add><![CDATA['application/pdf',
+                'application/x-pdf',]]></add>
+		</operation>
+    </file>
+	<file name="admin/language/english/common/filemanager.php">
+		<operation>
+			<search position="replace"><![CDATA[300kb]]></search>
+			<add><![CDATA[30MB]]></add>
+		</operation>
+    </file>
+</modification>
