@@ -443,11 +443,11 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 
 	  <?php } ?>
 
-	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
+<!--  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
 	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
-	  <?php } ?>
+	  <?php } ?>-->
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
