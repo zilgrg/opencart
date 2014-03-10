@@ -842,7 +842,7 @@ $(document).ready(function(){
 
           <?php if (!isset($this->document->journal_top_menu) || count($this->document->journal_top_menu) === 0): ?>
           <a class="link" href="<?php echo $home; ?>"><?php echo $text_home; ?></a>
-          <a class="link" href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a>
+      <!--<a class="link" href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a>-->
           <a class="link" href="<?php echo $account; ?>"><?php echo $text_account; ?></a>
           <a class="link" href="<?php echo $shopping_cart; ?>"><?php echo $text_shopping_cart; ?></a>
           <a class="link" href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a>
