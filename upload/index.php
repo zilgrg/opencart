@@ -230,7 +230,7 @@ $registry->set('encryption', new Encryption($config->get('config_encryption')));
 // Front Controller 
 $controller = new Front($registry);
 
-$controller->addPreAction(new Action('module/journal_cp'));
+//$controller->addPreAction(new Action('module/journal_cp'));
 
 // Maintenance Mode
 $controller->addPreAction(new Action('common/maintenance'));
