@@ -18,10 +18,16 @@
 						require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
 						$this->ssb_helper = ssb_helper::getInstance();
 						$l_code = $this->ssb_helper->getDefaultLanguage();
-						
+
 						$l_prefix = $this->session->data['language'] == $l_code ? '': $this->session->data['language'] . '/';
 						
-						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search';";
+						$l_id_session = $this->ssb_helper->getLang_Code_Id($this->session->data['language']);
+						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search' AND language_id = '". $l_id_session ."'";
+						$query = $this->db->query($sql);
+						if (!$query->num_rows) {
+							$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search'";
+							$query = $this->db->query($sql);
+						}
 						
 						$query = $this->db->query($sql);
 
@@ -93,9 +99,13 @@
 						
 						$l_prefix = $this->session->data['language'] == $l_code ? '': $this->session->data['language'] . '/';
 						
-						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search';";
-						
+						$l_id_session = $this->ssb_helper->getLang_Code_Id($this->session->data['language']);
+						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search' AND language_id = '". $l_id_session ."'";
 						$query = $this->db->query($sql);
+						if (!$query->num_rows) {
+							$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search'";
+							$query = $this->db->query($sql);
+						}
 
 						$keyword = isset($query->rows[0]['keyword']) ? $query->rows[0]['keyword'] : '';
 						$ampersand = $keyword ? '?' : '&';

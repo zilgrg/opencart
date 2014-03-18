@@ -33,9 +33,6 @@ class ssb_seo_url extends Controller {
 	private function seo_language($link,$language) { 
 		$link_orig = $link;
 		$config_lang = $this->ssb_helper->getDefaultLanguage();
-
-		//echo ' || $link='. $link . 'config_lang='. $config_lang .'; language='.$language;  
-		
 		if (trim($language) == trim($config_lang)) unset($language);
 		$url_data = parse_url($link);
 		if (strpos('a'.$url_data['scheme'].'a','https') ) {
@@ -44,18 +41,22 @@ class ssb_seo_url extends Controller {
 			$link = $this->config->get('config_url');
 		}	
 		if (isset($language) ) $link .= $language.'/';
+		
 		if (isset($url_data['path']) ) {
-		$temp_path = explode('/',$url_data['path']);
-		foreach ($temp_path as $key => $value) {
-			if(!empty($value))
-			if (strpos($link,$value)) unset($temp_path[$key]);
+			$link_array =  explode('/',$link);
+			$temp_path = explode('/',$url_data['path']);
+			foreach ($temp_path as $key => $value) {
+				if(!empty($value)){
+					if (in_array($value, $link_array)) unset($temp_path[$key]);
+				}
+			}
+			$url_data['path'] = implode('/',$temp_path);
+				if(substr($url_data['path'],0,1) == '/') 
+					$url_data['path'] = substr($url_data['path'],1);
 		}
-		$url_data['path'] = implode('/',$temp_path);
-			if(substr($url_data['path'],0,1) == '/') 
-				$url_data['path'] = substr($url_data['path'],1);
-		}
+		
 		$link .= $url_data['path'];
-		//if(substr($link,-1) == '/') $link = substr($link,0,-1);
+
 		if (isset($url_data['query']) ) $link .= '?'.$url_data['query'];
 		
 		$link = rtrim($link,"/");
@@ -63,25 +64,22 @@ class ssb_seo_url extends Controller {
 	}
 	
 	public function index() {
-		
+
 		$curPageURL = $this->curPageURL();	
-	
-		// if last char is /, deleting it and redirect
+
 		$tools = $this->ssb_data->getSetting('tools');
 		if(substr($curPageURL,-1) == '/' AND $tools['trailing_slash']['status'] == true) {
 			$new_url = rtrim($curPageURL,"/");  
-			$this->ssb_helper->redirect($new_url, 301);
+			$this->ssb_helper->redirect($new_url, 301); //TODO + request if set
 		}
-
+		
 		if ($this->config->get('config_seo_url')) {
 			$this->url->addRewrite($this);
 		}
 		
-		
 		$lang_inURL = $this->getLangFromUrl();
 
 		if (isset($this->request->get['_route_']) AND $this->request->get['_route_'] != $lang_inURL['code']){
-			//echo '_route_ = '; echo $this->request->get['_route_'].'; '; var_dump($lang_inURL);
 			$l_code_session = $this->session->data['language'];
 			$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code_session);
 			
@@ -91,31 +89,40 @@ class ssb_seo_url extends Controller {
 				
 				$part = trim($part);
 				if (empty($part) ) continue;
-			
-				$sql = "SELECT auto_gen, language_id, query FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "'";
+				
+				/**multilanguage for standard urls**/
+				$sql = "SELECT auto_gen, language_id, query FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "' AND language_id = '". (int)$l_id_session ."'";
 				$query = $this->db->query($sql);
 				
 				if ($query->num_rows) {
 					$result = $query->rows[0];
 					$this->parseQuery($result);
-					
-					if($result['language_id'] !== $l_id_session AND $l_code_session == $lang_inURL['code'] AND $query->num_rows == 1){
-						$urlWasCange = true;
+				}else{
+					$sql = "SELECT auto_gen, language_id, query FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "'";
+					$query = $this->db->query($sql);
+					if ($query->num_rows) {
+						$result = $query->rows[0];
+						$this->parseQuery($result);
+
+						if($result['language_id']!==$l_id_session AND $l_code_session==$lang_inURL['code'] ){
+							$query_count = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "url_alias WHERE query = '" . $result['query'] . "'");
+							if($query_count->row['total'] > 1){
+								$urlWasCange = true;
+							}
+						}
+					}else{
+						$this->request->get['route'] = 'error/not_found';	
 					}
-					
-				}else if(!$query->num_rows) {
-					$this->request->get['route'] = 'error/not_found';	
 				}
+				/**multilanguage for standard urls**/
 			}
 			
 			$this->setRouteType();
-			
-			// handing change url(replace keyword)
+
 			if(isset($urlWasCange) AND $urlWasCange){
-				$route = $this->request->get['route'];
-				if($route == 'product/product' OR $route == 'product/product' OR $route == 'product/category' OR $route == 'product/manufacturer/info' OR $route == 'information/information'){
-					$this->redirectPermanently();
-				}
+				/**multilanguage for standard urls**/
+				$this->redirectPermanently();
+				/**multilanguage for standard urls**/
 			}
 		}
 		
@@ -128,12 +135,10 @@ class ssb_seo_url extends Controller {
 		$query_url 	= http_build_query($this->query_data);
 		$route 		= isset($this->request->get['route']) ? $this->request->get['route'] : 'common/home';
 		$new_url = $this->url->link($route, $query_url, 'SSL');
-		//echo $new_url;
 		$this->ssb_helper->redirect($new_url, 301);
 	}
 	
 	function parseQuery($query){
-		//var_dump($query);
 		$url = explode('=', $query['query']);
 
 		if ($url[0] == 'product_id') {
@@ -150,28 +155,6 @@ class ssb_seo_url extends Controller {
 			}
 		}	
 		
-		//blog_system START (1)
-		if ($url[0] == 'blog_category_id') {
-			if (!isset($this->request->get['blogpath'])) {
-				$this->request->get['blogpath'] = $url[1];
-			} else {
-				$this->request->get['blogpath'] .= '_' . $url[1];
-			}
-		}
-		
-		if ($url[0] == 'blog_id') {
-			$this->request->get['blog_id'] = $url[1];
-		}
-		
-		if ($url[0] == 'post_category_id') {
-			if (!isset($this->request->get['postpath'])) {
-				$this->request->get['postpath'] = $url[1];
-			} else {
-				$this->request->get['postpath'] .= '_' . $url[1];
-			}
-		}
-		//blog_system END
-		
 		if ($url[0] == 'manufacturer_id') {
 			$this->query_data['manufacturer_id'] = $this->request->get['manufacturer_id'] = $url[1];
 		}
@@ -183,7 +166,6 @@ class ssb_seo_url extends Controller {
 			$this->query_data['route'] = $this->request->get['route'] = $url[0];
 		}
 		
-		//===========
 		if (isset($this->request->get['filter'])) {
 			$this->query_data['filter'] = $this->request->get['filter'];
 		}
@@ -203,12 +185,8 @@ class ssb_seo_url extends Controller {
 		if (isset($this->request->get['limit'])) {
 			$this->query_data['limit'] = $this->request->get['limit'];
 		}
-		//===========
 	}
 	
-		/*
-	get current or new language from url
-	*/
 	private function getLangFromUrl() {
 		
 		$l_code = $this->ssb_helper->getDefaultLanguage();
@@ -252,13 +230,6 @@ class ssb_seo_url extends Controller {
 			$this->request->get['route'] = 'product/category';
 		} elseif (isset($this->request->get['manufacturer_id'])) {
 			$this->request->get['route'] = 'product/manufacturer/info';
-			
-		//blog_system START (2)
-		} elseif (isset($this->request->get['blogpath'])) {
-			$this->request->get['route'] = 'extras/blog/getblogcategory';
-		} elseif (isset($this->request->get['blog_id'])) {
-			$this->request->get['route'] = 'extras/blog/getblog';	
-		//blog_system END	
 		
 		} elseif (isset($this->request->get['information_id'])) {
 			$this->request->get['route'] = 'information/information';
@@ -280,13 +251,8 @@ class ssb_seo_url extends Controller {
 	public function rewrite($link, $query_filter = '') {
 		$url_info = parse_url(str_replace('&amp;', '&', $link));
 	
-		//echo '  </br>  $link='.$link.'; $url_info='.$url_info;
-		//echo '  </br>  $link='.$link;
-	
 		$l_code_session = $this->session->data['language'];
 		$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code_session);	
-		
-		//echo '$l_code_session= ' . $l_code_session .'; ';
 		
 		$url = ''; 
 		
@@ -296,19 +262,25 @@ class ssb_seo_url extends Controller {
 		
 		foreach ($data as $key => $value) {
 			if (isset($data['route'])) {
-
-			/*super seo */
-			if ($key == 'route') { 
-						$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "'");
-						
+				/**multilanguage for standard urls**/
+				if ($key == 'route') { 
+					$sql = "SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "' AND language_id = '". $l_id_session ."'";
+					$query = $this->db->query($sql);
+					
+					if ($query->num_rows) {
+						$url .= '/' . $query->row['keyword'];
+					}else{
+						$sql = "SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "'";
+						$query = $this->db->query($sql);
 						if ($query->num_rows) {
-							$url .= '/' . $query->row['keyword'];
+							$url .= '/' . $query->rows[0]['keyword'];
 						}
-						continue;
 					}
-				/*super seo */
-			//blog_system:($data['route'] == 'extras/blog/getblog' && $key == 'blog_id')
-				if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'extras/blog/getblog' && $key == 'blog_id')) {
+					continue;
+				}
+				/**multilanguage for standard urls**/
+				
+				if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {
 					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id_session ."'");
 				
 					if ($query->num_rows) {
@@ -316,27 +288,12 @@ class ssb_seo_url extends Controller {
 						
 						unset($data[$key]);
 					}
-					
-				//blog_system START (3)
-				} elseif ($key == 'blogpath') {
-				$blog_categories = explode('_', $value);
-				foreach ($blog_categories as $blog_category) {
-					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'blog_category_id=" . (int)$blog_category . "'");
-			
-					if ($query->num_rows) {
-						$url .= '/' . $query->row['keyword'];
-			
-					}							
-				}
-				unset($data[$key]);	
-				//blog_system END
-				
+
 				} elseif ($key == 'path') {
 					$categories = explode('_', $value);
 					
 					foreach ($categories as $category) {
-						
-						/*super seo */
+
 						$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'category_id=" . (int)$category . "' AND language_id = '". $l_id_session ."'");
 					
 						if ($query->num_rows) {
@@ -344,7 +301,6 @@ class ssb_seo_url extends Controller {
 							unset($data[$key]); // added unset must go there do it as after
 						}
 					}
-					/*super seo */
 			
 				}
 			}
@@ -373,8 +329,6 @@ class ssb_seo_url extends Controller {
 			
 			$link = $link . $url . $query . $query_filter;
 
-			
-			/*super seo */
 			$link = $url_info['scheme'] . '://' . $url_info['host'] . (isset($url_info['port']) ? ':' . $url_info['port'] : '') . str_replace('/index.php', '', $url_info['path']) . $url . $query;
 				 }
 		if (strpos($link,"index.php") ) {
@@ -383,12 +337,9 @@ class ssb_seo_url extends Controller {
 		}
 		$link = $this->seo_language($link,$this->session->data['language']);
 		
-		//echo '  </br>  $link='.$link;
-		//echo '  </br></br>';
-		
 		$link = rtrim($link,"/");
 		
-		return $link; //added, all returns removed, one single remains.
+		return $link; 
 	}	
 }
 

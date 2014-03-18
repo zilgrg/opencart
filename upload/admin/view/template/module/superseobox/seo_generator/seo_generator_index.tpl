@@ -96,7 +96,17 @@
 
 <!-- Test generator result MODAL-->
 <div id="modal-testGenerate" class="width_80 modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-testGenerateLabel" aria-hidden="true">
-	<div class="modal-header">
+	<div class="modal-header clearfix">
+		<!-- multilanguage for standard urls !-->
+		<ul class="nav nav-pills pull-left" style="margin-bottom: -10px; margin-right: -250px;">
+		<li style="margin-top: 10px;">Choose language:&nbsp;</li>
+		<?php foreach ($languages as $l_code => $language){ if(!$language['status'])continue; ?>
+			<li <?php if($active_lang_code == $l_code) echo  "class=\"active\"";?>>
+				<a data-code-class="lang-<?php echo $l_code; ?>"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /> - <?php echo $language['name']; ?></a>
+			</li>
+		<?php } ?>
+		</ul>
+		<!-- multilanguage for standard urls !-->
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="modal-testGenerateLabel">RESULT TESTING GENERATOR</h3>
 	</div>
@@ -110,6 +120,23 @@
 	</div>
 </div>
 
+<!-- multilanguage for standard urls !--> 
+<script>
+jQuery(document).ready(function() {
+	$('#modal-testGenerate .nav-pills a').click(function(){
+		$(this).closest('.nav-pills').find('li').removeClass('active');
+		$(this).parent().addClass('active');
+		
+		var activ_code_class = $(this).attr('data-code-class');
+		
+		$('#modal-testGenerate .seo_text tr, #modal-testGenerate .seo_text .label').not('.tr-static').animate({'opacity':'hide'},400);
+		setTimeout(function(){$('#modal-testGenerate .seo_text .' + activ_code_class).animate({'opacity':'show'},400);},400);
+		
+		return false;
+	});
+});
+</script>
+<!-- multilanguage for standard urls !-->
 
 <!-- PREPARE GENERATE MODAL-->
 <div id="modal-prepareGenerate" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-prepareGenerateLabel" aria-hidden="true">

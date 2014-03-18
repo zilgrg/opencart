@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-blogmanager</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'manufacturer_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (2)**/
+			if($this->blogVirtualEnb){
+				if ($url[0] == 'blog_article_id') {
+					$this->request->get['article_id'] = $url[1];
+				}
+				if ($url[0] == 'blog_category_id') {
+					if (!isset($this->request->get['category_id'])) {
+						$this->request->get['category_id'] = $url[1];
+					} else {
+						$this->request->get['category_id'] .= '_' . $url[1];
+					}
+				}
+			}
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before" index="1">
+			<![CDATA[foreach ($parts as $part) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (1)**/
+			$this->blogVirtualEnb   = $this->config->get('blogSetting_virDir');
+			if($this->blogVirtualEnb){
+				$this->blogVirtualDir   = '';
+				if ( $this->config->get('blogSetting_virDir')) {
+				if ($this->config->get('blogSetting_virDirName') != '') {
+				   $this->blogVirtualDir = $this->config->get('blogSetting_virDirName');
+				} else {
+				   $this->blogVirtualDir = 'blog';
+				}
+				}
+			}
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif (isset($this->request->get['path'])) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (3)**/
+			} elseif ($this->blogVirtualEnb && ($this->request->get['_route_'] == $this->blogVirtualDir || $this->request->get['_route_'] == $this->blogVirtualDir . '/')) {
+				$this->request->get['route'] = 'blog/category/home';
+			} elseif ($this->request->get['_route_'] == 'blog-comments' || $this->request->get['_route_'] == 'blog-comments/') {
+				$this->request->get['route'] = 'blog/article/comment';
+			} elseif (isset($this->request->get['article_id'])) {
+				$this->request->get['route'] = 'blog/article';
+			} elseif (isset($this->request->get['category_id'])) {
+				$this->request->get['route'] = 'blog/category';
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[$url_info = parse_url(str_replace('&amp;', '&', $link));]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (4)**/
+			$this->blogVirtualEnb   = $this->config->get('blogSetting_virDir');
+			if($this->blogVirtualEnb){
+				$this->blogVirtualDir   = '';
+				if ( $this->config->get('blogSetting_virDir')) {
+				if ($this->config->get('blogSetting_virDirName') != '') {
+				   $this->blogVirtualDir = $this->config->get('blogSetting_virDirName');
+				} else {
+				   $this->blogVirtualDir = 'blog';
+				}
+				}
+			}
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="replace">
+			<![CDATA[if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (4)**/
+			if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'extras/blog/getblog' && $key == 'blog_id') || ($data['route'] == 'blog/category/home')) {
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif ($key == 'path') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_manager START (5)**/
+			} elseif ($this->blogVirtualEnb && isset($data['route']) && $data['route'] == 'blog/category/home') {
+					$url .= '/' . $this->blogVirtualDir;
+					unset($data['route']);
+
+				} elseif (isset($data['route']) && $data['route'] == 'blog/article/comment') {
+					$url .= '/blog-comments';
+					unset($data['route']);
+
+				} elseif ($key == 'article_id') {
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'blog_" . $this->db->escape($key . '=' . (int)$value) . "'");
+
+					if ($query->num_rows) {
+					   if($this->config->get('blogSetting_virDir')) { 
+						  $url .= '/' . $this->blogVirtualDir;
+					   }
+						
+					   $url .= '/' . $query->row['keyword'];
+					   $article_url = '/' . $query->row['keyword'];
+					}
+					unset($data[$key]);
+
+				} elseif ($key == 'category_id') {
+					$categories	= explode('_', $value);
+					$excludeCat	= $this->config->get('blogSetting_virDirExclude');
+
+					$cat_check = '';
+					$cat_url   = '';
+
+					foreach ($categories as $category) {
+					   $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'blog_category_id=" . (int)$category . "'");
+					   if ($query->num_rows) {
+						  $cat_check = 1;
+						  
+						  $cat_url .= '/' . $query->row['keyword'];
+					   } else {
+						  $notAllAlias = 1;
+					   }
+					}
+
+					$cat_virdir = '';
+					if($cat_check && $this->config->get('blogSetting_virDir')) {
+					   if (!in_array($categories[0], $excludeCat)) {
+						  $cat_virdir .= '/' . $this->blogVirtualDir;
+					   }
+					}
+
+					if (!isset($notAllAlias)) {
+						$url = $cat_virdir . $cat_url;
+						$category_url = $url;
+					}
+
+					unset($data[$key]);
+			/**blog_manager END**/
+			]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file name="system/config/ssb_library/catalog/controller/feed/ssb_site_map.php">
+		<operation>
+			<search position="before">
+			<![CDATA[$output .= '</urlset>';]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**ssb_inject for blog manager START**/
+			if($this->ssb_table->isTable("blog_article")){
+				$data = array(
+					'article_order'	=> 'dateDesc',
+					'start'				=> 0,
+					'limit'				=> 100
+				);
+				$this->load->model('blog/article');
+				$results = $this->model_blog_article->getArticles($data);
+				foreach ($results as $result) {
+					$output .= '<url>';
+					$output .= '<loc>' . htmlspecialchars(str_replace('&', '&amp;', $this->url->link('blog/article', 'article_id=' . $result['article_id']))) . '</loc>';
+					$output .= '<lastmod>' . gmdate('Y-m-d\TH:i:s+00:00', strtotime($result['modified'])) . '</lastmod>';
+					$output .= '<changefreq>weekly</changefreq>';
+					$output .= '<priority>1.0</priority>';
+					$output .= '</url>';   
+				}
+			}
+			/**ssb_inject for blog manager END**/
+			]]>
+			</add>
+		</operation>
+	</file>	
+</modification>

@@ -1,15 +1,15 @@
 <modification>
 <id><![CDATA[Paladin SEO Manager]]></id>
-<version>2.3.0</version>
+<version>2.5.0</version>
 <vqmver>1.0.0</vqmver>
 <author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
 
 	
-	<file name="admin/model/catalog/product.php">
+		<file name="admin/model/catalog/product.php">
 		<operation> 
 			<search position="after"><![CDATA[ $this->cache->delete('product'); ]]></search>
 			<add><![CDATA[
-				// ssb-inject
+				
 				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 				$this->ssb_data = ssb_data::getInstance();
 				$ssb_setting = $this->ssb_data->getSetting();
@@ -21,7 +21,7 @@
 					$ssb_autogen = ssb_autogen::getInstance();
 					$ssb_autogen->genAutoSeo('product', $product_id);
 				}
-				// ssb-inject
+				
 			]]></add>
 		</operation>		
 	</file>
@@ -29,7 +29,7 @@
 		<operation> 
 			<search position="after"><![CDATA[ $this->cache->delete('category'); ]]></search>
 			<add><![CDATA[
-				// ssb-inject
+				
 				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 				$this->ssb_data = ssb_data::getInstance();
 				$ssb_setting = $this->ssb_data->getSetting();
@@ -39,7 +39,7 @@
 					$ssb_autogen = ssb_autogen::getInstance();
 					$ssb_autogen->genAutoSeo('category', $category_id);
 				}
-				// ssb-inject
+				
 			]]></add>
 		</operation>		
 	</file>
@@ -47,7 +47,7 @@
 		<operation> 
 			<search position="after"><![CDATA[ $this->cache->delete('manufacturer'); ]]></search>
 			<add><![CDATA[
-				// ssb-inject
+				
 				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 				$this->ssb_data = ssb_data::getInstance();
 				$ssb_setting = $this->ssb_data->getSetting();
@@ -57,20 +57,20 @@
 					$ssb_autogen = ssb_autogen::getInstance();
 					$ssb_autogen->genAutoSeo('brand', $manufacturer_id);
 				} 
-				// ssb-inject
+				
 			]]></add>
 		</operation>	
 		<operation> 
 			<search position="after"><![CDATA[ public function deleteManufacturer($manufacturer_id) ]]></search>
 			<add><![CDATA[
-				// ssb-inject
+				
 					require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 					$this->ssb_data = ssb_data::getInstance();
 					$ssb_setting = $this->ssb_data->getSetting();
 					if($ssb_setting){
 						$this->delDescripManufacturer($manufacturer_id);
 					}
-				// ssb-inject
+				
 			]]></add>
 		</operation>
 	</file>
@@ -78,7 +78,7 @@
 		<operation> 
 			<search position="after"><![CDATA[ $this->cache->delete('information'); ]]></search>
 			<add><![CDATA[
-				// ssb-inject
+				
 				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 				$this->ssb_data = ssb_data::getInstance();
 				$ssb_setting = $this->ssb_data->getSetting();
@@ -88,7 +88,7 @@
 					$ssb_autogen = ssb_autogen::getInstance();
 					$ssb_autogen->genAutoSeo('info', $information_id);
 				} 
-				// ssb-inject
+				
 			]]></add>
 		</operation>		
 	</file>
@@ -375,17 +375,16 @@
 		</operation>	
 	</file>
 	
-<!--CLEAR cache SSB if we changing PCBI 	
-	UPDATE tables if Paladin existence, but not installing -->	
+	
 	<file name="system/engine/front.php">
 		<operation  error = "skip">
 			<search position="after" ><![CDATA[ 	private function execute($action) { ]]></search>
 			<add>
 				<![CDATA[ 
-					//ssb-xml start
+					
 					$act = $method = $action->getMethod();
 					
-					// CLEAR
+					
 					$act_to_clean = array('copy', 'delete');
 					if (in_array($act , $act_to_clean) OR ($act == 'update' AND count($_POST)) OR ($act == 'insert' AND count($_POST))) {
 						include_once DIR_CONFIG .'ssb_library/ssb_data.php';
@@ -393,7 +392,7 @@
 						$ssb_data->clearCache();
 					}
 					
-					// UPDATE (not full install)
+					
 					if ($act == 'update' AND !count($_POST)) {
 						include_once DIR_CONFIG .'ssb_library/ssb_data.php';
 						$ssb_data = ssb_data::getInstance();
@@ -407,7 +406,7 @@
 							$ssb_data->setSetting($default_data);
 						}
 					}
-					//ssb-xml end
+					
 				]]>
 			</add>
 		</operation>
@@ -419,7 +418,7 @@
 		<search position="after"><![CDATA[ class ModelCatalogManufacturer extends Model { ]]></search>
 		<add><![CDATA[
 
-	//ssb-xml start
+	
 		public function getDescripManufacturer($manufacturer_id) {
 			$seodata = array();
 			
@@ -439,11 +438,11 @@
 					'tag'				=> $result['tag']
 				);
 			}
-			//var_dump($seodata);
+			
 			return $seodata;
 		}
 	
-		//@param: [language_id]([description]/[meta_description]/[meta_keyword]/[seo_title])
+		
 		public function setDescripManufacturer($manufacturer_id, $data = array(), $onlyEmpty = false) {
 			
 			$this->load->model('localisation/language');
@@ -495,7 +494,7 @@
 		public function delDescripManufacturer($manufacturer_id) {
 			$this->db->query("DELETE FROM " . DB_PREFIX . "manufacturer_description WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
 		}
-	//ssb-xml end
+	
 		
 			]]>
 			</add>
@@ -506,7 +505,7 @@
 		<search position="after"><![CDATA[ class ModelCatalogInformation extends Model { ]]></search>
 		<add><![CDATA[
 
-	//ssb-xml start
+	
 		public function getDescripInfo($information_id) {
 			$seodata = array();
 			
@@ -522,11 +521,11 @@
 					'tag'				=> $result['tag']
 				);
 			}
-			//var_dump($seodata);
+			
 			return $seodata;
 		}
 	
-		//@param: [language_id]([description]/[meta_description]/[meta_keyword]/[seo_title])
+		
 		public function setDescripInfo($information_id, $data = array()) {
 			
 			if(!count($data)){
@@ -555,7 +554,7 @@
 				$this->db->query($sql);
 			}
 		}
-	//ssb-xml end
+	
 		
 			]]>
 			</add>
@@ -566,7 +565,7 @@
 		<search position="after"><![CDATA[ class ModelCatalogCategory extends Model { ]]></search>
 		<add><![CDATA[
 
-	//ssb-xml start
+	
 		public function getDescripCategory($category_id) {
 			$seodata = array();
 			
@@ -581,11 +580,11 @@
 					'tag'				=> $result['tag']
 				);
 			}
-			//var_dump($seodata);
+			
 			return $seodata;
 		}
 	
-		//@param: [language_id]([description]/[meta_description]/[meta_keyword]/[seo_title])
+		
 		public function setDescripCategory($category_id, $data = array()) {
 			
 			if(!count($data)){
@@ -613,7 +612,7 @@
 				$this->db->query($sql);
 			}
 		}
-	//ssb-xml end
+	
 		
 			]]>
 			</add>
@@ -624,7 +623,7 @@
 		<search position="after"><![CDATA[ class ModelCatalogProduct extends Model { ]]></search>
 		<add><![CDATA[
 
-	//ssb-xml start
+	
 		public function getDescripProduct($product_id) {
 			$seodata = array();
 			
@@ -638,11 +637,11 @@
 					'seo_h1' 			=> $result['seo_h1']
 				);
 			}
-			//var_dump($seodata);
+			
 			return $seodata;
 		}
 	
-		//@param: [language_id]([description]/[meta_description]/[meta_keyword]/[seo_title])
+		
 		public function setDescripProduct($product_id, $data = array()) {
 			
 			if(!count($data)){
@@ -669,7 +668,7 @@
 				$this->db->query($sql);
 			}
 		}
-	//ssb-xml end
+	
 		
 			]]>
 			</add>
