@@ -47,13 +47,13 @@
 				</a>
 			</li>
 			<li>
-				<a href="#rich_snipets" data-toggle="tab">
-					<i class="icon-th"></i> Rich Snippets
+				<a href="#seo_tools" data-toggle="tab">
+					<i class="icon-magnet"></i> SEO tools
 				</a>
 			</li>
 			<li>
-				<a href="#seo_tools" data-toggle="tab">
-					<i class="icon-magnet"></i> SEO tools
+				<a href="#rich_snipets" data-toggle="tab">
+					<i class="icon-th"></i> Rich Snippets
 				</a>
 			</li>
 			<li>
@@ -84,20 +84,20 @@
 				<?php require_once 'seo_generator/seo_generator_index.tpl';?>
 			</div>
 			
-			<div class="tab-pane" id="rich_snipets">
-				<div class="tab_title_info">
-					<i class="icon-th"></i>
-					Make your site more friendly for Google, Twitter and Facebook using this tools for insert on your pages  the few lines of special texts (Rich snippets). Here you can find the few tools such as Google Microdata, Facebook's Open Graph META Tags and Twitter Card, which will improve your pages.
-				</div>
-				<?php require_once 'rich_snipets/rich_snipets_index.tpl';?>
-			</div>
-			
 			<div class="tab-pane" id="seo_tools">
 				<div class="tab_title_info">
 					<i class="icon-magnet"></i>
 					Here you can find tools, which will give your site additional SEO promotion in search engines. Canonical links is the new option lets site owners suggest the version of a page that Google should treat as canonical. Use Direct links, if you have a few languages for switching language. QR-code gives your customers easy way to enter in your site from mobile device.
 				</div>
 				<?php require_once 'seo_tools/seo_tools_index.tpl';?>
+			</div>
+			
+			<div class="tab-pane" id="rich_snipets">
+				<div class="tab_title_info">
+					<i class="icon-th"></i>
+					Make your site more friendly for Google, Twitter and Facebook using this tools for insert on your pages  the few lines of special texts (Rich snippets). Here you can find the few tools such as Google Microdata, Facebook's Open Graph META Tags and Twitter Card, which will improve your pages.
+				</div>
+				<?php require_once 'rich_snipets/rich_snipets_index.tpl';?>
 			</div>
 			
 			<div class="tab-pane" id="imp_exp">

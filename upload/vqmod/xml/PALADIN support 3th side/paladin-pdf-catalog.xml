@@ -1,0 +1,18 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager - support PDF catalog]]></id>
+<version>1.0.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+	
+	<file name="system/library/session.php">
+		<operation>
+			<search position="after"><![CDATA[$this->data =& $_SESSION;]]></search>
+			<add><![CDATA[
+			if(isset($_GET['route']) AND strpos($_GET['route'], 'getPDFdata') !== false AND isset($_SESSION['last_ssb_language_id'])){
+				$_SESSION['ssb_language_id'] = $_SESSION['last_ssb_language_id'];
+			}
+			]]></add>
+		</operation>	
+	</file>
+
+</modification>

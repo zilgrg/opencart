@@ -104,6 +104,7 @@
 			<search position="after"><![CDATA[echo $pagination;]]></search>
 			<add><![CDATA[
 				
+				</div>
 				<?php if (isset($tags) AND $tags) { ?>
 				<div class="tags gen-area gen-tags"><b><?php echo $text_tags; ?></b>
 				<?php for ($i = 0; $i < count($tags); $i++) { ?>
@@ -113,7 +114,6 @@
 				<a href="<?php echo $tags[$i]['href']; ?>"><?php echo $tags[$i]['tag']; ?></a>
 				<?php } ?>
 				<?php } ?>
-				</div>
 				<?php } ?>
 				
 			]]></add>

@@ -16,6 +16,12 @@
 				</a>
 			</li>
 			<li>
+				<a href="#seo_tool_seo_pagination" data-toggle="tab">
+					<i class="icon-random"></i> 
+					SEO Pagination
+				</a>
+			</li>
+			<li>
 				<a href="#seo_tool_canonical" data-toggle="tab">
 					<i class="icon-road"></i> 
 					Canonical Link
@@ -23,7 +29,7 @@
 			</li>
 			<li>
 				<a href="#seo_tool_lan_dir_link" data-toggle="tab">
-					<i class="icon-random"></i> 
+					<i class="icon-upload"></i> 
 					Direct Links
 				</a>
 			</li>
@@ -67,6 +73,10 @@
 			<div class="tab-pane" id="seo_tool_site_map">
 				<h3>SITEMAP</h3>
 				<?php require_once 'tabs/site_map.tpl';?>
+			</div>
+			<div class="tab-pane" id="seo_tool_seo_pagination">
+				<h3>SEO PAGINATION</h3>
+				<?php require_once 'tabs/seo_pagination.tpl';?>
 			</div>
 			<div class="tab-pane" id="seo_tool_canonical">
 				<h3>CANONICAL LINK</h3>

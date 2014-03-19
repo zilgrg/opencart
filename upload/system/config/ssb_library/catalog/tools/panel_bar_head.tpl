@@ -10,7 +10,7 @@
 	$panel_box_css	= $tools['panel_box']['css'];
 	$soc_buttons	= $tools['soc_buttons'];
 	$qr_code		= $tools['qr_code'];
-	$page_title 	= $title;
+	$_SESSION['ssb_page_title'] = $page_title 	= $title;
 	$share_image	= $logo;
 	$url_get_qr		= $this->url->link('module/superseobox/get_qr');
 	$countReader 	= $pageURL . 'catalog/view/javascript/ssb_js/share_qr/sharrre.php';
