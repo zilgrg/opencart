@@ -383,7 +383,7 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/product/search.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: inline-block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
@@ -425,17 +425,17 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/category.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: inline-block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
@@ -477,17 +477,17 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/special.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: inline-block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
@@ -529,17 +529,17 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/manufacturer_info.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: inline-block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
@@ -581,11 +581,11 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: inline-block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/controller/module/latest.php">
