@@ -6,9 +6,9 @@ class ssb_seo_url extends Controller {
 	private $ssb_setting;
 	private $query_data = array();
 	
-	//seo pagination
+	
 	private $seo_pagination = false;
-	//seo pagination
+	
 	
 	function __construct(){ 
 		global $registry;
@@ -69,12 +69,12 @@ class ssb_seo_url extends Controller {
 	
 	public function index() {
 
-		$curPageURL = $this->curPageURL();	
+		$this->curPageURL = $this->curPageURL();	
 
 		$tools = $this->ssb_data->getSetting('tools');
-		if(substr($curPageURL,-1) == '/' AND $tools['trailing_slash']['status'] == true) {
-			$new_url = rtrim($curPageURL,"/");  
-			$this->ssb_helper->redirect($new_url, 301); //TODO + request if set
+		if(substr($this->curPageURL,-1) == '/' AND $tools['trailing_slash']['status'] == true) {
+			$new_url = rtrim($this->curPageURL,"/");  
+			$this->ssb_helper->redirect($new_url, 301); 
 		}
 		
 		if ($this->config->get('config_seo_url')) {
@@ -89,7 +89,7 @@ class ssb_seo_url extends Controller {
 			
 			$parts = explode('/', $this->request->get['_route_']);
 			
-			//seo pagination
+			
 			if($tools['seo_pagination']['status']){	
 				foreach($parts as $part){
 					if(strpos($part, 'page-') !== false){
@@ -98,22 +98,28 @@ class ssb_seo_url extends Controller {
 					}
 				}
 			}
-			//seo pagination
+			
+			$arrayLangCode = array();
+			if($this->ssb_helper->getActiveLang() > 1){
+				$arrayLangCode = $this->ssb_helper->getArrayLangCode();
+			}
 			
 			foreach ($parts as $part) {
 				
 				$part = trim($part);
 				if (empty($part) ) continue;
 				
-				//seo pagination 
+				if (in_array($part, $arrayLangCode)) continue;
+				
+				
 				if($tools['seo_pagination']['status'] && isset($CPBI_urls_ext) && strpos($CPBI_urls_ext, $part) === false){
 					$keyword_condition = "(keyword = '" . $this->db->escape($part) . "' OR keyword = '" . $this->db->escape($part . $CPBI_urls_ext) . "')";
 				}else{
 					$keyword_condition = "keyword = '" . $this->db->escape($part) . "'";
 				}
-				//seo pagination 
 				
-				/**multilanguage for standard urls**/
+				
+				
 				$sql = "SELECT auto_gen, language_id, query FROM " . DB_PREFIX . "url_alias WHERE ". $keyword_condition ." AND language_id = '". (int)$l_id_session ."';";
 				$query = $this->db->query($sql);
 				
@@ -134,30 +140,51 @@ class ssb_seo_url extends Controller {
 							}
 						}
 					}else{
-						$this->request->get['route'] = 'error/not_found';	
+						if(strpos($part, 'page-') === false){
+							$this->request->get['route'] = 'error/not_found';	
+							$this->query_data['path'] = 'error/not_found';
+						}
 					}
 				}
-				/**multilanguage for standard urls**/
+				
 			}
 			
-			//seo pagination
+			
 			if($tools['seo_pagination']['status']){	
 				if(strpos($part, 'page-') !== false){
 					$this->seo_pagination = (int)str_replace('page-', '', $part);
 				}
 			}
-			//seo pagination	
+			
 				
 			$this->setRouteType();
 
 			if(isset($urlWasCange) AND $urlWasCange){
-				/**multilanguage for standard urls**/
+				
 				$this->redirectPermanently();
-				/**multilanguage for standard urls**/
+				
 			}
 		}
 		
 		if (isset($this->request->get['route'])) {
+			
+			if($this->request->get['route'] == 'error/not_found'){
+				require_once DIR_CONFIG .'ssb_library/ssb_custom_404.php';
+				$this->ssb_custom_404 = ssb_custom_404::getInstance();
+				$url_404 = $this->ssb_custom_404->getUrl404(array('url_404' => $this->curPageURL));
+				if($url_404){
+					
+					$this->ssb_custom_404->addHit($url_404['custom_url_404_id']);
+					if($url_404['url_redirect']){
+						$this->ssb_helper->redirect($url_404['url_redirect'], 301);
+					}
+				}else{
+					
+					$this->ssb_custom_404->insertUrl(array('url_404' => $this->curPageURL));
+				}
+				//return; TODO for corupted part of url
+			}
+			
 			return $this->forward($this->request->get['route']);
 		}
 	}
@@ -255,6 +282,12 @@ class ssb_seo_url extends Controller {
 	}
 	
 	private function setRouteType() {
+		
+		
+		if ($this->seo_pagination !== false) {
+			$this->request->get['page'] = $this->seo_pagination;
+		}
+
 		if (isset($this->request->get['product_id'])) {
 			$this->request->get['route'] = 'product/product';
 		} elseif (isset($this->request->get['path'])) {
@@ -265,11 +298,6 @@ class ssb_seo_url extends Controller {
 		} elseif (isset($this->request->get['information_id'])) {
 			$this->request->get['route'] = 'information/information';
 		}
-		
-		//seo pagination
-		if ($this->seo_pagination !== false) {
-			$this->request->get['page'] = $this->seo_pagination;
-		}//seo pagination
 	}
 	
 	public function curPageURL() {
@@ -298,7 +326,7 @@ class ssb_seo_url extends Controller {
 		
 		foreach ($data as $key => $value) {
 			if (isset($data['route'])) {
-				/**multilanguage for standard urls**/
+				
 				if ($key == 'route') { 
 					$sql = "SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "' AND language_id = '". $l_id_session ."'";
 					$query = $this->db->query($sql);
@@ -314,7 +342,7 @@ class ssb_seo_url extends Controller {
 					}
 					continue;
 				}
-				/**multilanguage for standard urls**/
+				
 				
 				if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {
 					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id_session ."'");
@@ -334,7 +362,7 @@ class ssb_seo_url extends Controller {
 					
 						if ($query->num_rows) {
 							$url .= '/' . $query->row['keyword'];
-							unset($data[$key]); // added unset must go there do it as after
+							unset($data[$key]); 
 						}
 					}
 			

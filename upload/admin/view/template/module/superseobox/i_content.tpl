@@ -52,6 +52,11 @@
 				</a>
 			</li>
 			<li>
+				<a href="#seo_social" data-toggle="tab">
+					<i class="icon-share"></i> Social & share
+				</a>
+			</li>
+			<li>
 				<a href="#rich_snipets" data-toggle="tab">
 					<i class="icon-th"></i> Rich Snippets
 				</a>
@@ -87,9 +92,17 @@
 			<div class="tab-pane" id="seo_tools">
 				<div class="tab_title_info">
 					<i class="icon-magnet"></i>
-					Here you can find tools, which will give your site additional SEO promotion in search engines. Canonical links is the new option lets site owners suggest the version of a page that Google should treat as canonical. Use Direct links, if you have a few languages for switching language. QR-code gives your customers easy way to enter in your site from mobile device.
+					Here you can find tools, which will give your site additional SEO promotion in search engines. Canonical links is the new option lets site owners suggest the version of a page that Google should treat as canonical. Use Direct links, if you have a few languages for switching language.
 				</div>
 				<?php require_once 'seo_tools/seo_tools_index.tpl';?>
+			</div>
+			
+			<div class="tab-pane" id="seo_social">
+				<div class="tab_title_info">
+					<i class="icon-th"></i>
+					QR-code gives your customers easy way to enter in your site from mobile device.
+				</div>
+				<?php require_once 'seo_social/seo_social_index.tpl';?>
 			</div>
 			
 			<div class="tab-pane" id="rich_snipets">

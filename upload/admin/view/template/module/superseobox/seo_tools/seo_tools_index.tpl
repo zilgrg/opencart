@@ -16,6 +16,12 @@
 				</a>
 			</li>
 			<li>
+				<a href="#seo_tool_404_manager" data-toggle="tab">
+					<i class="icon-plane"></i> 
+					404 manager
+				</a>
+			</li>
+			<li>
 				<a href="#seo_tool_seo_pagination" data-toggle="tab">
 					<i class="icon-random"></i> 
 					SEO Pagination
@@ -40,27 +46,9 @@
 				</a>
 			</li>
 			<li>
-				<a href="#seo_tool_social_buttons" data-toggle="tab">
-					<i class="icon-move"></i> 
-					Social Buttons
-				</a>
-			</li>
-			<li>
-				<a href="#seo_tool_qr_code" data-toggle="tab">
-					<i class="icon-qrcode"></i> 
-					QR-code
-				</a>
-			</li>	
-			<li>
 				<a href="#seo_tool_ver_webm_tool" data-toggle="tab">
 					<i class="icon-briefcase"></i> 
 					Webmaster Tools
-				</a>
-			</li>
-			<li>
-				<a href="#seo_tool_set_panel_bar" data-toggle="tab">
-					<i class="icon-wrench"></i> 
-					Setting Panel Bar
 				</a>
 			</li>
 		</ul>
@@ -73,6 +61,10 @@
 			<div class="tab-pane" id="seo_tool_site_map">
 				<h3>SITEMAP</h3>
 				<?php require_once 'tabs/site_map.tpl';?>
+			</div>
+			<div class="tab-pane" id="seo_tool_404_manager">
+				<h3>404 MANAGER</h3>
+				<?php require_once 'tabs/404_manager.tpl';?>
 			</div>
 			<div class="tab-pane" id="seo_tool_seo_pagination">
 				<h3>SEO PAGINATION</h3>
@@ -90,21 +82,9 @@
 				<h3>Trailing slash of URL</h3>
 				<?php require_once 'tabs/trailing_slash.tpl';?>
 			</div>
-			<div class="tab-pane" id="seo_tool_social_buttons">
-				<h3>SOCIAL BUTTONS</h3>
-				<?php require_once 'tabs/social_buttons.tpl';?>
-			</div>
-			<div class="tab-pane" id="seo_tool_qr_code">
-				<h3>QR-CODE</h3>
-				<?php require_once 'tabs/qr_code.tpl';?>
-			</div>
 			<div class="tab-pane" id="seo_tool_ver_webm_tool">
 				<h3>WEBMASTER TOOLS</h3>
 				<?php require_once 'tabs/ver_webm_tool.tpl';?>
-			</div>
-			<div class="tab-pane" id="seo_tool_set_panel_bar">
-				<h3>SETTING PANEL BAR</h3>
-				<?php require_once 'tabs/set_panel_bar.tpl';?>
 			</div>
 		</div>
 	</div>
