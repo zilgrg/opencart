@@ -1,0 +1,14 @@
+<modification>
+	<id>Disable add to cart for Journal 2 if quantity less than -9999</id>
+	<version>1.5.6</version>
+	<vqmver>2.2.2</vqmver>
+	<author>ZG</author>
+
+	<!-- Template - Product Only-->
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+	<operation error="log">
+            <search position="replace"><![CDATA[<div class="cart">]]></search>
+            <add trim="true"><![CDATA[<?php if ($quantity <= -9999) { ?><div class="cart" style="display:none"><?php } else { ?><div class="cart"><?php } ?>]]></add>
+        </operation>
+    </file>
+</modification>
