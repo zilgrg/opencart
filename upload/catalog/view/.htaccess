@@ -3,6 +3,10 @@
 Order allow,deny
 Deny from all
 </Files>
+<FilesMatch "\.(tpl)">
+ Order deny,allow
+ Deny from all
+</FilesMatch>
 #  BEGIN Browser Caching/Headers
 <IfModule mod_mime.c>
     AddType text/css .css
