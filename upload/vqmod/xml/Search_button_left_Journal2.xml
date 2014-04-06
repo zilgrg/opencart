@@ -1,0 +1,26 @@
+<modification>
+	<id>Search button left, remove search options Journal 2</id>
+	<version>1.5.6</version>
+	<vqmver>2.2.2</vqmver>
+	<author>ZG</author>
+
+	<!-- Template - Search Only-->
+	<file name="catalog/view/theme/journal2/template/product/search.tpl">
+	<operation error="log">
+            <search position="replace"><![CDATA[<div class="right"><]]></search>
+            <add><![CDATA[<div class="left"><]]></add>
+        </operation>
+    </file>
+	<file name="catalog/view/theme/journal2/template/product/search.tpl">
+	<operation error="log">
+            <search position="replace" offset="5"><![CDATA[<?php if ($sub_category) { ?>]]></search>
+            <add><![CDATA[]]></add>
+        </operation>
+    </file>	
+	<file name="catalog/view/theme/journal2/template/product/search.tpl">
+	<operation error="log">
+            <search position="replace" offset="23"><![CDATA[<select name="category_id">]]></search>
+            <add><![CDATA[]]></add>
+        </operation>
+    </file>
+</modification>
