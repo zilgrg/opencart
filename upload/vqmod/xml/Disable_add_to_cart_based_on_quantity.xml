@@ -5,7 +5,7 @@
 	<author>ZG</author>
 
 	<!-- Template - Product Only-->
-	<file name="catalog/view/theme/*/template/product/product.tpl">
+	<file name="catalog/view/theme/journal2/template/product/product.tpl">
 	<operation error="log">
             <search position="replace"><![CDATA[<div class="cart">]]></search>
             <add trim="true"><![CDATA[<?php if ($quantity <= -9999) { ?><div class="cart" style="display:none"><?php } else { ?><div class="cart"><?php } ?>]]></add>
