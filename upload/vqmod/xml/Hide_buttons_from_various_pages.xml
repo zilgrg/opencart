@@ -1,0 +1,24 @@
+<modification>
+   <id><![CDATA[Hide Continue Buttons from various pages]]></id>
+   <version><![CDATA[1.1]]></version>
+   <vqmver><![CDATA[2.1.6+]]></vqmver>
+   <author><![CDATA[ZG]]></author>
+   <file name="catalog/view/theme/*/template/product/compare.tpl">
+      <operation error="log">
+         <search position="replace"><![CDATA[<div class="buttons">]]></search>
+         <add><![CDATA[<div class="buttons" style="display:none">]]></add>
+      </operation>
+   </file>
+   <file name="catalog/view/theme/*/template/product/category.tpl">
+      <operation error="log">
+         <search position="replace"><![CDATA[<div class="buttons">]]></search>
+         <add><![CDATA[<div class="buttons" style="display:none">]]></add>
+      </operation>
+   </file>
+   <file name="catalog/view/theme/*/template/error/not_found.tpl">
+      <operation error="log">
+         <search position="replace"><![CDATA[<div class="buttons">]]></search>
+         <add><![CDATA[<div class="buttons" style="display:none">]]></add>
+      </operation>
+   </file>
+ </modification>
