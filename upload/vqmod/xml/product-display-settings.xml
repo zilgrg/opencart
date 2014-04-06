@@ -1,7 +1,7 @@
 <!-- Created using vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk //-->
 <modification>
 	<id><![CDATA[Product Display Settings]]></id>
-	<version><![CDATA[1.0]]></version>
+	<version><![CDATA[1.1]]></version>
 	<vqmver><![CDATA[2.1.5]]></vqmver>
 	<author><![CDATA[Modified by ZG]]></author>
 	<file name="admin/controller/setting/setting.php">
@@ -229,7 +229,8 @@ $this->data['pds_location'] = $this->language->get('pds_location');
 		<span><?php echo $pds_sku; ?> </span> <?php echo $sku; ?><br />
 		<?php } ?>
 		<?php if ($this->config->get('config_display_upcp') && $upc) { ?>
-		<span><?php echo $pds_upc; ?> </span> <a href="<?php echo $upc; ?>"> <?php echo $upc; ?></a><br />
+		<span><?php echo $pds_upc; ?> </span><?php echo $upc; ?><br />
+<!--	<span><?php echo $pds_upc; ?> </span> <a href="<?php echo $upc; ?>"> <?php echo $upc; ?></a><br />-->
 		<?php } ?>
 		<?php if ($this->config->get('config_display_locationp') && $location) { ?>
 		<span><?php echo $pds_location; ?> </span> <?php echo $location; ?><br />
@@ -383,41 +384,41 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/product/search.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a><br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a><br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -425,51 +426,51 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/category.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
-<!--  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
+      <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
-	  <?php } ?>-->
+	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -477,51 +478,51 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/special.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
+      <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -529,51 +530,51 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/view/theme/*/template/product/manufacturer_info.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -581,11 +582,11 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '  <div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 		<operation>
 			<search position="after"><![CDATA[html += '<div class="name">' + $(element).find('.name').html() + '</div>';]]></search>
-			<add><![CDATA[html += '<div class="extra" style="display: block; color: #444;">' + $(element).find('.extra').html() + '</div>';]]></add>
+			<add><![CDATA[html += '<div class="extra" style="display: block;">' + $(element).find('.extra').html() + '</div>';]]></add>
 		</operation>
 	</file>
 	<file name="catalog/controller/module/latest.php">
@@ -625,41 +626,41 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/module/latest.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -704,41 +705,41 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/module/bestseller.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -783,41 +784,41 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/module/special.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	 <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+	  <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
@@ -862,41 +863,41 @@ $this->data['pds_stock'] = $this->language->get('pds_stock');]]></add>
 	<file name="catalog/view/theme/*/template/module/featured.tpl">
 		<operation>
 			<search position="after"><![CDATA[<div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>]]></search>
-			<add><![CDATA[<div class="extra" style="display: block; color: #444;">
+			<add><![CDATA[<div class="extra" style="display: block;">
 
 	  <?php if ($this->config->get('config_display_sku') && $product['sku']) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
+	  <span><?php echo $pds_sku; ?></span> <?php echo $product['sku']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_model') && $product['model']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
+	  <span><?php echo $pds_model; ?></span> <?php echo $product['model']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_brand') && $product['brand']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
+	  <span><?php echo $pds_brand; ?></span> <a href="<?php echo $product['brand_url']; ?>"><?php echo $product['brand']; ?></a> <br />
 
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_location') && $product['location']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
+	  <span><?php echo $pds_location; ?></span> <?php echo $product['location']; ?> <br />
 
 	  <?php } ?>
 
 	  <?php if ($product['upc'] && $this->config->get('config_display_upc')) { ?> 
 
-	  <span style="color:#38b0e3"><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />
-
+<!--  <span><?php echo $pds_upc; ?></span> <a href="<?php echo $product['upc']; ?>"><?php echo $product['upc']; ?> </a> <br />-->
+      <span><?php echo $pds_upc; ?></span> <?php echo $product['upc']; ?> <br />
 	  <?php } ?>
 
 	  <?php if ($this->config->get('config_display_listock') && $product['stock']) { ?>
 
-	  <span style="color:#38b0e3"><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
+	  <span><?php echo $pds_stock; ?></span> <?php echo $product['stock']; ?> <br />
 
 	  <?php } ?>
 
