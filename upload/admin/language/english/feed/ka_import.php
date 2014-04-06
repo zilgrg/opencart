@@ -3,10 +3,10 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 64 $)
+  Version: 3 ($Revision: 72 $)
 
 */
-$_['heading_title']       = 'CSV Product Import ver. 3.5 <i>(developed by <a href="mailto:support@ka-station.com">karapuz</a>)</i>';
+$_['heading_title']       = 'CSV Product Import ver. 3.6 <i>(developed by <a href="mailto:support@ka-station.com">karapuz</a>)</i>';
 $_['heading_title_plain'] = 'CSV Product Import';
 
 $_['text_feed']        = 'Product Feeds';

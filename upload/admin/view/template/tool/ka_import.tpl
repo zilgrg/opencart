@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 69 $)
+  Version: 3 ($Revision: 71 $)
 
 */
 
@@ -307,6 +307,22 @@ span.note {
             </td>
             <td width="50%">&nbsp;</td>
           </tr>
+          
+          <?php if ($enable_tpl_product) { ?>
+            <tr>
+              <td width="25%">Template product</td>
+              <td>
+                <input type="text" name="tpl_product" value="<?php if (!empty($tpl_product)) { echo $tpl_product['name']; } ?>" <?php if (!empty($tpl_product)) { ?> disabled="disabled" <?php } ?> />
+                <div id="tpl_product_actions" <?php if (empty($tpl_product)) { ?> style="display: none" <?php } else { ?> style="display: inline" <?php } ?>>
+                  &nbsp;<a id="view_tpl_product" target="_blank" <?php if (!empty($tpl_product)) { echo 'href="'. $product_url . '&product_id=' . $tpl_product['product_id'] . '"'; } ?>>view</a>
+                  &nbsp;<a id="clear_tpl_product" onclick="javascript: clearTplProduct();">clear</a>
+                </div>
+                <span class="help">(Autocomplete)</span>
+                <input type="hidden" name="tpl_product_id" value="<?php if (!empty($tpl_product['product_id'])) { echo $tpl_product['product_id']; } ?>" />
+              </td>
+              <td width="50%"><span class="help">if template product is specified then new products are created as a clone of the template product and updated with data from the file</span></td>
+            </tr>
+          <?php } ?>
         </table>
         
       </div>
@@ -394,6 +410,44 @@ function deleteProfile() {
   $("#form").submit();
 }
 
+$('input[name=\'tpl_product\']').autocomplete({
+  delay: 0,
+  source: function(request, response) {
+    $.ajax({
+      url: 'index.php?route=tool/ka_import/completeTpl&token=<?php echo $token; ?>',
+      type: 'POST',
+      dataType: 'json',
+      data: 'filter_name=' + encodeURIComponent(request.term),
+      success: function(data) {   
+        response($.map(data, function(item) {
+          return {
+            label: item.name,
+            value: item.product_id
+          }
+        }));
+      }
+    });
+    
+  }, 
+  select: function(event, ui) {
+    
+    $("input[name='tpl_product']").attr('value', ui.item.label).attr('disabled', 'disabled');
+    $("input[name='tpl_product_id']").attr('value', ui.item.value);
+    $("#view_tpl_product").attr('href', '<?php echo $product_url; ?>' + '&product_id=' + ui.item.value);
+    $("#tpl_product_actions").css('display', 'inline');
+
+    return false;
+  }
+});
+
+function clearTplProduct() {
+
+    $("input[name='tpl_product']").attr('value', '').removeAttr('disabled');
+    $("input[name='tpl_product_id']").attr('value', '');
+    $("#view_tpl_product").removeAttr('href');
+    $("#tpl_product_actions").hide();
+}
+
 //--></script> 
 
     <?php } elseif ($params['step'] == 2) { ?>
@@ -458,14 +512,14 @@ function deleteProfile() {
           </thead>
 
           <tbody>
-          <?php foreach($fields as $fk => $fv) { ?>
+          <?php foreach($matches['fields'] as $fk => $fv) { ?>
             <tr>
               <td width="25%"><?php echo $fv['name'] ?>
                 <?php if (!empty($fv['required'])) { ?><span class="required">*</span><?php } ?>
               </td>
               <td>
                 <?php 
-                  $val = (isset($params['matches']['fields'][$fk]['column'])) ? $params['matches']['fields'][$fk]['column']:0;
+                  $val = (isset($fv['column'])) ? $fv['column']:0;
                   echo $this->showSelector("fields[$fv[field]]", $columns, $val); 
                 ?>
               </td>
@@ -489,11 +543,11 @@ function deleteProfile() {
           </thead>
 
           <tbody>
-          <?php foreach($params['matches']['attributes'] as $ak => $av) { ?>
+          <?php foreach($matches['attributes'] as $ak => $av) { ?>
             <tr>
               <td width="25%"><?php echo $av['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("attributes[$av[attribute_id]]", $columns, $params['matches']['attributes'][$ak]['column']); ?>
+                <?php echo $this->showSelector("attributes[$av[attribute_id]]", $columns, $av['column']); ?>
               </td>
               <td width="50%"><?php echo $av['attribute_group']; ?></td>
             </tr>
@@ -516,11 +570,11 @@ function deleteProfile() {
             </thead>
 
             <tbody>
-            <?php foreach($params['matches']['filter_groups'] as $fk => $fv) { ?>
+            <?php foreach($matches['filter_groups'] as $fk => $fv) { ?>
               <tr>
                 <td width="25%"><?php echo $fv['name'] ?></td>
                 <td>
-                  <?php echo $this->showSelector("filter_groups[$fv[filter_group_id]]", $columns, $params['matches']['filter_groups'][$fk]['column']); ?>
+                  <?php echo $this->showSelector("filter_groups[$fv[filter_group_id]]", $columns, $fv['column']); ?>
                 </td>
                 <td width="50%">&nbsp;</td>
               </tr>
@@ -560,19 +614,17 @@ function deleteProfile() {
             <tr>
               <td class="left" width="25%">Option Name</td>
               <td>Column in File</td>
-              <td width="5%">Required</td>
               <td width="5%">Type</td>
             </tr>
           </thead>
 
           <tbody>
-          <?php foreach($params['matches']['options'] as $ok => $ov) { ?>
+          <?php foreach($matches['options'] as $ok => $ov) { ?>
             <tr>
               <td width="25%"><?php echo $ov['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("options[$ov[option_id]]", $columns, $params['matches']['options'][$ok]['column']); ?>
+                <?php echo $this->showSelector("options[$ov[option_id]]", $columns, $ov['column']); ?>
               </td>
-              <td width="5%"><input type="checkbox" name="required_options[<?php echo $ov['option_id'];?>]" value="Y" <?php if (!empty($params['matches']['options'][$ok]['required'])) { ?> checked="checked" <?php } ?> /></td>
               <td width="45%"><?php echo $ov['type']; ?></td>
             </tr>
           <?php } ?>
@@ -618,11 +670,11 @@ function deleteProfile() {
 
           <tbody>
 
-          <?php foreach($params['matches']['ext_options'] as $dk => $dv) { ?>
+          <?php foreach($matches['ext_options'] as $dk => $dv) { ?>
             <tr>
               <td width="25%"><?php echo $dv['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("ext_options[$dv[field]]", $columns, $params['matches']['ext_options'][$dk]['column']); ?>
+                <?php echo $this->showSelector("ext_options[$dv[field]]", $columns, $dv['column']); ?>
               </td>
               <td width="50%"><span class="help"><?php echo $dv['descr']; ?></span></td>
             </tr>
@@ -649,11 +701,11 @@ Product Discounts. You should specify at least 'quantity' and 'price' values to 
 
           <tbody>
 
-          <?php foreach($discounts as $dk => $dv) { ?>
+          <?php foreach($matches['discounts'] as $dk => $dv) { ?>
             <tr>
               <td width="25%"><?php echo $dv['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("discounts[$dv[field]]", $columns, $params['matches']['discounts'][$dk]['column']); ?>
+                <?php echo $this->showSelector("discounts[$dv[field]]", $columns, $dv['column']); ?>
               </td>
               <td width="50%"><span class="help"><?php echo $dv['descr']; ?></span></td>
             </tr>
@@ -677,11 +729,11 @@ Product Special Prices. You should specify at least 'price' value to add new spe
 
           <tbody>
 
-          <?php foreach($specials as $dk => $dv) { ?>           
+          <?php foreach($matches['specials'] as $dk => $dv) { ?>
             <tr>
               <td width="25%"><?php echo $dv['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("specials[$dv[field]]", $columns, $params['matches']['specials'][$dk]['column']); ?>
+                <?php echo $this->showSelector("specials[$dv[field]]", $columns, $dv['column']); ?>
               </td>
               <td width="50%"><span class="help"><?php echo $dv['descr']; ?></span></td>
             </tr>
@@ -705,11 +757,11 @@ Product Reward Points.<br /><br />
 
           <tbody>
 
-          <?php foreach($reward_points as $dk => $dv) { ?>            
+          <?php foreach($matches['reward_points'] as $dk => $dv) { ?>            
             <tr>
               <td width="25%"><?php echo $dv['name'] ?></td>
               <td>
-                <?php echo $this->showSelector("reward_points[$dv[field]]", $columns, $params['matches']['reward_points'][$dk]['column']); ?>
+                <?php echo $this->showSelector("reward_points[$dv[field]]", $columns, $dv['column']); ?>
               </td>
               <td width="50%"><span class="help"><?php echo $dv['descr']; ?></span></td>
             </tr>
@@ -734,11 +786,11 @@ Product Reward Points.<br /><br />
 
             <tbody>
 
-            <?php foreach($product_profiles as $dk => $dv) { ?>            
+            <?php foreach($matches['product_profiles'] as $dk => $dv) { ?>            
               <tr>
                 <td width="25%"><?php echo $dv['name'] ?></td>
                 <td>
-                  <?php echo $this->showSelector("product_profiles[$dv[field]]", $columns, $params['matches']['product_profiles'][$dk]['column']); ?>
+                  <?php echo $this->showSelector("product_profiles[$dv[field]]", $columns, $dv['column']); ?>
                 </td>
                 <td width="50%"><span class="help"><?php echo $dv['descr']; ?></span></td>
               </tr>
@@ -993,7 +1045,6 @@ function ka_import_loop() {
     });
   }
 }
-
   
 $(document).ready(function() {
   ka_import_status = 'in_progress';

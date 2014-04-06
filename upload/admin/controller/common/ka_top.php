@@ -3,7 +3,7 @@
 	Project: Ka Extensions
 	Author : karapuz <support@ka-station.com>
 
-	Version: 2.0 ($Revision$)
+	Version: 2.1 ($Revision: 14 $)
 */
 
 class ControllerCommonKaTop extends Controller {

@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 67 $)
+  Version: 3 ($Revision: 73 $)
 
 */
 
@@ -11,14 +11,13 @@ require_once(DIR_SYSTEM . 'engine/ka_controller.php');
 
 class ControllerFeedKaImport extends KaController {
 
-	private $error;
-	private $extension_version = '3.5.3';
-	private $min_store_version = '1.5.1';
-	private $max_store_version = '1.5.6.9';
-	private $tables;
-	private $db_exists = false;
+	protected $extension_version = '3.6.1';
+	protected $min_store_version = '1.5.1';
+	protected $max_store_version = '1.5.6.9';
+	protected $tables;
+	protected $db_exists = false;
 
-	private function init() {
+	protected function init() {
 		
  		$this->tables = array(
  			'product' => array(
@@ -112,6 +111,9 @@ class ControllerFeedKaImport extends KaController {
 			if (!isset($this->request->post['ka_pi_enable_product_id'])) {
 				$this->request->post['ka_pi_enable_product_id'] = '';
 			}
+			if (!isset($this->request->post['ka_pi_skip_img_download'])) {
+				$this->request->post['ka_pi_skip_img_download'] = '';
+			}
 
 			$this->request->post['ka_import_status'] = 'Y';
 
@@ -135,6 +137,8 @@ class ControllerFeedKaImport extends KaController {
 		
 		$this->data['ka_pi_create_options']     = $this->config->get('ka_pi_create_options');
 		$this->data['ka_pi_enable_product_id']  = $this->config->get('ka_pi_enable_product_id');
+		$this->data['ka_pi_skip_img_download']  = $this->config->get('ka_pi_skip_img_download');
+		
 		$this->data['ka_pi_key_fields']         = $this->config->get('ka_pi_key_fields');		
 		if (!is_array($this->data['ka_pi_key_fields']) || empty($this->data['ka_pi_key_fields'])) {
 			$this->data['ka_pi_key_fields'] = array('model');
@@ -156,12 +160,6 @@ class ControllerFeedKaImport extends KaController {
 		
 		$this->data['ka_pi_status_for_new_products']      = $this->config->get('ka_pi_status_for_new_products');
 		$this->data['ka_pi_status_for_existing_products'] = $this->config->get('ka_pi_status_for_existing_products');
-
- 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
 
  		$this->data['breadcrumbs'] = array();
 
@@ -198,21 +196,21 @@ class ControllerFeedKaImport extends KaController {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	protected function validate() {
+	
 		if (!$this->user->hasPermission('modify', 'feed/ka_import')) {
-			$this->error['warning'] = $this->language->get('error_permission');
+			$this->addTopMessage($this->language->get('error_permission'), 'E');
+			return false;
+			
 		} elseif (empty($this->request->post['ka_pi_key_fields'])) {
-			$this->error['warning'] = $this->language->get('Key fields cannot be empty');
-		}
-		
-		if (!$this->error) {
-			return true;
-		} else {
+			$this->addTopMessage($this->language->get('Key fields cannot be empty'), 'E');
 			return false;
 		}
+
+		return true;		
 	}
 
-	private function isVQModAvailable() {
+	protected function isVQModAvailable() {
 
 		if (class_exists('VQModObject')) {
 			return true;
@@ -221,7 +219,7 @@ class ControllerFeedKaImport extends KaController {
 		return false;
 	}
 
-	private function checkDBCompatibility(&$messages) {
+	protected function checkDBCompatibility(&$messages) {
 
 		if (empty($this->tables)) {
 			return true;
@@ -328,7 +326,7 @@ class ControllerFeedKaImport extends KaController {
 	}
 
 
-	private function patchDB(&$messages) {
+	protected function patchDB(&$messages) {
 
 		// create db
 		if (empty($this->tables)) {
@@ -364,7 +362,7 @@ class ControllerFeedKaImport extends KaController {
 	}
 
 
-	private function checkCompatibility(&$messages) {
+	protected function checkCompatibility(&$messages) {
 		$messages = '';
 
 		// check store version 
@@ -418,6 +416,7 @@ class ControllerFeedKaImport extends KaController {
 					'ka_import_status'                 => 'Y',
 					'ka_pi_create_options'             => 'Y',
 					'ka_pi_key_fields'                 => array('model'),
+					'ka_pi_skip_img_download'          => '',
 				);
 				$this->model_setting_setting->editSetting('ka_import', $settings);
 			}

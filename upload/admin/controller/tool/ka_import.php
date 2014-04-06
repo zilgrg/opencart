@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 69 $)
+  Version: 3 ($Revision: 71 $)
 
 */
 
@@ -16,7 +16,7 @@ class ControllerToolKaImport extends KaController {
 	protected $store_root_dir;
 	protected $store_images_dir;
 
-	protected function init() {
+	protected function onload() {
 
 		$this->tmp_dir          = DIR_CACHE;
 		$this->store_root_dir   = dirname(DIR_APPLICATION);
@@ -53,17 +53,19 @@ class ControllerToolKaImport extends KaController {
 			'common/header',
 			'common/footer',
 		);
+		
+		$this->data['token'] = $this->session->data['token'];
 	}
 
 
-	private function prepareOutput() {
+	protected function prepareOutput() {
 		$this->document->setTitle($this->data['heading_title']);
 
 		$this->data['ka_top_messages'] = $this->getTopMessages();
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	protected function validate() {
 		if (!$this->user->hasPermission('modify', 'tool/ka_import')) {
 			return FALSE;
 		}
@@ -72,7 +74,7 @@ class ControllerToolKaImport extends KaController {
 	}
 
 
-	private function getStores() {
+	protected function getStores() {
 
 		$this->load->model('setting/store');
 		$stores = $this->model_setting_store->getStores();
@@ -87,40 +89,17 @@ class ControllerToolKaImport extends KaController {
 	}
 
 
-	function isDBPrepared() {
-
-		$prefix = DB_PREFIX;
-		if (class_exists('MijoShop')) {
-		  $prefix = MijoShop::get('db')->getDbo()->replacePrefix($prefix);
-		}
-		
-		$tbl = $prefix . "ka_import_profiles";
-		
-		$res = $this->db->query("SHOW TABLES LIKE '$tbl'");
-		if (empty($res->rows)) {
-			return false;
-		}
-	
-		$tbl = $prefix . "ka_product_import";		
-		$res = $this->db->query("SHOW TABLES LIKE '$tbl'");
-		if (empty($res->rows)) {
-			return false;
-		}
-
-		return true;
-	}
-
 	// 
 	// public actions
 	//
 
 	public function index() { // step1
-	
-		$this->init();
 
+		$this->load->model('catalog/product');
+		
 		// do we need re-install modification?
 		//
-		if (!$this->isDBPrepared()) {
+		if (!$this->model_tool_ka_import->isDBPrepared()) {
 			$this->data['is_wrong_db'] = true;
 			$this->template = 'tool/ka_import.tpl';
 			$this->prepareOutput();
@@ -151,6 +130,7 @@ class ControllerToolKaImport extends KaController {
 				'skip_new_products'   => false,
 				'download_source_dir' => 'files',
 				'file_name_postfix'   => 'generate',
+				'tpl_product_id' => 0,
 			);
 
 			$this->params['iconv_exists']       = function_exists('iconv');
@@ -259,6 +239,17 @@ class ControllerToolKaImport extends KaController {
 					$msg = $msg . $this->language->get('error_file_not_found');
 			 	}
 		 	}
+		 	
+			if (!empty($this->request->post['tpl_product_id'])) {
+				$product = $this->model_catalog_product->getProduct($this->request->post['tpl_product_id']);
+				if (empty($product)) {
+					$msg .= "Template product not found";
+				} else {
+					$this->params['tpl_product_id'] = $product['product_id'];
+				}
+			} else {
+				$this->params['tpl_product_id'] = 0;
+			}
 
 		 	if (empty($msg)) {
 				$params = $this->params;
@@ -295,6 +286,17 @@ class ControllerToolKaImport extends KaController {
 		$this->data['charsets']   = $this->model_tool_ka_import->getCharsets();
 		$this->data['delimiters'] = $this->model_tool_ka_import->getDelimiters();
 
+		// tpl product will be displayed on a store where vqmod patch was applied to standard files
+		//
+		$this->data['enable_tpl_product'] = method_exists($this->model_catalog_product, 'getLastProductId');
+		
+		if (!empty($this->params['tpl_product_id'])) {
+			$product = $this->model_catalog_product->getProduct($this->params['tpl_product_id']);
+			if (!empty($product)) {
+				$this->data['tpl_product'] = $product;
+			}
+		}
+		
 		$this->load->model('localisation/language');
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		$this->data['action']    = $this->url->link('tool/ka_import', 'token=' . $this->session->data['token'], 'SSL');
@@ -304,6 +306,7 @@ class ControllerToolKaImport extends KaController {
 		$this->data['max_file_size'] = $this->model_tool_ka_import->convertToMegabyte($this->uploadMaxFilesize());
 
 		$this->data['settings_page'] = $this->url->link('feed/ka_import', 'token=' . $this->session->data['token'], 'SSL');
+		$this->data['product_url'] = $this->url->link('catalog/product/update', '', 'SSL') . '&token=' . $this->session->data['token'];
 		
 		$this->template = 'tool/ka_import.tpl';
 		return $this->prepareOutput();
@@ -318,54 +321,43 @@ class ControllerToolKaImport extends KaController {
 			discounts[<fieldid>] => <column position in the file>
 			...
 	*/
-	private function updateMatches() {
+	protected function updateMatches() {
 
-		$sets = array(
-			'fields'        => array('field'), 
-			'attributes'    => array('attribute_id'),
-			'filter_groups' => array('filter_group_id'), 
-			'discounts'     => array('field'),
-			'ext_options'   => array('field'),
-			'specials'      => array('field'),
-			'reward_points' => array('field'),
-			'product_profiles' => array('field'),
-		);
+		$sets = $this->model_tool_ka_import->getFieldSets();
 		
-		$matches = $this->params['matches'];
-
 		foreach ($sets as $sk => $sv) {
 
-			if (!empty($matches[$sk])) {
-				$fields = $this->request->post[$sk];
-				foreach($matches[$sk] as $mk => $mv) {
-
-					if (isset($fields[$mv[$sv[0]]])) {
-						$mv['column'] = $fields[$mv[$sv[0]]];
-					}
-					$matches[$sk][$mk] = $mv;
-				}
+			if (empty($sv)) {
+				continue;
 			}
-		}
-
-		if (!empty($matches['options'])) {
-			$options          = (isset($this->request->post['options'])) ? $this->request->post['options'] : array();
-			$required_options = (isset($this->request->post['required_options'])) ? $this->request->post['required_options'] : array();
-
-			foreach($matches['options'] as $mk => $mv) {
-
-				if (isset($options[$mv['option_id']])) {
-					$mv['column'] = $options[$mv['option_id']];
-
-					if (!empty($mv['column']) && isset($required_options[$mv['option_id']])) {
-						$mv['required'] = true;
+					
+			$fields = $this->request->post[$sk];
+			
+			foreach ($sv as $f_idx => $f_data) {
+			
+				if ($sk == 'filter_groups') {
+					$f_key = $f_data['filter_group_id'];
+					
+				} elseif ($sk == 'attributes') {
+					$f_key = $f_data['attribute_id'];
+					
+				} elseif ($sk == 'options') {
+					$f_key = $f_data['option_id'];
+					
+				} else {
+					$f_key = (isset($f_data['field']) ? $f_data['field']:$f_idx);
+				}
+				
+				if (isset($fields[$f_key])) {
+					if ($fields[$f_key] > 0) {
+						$matches[$sk][$f_key] = $this->params['columns'][$fields[$f_key]-1];
 					} else {
-						$mv['required'] = false;
+						$matches[$sk][$f_key] = '';
 					}
 				}
-				$matches['options'][$mk] = $mv;
 			}
 		}
-		
+
 		$this->params['matches'] = $matches;
 
 		return true;
@@ -374,20 +366,26 @@ class ControllerToolKaImport extends KaController {
 
 	public function step2() { // step2
 
-		$this->init();
-
 		$this->params['step'] = 2;
 
+		$this->data['columns']    = $this->params['columns'];
+		array_unshift($this->data['columns'], '');
+		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
+		
 			$this->updateMatches();
-
-			$errors_found = false;
-			foreach ($this->params['matches']['fields'] as $field) {
+			
+			$sets = $this->model_tool_ka_import->getFieldSets();			
+			$this->model_tool_ka_import->copyMatches($sets, $this->params['matches'], $this->data['columns']);
+			
+			$errors_found = false;			
+			foreach ($sets['fields'] as $field) {
 				if (!empty($field['required']) && empty($field['column'])) {
 					$this->addTopMessage(sprintf($this->language->get('error_field_required'), $field['name']), 'E');
 					$errors_found = true;
 				}
 			}
+			
 			if ($errors_found) {
 				return $this->redirect($this->url->link('tool/ka_import/step2', 'token=' . $this->session->data['token'], 'SSL'));
 			}
@@ -412,60 +410,31 @@ class ControllerToolKaImport extends KaController {
 			return $this->redirect($this->url->link('tool/ka_import/step3', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 				
-		$this->load->model('tool/ka_import');
-		$this->data['columns']    = $this->params['columns'];
-		array_unshift($this->data['columns'], '');
 		$sets = $this->model_tool_ka_import->getFieldSets();
 
-		$this->data['fields']        = $sets['fields'];
-		$this->data['specials']      = $sets['specials'];
-		$this->data['discounts']     = $sets['discounts'];
-		$this->data['reward_points'] = $sets['reward_points'];
-		$this->data['ext_options']   = $sets['ext_options'];
-		
-		$this->load->model('catalog/attribute');
-		$this->data['attributes'] = $this->model_catalog_attribute->getAttributes();
-		
 		if (version_compare(VERSION, '1.5.5', '>=')) {
-			$this->load->model('catalog/filter');
-			$this->data['filter_groups']   = $this->model_catalog_filter->getFilterGroups();
 			$this->data['filters_enabled'] = true;
 		} else {
-			$this->data['filter_groups']   = false;
 			$this->data['filters_enabled'] = false;
 		}
 
 		if (version_compare(VERSION, '1.5.6', '>=')) {
-			$this->data['product_profiles']         = $sets['product_profiles'];
 			$this->data['product_profiles_enabled'] = true;
 		} else {
-			$this->data['product_profiles']         = false;
 			$this->data['product_profiles_enabled'] = false;
 		}
 				
-		$this->load->model('catalog/option');
-		$this->data['options'] = $this->model_catalog_option->getOptions();
-
 		//
 		// $matches - stores array of fields and assigned columns
 		// $columns - list of columns in the file
 		//
-		if (empty($this->params['matches'])) {
-			$matches = array(
-				'fields'        => $this->data['fields'],
-				'attributes'    => $this->data['attributes'],
-				'filter_groups' => $this->data['filter_groups'],
-				'options'       => $this->data['options'],
-				'ext_options'   => $this->data['ext_options'],
-				'discounts'     => $this->data['discounts'],
-				'specials'      => $this->data['specials'],
-				'reward_points' => $this->data['reward_points'],
-				'product_profiles' => $this->data['product_profiles'],
-			);
-			$this->model_tool_ka_import->findMatches($matches, $this->data['columns']);
-			$this->params['matches'] = $matches;
+		if (!empty($this->params['matches'])) {
+			$this->model_tool_ka_import->copyMatches($sets, $this->params['matches'], $this->data['columns']);
 		}
 
+		$this->model_tool_ka_import->findMatches($sets, $this->data['columns']);
+		$this->data['matches'] = $sets;
+		
 		$this->data['attribute_page_url'] = $this->url->link('catalog/attribute', 'token=' . $this->session->data['token'], 'SSL');		
 		$this->data['filter_page_url']    = $this->url->link('catalog/filter', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['option_page_url']    = $this->url->link('catalog/option', 'token=' . $this->session->data['token'], 'SSL');
@@ -482,7 +451,6 @@ class ControllerToolKaImport extends KaController {
 
 	public function step3() { // step3
 
-		$this->init();
 		$this->params['step'] = 3;
 
 		$this->load->model('tool/ka_import');
@@ -515,8 +483,6 @@ class ControllerToolKaImport extends KaController {
 	*/
 	public function stat() {
 
-		$this->init();
-
 		if ($this->params['step'] != 3) {
 			$this->addTopMessage('This script can be requested at step 3 only', 'E');
 			return $this->redirect($this->url->link('tool/ka_import/step2', 'token=' . $this->session->data['token'], 'SSL'));
@@ -546,13 +512,6 @@ class ControllerToolKaImport extends KaController {
  	}
 
 
- 	public function flush() {
-		$x = str_repeat(' ', 1024);
-		$this->response->setOutput($x);
-		$this->response->output();
-		flush();
-	}
-
 	public function uploadMaxFilesize() {
 		static $max_filesize;
 
@@ -563,6 +522,36 @@ class ControllerToolKaImport extends KaController {
 		}
 
     	return $max_filesize;
+	}
+	
+	
+	public function completeTpl() {
+		$json = array();
+		
+		if (isset($this->request->post['filter_name'])) {
+			$this->load->model('catalog/product');
+			
+			$data = array(
+				'filter_name' => $this->request->post['filter_name'],
+				'start'       => 0,
+				'limit'       => 20
+			);
+			
+			$results = $this->model_catalog_product->getProducts($data);
+			
+			foreach ($results as $result) {
+				$option_data = array();
+				
+				$json[] = array(
+					'product_id' => $result['product_id'],
+					'name'       => html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),	
+					'model'      => $result['model'],
+					'price'      => $result['price']
+				);	
+			}
+		}
+		
+		$this->response->setOutput(json_encode($json));
 	}
 }
 ?>

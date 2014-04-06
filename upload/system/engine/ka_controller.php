@@ -3,7 +3,7 @@
 	Project: Ka-Extensions
 	Author : karapuz <support@ka-station.com>
 
-	Version: 2.0 ($Revision: 13 $)
+	Version: 2 ($Revision: 35 $)
 */
 
 abstract class KaController extends Controller {
@@ -18,6 +18,8 @@ abstract class KaController extends Controller {
 			$this->session->data["ka_params_$class"] = array();
 		}
 		$this->params = &$this->session->data["ka_params_$class"];
+		
+		$this->onLoad();
 	}
 
 	
@@ -74,5 +76,10 @@ abstract class KaController extends Controller {
 		return $ret;
 	}
 	
+	
+	protected function onLoad() {
+		return true;
+	}
+		
 }
 ?>

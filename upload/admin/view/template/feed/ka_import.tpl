@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 51 $)
+  Version: 3 ($Revision: 71 $)
 
 */
 ?>
@@ -16,17 +16,9 @@
 }
 
 </style>
-
 <div id="content">
-<div class="breadcrumb">
-  <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-  <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
-  <?php } ?>
-</div>
 
-<?php if ($error_warning) { ?>
-<div class="warning"><?php echo $error_warning; ?></div>
-<?php } ?>
+<?php echo $ka_top; ?>
 
 <div class="box">
   <div class="heading">
@@ -90,6 +82,15 @@
             </td>
           </tr>
 
+          <tr>
+            <td class="left">Skip downloading images for existing files
+            <span class="help">this option is applicable to direct image URLs only</span>
+            </td>
+            <td class="left">
+              <input type="checkbox" name="ka_pi_skip_img_download" value="Y" <?php if (!empty($ka_pi_skip_img_download)) { ?> checked="checked" <?php } ?>" />
+            </td>
+          </tr>
+          
           <tr>
             <td class="left">Set status for new products
               <span class="help">This option is ignored if the status field is defined in the file</span>

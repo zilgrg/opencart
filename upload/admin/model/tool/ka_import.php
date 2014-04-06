@@ -3,13 +3,20 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 69 $)
+  Version: 3 ($Revision: 75 $)
 
 */
 
+//
+// this option adds a filter for processing \r character to \n in files because fgetcsv function 
+// may fail randomly with detrmining the end of MacOS file line. It can be disabled to improve 
+// the speed of file processing for the import scripts where MacOS csv files are not used.
+//
+define('KA_ENABLE_MACFIX', TRUE);
+
 require_once(DIR_SYSTEM . 'library/ka_db.php');
 require_once(DIR_SYSTEM . 'library/ka_urlify.php');
-require_once(DIR_SYSTEM . 'engine/ka_controller.php');
+require_once(DIR_SYSTEM . 'engine/ka_model.php');
 
 if (!function_exists('mb_strtolower')) {
 	function mb_strtolower($str, $charset) {
@@ -27,6 +34,25 @@ if (!function_exists('utf8_strlen')) {
 	function utf8_strlen($string) {
 		return strlen(utf8_decode($string));
 	}
+}
+
+if (constant('KA_ENABLE_MACFIX')) {
+	class macfix_filter extends php_user_filter {
+		function filter($in, $out, &$consumed, $closing) {
+			while ($bucket = stream_bucket_make_writeable($in)) {
+
+				if (mb_strpos($bucket->data, "\r\n") === false) {
+					$bucket->data = mb_ereg_replace("\r", "\n", $bucket->data, 'mpe');
+				}
+				
+				$consumed += $bucket->datalen;
+				stream_bucket_append($out, $bucket);
+			}
+			return PSFS_PASS_ON;
+	  	}
+	}
+
+	stream_filter_register("macfix", "macfix_filter") or die("Failed to register filter");
 }
 
 class ModelToolKaImport extends Model {
@@ -135,6 +161,30 @@ class ModelToolKaImport extends Model {
 		return true;
 	}
 
+	
+	public function isDBPrepared() {
+
+		$prefix = DB_PREFIX;
+		if (class_exists('MijoShop')) {
+		  $prefix = MijoShop::get('db')->getDbo()->replacePrefix($prefix);
+		}
+		
+		$tbl = $prefix . "ka_import_profiles";
+		
+		$res = $this->db->query("SHOW TABLES LIKE '$tbl'");
+		if (empty($res->rows)) {
+			return false;
+		}
+	
+		$tbl = $prefix . "ka_product_import";		
+		$res = $this->db->query("SHOW TABLES LIKE '$tbl'");
+		if (empty($res->rows)) {
+			return false;
+		}
+
+		return true;
+	}
+
 
 	public function getSecPerCycle() {
 		return $this->sec_per_cycle;
@@ -186,15 +236,36 @@ class ModelToolKaImport extends Model {
 		return $price;
 	}
 
-	
+	/*
+		this function should parse the date and try to return formated as YYYY-MM-DD.
+	*/
 	public function formatDate(&$date) {
+	
 		$date = trim($date);
-		if (!preg_match("/^\d{4}-\d{1,2}-\d{1,2}$/", $date)) {
-			return false;
-		}
-		return true;
-	}
+		
+		// yyyy-mm-dd
+		if (preg_match("/^\d{4}-\d{1,2}-\d{1,2}$/", $date, $matches)) {
+			return true;
 
+		// mm/dd/yyyy
+		} elseif (preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/", $date, $matches)) {
+			if ($matches[3] < 100) {
+				$matches[3] += 2000;
+			}
+			$date = sprintf("%04d-%02d-%02d", $matches[3], $matches[1], $matches[2]);			
+			return true;
+			
+		// dd.mm.yyyy
+		} elseif (preg_match("/^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$/", $date, $matches)) {
+			if ($matches[3] < 100) {
+				$matches[3] += 2000;
+			}
+			$date = sprintf("%04d-%02d-%02d", $matches[3], $matches[2], $matches[1]);
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public function timeFormat($diff) {
 
@@ -405,6 +476,11 @@ class ModelToolKaImport extends Model {
 			fclose($handle);
 			$handle = FALSE;
 		}
+		
+		if (constant('KA_ENABLE_MACFIX')) {
+			stream_filter_append($handle, 'macfix');
+		}
+		
 		return $handle;
 	}
 
@@ -623,6 +699,7 @@ class ModelToolKaImport extends Model {
 	public function getFileContentsByUrl($url) {
 
 		$message = null;
+		$this->lastError = '';
 		
 		if (function_exists('curl_init')) {
 		
@@ -646,6 +723,7 @@ class ModelToolKaImport extends Model {
 				$header_block = substr($response, 0, $msg_start);
 				$headers      = $this->parseHttpHeader($header_block);				
 				if (empty($headers)) {
+					$this->lastError = 'No headers received';
 					break;
 				}
 
@@ -700,17 +778,6 @@ class ModelToolKaImport extends Model {
 		$file = '';
 		if ($this->isUrl($image)) {
 
-			// download file and parse the path
-			//
-			$image = htmlspecialchars_decode($image);
-		    $tmp = str_replace(array(' '), array('%20'), $image);
-
-		    $content = $this->getFileContentsByUrl($tmp);
-	    	if (empty($content)) {
-		    	$this->lastError = "File content is empty for $tmp";
-		    	return false;
-	    	}
-
 		    $url_info = @parse_url($image);
 
 		    if (empty($url_info)) {
@@ -718,8 +785,8 @@ class ModelToolKaImport extends Model {
 	    		return false;
 			}
 
-	    	//get relative image directory to $images_dir
-
+	    	// 1) get relative image directory to $images_dir
+			//
 		    $fullname  = '';
 		    $images_dir = str_replace("\\", '/', $this->params['incoming_images_dir']);
       
@@ -728,6 +795,7 @@ class ModelToolKaImport extends Model {
 	    		
 			    $path_info = pathinfo($url_info['path']);
 			    $path_info['dirname'] = $this->strip($path_info['dirname'], array("\\","/"));
+
 			    if (!empty($path_info['dirname'])) {
 		    		$images_dir = $images_dir . $path_info['dirname'] . '/';
 		    		if (!file_exists(DIR_IMAGE . $images_dir)) {
@@ -737,10 +805,33 @@ class ModelToolKaImport extends Model {
 		    			}
 			    	}
 			    }
+			    
+			    // skip downloading files if they exist on the server
+			    // it works for direct URLs only.
+			    //
+			    if (!empty($this->params['skip_img_download'])) {
+					if (empty($url_info['query']) && !empty($path_info['extension'])) {
+						$_file = $images_dir . $path_info['basename'];
+						if (is_file(DIR_IMAGE . $_file) && filesize(DIR_IMAGE . $_file) > 0) {
+							return $_file;
+						}
+					}
+				}
 			}
+		
+			// 2) download file and parse the path
+			//
+			$image = htmlspecialchars_decode($image);
+		    $tmp = str_replace(array(' '), array('%20'), $image);
 
-			// get file name to $filename
+		    $content = $this->getFileContentsByUrl($tmp);
+	    	if (empty($content)) {
+		    	$this->lastError = "File content is empty for $tmp (" . $this->lastError . ")";
+		    	return false;
+	    	}
 
+	    	// save the image to a temporary file
+	    	//
 		  	$tmp_file = tempnam(DIR_IMAGE . $images_dir, "tmp");
 		  	
 		  	$size = file_put_contents($tmp_file, $content);
@@ -754,7 +845,9 @@ class ModelToolKaImport extends Model {
 				$this->lastError = "getimagesize returned empty info for the file: $image";
 				return false;
 			}
-
+			
+			// 3) get a complete image file path
+			//
 			if (!empty($url_info['query'])) {
 				$filename = '';
 				if (!empty($path_info['basename'])) {
@@ -769,14 +862,16 @@ class ModelToolKaImport extends Model {
 					$filename = $filename . image_type_to_extension($image_info[2]);
 				}
 			}
-			
-			if (is_file(DIR_IMAGE.$images_dir.$filename)) {
-				@unlink(DIR_IMAGE.$images_dir.$filename);
+
+			// 4) move the image file to the incoming directory
+			//
+			if (is_file(DIR_IMAGE . $images_dir . $filename)) {
+				@unlink(DIR_IMAGE . $images_dir . $filename);
 			}
 			
-			if (!is_file(DIR_IMAGE.$images_dir.$filename)) {
-				if (!rename($tmp_file, DIR_IMAGE.$images_dir.$filename)) {
-					$this->lastError = "rename operation failed. from $tmp_file to " . DIR_IMAGE.$images_dir.$filename;
+			if (!is_file(DIR_IMAGE . $images_dir . $filename)) {
+				if (!rename($tmp_file, DIR_IMAGE . $images_dir . $filename)) {
+					$this->lastError = "rename operation failed. from $tmp_file to " . DIR_IMAGE . $images_dir . $filename;
 					return false;
 				}
 
@@ -793,7 +888,6 @@ class ModelToolKaImport extends Model {
 			//
 			// if the image is a regular file
 			//
-
 			$file = $this->params['images_dir'].$image;
 			if (!is_file(DIR_IMAGE . $file)) {
 				$this->lastError = "File not found " . DIR_IMAGE . $file;
@@ -989,19 +1083,28 @@ class ModelToolKaImport extends Model {
 		);
 
 		foreach ($sets as $sk => $sv) {
+		
+			if (!isset($matches[$sk])) {
+				continue;
+			}
+			
+			foreach ($matches[$sk] as $mk => $mv) {
 
-			if (!empty($matches[$sk])) {
-				foreach($matches[$sk] as $mk => $mv) {
-
-					$mv['column'] = 0;
-					if (isset($columns[$sv[2].$mv[$sv[0]]])) {
-						$mv['column'] = $columns[$sv[2].$mv[$sv[0]]];
-
-					} if (isset($columns[$sv[2].mb_strtolower($mv[$sv[1]], 'utf-8')])) {
-						$mv['column'] = $columns[$sv[2].mb_strtolower($mv[$sv[1]], 'utf-8')];
-					}
-					$matches[$sk][$mk] = $mv;
+				if (isset($mv['column'])) {
+					continue;
 				}
+			
+				$field = mb_strtolower($mv[$sv[0]], 'utf-8');
+				$name  = mb_strtolower($mv[$sv[1]], 'utf-8');
+
+				if (isset($columns[$sv[2]. $field])) {
+					$mv['column'] = $columns[$sv[2]. $field];
+					
+				} if (isset($columns[$sv[2]. $name])) {
+					
+					$mv['column'] = $columns[$sv[2]. $name];
+				}
+				$matches[$sk][$mk] = $mv;
 			}
 		}
 		
@@ -1244,7 +1347,7 @@ class ModelToolKaImport extends Model {
 			
 		// stock status
 		//
-		if (isset($data['stock_status'])) {
+		if (!empty($data['stock_status'])) {
 			$qry = $this->db->query("SELECT stock_status_id FROM " . DB_PREFIX . "stock_status 
 				WHERE '" . $this->db->escape(mb_strtolower($data['stock_status'], 'utf-8')) . "' LIKE LOWER(name)
 					AND language_id = '" . $this->params['language_id'] . "'");
@@ -1299,9 +1402,9 @@ class ModelToolKaImport extends Model {
 
 		// insert date available
 		//
-		if (isset($data['date_available'])) {
+		if (!empty($data['date_available'])) {
 			if (!$this->formatDate($data['date_available'])) {
-				$this->addImportMessage($this->product_mark . "Wrong date format in 'date available' field. It should be YYYY-MM-DD. Ex. 2012-11-28");
+				$this->addImportMessage($this->product_mark . "Wrong date format in 'date available' field. We recommend to use YYYY-MM-DD. Ex. 2012-11-28");
 				if ($is_new) {
 					$product['date_available'] = '2000-01-01';
 				}
@@ -1518,7 +1621,7 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = $row[$av['column']];
 			if (empty($val)) {
 				continue;
 			}
@@ -1555,7 +1658,7 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = $row[$av['column']];
 
 			$sep = $this->config->get('ka_pi_general_separator');
 			if (!empty($sep)) {
@@ -1850,7 +1953,7 @@ class ModelToolKaImport extends Model {
 				if (empty($ov['column']))
 					continue;
 
-				$val = $row[$ov['column']-1];
+				$val = $row[$ov['column']];
 				
 				if (empty($val)) {
 					continue;
@@ -1884,7 +1987,7 @@ class ModelToolKaImport extends Model {
 				if (empty($cv['column']))
 					continue;
 
-				$val = $row[$cv['column']-1];
+				$val = $row[$cv['column']];
 				$option[$cv['field']] = trim($val);
 			}
 			
@@ -1943,10 +2046,10 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = trim($row[$av['column']]);
 
 			if ($av['field'] == 'price') {
-				if (strlen(trim($val)) > 0) {
+				if (strlen($val) > 0) {
 					$record_valid = true;
 				}
 				$val = $this->formatPrice($val);
@@ -2004,7 +2107,7 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = trim($row[$av['column']]);
 
 			if ($av['field'] == 'price') {
 				$val = $this->formatPrice($val);
@@ -2083,7 +2186,7 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = $row[$av['column']];
 
 			if ($av['field'] == 'customer_group') {				
 				$data['customer_group_id'] = $this->getCustomerGroupByName($val);
@@ -2186,7 +2289,7 @@ class ModelToolKaImport extends Model {
 			if (empty($av['column']))
 				continue;
 
-			$val = $row[$av['column']-1];
+			$val = $row[$av['column']];
 
 			if ($av['field'] == 'customer_group') {
 				$data['customer_group_id'] = $this->getCustomerGroupByName($val);
@@ -2403,31 +2506,26 @@ class ModelToolKaImport extends Model {
 
 		// remove sets if they are not required in the current import
 		//
-		$sets = array('fields', 'attributes', 'filter_groups', 'specials', 'discounts', 'reward_points', 'options', 'ext_options', 'product_profiles');
-
-		foreach($sets as $sk => $sv) {
-			if (isset($params['matches'][$sv])) {
-				$has_column = false;
-				if (is_array($params['matches'][$sv])) {
-					foreach ($params['matches'][$sv] as $msk => $msv) {
-						if (!empty($msv['column']) || !empty($msv['import'])) {
-							$has_column = true;							
-						} else {
-							unset($params['matches'][$sv][$msk]);
-						}
-					}
-				}
-
-				if (!$has_column) {
-					unset($params['matches'][$sv]);
+		$sets = $this->getFieldSets();
+		$this->copyMatches($sets, $params['matches'], $this->columns);
+		foreach ($sets as $sk => $sv) {
+			$has_column = false;
+			foreach ($sv as $msk => $msv) {
+				if (!empty($msv['column'])) {
+					$has_column = true;
 				}
 			}
+			
+			if (!$has_column) {
+				unset($sets[$sk]);
+			}
 		}
-
-		$this->params['matches'] = $params['matches'];
+		$this->params['matches'] = $sets;
+				
 		$this->params['status_for_new_products']      = $this->config->get('ka_pi_status_for_new_products');
 		$this->params['status_for_existing_products'] = $this->config->get('ka_pi_status_for_existing_products');
 		$this->params['ka_pi_options_separator']      = $this->config->get('ka_pi_options_separator');
+		$this->params['skip_img_download']            = $this->config->get('ka_pi_skip_img_download');
 		$this->params['ka_pi_image_separator']        = str_replace(array('\r','\n'), array("\r", "\n"), $this->config->get('ka_pi_image_separator'));
 
 		$download_source_dir = '';
@@ -2440,7 +2538,7 @@ class ModelToolKaImport extends Model {
 		$this->params['download_source_dir'] = $download_source_dir;
 		
 		$this->params['field_lengths'] = $this->getFieldLengths(DB_PREFIX . 'product', array('model', 'sku', 'upc'));
-						
+		
 		$this->stat = array(
 			'filesize'         => $this->filesize_utf8($params['file']),
 			'offset'           => 0,
@@ -2597,11 +2695,11 @@ class ModelToolKaImport extends Model {
 			}
 
 			foreach ($this->params['matches']['fields'] as $fk => $fv) {
-				if (empty($fv['column']))
+				if (!isset($fv['column']))
 					continue;
 
-				$data[$fv['field']] = trim($row[$fv['column']-1]);
-
+				$data[$fv['field']] = trim($row[$fv['column']]);
+				
 				if (!empty($fv['copy'])) {
 					$product[$fv['field']] = $data[$fv['field']];
 				}
@@ -2646,12 +2744,29 @@ class ModelToolKaImport extends Model {
 						continue;
 					}
 
-					if (empty($data['product_id'])) {
-						$this->db->query("INSERT INTO " . DB_PREFIX . 'product SET date_modified = NOW(), date_added = NOW()');
-						$product_id = $this->db->getLastId();
-					} else {
-						$this->db->query("REPLACE INTO " . DB_PREFIX . "product SET date_modified = NOW(), date_added = NOW(), product_id = '" . $this->db->escape($data['product_id']) . "'");
-						$product_id = $data['product_id'];
+					if (!empty($this->params['tpl_product_id'])) {
+						$last_product_id = $this->model_catalog_product->getLastProductId();
+						$this->model_catalog_product->copyProduct($this->params['tpl_product_id']);
+						$product_id	= $this->model_catalog_product->getLastProductId();
+						if ($last_product_id == $product_id) {
+							$product_id = 0;
+						}
+						
+						if (!empty($product_id)) {
+							if (!empty($data['product_id'])) {
+								$this->db->query("UPDATE INTO " . DB_PREFIX . "product SET product_id = '" . $this->db->escape($data['product_id']) . "' WHERE product_id = '$product_id'");
+							}
+						}
+					}
+					
+					if (empty($product_id)) {
+						if (empty($data['product_id'])) {
+							$this->db->query("INSERT INTO " . DB_PREFIX . 'product SET date_modified = NOW(), date_added = NOW()');
+							$product_id = $this->db->getLastId();
+						} else {
+							$this->db->query("REPLACE INTO " . DB_PREFIX . "product SET date_modified = NOW(), date_added = NOW(), product_id = '" . $this->db->escape($data['product_id']) . "'");
+							$product_id = $data['product_id'];
+						}
 					}
 
 					if (empty($product_id)) {
@@ -3275,7 +3390,7 @@ class ModelToolKaImport extends Model {
 				'descr' => ''
 			),
 		);
-		
+
 		$sets = array(
 			'fields'        => $fields,
 			'discounts'     => $discounts,
@@ -3284,6 +3399,17 @@ class ModelToolKaImport extends Model {
 			'ext_options'   => $ext_options,
 		);
 
+		$this->load->model('catalog/attribute');
+		$sets['attributes'] = $this->model_catalog_attribute->getAttributes();
+
+		$this->load->model('catalog/option');
+		$sets['options'] = $this->model_catalog_option->getOptions();
+				
+		if (version_compare(VERSION, '1.5.5', '>=')) {
+			$this->load->model('catalog/filter');
+			$sets['filter_groups']   = $this->model_catalog_filter->getFilterGroups();
+		}
+		
 		if (version_compare(VERSION, '1.5.6', '>=')) {
 			$sets['product_profiles'] = array(
 				'name' => array(
@@ -3325,7 +3451,48 @@ class ModelToolKaImport extends Model {
 		return $arr;
 	}
 
-	
+	/*
+		$matches - sets array
+		$matches - hash array of column names			
+	*/
+	public function copyMatches(&$sets, $matches, $columns) {
+
+
+		foreach ($columns as $ck => $cv) {
+			if (!empty($cv)) {
+				$tmp[$cv] = $ck;
+			}
+		}
+		$columns = $tmp;
+
+		foreach ($sets as $sk => $sv) {
+		
+			foreach ($sv as $f_idx => $f_data) {
+				if ($sk == 'filter_groups') {
+					$f_key = $f_data['filter_group_id'];
+					
+				} elseif ($sk == 'attributes') {
+					$f_key = $f_data['attribute_id'];
+					
+				} elseif ($sk == 'options') {
+					$f_key = $f_data['option_id'];
+					
+				} else {
+					$f_key = (isset($f_data['field']) ? $f_data['field']:$f_idx);
+				}
+				
+				if (isset($matches[$sk][$f_key])) {
+					if (isset($columns[$matches[$sk][$f_key]])) {
+						$sets[$sk][$f_idx]['column'] = $columns[$matches[$sk][$f_key]];
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+
+			
 	public function getDelimiters() {
 		return $this->delimiters;
 	}

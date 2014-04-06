@@ -3,7 +3,7 @@
   Project: Ka Extensions
   Author : karapuz <support@ka-station.com>
 
-  Version: 2.0 ($Revision: 59 $)
+  Version: 2.0 ($Revision: 43 $)
 
 */
 class KaDb {
