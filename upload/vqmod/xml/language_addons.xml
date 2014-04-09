@@ -1,0 +1,49 @@
+<modification>
+        <id>Language Addons</id>
+        <version>1.0</version>
+        <vqmver>2.1.7</vqmver>
+        <author>ZG</author>
+
+<!-- Show a generic VAT name for each language -->
+        <file name="catalog/language/english/total/sub_total.php">
+                <operation>
+                        <search position="before"><![CDATA[
+                        $_['text_sub_total']
+                        ]]></search>
+                        <add><![CDATA[
+						$_['text_tax_name'] = 'VAT!!&nbsp;';
+                        ]]></add>
+                </operation>
+        </file>
+        <file name="catalog/language/lithuanian/total/sub_total.php">
+                <operation>
+                        <search position="before"><![CDATA[
+                        $_['text_sub_total']
+                        ]]></search>
+                        <add><![CDATA[
+						$_['text_tax_name'] = 'PVM!!&nbsp;';
+                        ]]></add>
+                </operation>
+        </file>
+        <file name="catalog/model/total/tax.php">
+                <operation>
+                        <search position="before"><![CDATA[
+                        foreach ($taxes as $key => $value) {
+                        ]]></search>
+                        <add><![CDATA[
+						$this->load->language('total/sub_total');
+                        ]]></add>
+                </operation>
+        </file>
+
+        <file name="catalog/model/total/tax.php">
+                <operation>
+                        <search position="replace"><![CDATA[
+                        'title'      => $this->tax->getRateName($key),
+                        ]]></search>
+                        <add><![CDATA[
+						'title'      => $this->language->get('text_tax_name') . $this->tax->getRateName($key),
+                        ]]></add>
+                </operation>
+        </file>
+</modification>
