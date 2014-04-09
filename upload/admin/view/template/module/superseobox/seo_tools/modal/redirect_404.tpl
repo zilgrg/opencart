@@ -3,6 +3,16 @@
    <h4>List of non-existing URLs</h4>
    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 	
+	<div style="margin-left: 20px;" class="btn-group pull-left">
+		<a class="btn dropdown-toggle" data-toggle="dropdown">Setting</a>
+		<button class="btn dropdown-toggle" data-toggle="dropdown">
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="btn btn-nonstyle bg_red" data-action="deleteAllUrl404" data-data="redirect_404" data-afteraction="refreshReviewTable">Delete all URLs</a></li>
+		</ul>
+	</div>
+	
 	<div style="margin-right: 20px;" class="btn-group pull-right">
 		<a class="add-header btn btn-success">Add Row</a>
 		<a data-jsbeforeaction="prepareRecive();" data-afteraction="afterAction" data-action="saveUrl404" data-scope=".closest('.ajax_modal').find('input[type=text]').not('.stamp')" class="btn  ajax_action" type="button">Save</a>

@@ -14,7 +14,7 @@
 			</dd>
 		</dl>
 	</td>
-	<input type="hidden" class="exclusion_empty" name="data[entity][<?php echo $entity_cat;?>][<?php echo $CPBI;?>][replacing]" value=""/>
+	<input type="hidden" class="exclusion_empty" name="data[entity][<?php echo $entity_cat;?>][CPBI_urls][data][<?php echo $CPBI;?>][replacing]" value=""/>
 	<?php 
 		$possible_pattern = array(
 			'product' 	=> array('pn', 'pm', 'pu','ps', 'sn'),
@@ -33,7 +33,6 @@
 		<div class="tab-content">
 			<?php $i_nav_param_descrip = 1; foreach ($possible_pattern[$CPBI] as $parameter) { ?>
 				<div class="tab-pane <?php if($i_nav_param_descrip ==1) echo  "active";?>" id="replacing-<?php echo $parameter; ?>">
-					<input type="hidden" class="parameter_empty" name="data[entity][<?php echo $entity_cat;?>][CPBI_urls][data][<?php echo $CPBI;?>][replacing][<?php echo $parameter;?>]" value=""/>
 					<table class="table table-hover grider">
 						<thead>
 							<tr class="top_table">
@@ -78,7 +77,8 @@
   
   <script>
 function prepareReplacing(){
-	var $input = $('.replacing-tables').find('.grider tbody input.search ');
+	
+	var $input = $('.replacing-tables').find('.grider tbody input.search');
 	$input.each(function(){
 		var val = $(this).val();
 		if(val == ''){
@@ -100,6 +100,14 @@ function prepareReplacing(){
 	}
 	
 }
+setTimeout(function(){
+	$('.replacing-tables .delete').live('click', function(){
+		$input = $(this).closest('tbody').find('input.search');
+		if($input.length == 1){
+			$input.closest('tr').find('input').val('');
+		}
+	});
+},500);
 </script>
 <style>
 .modal-absolute.ajax_modal{

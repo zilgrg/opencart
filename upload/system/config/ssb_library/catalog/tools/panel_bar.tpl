@@ -1,18 +1,27 @@
 <div id="ssb-share-bar">
+		<?php 
+		$h_title = '';
+		if(isset($_SESSION['ssb_page_title'])){
+			$h_title = $_SESSION['ssb_page_title'];
+		}else if(isset($_SESSION['page_title'])){
+			$h_title = $_SESSION['page_title'];
+		} 
+		?>
+		
 		<?php if($soc_buttons['data']['Facebook']['status']){ ?>
-			<div class="facebook" data-text="<?php echo $_SESSION['ssb_page_title']; ?>" data-title="Like"></div><?php }?>
+			<div class="facebook" data-text="<?php echo $h_title; ?>" data-title="Like"></div><?php }?>
 		
 		<?php if($soc_buttons['data']['Twitter']['status']){ ?>
-			<div class="twitter" data-text="<?php echo $_SESSION['ssb_page_title']; ?>" data-title="Tweet"></div> <?php }?>
+			<div class="twitter" data-text="<?php echo $h_title; ?>" data-title="Tweet"></div> <?php }?>
 			
 		<?php if($soc_buttons['data']['Google']['status']){ ?>
-			<div class="google" data-text="<?php echo $_SESSION['ssb_page_title']; ?>" data-title="g+"></div><?php }?>
+			<div class="google" data-text="<?php echo $h_title; ?>" data-title="g+"></div><?php }?>
 		
 		<?php if($soc_buttons['data']['Pinterest']['status']){ ?>
-			<div class="pinterest" data-text="<?php echo $_SESSION['ssb_page_title']; ?>" data-title="Pin it"></div><?php }?>
+			<div class="pinterest" data-text="<?php echo $h_title; ?>>" data-title="Pin it"></div><?php }?>
 		
 		<?php if($soc_buttons['data']['Linkedin']['status']){ ?>
-			<div class='linkedin' data-text="<?php echo $_SESSION['ssb_page_title']; ?>" data-title="Linkedin"></div><?php }?>
+			<div class='linkedin' data-text="<?php echo $h_title; ?>" data-title="Linkedin"></div><?php }?>
 		
 		<?php if($soc_buttons['data']['Odnoklassniki']['status']){ ?>
 			

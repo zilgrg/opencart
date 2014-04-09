@@ -97,16 +97,26 @@
 								<div style="" class="input-prepend input-append">
 									<span class="add-on item_name"> <?php echo ${'text_entity_name_'.$key}; ?></span>
 									<span class="add-on status <?php if($val['status'] ==1){echo "status-on";}else{echo "status-off";}?>" data-toggle="tooltip" title="<?php if($val['status'] ==1){echo $text_status_on;}else{echo $text_status_off;}?>" data-placement="bottom"></span>
+									<!-- set data for categories templates -->
+										<?php if($key == 'product'){ ?>
+											<?php 
+											$additional_data = 'additionData[function]=setCategoryTemplateData&additionData[data][0]='. $entity_category_name .'&additionData[data][1]='. $key;
+											$categor_templ_url = $this->url->link('module/superseobox/ajax', 'token=' . $this->session->data['token'] . '&metaData[action]=getModal&data[m_name]=seo_generator/modal/category_template&'.$additional_data, 'SSL');
+											?>
+											<a style="padding-bottom: 3px;" data-jsbeforeaction="$('body,html').stop(true,true).animate({'scrollTop':0},'slow');" href="<?php echo $categor_templ_url; ?>" class="btn" type="button" data-toggle="modal"><span style="margin-top: 4px;" class="icon-filter"></span></a>
+										<?php } ?>
+										<!-- set data for categories templates -->
 									<?php if(isset($val['pattern'])) { ?>
 										<!-- data has language array !-->
-										<input  data-toggle="popover" data-placement="top" data-content="<p>/<p><p>/<p>" data-original-title="Parameters for template" type="text" name="data[entity][<?php echo $entity_category_name; ?>][<?php echo  $key;?>][data][<?php echo $l_code; ?>]" class="seo_input_pattern" value="<?php echo $val['data'][$l_code]; ?>">
+										<input  data-toggle="popover" data-placement="top" data-content="<p>/<p><p>/<p>" data-original-title="Parameters for template" type="text" name="data[entity][<?php echo $entity_category_name; ?>][<?php echo  $key;?>][data][<?php echo $l_code; ?>]" class="seo_input_pattern <?php if($key == 'product') echo"shortstyle"; ?>" value="<?php echo $val['data'][$l_code]; ?>">
 									<?php }else{ ?>
 										<!-- data has string emplate !-->
-										<input  data-toggle="popover" data-placement="top" data-content="<p>/<p><p>/<p>" data-original-title="Parameters for template" type="text" name="data[entity][<?php echo $entity_category_name; ?>][<?php echo  $key;?>][data]" class="seo_input_pattern" value="<?php echo $val['data']; ?>">
+										<input  data-toggle="popover" data-placement="top" data-content="<p>/<p><p>/<p>" data-original-title="Parameters for template" type="text" name="data[entity][<?php echo $entity_category_name; ?>][<?php echo  $key;?>][data]" class="seo_input_pattern <?php if($key == 'product') echo"shortstyle"; ?>" value="<?php echo $val['data']; ?>">
 									<?php } ?>
 									
 									<div class="btn-group">
 										<a data-action="prepareGenerate" data-entity="<?php echo $entity_category_name; ?>-<?php echo  $key;?>" data-scope=".closest('.one_entity').find('input')" class="btn btn-success ajax_action" type="button">Generate!</a>
+										
 										<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 										<ul class="dropdown-menu">
 											<li>

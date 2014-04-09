@@ -1,6 +1,6 @@
 <modification>
 <id><![CDATA[Paladin SEO Manager]]></id>
-<version>2.7.0</version>
+<version>2.9.0</version>
 <vqmver>1.0.0</vqmver>
 <author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
 
@@ -300,28 +300,6 @@
 
 
 
-	<file name="system/library/session.php">
-		<operation>
-			<search position="before"><![CDATA[$this->data =& $_SESSION;]]></search>
-			<add><![CDATA[
-			
-			$_SESSION["ssb_page_type"]  = '';
-			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
-			$ssb_data = ssb_data::getInstance();
-			if($ssb_data->getEntityStatus('urls') AND !isset($_GET['route'])){
-				require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
-				$ssb_helper = ssb_helper::getInstance();
-				$lang_inURL 	= $ssb_helper->getLangFromUrl();
-
-				$_SESSION['language'] = $lang_inURL['code'];
-				$_SESSION['last_ssb_language_id'] = isset($_SESSION['ssb_language_id']) ? $_SESSION['ssb_language_id'] : '';
-				$_SESSION['ssb_language_id'] = $lang_inURL['language_id'];
-
-			}
-			
-			]]></add>
-		</operation>		
-	</file>
 	<file name="catalog/controller/common/seo_url.php">
 		<operation>
 			<search position="after"><![CDATA[index()]]></search>
@@ -329,11 +307,6 @@
 				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 				$ssb_data = ssb_data::getInstance();
 				if($ssb_data->getEntityStatus('urls')){
-
-					if(isset($_SESSION['ssb_language_id']) AND $_SESSION['ssb_language_id'] != ''){
-						$this->config->set('config_language_id', $_SESSION['ssb_language_id']);
-					}
-	
 					global $vqmod;
 					if(isset($vqmod)){
 						require_once $vqmod->modCheck(DIR_CONFIG .'ssb_library/catalog/controller/common/ssb_seo_url.php');
@@ -348,330 +321,56 @@
 			]]></add>
 		</operation>		
 	</file>
+
+
+
 	<file name="catalog/controller/module/language.php">
 		<operation>
 			<search position="after"><![CDATA[ControllerModuleLanguage extends Controller]]></search>
 			<add><![CDATA[
-
-	private function clear_link ($link) { // added
-		$lang_code = $this->ssb_helper->getArrayLangCode();
-		$link = explode("/",$link);
-		foreach ($link as $key => $part) {
-			if (in_array($part,$lang_code) ) {
-				unset($link[$key]);
-			}
-		}
-		$link = implode("/",$link);
-		if(substr($link,0,1) == '/') $link = substr($link,1);
-		return $link;
-	}
-	
-	private function seo_language($link,$language) { // added 
-		include_once DIR_CONFIG .'ssb_library/ssb_helper.php';
-		$this->ssb_helper = ssb_helper::getInstance();
 			
-		$config_lang = $this->ssb_helper->getDefaultLanguage();
-		
+			private function addLangSuffix($l_code){
 				
-		if (trim($language) == trim($config_lang)) unset($language);
-		$url_data = parse_url($link);
-		$url_data = $this->ssb_helper->fix_parse_bug($url_data);
-		if(isset($url_data['path']))
-			$url_data['path'] = $this->clear_link($url_data['path']);
-		else $url_data['path'] = '';
-		if (strpos('a'.$url_data['scheme'].'a','https') ) $link = $this->config->get('config_ssl');
-		else $link = $this->config->get('config_url');	
-		if (isset($language) ) $link .= $language.'/';
-		if (isset($url_data['path']) ) {
-		$temp_path = explode('/',$url_data['path']);
-		foreach ($temp_path as $key => $value) {
-			if(!empty($value))
-			if (strpos($link,$value)) unset($temp_path[$key]);
-		}
-		$url_data['path'] = implode('/',$temp_path);
-		$link .= $url_data['path'];
-		}
-		if(substr($link,-1) == '/') $link = substr($link,0,-1);
-		if (isset($url_data['query']) ) $link .= '?'.$url_data['query'];
-		return $link;
-	}
-	
-	private function getNewLink($link, $l_code = ''){
-
-		$prepare_parts = parse_url($link);
-		
-		$path = isset($prepare_parts['path']) ? $prepare_parts['path'] : '';
-		
-		$parts = $prepare_parts['host'] . $path;
-		
-		$parts = explode('/', $parts);
-		
-		include_once DIR_CONFIG .'ssb_library/ssb_helper.php';
-		$this->ssb_helper = ssb_helper::getInstance();
-		$arrayLangCode = array();
-		if($this->ssb_helper->getActiveLang() > 1){
-			$arrayLangCode = $this->ssb_helper->getArrayLangCode();
-		}
-		
-		foreach ($parts as $part) {
-				
-			$part = trim($part);
-			if (empty($part) ) continue;
-	
-			$query = $this->db->query("SELECT query FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($part) . "'");
-			
-			//echo '$part = '.$part;
-			
-			if ($query->num_rows) {
-				$result = $query->rows[0];
-				
-				$url = explode('=', $result['query']);
-
-				if ($url[0] == 'product_id') {
-					$data['product_id'] = $url[1];
-				}
-				
-				if ($url[0] == 'category_id') {
-					if (!isset($data['path'])) {
-						$data['path'] = $url[1];
-					} else {
-						$data['path'] .= '_' . $url[1];
-					}
-				}	
-				
-				if ($url[0] == 'manufacturer_id') {
-					$data['manufacturer_id'] = $url[1];
-				}
-				
-				if ($url[0] == 'information_id') {
-					$data['information_id'] = $url[1];
-				}
-				if (isset($url[0]) AND !isset($url[1])) { 
-					$data['route'] = $url[0];
-				}
-			} else if(!in_array($part, $arrayLangCode)) {
-				$data['route'] = 'error/not_found';	
-			}
-		}
-		
-		if (isset($data['product_id'])) {
-			$data['route'] = 'product/product';
-		} elseif (isset($data['path'])) {
-			$data['route'] = 'product/category';
-		} elseif (isset($data['manufacturer_id'])) {
-			$data['route'] = 'product/manufacturer/info';
-		} elseif (isset($data['information_id'])) {
-			$data['route'] = 'information/information';
-		}
-	
-		$url_info = parse_url(str_replace('&amp;', '&', $link));
-		
-		$link = $url_info['scheme'] . '://' . $url_info['host'] . (isset($url_info['port']) ? ':' . $url_info['port'] : '');
-		
-		if(isset($url_info['query']) AND in_array('route', explode("=", $url_info['query']))){
-			$link = $link . $path;
-		}
-
-		return $this->rewrite($link, $data, isset($url_info['query'])? $url_info['query'] : '', $l_code);
-	}
-
-	public function rewrite($link, $data , $query_filter = '', $l_code = '') {
-		
-		//echo $link . ' ==> ' . $query_filter;
-
-		require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
-		$this->ssb_helper = ssb_helper::getInstance();
-	
-		if($l_code){
-			$l_code_session = $l_code;
-			$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code);
-		}else{
-			$l_code_session = $this->session->data['language'];
-			$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code_session);	
-		}
-		
-		$url = ''; 
-
-		foreach ($data as $key => $value) {
-			if (isset($data['route'])) {
-				if ($key == 'route') { 
-					$sql = "SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "' AND language_id = '". $l_id_session ."'";
-					$query = $this->db->query($sql);
-					
-					if ($query->num_rows) {
-						$url .= '/' . $query->row['keyword'];
-					}else{
-						$sql = "SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($value) . "'";
-						$query = $this->db->query($sql);
-						if ($query->num_rows) {
-							$url .= '/' . $query->rows[0]['keyword'];
-						}
-					}
-					continue;
+				if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+					$domen = rtrim(HTTPS_SERVER, '/');
+				}else{
+					$domen = rtrim(HTTP_SERVER, '/');
 				}
 
-				if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {
-					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id_session ."'");
-				
-					if ($query->num_rows) {
-						$url .= '/' . $query->row['keyword'];
-						
-						unset($data[$key]);
-					}					
-				} elseif ($key == 'path') {
-					$categories = explode('_', $value);
-					
-					foreach ($categories as $category) {
-
-						$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'category_id=" . (int)$category . "' AND language_id = '". $l_id_session ."'");
-					
-						if ($query->num_rows) {
-							$url .= '/' . $query->row['keyword'];
-							unset($data[$key]); 
-						}
-					}
-				}
-			}
-		}
-		//echo '$url= '.$url;
-		if ($url) {
-		
-			unset($data['route']);
-		
-			$query = '';
-		
-			if ($data) {
-				foreach ($data as $key => $value) {
-					$query .= '&' . $key . '=' . $value;
-				}
-				
-				if ($query) {
-					$query = '?' . trim($query, '&');
-				}
-			}
-
-			
-			/*super seo */
-			
-			if($query){
-				$query_filter = '&'.$query_filter;
-			}else{
-				$query_filter = '?'.$query_filter;
+				$result = $domen . '/change-' . $l_code;
+				return $result;
 			}
 			
-			$link = $link . $url . $query . $query_filter;
-		}elseif($query_filter AND in_array('route', explode("=", $query_filter))){
-			$link = $link . '?' . $query_filter;
-		}
-		
-		if (strpos($link,"index.php") ) {
-			$link = explode("index.php",$link);
-			$link = implode("",$link);
-		}
-		
-		//echo $link;
-		
-		//seo pagination start
-		$query = ''; $page = '';
-		$url_info = parse_url(str_replace('&amp;', '&', $link));
-		
-		if(isset($url_info['query'])){
-			$parts = explode('&', $url_info['query']);
-			foreach($parts as $part){
-				if(strpos($part, 'page') !== false){
-					$page = preg_replace("/[^0-9]/", '', $part);
-				}
-			}
-			$query = '?' . preg_replace("/&*page=[0-9]/i","", $url_info['query']);
-		}
-		if($page != ''){
-			$setting		= $this->ssb_data->getSetting();
-			$CPBI_urls_ext	= $setting['entity']['urls']['CPBI_urls']['ext'];
-			$STAN_urls_ext	= $setting['entity']['urls']['STAN_urls']['ext'];
-			
-			$url_info['path'] = preg_replace("/\/page-[0-9]+". $STAN_urls_ext ."/i","", $url_info['path']);
-			$url_info['path'] = preg_replace("/". $CPBI_urls_ext ."$/i","", $url_info['path']);
-			
-			$page_part = '/page-' . $page . $STAN_urls_ext;
-			
-			$seo_link = $url_info['scheme'] . '://' . $url_info['host'] . (isset($url_info['port']) ? ':' . $url_info['port'] : '') . $url_info['path'] . $page_part . $query;
-			$link = $seo_link;
-			
-		}
-		//seo pagination end
-		
-		$link = $this->seo_language($link, $l_code_session);
-		return $link;
-	}			
-
 			]]></add>
 		</operation>
-		<operation>
-			<search position="after"><![CDATA[$this->session->data['language'] = $this->request->post['language_code'];]]></search>
-			<add><![CDATA[
-
-			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
-			$this->ssb_data = ssb_data::getInstance();
-			
-			if($this->ssb_data->getEntityStatus('urls')){
-				if (isset($this->request->post['redirect'])) {
-					$temp_redirect = $this->getNewLink($this->request->post['redirect']);
-				} else {
-					$temp_redirect = $this->url->link('common/home','','SSL');
-				}
-				//echo $temp_redirect;
-				//return;
-				$this->redirect($temp_redirect);
-			}	
-				
-			]]></add>
-		</operation>	
-	</file>	
-	<file name="catalog/view/theme/*/template/common/footer.tpl">
-		<operation>
-			<search position="before"><![CDATA[</body>]]></search>
-			<add><![CDATA[
-
-			<?php require_once DIR_CONFIG .'ssb_library/ssb_data.php';
-					$this->ssb_data = ssb_data::getInstance();
-					$tools = $this->ssb_data->getSetting('tools');
-					if($tools){
-						if($tools['qr_code']['status'] OR $tools['soc_buttons']['status']){
-							$soc_buttons = $tools['soc_buttons'];
-							$qr_code = $tools['qr_code'];
-							require_once DIR_CONFIG .'ssb_library/catalog/tools/tool.php';
-							$this->tool = tool::getInstance();
-							$curPageURL = $this->tool->curPageURL();
-							$qr_image_path = $this->tool->get_qr($curPageURL);
-							$qr_image = "<img class='count' src='" . $qr_image_path . "' />";
-							include_once DIR_CONFIG .'ssb_library/catalog/tools/panel_bar.tpl';
-						}
-					}
-			?>
-				]]></add>
-		</operation>
-	</file>
-
-
-
-	<file name="catalog/controller/module/language.php">
 		<operation>
 			<search position="before"><![CDATA[$this->render();]]></search>
 			<add><![CDATA[
-
-		require_once DIR_CONFIG .'ssb_library/ssb_data.php';
-		$this->ssb_data = ssb_data::getInstance();
-		$tools = $this->ssb_data->getSetting('tools');
-		if($tools['lang_dir_link']['status'] AND $this->ssb_data->getEntityStatus('urls')){
-			foreach($this->data['languages'] as &$language){
-				$language['href'] = $this->getNewLink($this->data['redirect'], $language['code']);
+			
+			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+			$this->ssb_data = ssb_data::getInstance();
+			$tools = $this->ssb_data->getSetting('tools');
+			if($tools['lang_dir_link']['status'] AND $this->ssb_data->getEntityStatus('urls')){
+				$l_code_session = $this->session->data['language'];
+				$_SESSION['last_request'] = $this->data['redirect'];
+				
+				foreach($this->data['languages'] as &$language){
+					$this->session->data['language'] = $language['code'];
+					if (!isset($this->request->get['route'])) {
+						$_SESSION['last_request_' . $language['code']] = $this->url->link('common/home');
+					} else {
+						$_SESSION['last_request_' . $language['code']] = $this->url->link($route, $url, $connection);
+					}
+					$language['href'] = $this->addLangSuffix($language['code']);
+				}
+				
+				$this->session->data['language'] = $l_code_session;
+				$this->template = 'default/template/module/ssb_language.tpl';
 			}
-			$this->template = 'default/template/module/ssb_language.tpl';
-		}
-	
+			
 				]]></add>
-		</operation>		
-	</file>
+		</operation>	
+	</file>	
 		
 	
 
@@ -781,6 +480,30 @@
 
 
 
+	<file name="catalog/view/theme/*/template/common/footer.tpl">
+		<operation>
+			<search position="before"><![CDATA[</body>]]></search>
+			<add><![CDATA[
+
+			<?php require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+					$this->ssb_data = ssb_data::getInstance();
+					$tools = $this->ssb_data->getSetting('tools');
+					if($tools){
+						if($tools['qr_code']['status'] OR $tools['soc_buttons']['status']){
+							$soc_buttons = $tools['soc_buttons'];
+							$qr_code = $tools['qr_code'];
+							require_once DIR_CONFIG .'ssb_library/catalog/tools/tool.php';
+							$this->tool = tool::getInstance();
+							$curPageURL = $this->tool->curPageURL();
+							$qr_image_path = $this->tool->get_qr($curPageURL);
+							$qr_image = "<img class='count' src='" . $qr_image_path . "' />";
+							include_once DIR_CONFIG .'ssb_library/catalog/tools/panel_bar.tpl';
+						}
+					}
+			?>
+				]]></add>
+		</operation>
+	</file>
 	<file name="system/library/response.php">
 		<operation>
 			<search position="replace"><![CDATA[$this->output = $output;]]></search>
@@ -912,7 +635,7 @@
 		<operation>
 			<search position="before"><![CDATA[if ($this->config->get('google_sitemap_status'))]]></search>
 			<add><![CDATA[
-		//ssb-xml 
+		
 			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
 			$this->ssb_data = ssb_data::getInstance();
 			$tools = $this->ssb_data->getSetting('tools');
@@ -929,7 +652,7 @@
 					return $ssb_site_map->index();
 				}
 			}
-		 //ssb-xml  
+		 
 			]]></add>
 		</operation>		
 	</file>
@@ -940,7 +663,7 @@
 		<operation>
 		<search position="after"><![CDATA[get($key)]]></search>
 		<add><![CDATA[
-		//ssb-inject
+		
 		$seo_store_trigger = array('config_name', 'config_title', 'config_meta_description', 'config_meta_keyword');
 		if (in_array($key, $seo_store_trigger)) {
 			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
@@ -956,7 +679,7 @@
 				}
 			}
 		}
-		//ssb-inject
+		
 		]]></add>
 		</operation>
 	</file>
@@ -973,7 +696,7 @@
 		<operation>
 		<search position="before"><![CDATA[public function render() {]]></search>
 		<add><![CDATA[
-		//ssb-inject
+		
 		public function curPageURL() {
 			$pageURL = 'http';
 			if (isset($this->request->server['HTTPS']) AND (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {$pageURL .= "s";}
@@ -985,13 +708,13 @@
 			}
 			return $pageURL;
 		} 
-		//ssb-inject
+		
 		]]></add>
 		</operation>
 		<operation>
 		<search position="after"><![CDATA[$output = '';]]></search>
 		<add><![CDATA[
-		//ssb-inject
+		
 		$url_info = parse_url(str_replace('&amp;', '&', $this->curPageURL()));
 		if((isset($url_info['query']) AND strpos($url_info['query'], 'route=') === false) OR !isset($url_info['query'])){
 			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
@@ -1030,7 +753,7 @@
 				}
 			}
 		}		
-		//ssb-inject
+		
 		]]></add>
 		</operation>
 	</file>

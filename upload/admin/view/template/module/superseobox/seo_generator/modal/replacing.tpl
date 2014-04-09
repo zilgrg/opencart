@@ -26,7 +26,6 @@
 		<div class="tab-content">
 			<?php $i_nav_param_descrip = 1; foreach ($MD_CPBI_parameters as $parameter) { ?>
 				<div class="tab-pane <?php if($i_nav_param_descrip ==1) echo  "active";?>" id="replacing-<?php echo $parameter; ?>">
-					<input type="hidden" class="parameter_empty" name="data[entity][<?php echo $entity_cat;?>][<?php echo $CPBI;?>][replacing][<?php echo $parameter;?>]" value=""/>
 					<table class="table table-hover grider">
 						<thead>
 							<tr class="top_table">
@@ -91,8 +90,17 @@ function prepareReplacing(){
 	if($input.length){
 		$('.replacing-tables').find('.exclusion_empty').remove();
 	}
-	
 }
+
+setTimeout(function(){
+	$('.replacing-tables .delete').live('click', function(){
+		$input = $(this).closest('tbody').find('input.search');
+		if($input.length == 1){
+			$input.closest('tr').find('input').val('');
+		}
+	});
+},500);
+
 </script>
 <style>
 .modal-absolute.ajax_modal{

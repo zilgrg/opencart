@@ -8,7 +8,7 @@
 	Some of the parameters has additional settings, which give us more flexibility in writing SEO templates.
 	</p>
 
-	<h3 style="text-align:left;"> Table of the additional settings (here you can see where and what additional settings possible to write) </h3>
+	<h4 style="text-align:left;"> Table of the additional settings (here you can see where and what additional settings possible to write) </h4>
 
 	<table class="table table-bordered">
 	<thead>

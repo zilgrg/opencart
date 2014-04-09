@@ -71,7 +71,8 @@ class ssb_seo_url extends Controller {
 
 		$this->curPageURL = $this->curPageURL();	
 
-		$tools = $this->ssb_data->getSetting('tools');
+		$setting = $this->ssb_data->getSetting();
+		$tools = $setting['tools'];
 		if(substr($this->curPageURL,-1) == '/' AND $tools['trailing_slash']['status'] == true) {
 			$new_url = rtrim($this->curPageURL,"/");  
 			$this->ssb_helper->redirect($new_url, 301); 
@@ -93,7 +94,6 @@ class ssb_seo_url extends Controller {
 			if($tools['seo_pagination']['status']){	
 				foreach($parts as $part){
 					if(strpos($part, 'page-') !== false){
-						$setting 		= $this->ssb_data->getSetting();
 						$CPBI_urls_ext	= $setting['entity']['urls']['CPBI_urls']['ext'];
 					}
 				}
@@ -110,7 +110,25 @@ class ssb_seo_url extends Controller {
 				if (empty($part) ) continue;
 				
 				if (in_array($part, $arrayLangCode)) continue;
+				if(strpos($part, 'page-') !== false) continue;
 				
+				//direct links start
+				if(strpos($part, 'change-') !== false){
+					$chage_lang = explode('-', $part);
+					if(isset($chage_lang[1]) AND in_array($chage_lang[1], $arrayLangCode)){
+						//change language
+						$chage_lang_code = $chage_lang[1];
+						if(isset($_SESSION['last_request_' . $chage_lang_code])){
+							//echo '' . $_SESSION['last_request_' . $chage_lang_code];
+							$this->request->post['redirect'] = $_SESSION['last_request_' . $chage_lang_code];
+							$this->request->post['language_code'] = $chage_lang_code;
+							return $this->forward('module/language');
+						}else{
+							continue;
+						}
+					}
+				}
+				//direct links start
 				
 				if($tools['seo_pagination']['status'] && isset($CPBI_urls_ext) && strpos($CPBI_urls_ext, $part) === false){
 					$keyword_condition = "(keyword = '" . $this->db->escape($part) . "' OR keyword = '" . $this->db->escape($part . $CPBI_urls_ext) . "')";
@@ -140,10 +158,8 @@ class ssb_seo_url extends Controller {
 							}
 						}
 					}else{
-						if(strpos($part, 'page-') === false){
-							$this->request->get['route'] = 'error/not_found';	
-							$this->query_data['path'] = 'error/not_found';
-						}
+						$this->request->get['route'] = 'error/not_found';	
+						$this->query_data['path'] = 'error/not_found';
 					}
 				}
 				
@@ -312,11 +328,11 @@ class ssb_seo_url extends Controller {
 		return $pageURL;
 	}
 	
-	public function rewrite($link, $query_filter = '') {
+	public function rewrite($link, $query_filter = '', $l_code = '') {
 		$url_info = parse_url(str_replace('&amp;', '&', $link));
 	
-		$l_code_session = $this->session->data['language'];
-		$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code_session);	
+		$l_code = $l_code ? $l_code : $this->session->data['language'];
+		$l_id_session 	= $this->ssb_helper->getLang_Code_Id($l_code);	
 		
 		$url = ''; 
 		

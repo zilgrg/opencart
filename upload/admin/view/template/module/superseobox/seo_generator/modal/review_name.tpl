@@ -49,7 +49,7 @@
   	<div class="tabbable "> 
 		<ul class="nav nav-tabs">
 			<?php $i_nav_param_descrip = 1; foreach ($review_name as $l_code => $l_data) { ?>
-				<li <?php if($i_nav_param_descrip ==1) echo  "class=\"active\"";?> ><a href="#r_name-<?php echo $l_code; ?>" data-toggle="tab"><img src="view/image/flags/<?php echo $languages[$l_code]['image']; ?>" title="<?php echo $languages[$l_code]['name']; ?>" /></a></li>
+				<li <?php if($i_nav_param_descrip ==1) echo  "class=\"active\"";?> ><a href="#r_name-<?php echo $l_code; ?>" data-toggle="tab"><img src="view/image/flags/<?php echo $languages[$l_code]['image']; ?>" title="<?php echo $languages[$l_code]['name']; ?>" /> <?php echo $languages[$l_code]['name']; ?></a></li>
 			<?php $i_nav_param_descrip++; } ?>
 		</ul>
 		
