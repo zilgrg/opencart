@@ -57,14 +57,14 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 # 7. disable open_basedir limitations
 # php_admin_value open_basedir none
 ## INCREASE PAGE SPEED HTACCESS MODIFICATION ##
-<ifModule mod_headers.c>
-    Header set Connection keep-alive
-</ifModule>
-AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/x-javascript
-BrowserMatch ^Mozilla/4 gzip-only-text/html
-BrowserMatch ^Mozilla/4\.0[678] no-gzip
-BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-<ifModule mod_headers.c>
-    Header append Vary User-Agent
-</ifModule>
+#<ifModule mod_headers.c>
+#    Header set Connection keep-alive
+#</ifModule>
+#AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/x-javascript
+#BrowserMatch ^Mozilla/4 gzip-only-text/html
+#BrowserMatch ^Mozilla/4\.0[678] no-gzip
+#BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+#<ifModule mod_headers.c>
+#    Header append Vary User-Agent
+#</ifModule>
 ## END INCREASE PAGE SPEED HTACCESS MODIFICATION ##
