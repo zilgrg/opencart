@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 75 $)
+  Version: 3 ($Revision: 82 $)
 
 */
 
@@ -42,7 +42,7 @@ if (constant('KA_ENABLE_MACFIX')) {
 			while ($bucket = stream_bucket_make_writeable($in)) {
 
 				if (mb_strpos($bucket->data, "\r\n") === false) {
-					$bucket->data = mb_ereg_replace("\r", "\n", $bucket->data, 'mpe');
+					$bucket->data = mb_ereg_replace("\r", "\n", $bucket->data, 'mp');
 				}
 				
 				$consumed += $bucket->datalen;
@@ -60,10 +60,11 @@ class ModelToolKaImport extends Model {
 	// constants
 
 	protected $sec_per_cycle    = 10;
-	protected $enclosure        = '"';
+	protected $enclosure        = '"';	
 	//	protected $escape           = '\\'; - not supported;
 	protected $default_attribute_group_name = 'unassigned';
 	protected $generate_urls    = true;
+	protected $curl_resolve_attempts = 3;
 
 	protected $extended_types          = array('select', 'radio', 'checkbox', 'image');
 	protected $options_with_def_values = array('text', 'textarea', 'date', 'time', 'datetime');
@@ -716,14 +717,43 @@ class ModelToolKaImport extends Model {
 				curl_setopt($curl, CURLOPT_TIMEOUT, 23);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-				$response = curl_exec($curl);
+				
+				// use more attempts to resolve host name. Sometimes curl fails at resolving 
+				// a valid host name.
+				//
+				$resolve_attempt = 0;
+				while (true) {
+					$response = curl_exec($curl);
+					
+					if ($response === false) {
+					
+						// curl_error code 6 means 'could not resolve host name'
+						//
+						if (curl_errno($curl) == 6) {
+							if ($resolve_attempt++ < $this->curl_resolve_attempts) {
+								continue;
+							}
+						}
+						$this->lastError = 'CURL error (' . curl_errno($curl) . '): ' . curl_error($curl);
+					}
+					
+					break;					
+				}				
 				curl_close($curl);
+				
+				if ($response === false) {
+					break;
+				}
 				
 				$msg_start    = strpos($response, "\x0D\x0A\x0D\x0A");
 				$header_block = substr($response, 0, $msg_start);
 				$headers      = $this->parseHttpHeader($header_block);				
 				if (empty($headers)) {
-					$this->lastError = 'No headers received';
+					if (strlen($response) > 1000) {
+						$this->lastError = 'No headers received. Response size is ' . strlen($response);
+					} else {
+						$this->lastError = 'No headers received. Response is "' . $response . '"';
+					}
 					break;
 				}
 
@@ -1480,13 +1510,11 @@ class ModelToolKaImport extends Model {
 
 		$category_assigned = false;
 		
-		if (empty($data['category_id']) && empty($data['category'])) {
-			return false;
-		}
-		
-		if ($delete_old) {
-			$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category
-				WHERE product_id = '$product_id'");
+		if (!empty($data['category_id']) || !empty($data['category'])) {
+			if ($delete_old) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category
+					WHERE product_id = '$product_id'");
+			}
 		}
 		
 		$multicat_sep = $this->config->get('ka_pi_multicat_separator');
@@ -1912,7 +1940,7 @@ class ModelToolKaImport extends Model {
 			}
 			
 			if (isset($option['price'])) {
-				$rec['price']        = abs($option['price']);
+				$rec['price']        = abs($this->formatPrice($option['price']));
 				$rec['price_prefix'] = ($option['price'] < 0 ? '-':'+');
 			}
 			
@@ -3457,9 +3485,10 @@ class ModelToolKaImport extends Model {
 	*/
 	public function copyMatches(&$sets, $matches, $columns) {
 
-
+		// remove empty columns except the first one meaning 'not selected'
+		//
 		foreach ($columns as $ck => $cv) {
-			if (!empty($cv)) {
+			if ($ck == 0 || !empty($cv)) {
 				$tmp[$cv] = $ck;
 			}
 		}
