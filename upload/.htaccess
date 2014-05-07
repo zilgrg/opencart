@@ -71,3 +71,35 @@ RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
 #    Header append Vary User-Agent
 #</ifModule>
 ## END INCREASE PAGE SPEED HTACCESS MODIFICATION ##
+Redirect 301 /kontaktai http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /yamaha-motociklai http://www.yamaha-vilnius.lt/motociklai?
+Redirect 301 /apie-yamaha-vilnius http://www.yamaha-vilnius.lt/apie-mus.html?
+Redirect 301 /benzininiai-pakabinami-varikliai http://www.yamaha-vilnius.lt/pakabinami-varikliai?
+Redirect 301 /yamaha-keturraciai-atv http://www.yamaha-vilnius.lt/keturraciai?
+Redirect 301 /yamaha-motoroleriai http://www.yamaha-vilnius.lt/motoroleriai?
+Redirect 301 /site_map http://www.yamaha-vilnius.lt/svetaines-zemelapis.html?
+Redirect 302 /schuberth-salmai http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /yamaha-sniego-motociklai http://www.yamaha-vilnius.lt/sniego-motociklai?
+Redirect 302 /yamaha-rhino http://www.yamaha-vilnius.lt/keturraciai?
+Redirect 302 /atsargines-dalys http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /keturraciu-atv-serviso-remonto-aptarnavimo-kainos http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /garantija http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /aksesuarai-ixs-apranga http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /naujienu-prenumerata http://www.yamaha-vilnius.lt/naujienlaiskis.html?
+Redirect 302 /servisas-detales http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /yamaha-lietuva-adresas http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /yamaha-naujas-adresas-moletu-47f http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /yamaha-vandens-motociklai http://www.yamaha-vilnius.lt/vandens-motociklai?
+Redirect 301 /servisas_detales http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 301 /pakabinami-valciu-varikliai-valtys-vandens-motociklai http://www.yamaha-vilnius.lt/pakabinami-varikliai?
+Redirect 302 /yamaha-kliento-nuolaidu-kortele http://www.yamaha-vilnius.lt/prisijungimas.html?
+Redirect 302 /motociklu-serviso-remonto-aptarnavimo-kainos http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /yamalube-tepalai-skysciai-alyva http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /pakabinamu-valciu-vandens-varikliu-serviso-remonto-aptarnavimo-kainos http://www.yamaha-vilnius.lt/kontaktai.html?
+Redirect 302 /yamaha-detaliu-katalogas http://www.yamaha-vilnius.lt?
+Redirect 301 /get.php?f.3609 http://www.yamaha-vilnius.lt/motociklai?
+Redirect 301 /get.php?f.3638 http://www.yamaha-vilnius.lt/vandens-motociklai?
+Redirect 301 /grizzly-550-keturratis-yamaha http://www.yamaha-vilnius.lt/keturraciai/grizzly-550-irs.html?
+Redirect 302 /yamaha-vilnius-naujienos http://www.yamaha-vilnius.lt/apie-mus.html?
+Redirect 301 /varikliai-valtys-vandens-motociklai http://www.yamaha-vilnius.lt/pakabinami-varikliai?
+Redirect 301 /XT1200Z-super-tenere http://www.yamaha-vilnius.lt/bekeles-motociklai/xt1200ze-super-tenere.html?
