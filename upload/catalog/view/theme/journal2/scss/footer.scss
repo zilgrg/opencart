@@ -1,0 +1,255 @@
+@import 'variables.scss';
+
+/******************************
+ FOOTER
+*******************************/
+
+#footer {
+  border: 0;
+  position: relative;
+  max-width: $sitewidth;
+  margin: 0 auto;
+  display: table;
+  width: 100%;
+}
+
+.fullwidth-footer{
+  max-width: 100%;
+  #footer{
+    overflow: visible;
+    border-radius: 0;
+  }
+  .columns{
+    padding-left: 1px;
+  }
+  .bottom-footer{
+    max-width: 100%;
+    padding: 0;
+  }
+}
+.boxed-footer{
+  background-color: transparent;
+}
+footer {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  clear: both;
+  overflow: hidden;
+  z-index: 2;
+  .row:last-of-type{
+    margin-bottom: 15px;
+  }
+  .columns{
+    padding-left:15px;
+    overflow: hidden;
+  }
+
+  .column{
+    padding: 0px 15px 0px 0;
+    position: relative;
+    &.no-title{
+      .column-text-wrap{
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .column-menu-wrap {
+    > ul{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      padding-top: 6px;
+      li{
+        padding: 3px 0;
+        color: $e4;
+        i{
+          float: left;
+          &:before{
+            margin-top: -1px;
+          }
+        }
+      }
+      a{
+        display: block;
+        color: inherit;
+        transition:color .2s;
+      }
+    }
+  }
+
+  .column-text-wrap{
+    color: $e4;
+    height: 100%;
+    > ul{
+      padding-left: 15px;
+      margin: 0 0 7px 0;
+    }
+    > ol{
+      padding-left: 20px;
+      margin: 0 0 7px 0;
+    }
+    p{
+      color: inherit;
+      margin: 0;
+      overflow: hidden;
+      iframe{
+        background-color: $e4;
+        width: 100%;
+      }
+    }
+
+    img{
+      max-width: 100%;
+      height: auto !important;
+      margin: 6px;
+    }
+  }
+
+  h3{
+    color: $e4;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-bottom: 1px solid $gray;
+    padding-bottom: 10px;
+    margin-top: 12px;
+  }
+
+  .text h3{
+    margin-bottom: 12px;
+  }
+
+  .columns + .contacts{
+    margin-top: 15px;
+  }
+  .contacts + .columns{
+
+  }
+
+  .contacts{
+    position: relative;
+    clear: both;
+    display: table;
+    width: 100%;
+    padding:10px;
+    > div > span{
+      color: white;
+      margin-right: 4px;
+    }
+    i{
+      font-size: 20px;
+      color: inherit;
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50px;
+      margin-right: 7px;
+      display: inline-block;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: $dark;
+      text-align: center;
+      line-height: 39px;
+      transition:background-color .2s;
+    }
+    a{
+      color: inherit;
+    }
+    a:hover i{
+      color: inherit;
+    }
+    [data-hint]:before, [data-hint]:after{
+      display: block;
+    }
+    .hint--top:before{
+      margin-left: -10px;
+    }
+    .hint--top:after,
+    .hint--top:focus:after{
+      -webkit-transform: translate3d(0,0,0) translateX(-54%);
+      -moz-transform: translate3d(0,0,0) translateX(-50%);
+      -ms-transform: translate3d(0,0,0) translateX(-50%);
+      transform: translate3d(0,0,0) translateX(-54%);
+    }
+
+    .hint--top:hover:after,
+    .hint--top:focus:after{
+      -webkit-transform: translate3d(0,0,0) translateY(-8px) translateX(-54%);
+      -moz-transform: translate3d(0,0,0) translateY(-8px) translateX(-54%);
+      -ms-transform: translate3d(0,0,0) translateY(-8px) translateX(-54%);
+      transform: translate3d(0,0,0) translateY(-8px) translateX(-54%);
+    }
+  }
+  .contacts-text{
+    display: inline-block;
+    font-weight: bold;
+    font-size: 15px;
+    color: inherit;
+    line-height: 35px;
+    position: relative;
+    top: 1px;
+  }
+  .contacts-center{
+    margin: 0 auto;
+    position: absolute;
+    clear: both;
+    width: 100%;
+    top: 10px;
+    right: 10px;
+    z-index: 0;
+  }
+  .contacts-left{
+    position: relative;
+    float: left;
+    z-index: 1;
+  }
+  .contacts-right{
+    position: relative;
+    float: right;
+    z-index: 1;
+  }
+
+}
+
+.bottom-footer{
+  height: 60px;
+  clear: both;
+  margin: 0 auto;
+  position: relative;
+
+  > div{
+    max-width: $sitewidth;
+    margin: 0 auto;
+    position: relative;
+  }
+  .copyright{
+    float: left;
+    line-height: 60px;
+  }
+  .payments{
+    float: right;
+    img{
+      margin-left: 10px;
+      position: relative;
+      margin-top: 13px;
+      max-height: 35px;
+      vertical-align: middle;
+    }
+  }
+  .no-copyright{
+    text-align: center;
+    .payments{
+      float: none;
+    }
+  }
+  .no-payments{
+     text-align: center;
+     .copyright{
+       float: none;
+    }
+  }
+  &.boxed-bar{
+    padding: 0 15px;
+  }
+}
