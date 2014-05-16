@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+   <id>Blog Manager</id>
+   <version>1.3.6.2</version>
+   <vqmver>2.1.0</vqmver>
+   <author>EchoThemes.com</author>
+   <file name="admin/view/template/common/header.tpl">
+      <operation>
+         <search position="after"><![CDATA[<?php echo $text_feed; ?>]]></search>
+         <add><![CDATA[
+         <?php 
+            $this->load->model('blog/setting');
+            if (!$this->model_blog_setting->checkDbTable('blog_setting')) { 
+         ?>
+            <li><a href="<?php echo $this->url->link('blog/blog/install', 'token=' . $this->session->data['token'], 'SSL'); ?>">Install Blog Manager</a></li>
+         <?php } else { ?>
+            <li><a href="<?php echo $this->url->link('blog/blog', 'token=' . $this->session->data['token'], 'SSL'); ?>">Blog Manager</a></li>
+         <?php } ?>
+         ]]></add>
+      </operation>
+   </file>
+</modification>
