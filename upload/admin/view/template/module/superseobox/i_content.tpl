@@ -52,6 +52,11 @@
 				</a>
 			</li>
 			<li>
+				<a href="#seo_edit" data-toggle="tab">
+					<i class="icon-edit"></i> SEO Editor
+				</a>
+			</li>
+			<li>
 				<a href="#seo_social" data-toggle="tab">
 					<i class="icon-share"></i> Social & share
 				</a>
@@ -67,7 +72,7 @@
 				</a>
 			</li>
 			<li>
-				<li class="dropdown">
+				<li class="dropdown" style="position: absolute;top: -162px;left: 125px;">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bell"></i> Get Support <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="#seo_support" data-toggle="tab">Get Support and Updates</a></li>
@@ -95,6 +100,14 @@
 					Here you can find tools, which will give your site additional SEO promotion in search engines. Canonical links is the new option lets site owners suggest the version of a page that Google should treat as canonical. Use Direct links, if you have a few languages for switching language.
 				</div>
 				<?php require_once 'seo_tools/seo_tools_index.tpl';?>
+			</div>
+			
+			<div class="tab-pane" id="seo_edit">
+				<div class="tab_title_info">
+					<i class="icon-edit"></i>
+					Here, in one place, you can easy viewing and edit all your SEO data. Below you can see table, which represent all SEO data for products, categories, brand, info and home pages, plus the Seo setting for common Opencart pages, as account, cart, login and other. This list gives you possibility to improve your SEO level and saves your time.</br><span class="colorFC580B">For edit any texts, just click on it and do it. To change the language, just click on appropriate link and your list will be refreshed.</span>
+				</div>
+				<?php require_once 'seo_edit/seo_edit.tpl';?>
 			</div>
 			
 			<div class="tab-pane" id="seo_social">

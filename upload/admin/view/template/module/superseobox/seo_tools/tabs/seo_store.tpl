@@ -95,4 +95,4 @@ Before using this function, you must fill all fields below.
 <?php } ?>
 
 <h4>What is the "SEO store"?</h4>
-<p>Here you can easy set  name, title and META tags for every of your stores and for every language.</p>
+<p>Here you can easy set  name, title and META tags for every of your stores and for every language. And this data will be displayed on Home page for every of your store. </br>With this function all your stores will be has more unique text, what improves your SEO. </br>Even if you have one store, we recommend fill this fields for display META tags on your home page.</p>

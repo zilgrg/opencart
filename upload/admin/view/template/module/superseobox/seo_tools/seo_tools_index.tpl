@@ -28,6 +28,24 @@
 				</a>
 			</li>
 			<li>
+				<a href="#seo_tool_seo_breadcrumbs" data-toggle="tab">
+					<i class="icon-circle-arrow-right"></i> 
+					SEO Breadcrumbs
+				</a>
+			</li>
+			<li>
+				<a href="#seo_tool_path_manager" data-toggle="tab">
+					<i class="icon-circle-arrow-right"></i> 
+					Path Manager
+				</a>
+			</li>
+			<li>
+				<a href="#seo_tool_seo_hreflang" data-toggle="tab">
+					<i class="icon-refresh"></i> 
+					Languages Link
+				</a>
+			</li>
+			<li>
 				<a href="#seo_tool_canonical" data-toggle="tab">
 					<i class="icon-road"></i> 
 					Canonical Link
@@ -69,6 +87,18 @@
 			<div class="tab-pane" id="seo_tool_seo_pagination">
 				<h3>SEO PAGINATION</h3>
 				<?php require_once 'tabs/seo_pagination.tpl';?>
+			</div>
+			<div class="tab-pane" id="seo_tool_seo_breadcrumbs">
+				<h3>SEO BREADCRUMBS</h3>
+				<?php require_once 'tabs/seo_breadcrumb.tpl';?>
+			</div>
+			<div class="tab-pane" id="seo_tool_path_manager">
+				<h3>PATH MANAGER</h3> 
+				<?php require_once 'tabs/path_manager.tpl';?>
+			</div>
+			<div class="tab-pane" id="seo_tool_seo_hreflang">
+				<h3>LANGUAGES LINK</h3>
+				<?php require_once 'tabs/seo_hreflang.tpl';?>
 			</div>
 			<div class="tab-pane" id="seo_tool_canonical">
 				<h3>CANONICAL LINK</h3>

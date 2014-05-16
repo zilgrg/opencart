@@ -39,7 +39,9 @@ legend {
 border-top: 0px solid #ddd;
 }
 
-
+.btn-group>.btn+.btn {
+margin-left: 0px!important;
+}
 
 dl{
 	margin-top: 0px;

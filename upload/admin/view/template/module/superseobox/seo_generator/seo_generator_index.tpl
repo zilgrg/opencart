@@ -30,12 +30,6 @@
 				</a>
 			</li>	
 			<li>
-				<a href="#seo_edit" data-toggle="tab">
-					<i class="icon-edit"></i> 
-					Edit SEO items
-				</a>
-			</li>
-			<li>
 				<a href="#generate_setting" data-toggle="tab">
 					<i class="icon-wrench"></i> 
 					Settings
@@ -60,9 +54,6 @@
 			
 			<div class="tab-pane" id="seo_auto_generate">
 				<?php require_once 'tools/seo_auto_generate.tpl';?>
-			</div>
-			<div class="tab-pane" id="seo_edit">
-				<?php require_once 'tools/seo_edit.tpl';?>
 			</div>
 			<div class="tab-pane" id="generate_setting">
 				<?php require_once 'tools/generate_setting.tpl';?>
@@ -169,7 +160,7 @@ jQuery(document).ready(function() {
   
   <div class="modal-footer">
 	<button data-jsbeforeaction="PSBeng.setCondition();PSBeng.data.ajaxBlock = true;" data-action="testGenerate" class="btn btn-warning"  data-dismiss="modal" aria-hidden="true">Preview</button>
-	<button data-jsbeforeaction="PSBeng.setCondition();PSBeng.data.ajaxBlock = false;PSBeng.progress.show();" data-afteraction="processGenerate" data-action="startGenerate" class="btn btn-success"  data-dismiss="modal" aria-hidden="true">Start generate</button>
+	<button data-jsbeforeaction="PSBeng.setCondition();PSBeng.progress.show();" data-afteraction="processGenerate" data-action="startGenerate" class="btn btn-success"  data-dismiss="modal" aria-hidden="true">Start generate</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
   </div>
 </div>

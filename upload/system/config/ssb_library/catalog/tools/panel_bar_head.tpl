@@ -649,12 +649,15 @@ jQuery(document).ready(function () {
 	position: absolute;
 	padding:5px;
 }
-
+<?php 
+	$startUrl = HTTP_SERVER;
+	if (isset($this->request->server['HTTPS']) AND (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {$startUrl = HTTPS_SERVER;}
+?>
 .ssb-shar-button{
 	position: absolute;
 	width:  50px;
 	height: 50px;
-	background: #000 url('<?php echo HTTP_SERVER; ?>image/ssb_image/share-icon-white.png') center center no-repeat;
+	background: #000 url('<?php echo $startUrl; ?>image/ssb_image/share-icon-white.png') center center no-repeat;
 	
 }
 

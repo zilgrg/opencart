@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-boss-blog</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+
+		<operation>
+			<search position="before" error="log"><![CDATA[if ($url[0] == 'manufacturer_id') {]]></search>
+			<add><![CDATA[
+					/** boss-blog **/
+					if ($url[0] == 'blog_article_id') {
+						$this->query_data['blog_article_id'] = $this->request->get['blog_article_id'] = $url[1];
+					}
+					/** boss-blog **/]]></add>
+		</operation>		
+		<operation>
+			<search position="replace" error="log"><![CDATA[$this->request->get['route'] = 'product/category';]]></search>
+			<add><![CDATA[
+			/** boss-blog **/
+			$this->request->get['route'] = 'product/category';
+			}elseif (isset($this->request->get['blog_article_id'])) {
+					$this->request->get['route'] = 'bossblog/article';
+			/** boss-blog **/]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[} elseif ($key == 'path') {]]></search>
+			<add><![CDATA[
+			/** boss-blog **/
+			} elseif ($data['route'] == 'bossblog/article' && $key == 'blog_article_id') {
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");
+			
+				if ($query->num_rows) {
+					$url .= '/' . $query->rows[0]['keyword'];
+					
+					unset($data[$key]);
+				}
+			/** boss-blog **/
+			]]></add>
+		</operation>		
+	</file>
+</modification>

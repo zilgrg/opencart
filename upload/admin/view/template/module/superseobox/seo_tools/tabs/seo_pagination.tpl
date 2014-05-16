@@ -3,7 +3,7 @@
 		<label class="control-label">Change the pagination to SEO format</label>
 		<div class="controls">
 			<input type="hidden" name="data[tools][seo_pagination][status]" value="">
-			<input data-action="save" data-scope=".parents('.controls').find('input')" type="checkbox" value="true" <?php if($data['tools']['seo_pagination']['status']) echo 'checked="checked"'; ?> name="data[tools][seo_pagination][status]" class="on_off">
+			<input data-afteraction="afterAction" data-action="save" data-scope=".parents('.controls').find('input')" type="checkbox" value="true" <?php if($data['tools']['seo_pagination']['status']) echo 'checked="checked"'; ?> name="data[tools][seo_pagination][status]" class="on_off">
 		</div>
 	</div></br>
 	<div class="control-group">

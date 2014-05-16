@@ -11,7 +11,9 @@
 </div>
 </div>
 <h3>Easily redirect 404s to suggested SEO URLs</h3>
-
+<p class="colorFC580B">
+	This feature works only if  SEO URLs was generated and active (see in tab generators -&gt; SEO URLs)
+</p>
 <p>The 404 manager presents you with a list of urls that were requested by visitors and that could not be found on your site.</p>
 <p>It is quite important to monitor these pages, as they can be the sign of:</p>
 <ul>

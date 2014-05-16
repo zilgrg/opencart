@@ -147,7 +147,11 @@
 				<dt>
 				<?php echo 'Info of the generator for ' . ${'text_category_name_'.$entity_category_name} ?>:</dt>
 				<dd class="info-area">
+					<?php if($entity_category_name == 'alt_image' || $entity_category_name == 'title_image'){ ?>
+					Here you can generate <?php echo ${'text_category_name_'.$entity_category_name}; ?> for Categories and Products. You can write own template for creating <?php echo ${'text_category_name_'.$entity_category_name}; ?> for every items. If you click on the button "Replacing", before use generator, you can easily add char or string for replacing in the <?php echo ${'text_category_name_'.$entity_category_name}; ?>. Button "Clear" removes all <?php echo ${'text_category_name_'.$entity_category_name}; ?>. <p class="colorFC580B">(Click on the button with caret (after button Generate) to see the buttons "Replacing" and "Clear")</p>
+					<?php }else{ ?>
 					Here you can generate <?php echo ${'text_category_name_'.$entity_category_name}; ?> for Categories, Products, Brands and Informations pages (CPBI). You can write own template for creating <?php echo ${'text_category_name_'.$entity_category_name}; ?> for every CPBI page. If you click on the button "Replacing", before use generator, you can easily add char or string for replacing in the <?php echo ${'text_category_name_'.$entity_category_name}; ?>. Button "Clear" removes all <?php echo ${'text_category_name_'.$entity_category_name}; ?>. <p class="colorFC580B">(Click on the button with caret (after button Generate) to see the buttons "Replacing" and "Clear")</p>
+					<?php } ?>
 				</dd>
 			</dl>
 		</td>
