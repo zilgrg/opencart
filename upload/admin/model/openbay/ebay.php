@@ -28,8 +28,6 @@ class ModelOpenbayEbay extends Model{
 		$value["openbaypro_confirm_notify"]     = '1';
 		$value["openbaypro_confirmadmin_notify"]= '1';
 		$value["openbaypro_created_hours"]      = '48';
-		$value["openbaypro_stock_report"]       = '1';
-		$value["openbaypro_stock_report_summary"]= '1';
 		$value["openbaypro_create_date"]        = '0';
 		$value["openbaypro_ebay_itm_link"]      = 'http://www.ebay.com/itm/';
 		$value["openbaypro_relistitems"]        = 0;
@@ -46,171 +44,187 @@ class ModelOpenbayEbay extends Model{
 		$this->model_setting_setting->editSetting('openbay',$value);
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category` (
-					  `ebay_category_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `CategoryID` int(11) NOT NULL,
-					  `CategoryParentID` int(11) NOT NULL,
-					  `CategoryLevel` smallint(6) NOT NULL,
-					  `CategoryName` char(100) NOT NULL,
-					  `BestOfferEnabled` tinyint(1) NOT NULL,
-					  `AutoPayEnabled` tinyint(1) NOT NULL,
-					  PRIMARY KEY (`ebay_category_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category` (
+				`ebay_category_id` int(11) NOT NULL AUTO_INCREMENT,
+				`CategoryID` int(11) NOT NULL,
+				`CategoryParentID` int(11) NOT NULL,
+				`CategoryLevel` smallint(6) NOT NULL,
+				`CategoryName` char(100) NOT NULL,
+				`BestOfferEnabled` tinyint(1) NOT NULL,
+				`AutoPayEnabled` tinyint(1) NOT NULL,
+				PRIMARY KEY (`ebay_category_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category_history` (
-					  `ebay_category_history_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `CategoryID` int(11) NOT NULL,
-					  `breadcrumb` varchar(255) NOT NULL,
-					  `used` int(6) NOT NULL,
-					  PRIMARY KEY (`ebay_category_history_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category_history` (
+				`ebay_category_history_id` int(11) NOT NULL AUTO_INCREMENT,
+				`CategoryID` int(11) NOT NULL,
+				`breadcrumb` varchar(255) NOT NULL,
+				`used` int(6) NOT NULL,
+				PRIMARY KEY (`ebay_category_history_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing` (
-					  `ebay_listing_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `ebay_item_id` char(100) NOT NULL,
-					  `product_id` int(11) NOT NULL,
-					  `variant` int(11) NOT NULL,
-					  `status` SMALLINT(3) NOT NULL DEFAULT '1',
-					  PRIMARY KEY (`ebay_listing_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
-;
-		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing_pending` (
-					  `ebay_listing_pending_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `ebay_item_id` char(25) NOT NULL,
-					  `product_id` int(11) NOT NULL,
-					  `key` char(50) NOT NULL,
-					  `variant` int(11) NOT NULL,
-					  PRIMARY KEY (`ebay_listing_pending_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing` (
+				`ebay_listing_id` int(11) NOT NULL AUTO_INCREMENT,
+				`ebay_item_id` char(100) NOT NULL,
+				`product_id` int(11) NOT NULL,
+				`variant` int(11) NOT NULL,
+				`status` SMALLINT(3) NOT NULL DEFAULT '1',
+				PRIMARY KEY (`ebay_listing_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping` (
-					  `ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `description` varchar(100) NOT NULL,
-					  `InternationalService` tinyint(4) NOT NULL,
-					  `ShippingService` varchar(100) NOT NULL,
-					  `ShippingServiceID` int(11) NOT NULL,
-					  `ServiceType` varchar(100) NOT NULL,
-					  `ValidForSellingFlow` tinyint(4) NOT NULL,
-					  `ShippingCategory` varchar(100) NOT NULL,
-					  `ShippingTimeMin` int(11) NOT NULL,
-					  `ShippingTimeMax` int(11) NOT NULL,
-					  `site` int(11) NOT NULL,
-					  PRIMARY KEY (`ebay_shipping_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing_pending` (
+				`ebay_listing_pending_id` int(11) NOT NULL AUTO_INCREMENT,
+				`ebay_item_id` char(25) NOT NULL,
+				`product_id` int(11) NOT NULL,
+				`key` char(50) NOT NULL,
+				`variant` int(11) NOT NULL,
+				PRIMARY KEY (`ebay_listing_pending_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location` (
-					  `ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `description` varchar(100) NOT NULL,
-					  `detail_version` varchar(100) NOT NULL,
-					  `shipping_location` varchar(100) NOT NULL,
-					  `update_time` varchar(100) NOT NULL,
-					  PRIMARY KEY (`ebay_shipping_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping` (
+				`ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
+				`description` varchar(100) NOT NULL,
+				`InternationalService` tinyint(4) NOT NULL,
+				`ShippingService` varchar(100) NOT NULL,
+				`ShippingServiceID` int(11) NOT NULL,
+				`ServiceType` varchar(100) NOT NULL,
+				`ValidForSellingFlow` tinyint(4) NOT NULL,
+				`ShippingCategory` varchar(100) NOT NULL,
+				`ShippingTimeMin` int(11) NOT NULL,
+				`ShippingTimeMax` int(11) NOT NULL,
+				`site` int(11) NOT NULL,
+				PRIMARY KEY (`ebay_shipping_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_payment_method` (
-					  `ebay_payment_method_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `ebay_name` char(50) NOT NULL,
-					  `local_name` char(50) NOT NULL,
-					  PRIMARY KEY (`ebay_payment_method_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location` (
+				`ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
+				`description` varchar(100) NOT NULL,
+				`detail_version` varchar(100) NOT NULL,
+				`shipping_location` varchar(100) NOT NULL,
+				`update_time` varchar(100) NOT NULL,
+				PRIMARY KEY (`ebay_shipping_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_transaction` (
-						`ebay_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
-						`order_id` int(11) NOT NULL,
-						`product_id` int(11) NOT NULL,
-						`sku` varchar(100) NOT NULL,
-						`txn_id` varchar(100) NOT NULL,
-						`item_id` varchar(100) NOT NULL,
-						`containing_order_id` varchar(100) NOT NULL,
-						`order_line_id` varchar(100) NOT NULL,
-						`qty` int(11) NOT NULL,
-						`smp_id` int(11) NOT NULL,
-						`created` DATETIME NOT NULL,
-						`modified` DATETIME NOT NULL,
-					PRIMARY KEY (`ebay_transaction_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_payment_method` (
+				`ebay_payment_method_id` int(11) NOT NULL AUTO_INCREMENT,
+				`ebay_name` char(50) NOT NULL,
+				`local_name` char(50) NOT NULL,
+				PRIMARY KEY (`ebay_payment_method_id`)
+			) DEFAULT COLLATE=utf8_general_ci AUTO_INCREMENT=5;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_order` (
-					  `ebay_order_id` int(11) NOT NULL AUTO_INCREMENT,
-					  `parent_ebay_order_id` int(11) NOT NULL,
-					  `order_id` int(11) NOT NULL,
-					  `smp_id` int(11) NOT NULL,
-					  `tracking_no` varchar(100) NOT NULL,
-					  `carrier_id` varchar(100) NOT NULL,
-					  PRIMARY KEY (`ebay_order_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_transaction` (
+				`ebay_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+				`order_id` int(11) NOT NULL,
+				`product_id` int(11) NOT NULL,
+				`sku` varchar(100) NOT NULL,
+				`txn_id` varchar(100) NOT NULL,
+				`item_id` varchar(100) NOT NULL,
+				`containing_order_id` varchar(100) NOT NULL,
+				`order_line_id` varchar(100) NOT NULL,
+				`qty` int(11) NOT NULL,
+				`smp_id` int(11) NOT NULL,
+				`created` DATETIME NOT NULL,
+				`modified` DATETIME NOT NULL,
+				PRIMARY KEY (`ebay_transaction_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-					CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_profile` (
-						`ebay_profile_id` int(11) NOT NULL AUTO_INCREMENT,
-						`name` varchar(100) NOT NULL,
-						`description` text NOT NULL,
-						`type` int(11) NOT NULL,
-						`default` TINYINT(1) NOT NULL,
-						`data` text NOT NULL,
-						PRIMARY KEY (`ebay_profile_id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_order` (
+				`ebay_order_id` int(11) NOT NULL AUTO_INCREMENT,
+				`parent_ebay_order_id` int(11) NOT NULL,
+				`order_id` int(11) NOT NULL,
+				`smp_id` int(11) NOT NULL,
+				`tracking_no` varchar(100) NOT NULL,
+				`carrier_id` varchar(100) NOT NULL,
+				PRIMARY KEY (`ebay_order_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_setting_option` (
-					`ebay_setting_option_id` INT(11) NOT NULL AUTO_INCREMENT,
-					`key` VARCHAR(100) NOT NULL,
-					`last_updated` DATETIME NOT NULL,
-					`data` TEXT NOT NULL,
-					PRIMARY KEY (`ebay_setting_option_id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_profile` (
+				`ebay_profile_id` int(11) NOT NULL AUTO_INCREMENT,
+				`name` varchar(100) NOT NULL,
+				`description` text NOT NULL,
+				`type` int(11) NOT NULL,
+				`default` TINYINT(1) NOT NULL,
+				`data` text NOT NULL,
+				PRIMARY KEY (`ebay_profile_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_image_import` (
-				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `image_original` text NOT NULL,
-				  `image_new` text NOT NULL,
-				  `name` text NOT NULL,
-				  `product_id` int(11) NOT NULL,
-				  `imgcount` int(11) NOT NULL,
-				  PRIMARY KEY (`id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_setting_option` (
+				`ebay_setting_option_id` INT(11) NOT NULL AUTO_INCREMENT,
+				`key` VARCHAR(100) NOT NULL,
+				`last_updated` DATETIME NOT NULL,
+				`data` TEXT NOT NULL,
+				PRIMARY KEY (`ebay_setting_option_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location_exclude` (
-					`ebay_shipping_exclude_id` int(11) NOT NULL AUTO_INCREMENT,
-					`description` varchar(100) NOT NULL,
-					`location` varchar(100) NOT NULL,
-					`region` varchar(100) NOT NULL,
-					PRIMARY KEY (`ebay_shipping_exclude_id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+			CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_image_import` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`image_original` text NOT NULL,
+				`image_new` text NOT NULL,
+				`name` text NOT NULL,
+				`product_id` int(11) NOT NULL,
+				`imgcount` int(11) NOT NULL,
+				PRIMARY KEY (`id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_stock_reserve` (
-				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `product_id` int(11) NOT NULL,
-				  `variant_id` varchar(100) NOT NULL,
-				  `item_id` varchar(100) NOT NULL,
-				  `reserve` int(11) NOT NULL,
-				  PRIMARY KEY (`id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location_exclude` (
+				`ebay_shipping_exclude_id` int(11) NOT NULL AUTO_INCREMENT,
+				`description` varchar(100) NOT NULL,
+				`location` varchar(100) NOT NULL,
+				`region` varchar(100) NOT NULL,
+				PRIMARY KEY (`ebay_shipping_exclude_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_order_lock` (
-				  `smp_id` int(11) NOT NULL,
-				  PRIMARY KEY (`smp_id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+			CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_stock_reserve` (
+				`id` int(11) NOT NULL AUTO_INCREMENT,
+				`product_id` int(11) NOT NULL,
+				`variant_id` varchar(100) NOT NULL,
+				`item_id` varchar(100) NOT NULL,
+				`reserve` int(11) NOT NULL,
+				PRIMARY KEY (`id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_template` (
-				  `template_id` INT(11) NOT NULL AUTO_INCREMENT,
-				  `name` VARCHAR(100) NOT NULL,
-				  `html` MEDIUMTEXT NOT NULL,
-				  PRIMARY KEY (`template_id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+			CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_order_lock` (
+				`smp_id` int(11) NOT NULL,
+				PRIMARY KEY (`smp_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
+
+		$this->db->query("
+			CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ebay_template` (
+				`template_id` INT(11) NOT NULL AUTO_INCREMENT,
+				`name` VARCHAR(100) NOT NULL,
+				`html` MEDIUMTEXT NOT NULL,
+				PRIMARY KEY (`template_id`)
+			) DEFAULT COLLATE=utf8_general_ci;
+		");
 	}
 
 	public function uninstall(){
@@ -258,10 +272,12 @@ class ModelOpenbayEbay extends Model{
 			`p`.`sku`,
 			`p`.`model`,
 			`p`.`quantity`,
-			`pd`.name
+			`pd`.`name`,
+			`esr`.`reserve`
 		FROM `" . DB_PREFIX . "ebay_listing` `el`
 		LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`el`.`product_id` = `p`.`product_id`)
 		LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)
+		LEFT JOIN `" . DB_PREFIX . "ebay_stock_reserve` `esr` ON (`esr`.`product_id` = `p`.`product_id`)
 		WHERE `el`.`status` = '1'
 		AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
 
@@ -280,6 +296,7 @@ class ModelOpenbayEbay extends Model{
 					'name'          => $row['name'],
 					'link_edit'     => $this->url->link('catalog/product/update', 'token=' . $this->session->data['token'] . '&product_id='.$row['product_id'], 'SSL'),
 					'link_ebay'     => $this->config->get('openbaypro_ebay_itm_link').$row['ebay_item_id'],
+					'reserve'       => (int)$row['reserve'],
 				);
 
 				$data[$row['ebay_item_id']]['options'] = 0;
@@ -302,38 +319,38 @@ class ModelOpenbayEbay extends Model{
 
 	public function loadLinkedStatus($item_ids){
 		$this->openbay->ebay->log('loadLinkedStatus() - Get item status from ebay for multiple IDs');
-		return $this->openbay->ebay->openbay_call('item/getItemsById/', array('item_ids' => $item_ids));
+		return $this->openbay->ebay->call('item/getItemsById/', array('item_ids' => $item_ids));
 	}
 
-	public function loadUnlinked($limit = 100, $page = 1){
-
+	public function loadUnlinked($limit = 200, $page = 1, $filter = array()){
 		$unlinked = array();
-
-		// - continue until no more pages or 10 or more found
+		$current = 1;
+		$stop_flag = 0;
 
 		while(count($unlinked) < 5){
+			if ($current > 5) {
+				$stop_flag = 1;
+				break;
+			} else {
+				$current++;
+			}
 
 			$this->openbay->ebay->log('Checking unlinked page: '.$page);
 
-			//some products from ebay (100)
-			$response = $this->openbay->ebay->getEbayItemList($limit, $page);
+			$response = $this->openbay->ebay->getEbayItemList($limit, $page, $filter);
 
 			if($this->openbay->ebay->lasterror == true){
 				break;
 			}
 
-			//loop over these and check if any are not in the db
 			foreach($response['items'] as $itemId => $item){
 				if($this->openbay->ebay->getProductId($itemId, 1) == false){
-					//ebay item ID not in the db
 					$unlinked[$itemId] = $item;
 				}
 			}
 
 			$this->openbay->ebay->log('Unlinked count: '.count($unlinked));
 
-			//if end of the loop and less than 10, request next page
-			//if the last page requested was the max page of results
 			if($response['max_page'] == $page || count($unlinked) >= 5){
 				break;
 			}else{
@@ -343,6 +360,7 @@ class ModelOpenbayEbay extends Model{
 
 		return array(
 			'items' => $unlinked,
+			'break' => $stop_flag,
 			'next_page' => $response['page']+1,
 			'max_page' => $response['max_page']
 		);
@@ -387,18 +405,18 @@ class ModelOpenbayEbay extends Model{
 		$qry = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "ebay_store_category'");
 
 		if( $qry->num_rows ){
-			$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '0'");
+			$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '0' ORDER BY `CategoryName` ASC");
 
 			if($qry->num_rows){
 				$cats = array();
 
 				foreach($qry->rows as $row){
 					$lev1 = $row['CategoryName'];
-					$qry2 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '".$row['ebay_store_category_id']."'");
+					$qry2 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '".$row['ebay_store_category_id']."' ORDER BY `CategoryName` ASC");
 
 					if($qry2->num_rows){
 						foreach($qry2->rows as $row2){
-							$qry3 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '".$row2['ebay_store_category_id']."'");
+							$qry3 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '".$row2['ebay_store_category_id']."' ORDER BY `CategoryName` ASC");
 
 							if($qry3->num_rows){
 								foreach($qry3->rows as $row3){
@@ -454,7 +472,7 @@ class ModelOpenbayEbay extends Model{
 	public function getSuggestedCategories($qry){
 		$this->load->language('openbay/openbay');
 
-		$response['data']   = $this->openbay->ebay->openbay_call('listing/getSuggestedCategories/', array('qry' => $qry));
+		$response['data']   = $this->openbay->ebay->call('listing/getSuggestedCategories/', array('qry' => $qry));
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 
@@ -501,21 +519,21 @@ class ModelOpenbayEbay extends Model{
 	}
 
 	public function getEbayCategorySpecifics($catId){
-	$response['data']   = $this->openbay->ebay->openbay_call('listing/getEbayCategorySpecifics/', array('id' => $catId));
+	$response['data']   = $this->openbay->ebay->call('listing/getEbayCategorySpecifics/', array('id' => $catId));
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 		return $response;
 	}
 
 	public function getCategoryFeatures($catId){
-	$response['data']   = $this->openbay->ebay->openbay_call('listing/getCategoryFeatures/', array('id' => $catId));
+	$response['data']   = $this->openbay->ebay->call('listing/getCategoryFeatures/', array('id' => $catId));
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 		return $response;
 	}
 
 	public function getSellerSummary(){
-	$response['data']   = $this->openbay->ebay->openbay_call('account/getSellerSummary/');
+	$response['data']   = $this->openbay->ebay->call('account/getSellerSummary/');
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 
@@ -551,9 +569,9 @@ class ModelOpenbayEbay extends Model{
 
 	public function ebayVerifyAddItem($data, $options){
 		if($options == 'yes'){
-			$response['data'] = $this->openbay->ebay->openbay_call('listing/verifyFixedPrice/', $data);
+			$response['data'] = $this->openbay->ebay->call('listing/verifyFixedPrice/', $data);
 		}else{
-			$response['data'] = $this->openbay->ebay->openbay_call('listing/ebayVerifyAddItem/', $data);
+			$response['data'] = $this->openbay->ebay->call('listing/ebayVerifyAddItem/', $data);
 		}
 
 		$response['error']  = $this->openbay->ebay->lasterror;
@@ -564,10 +582,10 @@ class ModelOpenbayEbay extends Model{
 
 	public function ebayAddItem($data, $options){
 		if($options == 'yes'){
-			$response = $this->openbay->ebay->openbay_call('listing/addFixedPrice/', $data);
+			$response = $this->openbay->ebay->call('listing/addFixedPrice/', $data);
 			$variant = 1;
 		}else{
-			$response = $this->openbay->ebay->openbay_call('listing/ebayAddItem/', $data);
+			$response = $this->openbay->ebay->call('listing/ebayAddItem/', $data);
 			$variant = 0;
 		}
 
@@ -578,7 +596,7 @@ class ModelOpenbayEbay extends Model{
 
 		if(!empty($response['ItemID'])){
 			$this->openbay->ebay->createLink($data['product_id'], $response['ItemID'], $variant);
-			$this->openbay->ebay->insertReserve($data, $response['ItemID'], $variant);
+			$this->openbay->ebay->addReserve($data, $response['ItemID'], $variant);
 
 			$data2['data']['viewLink']  = html_entity_decode($this->config->get('openbaypro_ebay_itm_link') . $response['ItemID']);
 		}else{
@@ -652,15 +670,15 @@ class ModelOpenbayEbay extends Model{
 	}
 
 	public function getUsage(){
-		return $this->openbay->ebay->openbay_call('report/accountUse/');
+		return $this->openbay->ebay->call('report/accountUse/');
 	}
 
 	public function getPlans(){
-		return $this->openbay->ebay->openbay_call('plan/getPlans/');
+		return $this->openbay->ebay->call('plan/getPlans/');
 	}
 
 	public function getMyPlan(){
-		return $this->openbay->ebay->openbay_call('plan/myPlan/');
+		return $this->openbay->ebay->call('plan/myPlan/');
 	}
 
 	public function getLiveListingArray(){
@@ -679,7 +697,7 @@ class ModelOpenbayEbay extends Model{
 	public function verifyCreds(){
 		$this->request->post['domain'] = HTTPS_SERVER;
 
-		$data = $this->openbay->ebay->openbay_call('account/validate/', $this->request->post, array(), 'json', 1);
+		$data = $this->openbay->ebay->call('account/validate/', $this->request->post, array(), 'json', 1);
 
 		if($this->openbay->ebay->lasterror == true){
 			return array(
@@ -714,7 +732,7 @@ class ModelOpenbayEbay extends Model{
 			$this->openbay->ebay->putStockUpdate($data['itemId'], $stock['quantity']);
 
 			//finish the revise item call
-			return $this->openbay->ebay->openbay_call('listing/reviseItem/', $data);
+			return $this->openbay->ebay->call('listing/reviseItem/', $data);
 		}else{
 			$this->openbay->ebay->log('editSave() - variant item');
 
@@ -772,7 +790,7 @@ class ModelOpenbayEbay extends Model{
 			//send to the api to process
 			if($stockFlag == true){
 				$this->openbay->ebay->log('editSave() - Sending to API');
-				$response = $this->openbay->ebay->openbay_call('item/reviseVariants', $varData);
+				$response = $this->openbay->ebay->call('item/reviseVariants', $varData);
 				return $response;
 			}else{
 				$this->openbay->ebay->log('editSave() - Ending item');

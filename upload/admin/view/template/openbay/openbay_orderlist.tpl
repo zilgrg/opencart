@@ -11,8 +11,8 @@
   <?php if ($success) { ?>
     <div class="success"><?php echo $success; ?></div>
   <?php } ?>
-  <div class="box">
-    <form action="<?php echo $link_update; ?>" method="post" enctype="multipart/form-data" id="form">
+  <form action="<?php echo $link_update; ?>" method="post" enctype="multipart/form-data" id="form">
+    <div class="box">
       <div class="heading">
         <h1><img src="view/image/order.png" alt="" /> <?php echo $heading_title; ?></h1>
         <div class="buttons">
@@ -44,7 +44,11 @@
                   <?php } else { ?>
                   <a href="<?php echo $sort_status; ?>"><?php echo $column_status; ?></a>
                   <?php } ?></td>
-                <td class="right"><?php echo $lang_order_channel; ?></td>
+                <td class="right"><?php if ($sort == 'channel') { ?>
+                  <a href="<?php echo $sort_channel; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_channel; ?></a>
+                  <?php } else { ?>
+                  <a href="<?php echo $sort_channel; ?>"><?php echo $column_channel; ?></a>
+                  <?php } ?></td>
                 <td class="left"><?php if ($sort == 'o.date_added') { ?>
                   <a href="<?php echo $sort_date_added; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_date_added; ?></a>
                   <?php } else { ?>
@@ -76,7 +80,16 @@
                     <?php } ?>
                   </select>
                 </td>
-                <td align="right"></td>
+                <td align="right"><select name="filter_channel">
+                <option value=""></option>
+                <?php foreach ($channels as $channel) { ?>
+                  <?php if ($channel['module'] == $filter_channel) { ?>
+                    <option value="<?php echo $channel['module'] ?>" selected="selected"><?php echo $channel['title'] ?></option>
+                  <?php } else {  ?>
+                    <option value="<?php echo $channel['module'] ?>"><?php echo $channel['title'] ?></option>
+                  <?php } ?>
+                <?php } ?>
+                </select></td>
                 <td><input type="text" name="filter_date_added" value="<?php echo $filter_date_added; ?>" size="12" class="date" /></td>
                 <td></td>
                 <td align="right"><a onclick="filter();" class="button"><?php echo $button_filter; ?></a></td>
@@ -111,39 +124,40 @@
           </table>
         <div class="pagination"><?php echo $pagination; ?></div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 <script type="text/javascript"><!--
-function filter() {
-	url = 'index.php?route=extension/openbay/orderList&token=<?php echo $token; ?>';
-	
-	var filter_order_id = $('input[name=\'filter_order_id\']').attr('value');
-	
-	if (filter_order_id) {
-		url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
-	}
-	
-	var filter_customer = $('input[name=\'filter_customer\']').attr('value');
-	
-	if (filter_customer) {
-		url += '&filter_customer=' + encodeURIComponent(filter_customer);
-	}
-	
-	var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');
-	
-	if (filter_order_status_id != '*') {
-		url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);
-	}
-	
-	var filter_date_added = $('input[name=\'filter_date_added\']').attr('value');
-	
-	if (filter_date_added) {
-		url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
-	}
-				
-	location = url;
-}
+  function filter() {
+    url = 'index.php?route=extension/openbay/orderList&token=<?php echo $token; ?>';
+    var filter_order_id = $('input[name=\'filter_order_id\']').attr('value');
+    if (filter_order_id) {
+      url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
+    }
+
+    var filter_customer = $('input[name=\'filter_customer\']').attr('value');
+    if (filter_customer) {
+      url += '&filter_customer=' + encodeURIComponent(filter_customer);
+    }
+
+    var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');
+    if (filter_order_status_id != '*') {
+      url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);
+    }
+
+    var filter_channel = $('select[name=\'filter_channel\']').attr('value');
+
+    if (filter_channel != '') {
+      url += '&filter_channel=' + encodeURIComponent(filter_channel);
+    }
+
+    var filter_date_added = $('input[name=\'filter_date_added\']').attr('value');
+    if (filter_date_added) {
+      url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
+    }
+
+    location = url;
+  }
 //--></script>
 <script type="text/javascript"><!--
   $(document).ready(function() {
@@ -151,11 +165,11 @@ function filter() {
   });
 //--></script>
 <script type="text/javascript"><!--
-    $('#form input').keydown(function(e) {
-	if (e.keyCode == 13) {
-		filter();
-	}
-});
+  $('#form input').keydown(function(e) {
+    if (e.keyCode == 13) {
+      filter();
+    }
+  });
 //--></script>
 <script type="text/javascript"><!--
     $.widget('custom.catcomplete', $.ui.autocomplete, {
@@ -188,6 +202,9 @@ function filter() {
                             value: item.customer_id
                         }
                     }));
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                  alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                 }
             });
         },

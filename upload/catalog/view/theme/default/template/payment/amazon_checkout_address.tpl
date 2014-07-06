@@ -5,8 +5,8 @@
     <div style="float: left; width: 58%" class="shipping-methods"></div>
     <div style="clear: both;"></div>
     <div class="buttons" style="margin-top: 15px">
-      <a href="<?php echo $cart ?>" class="button left"><span><?php echo $text_cart ?></span></a>
-      <a class="button right" id="continue-button"><span><?php echo $text_continue ?></span></a>
+      <a href="<?php echo $cart; ?>" class="button left"><span><?php echo $text_cart; ?></span></a>
+      <a class="button right" id="continue-button"><span><?php echo $text_continue; ?></span></a>
     </div>
     <input type="hidden" name="addressSelected" value="0" />
   <?php echo $content_bottom; ?>
@@ -18,7 +18,7 @@
 
       if ($('input[name="addressSelected"]').val() == '0') {
         $('#amazon-address-widget').before('<div class="warning"><?php echo $error_shipping_address ?></div>');
-      } else if($('input[name="shipping_method"]:checked').length == 0) {
+      } else if ($('input[name="shipping_method"]:checked').length == 0) {
         $('#amazon-address-widget').before('<div class="warning"><?php echo $error_shipping ?></div>');
       } else {
         $.ajax({
@@ -37,20 +37,20 @@
     });
 
     new CBA.Widgets.AddressWidget({
-      merchantId: '<?php echo $merchant_id ?>',
+      merchantId: '<?php echo $merchant_id; ?>',
       displayMode: 'edit',
       onAddressSelect: function(widget) {
         $('input[name="addressSelected"]').val('1');
         $('div.warning').remove();
         $('div.shipping-methods').html('');
 
-        $.get('<?php echo $shipping_quotes ?>', {}, function(data) {
+        $.get('<?php echo $shipping_quotes; ?>', {}, function(data) {
 
           $('.shipping-methods').html('');
 
           if (data.error) {
             $('#amazon-address-widget').before('<div class="warning">' + data.error + '</div>');
-          } elseif (data.quotes) {
+          } else if (data.quotes) {
             var html = '';
             html += '<table class="radio">';
 
