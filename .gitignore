@@ -8,8 +8,6 @@
 !/upload/system/cache/index.html
 /upload/system/cache/seo/*
 !/upload/system/cache/seo/index.html
-/upload/install/
-
 
 # Image File
 !/upload/image/no_image.jpg
