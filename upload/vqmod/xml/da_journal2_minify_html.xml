@@ -15,7 +15,8 @@
                     $is_get = !empty($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) === 'get';
                     $ignored_routes = array(
                         'journal2/assets/css',
-                        'journal2/assets/js'
+                        'journal2/assets/js',
+                        'feed/google_sitemap'
                     );
                     $request = $registry->get('request');
                     $current_route = isset($request->get['route']) ? $request->get['route'] : null;
@@ -26,6 +27,9 @@
                             'xhtml' => false,
                             'jsMinifier' => 'j2_js_minify'
                         ));
+                        if (Journal2Cache::$page_cache_file) {
+                            file_put_contents(Journal2Cache::$page_cache_file, $this->output);
+                        }
                     }
                 }
             ]]></add>

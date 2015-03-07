@@ -1,3 +1,4 @@
+<?php if (!isset($is_j2_popup)): ?>
 <?php echo $header; ?>
 <div class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
@@ -6,8 +7,13 @@
 </div>
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content" class="contact-page"><h1 class="heading-title"><?php echo $heading_title; ?></h1><?php echo $content_top; ?>
+<?php endif; ?>
 
   <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
+    <?php if (isset($product_id) && $product_id): ?>
+    <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+    <?php endif; ?>
+    <?php if (!isset($is_j2_popup)): ?>
     <h2 class="secondary-title"><?php echo $text_location; ?></h2>
     <div class="contact-info">
       <div class="content"><div class="left"><b><?php echo $text_address; ?></b><br />
@@ -27,6 +33,7 @@
     </div>
     </div>
     <h2 class="secondary-title"><?php echo $text_contact; ?></h2>
+    <?php endif; ?>
     <div class="content">
     <b><?php echo $entry_name; ?></b><br />
     <input type="text" name="name" value="<?php echo $name; ?>" />
@@ -57,9 +64,13 @@
     <span class="error"><?php echo $error_captcha; ?></span>
     <?php } ?>
     </div>
-      <div class="buttons">
-          <div class="right"><input type="submit" value="<?php echo $button_continue; ?>" class="button" /></div>
-      </div>
+    <?php if (!isset($is_j2_popup)): ?>
+    <div class="buttons">
+        <div class="right"><input type="submit" value="<?php echo $button_continue; ?>" class="button" /></div>
+    </div>
+    <?php endif; ?>
   </form>
+<?php if (!isset($is_j2_popup)): ?>
   <?php echo $content_bottom; ?></div>
 <?php echo $footer; ?>
+<?php endif; ?>

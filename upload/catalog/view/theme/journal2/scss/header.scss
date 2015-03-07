@@ -27,7 +27,6 @@ header{
 }
 
 
-
 /******************************
  Logo
 *******************************/
@@ -56,6 +55,7 @@ header{
       max-height: 120px;
       vertical-align: middle;
       display: inline-block;
+      width: auto;
     }
   }
 }
@@ -248,6 +248,55 @@ header .links {
   background-color:transparent;
 }
 
+.journal-header-default,
+.journal-header-menu,
+.journal-header-center,
+.journal-header-mega{
+  .language-full, .currency-full {
+    .journal-language, .journal-currency {
+      width: auto;
+      display: inline-block !important;
+      padding-right: 10px;
+      .dropdown-toggle {
+        width: auto;
+        img{
+          display: inline-block;
+          margin-right: 2px;
+        }
+      }
+      .dropdown-menu {
+        left: auto !important;
+        margin-left: 0 !important;
+        > li > a{
+          text-align: left;
+          img{
+            margin-right: 2px;
+          }
+        }
+        &:before {
+          top: -13px;
+          margin-left: 0;
+          left: 3px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .language-full, .currency-full {
+    .journal-login{
+      padding: 5px 0;
+    }
+    .journal-language, .journal-currency {
+      padding-left: 10px;
+      .dropdown-toggle {
+        height: auto;
+      }
+    }
+  }
+}
+
 /******************************
  Login
 *******************************/
@@ -338,6 +387,11 @@ header .links {
   right: 0;
   width: 100%;
   height: $j-min;
+  ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
   .heading {
     cursor: pointer;
     float: none;
@@ -346,6 +400,9 @@ header .links {
     border: none;
     position: relative;
     height: 100%;
+    width: 100%;
+    display: block;
+    background-color: transparent;
     z-index: 1;
     i{
       width: 40px;
@@ -382,7 +439,10 @@ header .links {
   }
   .content {
     visibility: hidden;
+    list-style: none;
     opacity: 0;
+    padding: 0;
+    margin: 0;
     min-width: 360px;
     -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
     position: relative;
@@ -454,6 +514,7 @@ header .links {
         img{
           text-align: left;
           max-width: 50px;
+          height: auto;
         }
       }
       td.name {
@@ -464,6 +525,7 @@ header .links {
       }
       td.quantity {
         text-align: right;
+        white-space: nowrap;
       }
       td.total {
         text-align: right;
@@ -548,6 +610,9 @@ header .links {
 
   .p-image{
     max-width: 55px;
+    img{
+      max-width: 55px;
+    }
   }
 
   .p-name {
@@ -555,7 +620,6 @@ header .links {
     margin-bottom: 5px;
     padding-top: 3px;
     padding-left: 7px;
-    @extend .f-bold;
     span{
       display: block;
       margin-bottom: 2px;
@@ -586,6 +650,11 @@ header .links {
   background-color: $verylight;
 }
 
+.view-more-link{
+  display: block;
+  padding: 3px 5px;
+}
+
 /******************************
 HEADER CENTER
 *******************************/
@@ -593,8 +662,9 @@ HEADER CENTER
 .journal-desktop .sticky-wrapper{
   max-height: 120px;
   position: relative;
-  z-index: 99;
+  z-index: 9999;
 }
+
 
 .journal-desktop.header-center .sticky-wrapper{
   max-height: 180px;
@@ -617,9 +687,11 @@ HEADER CENTER
   #logo {
     a {
       height: 100px;
-      transition: all 0;
+      transition: all 0.2s;
       img{
         max-height: 100px;
+        width: auto;
+        height:auto;
       }
     }
   }
@@ -796,10 +868,10 @@ HEADER CENTER
   #cart .content:before{
     content: "\e61e";
     color: white;
-    font-size: 40px;
+    font-size: 19px;
     position: absolute;
-    top: -5px;
-    right: 0px;
+    top: 0px;
+    right: 10px;
   }
 
   //AutoComplete
@@ -817,7 +889,7 @@ HEADER CENTER
     content: "\e61e";
     font-size: 40px;
     position: absolute;
-    top: -20px;
+    top: -22px;
   }
 
   .autocomplete2-suggestion:first-of-type{
@@ -923,6 +995,7 @@ HEADER MEGA
     height:80px;
     img{
       max-height: 80px;
+      width: auto;
     }
   }
 
@@ -942,6 +1015,7 @@ HEADER MEGA
 /******************************
  JOURNAL MEGA-MENU
 *******************************/
+
 header{
   -webkit-backface-visibility: hidden;
 }
@@ -955,8 +1029,10 @@ header{
   display: none;
 }
 
-.super-menu > li:hover {
-  transition:  background-color 0.2s;
+.super-menu > li{
+  &:hover {
+    transition:  background-color 0.2s;
+  }
 }
 
 .super-menu {
@@ -967,7 +1043,7 @@ header{
     margin: 0;
     padding: 0;
     border: 0;
-   > li {
+    > li {
       border-left: 1px solid $dark;
       transition: all 0.2s !important;
       display: table-cell;
@@ -977,11 +1053,10 @@ header{
         border-top-left-radius: inherit;
         border-bottom-left-radius: inherit;
       }
-     &:last-of-type{
+      &:last-of-type{
        border-top-right-radius: inherit;
        border-bottom-right-radius: inherit;
-     }
-
+      }
       > a {
         text-align: center;
         height: 100%;
@@ -996,9 +1071,11 @@ header{
         height: 40px;
         white-space: nowrap;
         overflow: hidden;
+        span{
+          display: inline-block;
+        }
         i{
           display: inline-block;
-          padding-bottom: 3px;
           &:before{
             float: left;
           }
@@ -1067,6 +1144,7 @@ header{
 }
 
 
+
 .journal-header-default,
 .journal-header-menu.sticky-header{
   .mega-menu{
@@ -1075,11 +1153,6 @@ header{
   }
 }
 
-.mega-menu-brands {
-  .mega-menu {
-   // display: block !important;
-  }
-}
 
 /******************************
 MEGA-MENU DROPDOWN
@@ -1243,6 +1316,7 @@ MEGA-MENU PRODUCTS
 
   .product-wrapper{
     margin-right: 20px;
+    box-shadow: none;
   }
   .product-grid-item{
     margin-bottom: 20px;
@@ -1259,6 +1333,7 @@ MEGA-MENU BRANDS
     img{
       width: 100%;
       float: left;
+      height: auto;
     }
   }
 }
@@ -1270,7 +1345,6 @@ MEGA-MENU HTML
 .mega-menu-html{
   .mega-menu-item{
     margin-bottom: 20px;
-
     img{
       max-width: 100%;
       height: auto !important;
@@ -1285,5 +1359,90 @@ MEGA-MENU HTML
   display: block !important;
   visibility: hidden;
   opacity: 0;
+}
+
+/******************************
+ MEGA-MENU MIXED
+*******************************/
+
+.mega-menu {
+  .wrapper p span{
+    line-height: 100% !important;
+  }
+
+  .mega-menu-column {
+    float: left;
+    margin: 0 0 -10px 0;
+    &:last-of-type {
+      > div {
+        margin-right: -20px;
+      }
+    }
+    .menu-cms-block{
+      clear: both;
+      margin: 0;
+    }
+  }
+}
+
+/******************************
+Header Cart
+*******************************/
+
+.oc2{
+  #cart {
+    .content{
+      transition: opacity 0s;
+      &:before{
+        display: none;
+      }
+      .cart-wrapper{
+        &:before{
+            content: "\e61e";
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 0px;
+            right: 10px;
+        }
+      }
+    }
+    .heading i:before{
+      margin-top: 4px;
+    }
+  }
+  #cart.visible .content {
+    opacity: 1;
+    visibility: visible;
+  }
+  #search input{
+    height: 40px;
+  }
+  .mini-cart-total{
+    padding: 0;
+    table{
+      padding: 5px 10px 3px 0;
+    }
+  }
+}
+
+.ie9.oc2{
+  .journal-header-center #cart .heading span{
+    position:relative;
+    right:-35px;
+  }
+  .journal-header-center #cart .heading i{
+    position:absolute;
+    right:0;
+    top:0;
+  }
+  .mini-cart-info table tr td.remove i{
+    position:relative;
+    padding-right: 5px;
+  }
+  .mini-cart-info table tr td.remove i:before{
+    position:relative;
+    padding-top: 1px;
+  }
 }
 

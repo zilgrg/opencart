@@ -49,7 +49,7 @@ define(['./module', 'underscore.string'], function (module, _S) {
         };
     });
 
-    module.directive('menuItem', [function () {
+    module.directive('menuItem', function (Rest) {
         return {
             require: '?ngModel',
             scope: {
@@ -59,6 +59,14 @@ define(['./module', 'underscore.string'], function (module, _S) {
             templateUrl: 'view/journal2/tpl/directives/menu-item.html?ver=' + Journal2Config.version,
             controller: function ($scope) {
                 $scope.languages = Journal2Config.languages.languages;
+            },
+            link: function ($scope, $element) {
+                $scope.popup_modules = [];
+                $($element).find('select').change(function () {
+                    if ($scope.ngModel.menu_type === 'opencart') {
+                        $scope.ngModel.menu_item.page = 'common/home';
+                    }
+                });
                 $scope.$watch('ngModel', function (val) {
                     if (Object.prototype.toString.call(val.menu_item) === '[object Array]') {
                         val.menu_item = {};
@@ -67,14 +75,14 @@ define(['./module', 'underscore.string'], function (module, _S) {
                         val.menu_item = val.menu_item || {};
                         val.menu_item.page = 'common/home';
                     }
-                    $scope.ngModel = val;
-                });
-            },
-            link: function ($scope, $element, $attrs, $ngModel) {
-                $($element).find('select').change(function () {
-                    if ($scope.ngModel.menu_type === 'opencart') {
-                        $scope.ngModel.menu_item.page = 'common/home';
+                    if (val.menu_type === 'popup') {
+                        Rest.getModules('popup').then(function (response) {
+                            $scope.popup_modules = response;
+                        }, function (error) {
+                            alert(error);
+                        });
                     }
+                    $scope.ngModel = val;
                 });
                 $scope.resetItem = function () {
                     if ($scope.ngModel.menu_type === 'opencart') {
@@ -83,9 +91,16 @@ define(['./module', 'underscore.string'], function (module, _S) {
                     } else {
                         $scope.ngModel.menu_item = null;
                     }
+                    if ($scope.ngModel.menu_type === 'popup') {
+                        Rest.getModules('popup').then(function (response) {
+                            $scope.popup_modules = response;
+                        }, function (error) {
+                            alert(error);
+                        });
+                    }
                 };
             }
         };
-    }]);
+    });
 
 });

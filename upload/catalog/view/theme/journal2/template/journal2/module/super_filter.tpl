@@ -3,16 +3,6 @@
     <a class="sf-reset hint--top sf-<?php echo $this->journal2->settings->get('filter_reset_display'); ?>" data-hint="<?php echo $reset_btn_text; ?>"><span class="sf-reset-text"><?php echo $reset_btn_text; ?></span><i class="sf-reset-icon"></i></a>
     <?php endif; ?>
     <input type="hidden" class="sf-page" value="" />
-
-    <?php if ($price_filter) { ?>
-    <div class="sf-price box" data-min-price="<?php echo $min_price; ?>" data-max-price="<?php echo $max_price; ?>">
-        <div class="box-heading"><?php echo $this->journal2->settings->get('filter_price_text', $text_price); ?></div>
-        <div class="box-content">
-            <section class="slider" data-min-value="<?php echo $min_price; ?>" data-max-value="<?php echo $max_price; ?>"></section>
-        </div>
-    </div>
-    <?php } ?>
-
     <?php foreach ($filter_groups as $filter_group): ?>
     <?php echo $filter_group['html']; ?>
     <?php endforeach; ?>

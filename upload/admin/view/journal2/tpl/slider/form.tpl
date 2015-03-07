@@ -117,6 +117,7 @@
                         <switch data-ng-model="module_data.js_options.navigationArrows">
                             <switch-option key="solo">Solo</switch-option>
                             <switch-option key="nexttobullets">Bullets</switch-option>
+                            <switch-option key="none">None</switch-option>
                         </switch>
                     </span>
                 </li>
@@ -212,13 +213,13 @@
                     <li>
                         <span class="module-create-title">Slide Image</span>
                         <span class="module-create-option">
-                            <image-select image="slide.image"></image-select>
+                            <image-select-lang image="slide.image"></image-select-lang>
                         </span>
                     </li>
                     <li>
                         <span class="module-create-title">Slide Thumb</span>
                         <span class="module-create-option">
-                            <image-select image="slide.thumb"></image-select>
+                            <image-select-lang image="slide.thumb"></image-select-lang>
                         </span>
                     </li>
                     <li>
@@ -319,12 +320,12 @@
                             <li data-ng-show="caption.type == 'image'">
                                 <span class="module-create-title">Image</span>
                                 <span class="module-create-option">
-                                    <image-select image="caption.image"></image-select>
+                                    <image-select-lang image="caption.image"></image-select-lang>
                                 </span>
                             </li>
                             <li data-ng-show="caption.type == 'text'">
                                 <span class="module-create-title">Text</span>
-                                <span class="module-create-option">
+                                <span class="module-create-option revo-text">
                                     <j-opt-text-lang data-ng-model="caption.text"></j-opt-text-lang>
                                 </span>
                             </li>
@@ -381,7 +382,7 @@
                                 </span>
                             </li>
                             <li data-ng-show="caption.type == 'video' && caption.video_autoplay == '1'">
-                                <span class="module-create-title">Autoplay First Time</span>
+                                <span class="module-create-title">Autoplay Only First Time</span>
                                 <span class="module-create-option">
                                     <switch data-ng-model="caption.video_autoplayonlyfirsttime">
                                         <switch-option key="1">ON</switch-option>
@@ -389,10 +390,38 @@
                                     </switch>
                                 </span>
                             </li>
+                            <li data-ng-show="caption.type == 'video' && caption.video_autoplay == '1'">
+                                <span class="module-create-title">Next Slide at End</span>
+                                <span class="module-create-option">
+                                    <switch data-ng-model="caption.video_nextslideatend">
+                                        <switch-option key="1">ON</switch-option>
+                                        <switch-option key="0">OFF</switch-option>
+                                    </switch>
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'video'">
+                                <span class="module-create-title">Mute</span>
+                                <span class="module-create-option">
+                                    <switch data-ng-model="caption.video_volume">
+                                        <switch-option key="0">ON</switch-option>
+                                        <switch-option key="1">OFF</switch-option>
+                                    </switch>
+                                </span>
+                            </li>
                             <li data-ng-show="caption.type == 'text'">
                                 <span class="module-create-title">Font</span>
                                 <span class="module-create-option">
                                     <j-opt-font data-ng-model="caption.text_font"></j-opt-font>
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'text'">
+                                <span class="module-create-title">Text Align</span>
+                                <span class="module-create-option">
+                                    <switch data-ng-model="caption.text_align">
+                                        <switch-option key="left">Left</switch-option>
+                                        <switch-option key="center">Center</switch-option>
+                                        <switch-option key="right">Right</switch-option>
+                                    </switch>
                                 </span>
                             </li>
                             <li data-ng-show="caption.type == 'text'">
@@ -411,6 +440,33 @@
                                 <span class="module-create-title">Hover Background Color</span>
                                 <span class="module-create-option">
                                     <j-opt-color data-ng-model="caption.text_hover_bg_color"></j-opt-color>
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'text'">
+                                <span class="module-create-title">Text Border</span>
+                                <span class="module-create-option">
+                                    <j-opt-border data-ng-model="caption.text_border"></j-opt-border>
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'text'">
+                                <span class="module-create-title">Hover Border Color</span>
+                                <span class="module-create-option">
+                                    <j-opt-color data-ng-model="caption.text_hover_border_color"></j-opt-color>
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'text'">
+                                <span class="module-create-title">Text Padding <small>Top - Right - Bottom - Left</small></span>
+                                <span class="module-create-option">
+                                    <input type="text" class="journal-input journal-sort" data-ng-model="caption.text_padding_top" /> -
+                                    <input type="text" class="journal-input journal-sort" data-ng-model="caption.text_padding_right" /> -
+                                    <input type="text" class="journal-input journal-sort" data-ng-model="caption.text_padding_bottom" /> -
+                                    <input type="text" class="journal-input journal-sort" data-ng-model="caption.text_padding_left" />
+                                </span>
+                            </li>
+                            <li data-ng-show="caption.type == 'text'">
+                                <span class="module-create-title">Text Line Height</span>
+                                <span class="module-create-option">
+                                    <input type="text" class="journal-input journal-number-field" data-ng-model="caption.text_line_height" />
                                 </span>
                             </li>
                             <li>
@@ -477,8 +533,14 @@
                                 <span class="module-create-option">
                                     X: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_in_transition_x" />
                                     Y: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_in_transition_y" />
-                                    Z: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_in_transition_z" />
                                 </span>
+                                </li>
+                                <li data-ng-show="caption.animation_in == 'customin'">
+                                    <span class="module-create-title">Scale</span>
+                                    <span class="module-create-option">
+                                        X: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_in_scale_x" />
+                                        Y: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_in_scale_y" />
+                                    </span>
                                 </li>
                                 <li data-ng-show="caption.animation_in == 'customin'">
                                     <span class="module-create-title">Rotation</span>
@@ -556,7 +618,13 @@
                                 <span class="module-create-option">
                                     X: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_out_transition_x" />
                                     Y: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_out_transition_y" />
-                                    Z: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_out_transition_z" />
+                                </span>
+                                </li>
+                                <li data-ng-show="caption.animation_out == 'customout'">
+                                    <span class="module-create-title">Scale</span>
+                                <span class="module-create-option">
+                                    X: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_out_scale_x" />
+                                    Y: <input type="text" class="journal-input journal-number-field" data-ng-model="caption.custom_out_scale_y" />
                                 </span>
                                 </li>
                                 <li data-ng-show="caption.animation_out == 'customout'">

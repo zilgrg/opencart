@@ -468,10 +468,12 @@ class Browser
     {
         if (stripos($this->_agent, 'googlebot') !== false) {
             $aresult = explode('/', stristr($this->_agent, 'googlebot'));
-            $aversion = explode(' ', $aresult[1]);
-            $this->setVersion(str_replace(';', '', $aversion[0]));
-            $this->_browser_name = self::BROWSER_GOOGLEBOT;
-            $this->setRobot(true);
+            if (is_array($aresult) && isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion(str_replace(';', '', $aversion[0]));
+                $this->_browser_name = self::BROWSER_GOOGLEBOT;
+                $this->setRobot(true);
+            }
             return true;
         }
         return false;

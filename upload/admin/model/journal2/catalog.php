@@ -35,6 +35,22 @@ class ModelJournal2Catalog extends Model{
             throw new Exception('Parameter filter_name was not found.');
         }
         $this->load->model('catalog/category');
+        /* check v1541 compatibility */
+        $reflector = new ReflectionClass($this->model_catalog_category);
+        $params = $reflector->getMethod('getCategories')->getParameters();
+        $is_1541 = false;
+        foreach ($params as $param) {
+            if ($param->name === 'parent_id') {
+                $is_1541 = true;
+                break;
+            }
+        }
+        if ($is_1541) {
+            return $this->getCategories(array(
+                'filter_name'   => $this->get_data['filter_name']
+            ));
+        }
+        /* end v1541 compatibility */
         return $this->model_catalog_category->getCategories(array(
             'filter_name'   => $this->get_data['filter_name']
         ));
@@ -134,6 +150,52 @@ class ModelJournal2Catalog extends Model{
             'options'       => $options,
             'tax_classes'   => $tax_classes
         );
+    }
+
+    /*
+     *
+     * v1541 compatibility
+     *
+     */
+    public function getCategories($data) {
+        $sql = "SELECT c.category_id, cd1.name as name, c.parent_id, c.sort_order FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd1 ON (c.category_id = cd1.category_id) WHERE cd1.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+
+        if (!empty($data['filter_name'])) {
+            $sql .= " AND LCASE(cd1.name) LIKE '" . $this->db->escape(utf8_strtolower($data['filter_name'])) . "%'";
+        }
+
+        $sql .= " GROUP BY c.category_id ORDER BY name";
+
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
+
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
+
+            $sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+        }
+
+        $query = $this->db->query($sql);
+
+        return $query->rows;
+    }
+
+    /*
+     *
+     * v2 featured modules
+     *
+     * */
+    public function get_featured() {
+        if (!Front::$IS_OC2) {
+            return null;
+        }
+
+        $query = $this->db->query("SELECT module_id, name FROM `" . DB_PREFIX . "module` WHERE `code` = 'featured' ORDER BY `name`");
+
+        return $query->rows;
     }
 
 }

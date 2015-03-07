@@ -10,7 +10,7 @@
     </div>
 </div>
 </div>
-<div class="module-body footer-columns" data-ng-hide="isLoading">
+<div class="module-body footer-columns">
     <div class="accordion-bar bar-level-0 bar-expand" >
         <a data-ng-click="toggleAccordion(rows, 'scope', null, true)" class="hint--top" data-hint="Expand All"><i class="expand-icon"></i></a>  <a data-ng-click="toggleAccordion(rows, 'scope', null, false)" class="hint--top" data-hint="Collapse All"><i class="collapse-icon"></i></a>
         <label class="close-others hint--top" data-hint="Close Others"><input type="checkbox" data-ng-model="close_others" /></label>
@@ -39,6 +39,45 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Background</span>
+                    <span class="module-create-option">
+                        <j-opt-background data-ng-model="row.background" data-bgcolor="true"></j-opt-background>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Padding<small>Top-Right-Bottom-Left</small></span>
+                    <span class="module-create-option">
+                        <input type="text" data-ng-model="row.padding_top" class="journal-sort journal-input" /> -
+                        <input type="text" data-ng-model="row.padding_right" class="journal-sort journal-input" /> -
+                        <input type="text" data-ng-model="row.padding_bottom" class="journal-sort journal-input" /> -
+                        <input type="text" data-ng-model="row.padding_left" class="journal-sort journal-input" />
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Bottom Spacing</span>
+                    <span class="module-create-option">
+                        <input type="text" data-ng-model="row.bottom_spacing" class="journal-input journal-number-field" />
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Status</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="row.status">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Disable on Mobile</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="row.disable_mobile">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Sort Order</span>
                     <span class="module-create-option">
                         <input type="text" data-ng-model="row.sort_order" class="journal-input journal-sort" />
@@ -63,6 +102,9 @@
                                 <switch data-ng-model="column.type">
                                     <switch-option key="menu">Menu</switch-option>
                                     <switch-option key="text">HTML</switch-option>
+                                    <switch-option key="newsletter">Newsletter</switch-option>
+                                    <switch-option key="products">Products</switch-option>
+                                    <switch-option key="posts">Blog Posts</switch-option>
                                 </switch>
                             </span>
                         </li>
@@ -72,16 +114,185 @@
                                 <j-opt-text-lang data-ng-model="column.title"></j-opt-text-lang>
                             </span>
                         </li>
-                        <li>
-                            <span class="module-create-title">Sort Order</span>
+                        <li data-ng-show="column.type == 'text'">
+                            <span class="module-create-title">Add Icon</span>
                             <span class="module-create-option">
-                                <input type="text" data-ng-model="column.sort_order" class="journal-input journal-sort" />
+                                <switch data-ng-model="column.icon_status">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.icon_status == 1 && column.type == 'text'">
+                            <span class="module-create-title">Icon</span>
+                            <span class="module-create-option">
+                                <icon-select data-ng-model="column.icon"></icon-select>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.icon_status == 1 && column.type == 'text'">
+                            <span class="module-create-title">Icon Position</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.icon_position">
+                                    <switch-option key="left">Left</switch-option>
+                                    <switch-option key="top">Top</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.icon_status == 1 && column.type == 'text'">
+                            <span class="module-create-title">Icon Container Background</span>
+                            <span class="module-create-option">
+                                <j-opt-color data-ng-model="column.icon_bg_color"></j-opt-color>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.icon_status == 1 && column.type == 'text'">
+                            <span class="module-create-title">Icon Container Border</span>
+                            <span class="module-create-option">
+                                <j-opt-border data-ng-model="column.icon_border"></j-opt-border>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.icon_status == 1 && column.type == 'text'">
+                            <span class="module-create-title">Icon Container Dimensions</span>
+                            <span class="module-create-option">
+                                <input type="text" class="journal-number-field" data-ng-model="column.icon_width" /> x <input type="text" class="journal-number-field" data-ng-model="column.icon_height" />
                             </span>
                         </li>
                         <li data-ng-show="column.type === 'text'">
                             <span class="module-create-title">Text</span>
                             <span class="module-create-option">
                                 <ck-editor data-ng-model="column.text"></ck-editor>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'newsletter'">
+                            <span class="module-create-title">Choose Module</span>
+                            <span class="module-create-option">
+                                <select data-ng-model="column.newsletter_id" ui-select2="{width: 50, minimumResultsForSearch: -1, placeholder: 'Choose Module'}">
+                                    <option value=""></option>
+                                    <option data-ng-repeat="module in newsletter_modules" value="{{module.module_id}}">{{module.module_data.module_name}}</option>
+                                </select>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products'">
+                            <span class="module-create-title">Section Type</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.section_type">
+                                    <switch-option key="module">Module</switch-option>
+                                    <switch-option key="category">Category</switch-option>
+                                    <switch-option key="manufacturer">Brand</switch-option>
+                                    <switch-option key="random">Random</switch-option>
+                                    <switch-option key="custom">Custom</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'posts'">
+                            <span class="module-create-title">Posts Type</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.posts_type">
+                                    <switch-option key="newest">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Latest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</switch-option>
+                                    <switch-option key="comments">Most Commented&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</switch-option>
+                                    <switch-option key="views">Most Viewed</switch-option>
+                                    <switch-option key="custom">Custom</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'posts' && column.posts_type === 'custom'">
+                            <span class="module-create-title">Posts</span>
+                            <span class="module-create-option">
+                                <ul class="simple-list">
+                                    <li data-ng-repeat="post in column.posts">
+                                        <blog-post-search model="post.data"></blog-post-search>
+                                        <a class="btn red delete" href="javascript:;" data-ng-click="removePost(column, $index)">X</a>
+                                    </li>
+                                </ul>
+                                <a href="javascript:;" data-ng-click="addPost(column)" class="btn blue add-product">Add</a>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'module'">
+                            <span class="module-create-title">Module Type</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.module_type">
+                                    <switch-option key="featured">Featured</switch-option>
+                                    <switch-option key="bestsellers">Bestsellers</switch-option>
+                                    <switch-option key="specials">Specials</switch-option>
+                                    <switch-option key="latest">Latest</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'module' && column.module_type == 'featured' && featured_modules !== null">
+                            <span class="module-create-title">Featured Modules</span>
+                            <span class="module-create-option">
+                                <select data-ng-model="column.featured_module_id" ui-select2="{width: 50, minimumResultsForSearch: -1, placeholder: 'Choose Module'}">
+                                    <option value=""></option>
+                                    <option data-ng-repeat="module in featured_modules" value="{{module.module_id}}">{{module.name}}</option>
+                                </select>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'category'">
+                            <span class="module-create-title">Category</span>
+                            <span class="module-create-option">
+                                <category-search model="column.category.data"></category-search>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'manufacturer'">
+                            <span class="module-create-title">Brand</span>
+                            <span class="module-create-option">
+                                <manufacturer-search model="column.manufacturer.data"></manufacturer-search>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'custom'">
+                            <span class="module-create-title">Products</span>
+                            <span class="module-create-option">
+                                 <ul class="simple-list">
+                                     <li data-ng-repeat="item in column.products">
+                                         <product-search model="item.data"></product-search>
+                                         <a class="btn red delete" href="javascript:;" data-ng-click="removeProduct(column, $index)">X</a>
+                                     </li>
+                                 </ul>
+                                <a href="javascript:;" class="btn blue add-product" data-ng-click="addProduct(column)">Add</a>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'random'">
+                            <span class="module-create-title">Random From</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.random_from">
+                                    <switch-option key="all"> &nbsp;&nbsp;&nbsp; All &nbsp;&nbsp;&nbsp;</switch-option>
+                                    <switch-option key="category">Category</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' && column.section_type == 'random' && column.random_from == 'category'">
+                            <span class="module-create-title">Category</span>
+                            <span class="module-create-option">
+                                <category-search model="column.random_from_category"></category-search>
+                            </span>
+                        </li>
+                        <li data-ng-show="column.type === 'products' || column.type === 'posts'">
+                            <span class="module-create-title">Item Limit</span>
+                            <span class="module-create-option">
+                                 <input type="text" value="" class="journal-input journal-sort" data-ng-model="column.items_limit" />
+                            </span>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Status</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.status">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Disable on Mobile</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.disable_mobile">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Sort Order</span>
+                            <span class="module-create-option">
+                                <input type="text" data-ng-model="column.sort_order" class="journal-input journal-sort" />
                             </span>
                         </li>
                     </ul>

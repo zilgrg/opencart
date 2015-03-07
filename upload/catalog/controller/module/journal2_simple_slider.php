@@ -3,12 +3,19 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
             return;
         }
         $this->load->model('journal2/module');
+        $this->load->model('journal2/menu');
         $this->load->model('tool/image');
         $this->load->model('catalog/product');
         $this->load->model('catalog/category');
@@ -31,7 +38,7 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
         if (!$module_data || !isset($module_data['module_data']) || !$module_data['module_data']) return;
         $module_data = $module_data['module_data'];
 
-        if (Journal2Utils::getProperty($module_data, 'hideonmobile') && $this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'hideonmobile') && Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -72,8 +79,12 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
                     break;
                 case 'top':
                 case 'bottom':
-                case 'multi_module':
                     $width = $this->journal2->settings->get('site_width', 1024);
+                    $this->data['width'] = "max-width: {$width}px";
+                    break;
+                case 'multi_module':
+                    $width = $setting['width'];
+                    $height = $setting['height'];
                     $this->data['width'] = "max-width: {$width}px";
                     break;
             }
@@ -88,7 +99,8 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
             $this->data['js_options'] = array(
                 'slideSpeed'        => (int)Journal2Utils::getProperty($module_data, 'transition_speed', 800),
                 'stopOnHover'       => (bool)Journal2Utils::getProperty($module_data, 'pause_on_hover', 1),
-                'lazyLoad'          => (bool)Journal2Utils::getProperty($module_data, 'preload_images', '1'),
+                'lazyLoad'          => (bool)Journal2Utils::getProperty($module_data, 'preload_images', 1),
+                'touchDrag'         => (bool)Journal2Utils::getProperty($module_data, 'touch_drag', 0),
                 'navigation'        => (bool)Journal2Utils::getProperty($module_data, 'arrows', 1),
                 'pagination'        => (bool)Journal2Utils::getProperty($module_data, 'bullets', 1)
             );
@@ -105,13 +117,19 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
                 $this->data['js_options']['autoPlay'] = false;
             }
 
+            $this->data['image_width']  = $width;
+            $this->data['image_height'] = $height;
+
             foreach ($slides as $slide) {
                 if (isset($slide['status']) && !$slide['status']) continue;
-                list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . Journal2Utils::getProperty($slide, 'image', 'no_image.jpg'));
+                $image = Journal2Utils::getProperty($slide, 'image');
+                if (is_array($image)) {
+                    $image = Journal2Utils::getProperty($image, $this->config->get('config_language_id'));
+                }
                 $_slides[] = array(
-                    'image'     => $this->model_tool_image->resize(Journal2Utils::getProperty($slide, 'image', 'no_image.jpg'), $width, $height, $width_orig < $height_orig ? 'w' : 'h'),
+                    'image'     => Journal2Utils::resizeImage($this->model_tool_image, $image, $width, $height, 'crop'),
                     'name'      => Journal2Utils::getProperty($slide, 'slide_name'),
-                    'link'      => $this->getLink(Journal2Utils::getProperty($slide, 'link')),
+                    'link'      => $this->model_journal2_menu->getLink(Journal2Utils::getProperty($slide, 'link')),
                     'target'    => Journal2Utils::getProperty($slide, 'link_new_window') ? 'target="_blank"' : ''
                 );
             }
@@ -125,75 +143,25 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
             $this->data['preload_images'] = Journal2Utils::getProperty($module_data, 'preload_images', '1');
             $this->data['height'] = $height;
 
-            $this->template = 'journal2/template/journal2/module/slider_simple.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/slider_simple.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
-        $this->document->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.css');
-        $this->document->addScript('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.js');
-        $this->document->addScript('catalog/view/javascript/jquery/tabs.js');
+        $output = $this->render();
 
         Journal2::stopTimer(get_class($this));
-    }
 
-    private function getLink($link) {
-        $href = null;
-        /* menu type */
-        switch ($link['menu_type']) {
-            case 'category':
-                $category_info = $this->model_catalog_category->getCategory(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$category_info) continue;
-                $href = $this->url->link('product/category', 'path=' . $category_info['category_id']);
-                break;
-            case 'product':
-                $product_info = $this->model_catalog_product->getProduct(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$product_info) continue;
-                $href = $this->url->link('product/product', 'product_id=' . $product_info['product_id']);
-                break;
-            case 'manufacturer':
-                $manufacturer_info = $this->model_catalog_manufacturer->getManufacturer(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$manufacturer_info) continue;
-                $href = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_info['manufacturer_id']);
-                break;
-            case 'information':
-                $information_info = $this->model_catalog_information->getInformation(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$information_info) continue;
-                $href = $this->url->link('information/information', 'information_id=' .  $information_info['information_id']);
-                break;
-            case 'opencart':
-                $customer_name = null;
-                switch ($link['menu_item']['page']) {
-                    case 'login':
-                        $link['menu_item']['page'] = $this->customer->isLogged() ? 'account/account' : 'account/login';
-                        $customer_name = $this->customer->getFirstName();
-                        break;
-                    case 'register':
-                        $link['menu_item']['page'] = $this->customer->isLogged() ? 'account/logout' : 'account/register';
-                        break;
-                    case 'account/wishlist':
-                        break;
-                    default:
-                }
-                $href = $link['menu_item']['page'] === 'common/home' ? $this->journal2->config->base_url : $this->url->link($link['menu_item']['page'], '', 'SSL');
-                break;
-            case 'custom':
-                $href = Journal2Utils::getProperty($link, 'menu_item.url');
-                break;
-        }
-
-        return $href;
+        return $output;
     }
 
 }

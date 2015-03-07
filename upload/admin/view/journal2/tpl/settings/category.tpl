@@ -47,6 +47,13 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+                <li data-ng-show="settings.hide_category_image == '1'">
+                    <span class="module-create-title">Image Border Settings</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="settings.main_category_image_border"></j-opt-border>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
                 <li>
                     <span class="module-create-title">Description Font</span>
                     <span class="module-create-option">
@@ -69,6 +76,80 @@
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
 
+                <!--Product Page Title-->
+                <accordion-group is-open="false">
+                    <accordion-heading>
+                        <div class="accordion-bar bar-level-1">Page Title</div>
+                    </accordion-heading>
+                    <ul>
+
+                        <li>
+                            <span class="module-create-title">Page Title Font</span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.category_page_title_font"></j-opt-font>
+                                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Page Title Background</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.category_page_title_bg"></j-opt-color>
+                                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Border Settings</span>
+                                    <span class="module-create-option">
+                                        <j-opt-border data-ng-model="settings.category_page_title_border"></j-opt-border>
+                                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Line Height <small>Vertical Centering</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.category_page_title_line_height" class="journal-number-field"></j-opt-text>
+                                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Padding <small>Left - Right</small></span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.category_page_title_padding_left" class="journal-sort"></j-opt-text> -
+                                <j-opt-text data-ng-model="settings.category_page_title_padding_right" class="journal-sort"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"></a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Title Overflow <small>Keep long names on the same line</small></span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="settings.category_page_title_overflow">
+                                    <switch-option key="on">ON</switch-option>
+                                    <switch-option key="off">OFF</switch-option>
+                                </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Title Align</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.category_page_title_align">
+                                            <switch-option key="left">Left</switch-option>
+                                            <switch-option key="center">Center</switch-option>
+                                            <switch-option key="right">Right</switch-option>
+                                        </switch>
+                                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                    </ul>
+                </accordion-group>
+
+
             </ul>
         </accordion-group>
         <accordion-group is-open="accordion.accordions[1]">
@@ -89,7 +170,48 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+                <li>
+                    <span class="module-create-title">Subcategory Image Size</span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.refine_image_width" class="journal-number-field"></j-opt-text> x
+                        <j-opt-text data-ng-model="settings.refine_image_height" class="journal-number-field"></j-opt-text>
+                        <switch data-ng-model="settings.refine_image_type">
+                            <switch-option key="fit">Fit</switch-option>
+                            <switch-option key="crop">Crop&nbsp;&nbsp;&nbsp;</switch-option>
+                        </switch>
+                    </span>
+                </li>
 
+                <li data-ng-show="settings.refine_category === 'carousel'">
+                    <span class="module-create-title">Carousel Autoplay</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.refine_carousel_autoplay">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li data-ng-show="settings.refine_category === 'carousel' && settings.refine_carousel_autoplay === '1'">
+                    <span class="module-create-title">Carousel Pause on Hover</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.refine_carousel_pause_on_hover">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li data-ng-show="settings.refine_category === 'carousel' && settings.refine_carousel_autoplay === '1'">
+                    <span class="module-create-title">Carousel Touch Drag</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.refine_carousel_touchdrag">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
                 <li data-ng-hide="settings.refine_category == 'none'">
                     <span class="module-create-title">Font</span>
                     <span class="module-create-option">
@@ -188,6 +310,7 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+
             </ul>
         </accordion-group>
         <accordion-group is-open="accordion.accordions[2]">
@@ -242,8 +365,8 @@
                     <span class="module-create-title">Product Compare Link</span>
                     <span class="module-create-option">
                         <switch data-ng-model="settings.product_compare_link_status">
-                            <switch-option key="1">ON</switch-option>
-                            <switch-option key="0">OFF</switch-option>
+                            <switch-option key="on">ON</switch-option>
+                            <switch-option key="off">OFF</switch-option>
                         </switch>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
@@ -333,162 +456,5 @@
                 </li>
             </ul>
         </accordion-group>
-        <!--&lt;!&ndash;Infinite Scroll&ndash;&gt;-->
-        <!--<accordion-group is-open="false">-->
-            <!--<accordion-heading>-->
-                <!--<div class="accordion-bar bar-level-0">Infinite Scroll</div>-->
-            <!--</accordion-heading>-->
-                <!--<ul class="module-create-options">-->
-
-                    <!--<li>-->
-                    <!--<span class="module-create-title">Status</span>-->
-                    <!--<span class="module-create-option">-->
-                        <!--<switch data-ng-model="settings.product_infinite_scroll">-->
-                            <!--<switch-option key="1">ON</switch-option>-->
-                            <!--<switch-option key="0">OFF</switch-option>-->
-                        <!--</switch>-->
-                    <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-                <!--<li data-ng-show="settings.product_infinite_scroll == '1'">-->
-                    <!--<span class="module-create-title">Auto Scroll</span>-->
-                    <!--<span class="module-create-option">-->
-                        <!--<switch data-ng-model="settings.product_infinite_scroll_auto_trigger">-->
-                            <!--<switch-option key="1">ON</switch-option>-->
-                            <!--<switch-option key="0">OFF</switch-option>-->
-                        <!--</switch>-->
-                    <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-
-
-
-                <!--<li data-ng-show="settings.product_infinite_scroll == '1'">-->
-                    <!--<span class="module-create-title">Loading Image</span>-->
-                    <!--<span class="module-create-option">-->
-                        <!--<j-opt-image data-ng-model="settings.infinite_scroll_loader"></j-opt-image>-->
-                    <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-
-                <!--<li data-ng-show="settings.product_infinite_scroll == '1'">-->
-                    <!--<span class="module-create-title">Loading Image Radius</span>-->
-                    <!--<span class="module-create-option">-->
-                        <!--<j-opt-border data-ng-model="settings.infinite_scroll_loader_radius" data-editor="hide-style"></j-opt-border>-->
-                    <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-
-                <!--<li data-ng-show="settings.product_infinite_scroll == '1'">-->
-                    <!--<span class="module-create-title">Scroll End Text</span>-->
-                        <!--<span class="module-create-option">-->
-                            <!--<j-opt-text-lang data-ng-model="settings.product_infinite_scroll_finished_text"></j-opt-text-lang>-->
-                        <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-
-                <!--<li data-ng-show="settings.product_infinite_scroll == '1'">-->
-                    <!--<span class="module-create-title">Scroll End Font</span>-->
-                    <!--<span class="module-create-option">-->
-                        <!--<j-opt-font data-ng-model="settings.product_infinite_scroll_finished_text_font"></j-opt-font>-->
-                    <!--</span>-->
-                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                <!--</li>-->
-
-                    <!--<accordion data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                        <!--<accordion-group is-open="false">-->
-                            <!--<accordion-heading>-->
-                                <!--<div class="accordion-bar bar-level-1">Button Settings</div>-->
-                            <!--</accordion-heading>-->
-                            <!--<ul class="module-create-options">-->
-
-                                <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                    <!--<span class="module-create-title">Button Text</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-text-lang data-ng-model="settings.product_infinite_scroll_button_text"></j-opt-text-lang>-->
-                                        <!--</span>-->
-                                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                <!--</li>-->
-
-                                <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                    <!--<span class="module-create-title">Button Font</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-font data-ng-model="settings.product_infinite_scroll_button_font"></j-opt-font>-->
-                                        <!--</span>-->
-                                            <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                        <!--</li>-->
-
-                                        <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                                    <!--<span class="module-create-title">Button Background Color</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-color data-ng-model="settings.product_infinite_scroll_button_bg"></j-opt-color>-->
-                                        <!--</span>-->
-                                                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                                <!--</li>-->
-
-                                                <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                                    <!--<span class="module-create-title">Button Border Settings</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-border data-ng-model="settings.product_infinite_scroll_button_border"></j-opt-border>-->
-                                        <!--</span>-->
-                                                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                                <!--</li>-->
-
-                                                <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                                    <!--<span class="module-create-title">Font Hover Color</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-color data-ng-model="settings.product_infinite_scroll_button_hover"></j-opt-color>-->
-                                        <!--</span>-->
-                                                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                                <!--</li>-->
-
-                                                <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                                    <!--<span class="module-create-title">Background Hover Color</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-color data-ng-model="settings.product_infinite_scroll_button_bg_hover"></j-opt-color>-->
-                                        <!--</span>-->
-                                                    <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                                <!--</li>-->
-
-                                        <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                                    <!--<span class="module-create-title">Border Hover Color</span>-->
-                                        <!--<span class="module-create-option">-->
-                                            <!--<j-opt-color data-ng-model="settings.product_infinite_scroll_button_border_hover"></j-opt-color>-->
-                                        <!--</span>-->
-                                            <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                        <!--</li>-->
-
-                                        <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                            <!--<span class="module-create-title">Button Width <small>Padding Left/Right</small></span>-->
-                                                <!--<span class="module-create-option">-->
-                                                    <!--<j-opt-text data-ng-model="settings.product_infinite_scroll_button_width" class="journal-number-field"></j-opt-text>-->
-                                                <!--</span>-->
-                                            <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                        <!--</li>-->
-
-                                        <!--<li data-ng-show="settings.product_infinite_scroll == '1' && settings.product_infinite_scroll_auto_trigger == '0'">-->
-                                            <!--<span class="module-create-title">Button Height</span>-->
-                                                <!--<span class="module-create-option">-->
-                                                    <!--<j-opt-text data-ng-model="settings.product_infinite_scroll_button_height" class="journal-number-field"></j-opt-text>-->
-                                                <!--</span>-->
-                                            <!--<a href="#" target="_blank" class="journal-tip"></a>-->
-                                        <!--</li>-->
-                                        <!--<li>-->
-                                            <!--<span class="module-create-title">Active State Effect <small>Inner Shadow</small></span>-->
-                                            <!--<span class="module-create-option">-->
-                                                <!--<switch data-ng-model="settings.product_infinite_scroll_button_active_shadow">-->
-                                                    <!--<switch-option key="inset 0 1px 10px rgba(0, 0, 0, 0.8)">ON</switch-option>-->
-                                                    <!--<switch-option key="none">OFF</switch-option>-->
-                                                <!--</switch>-->
-                                            <!--</span>-->
-                                            <!--<a href="#" target="_blank" class="journal-tip"> </a>-->
-                                        <!--</li>-->
-
-                            <!--</ul>-->
-                        <!--</accordion-group>-->
-                    <!--</accordion>-->
-
-                <!--</ul>-->
-        <!--</accordion-group>-->
     </accordion>
 </div>

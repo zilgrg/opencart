@@ -60,3 +60,33 @@
     });
 }());
 
+(function () {
+    $(function () {
+        setTimeout(function () {
+            $("img.lazy").lazy({
+                bind: 'event',
+                visibleOnly: false,
+                effect: "fadeIn",
+                effectTime: 250
+            });
+        }, 1);
+    })
+}());
+
+(function () {
+    var $menu = $('.android.tablet .super-menu > li > a');
+    if ($menu.length) {
+        $menu.click(function (e) {
+            $menu.not(this).removeClass("clicked");
+            $(this).toggleClass("clicked");
+            if ($(this).hasClass("clicked")) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    $('.mobile-menu a:not([href])').live('click', function () {
+        $(this).parent().find('> .mobile-plus').trigger('click');
+    });
+}());
+

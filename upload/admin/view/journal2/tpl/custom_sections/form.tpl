@@ -48,6 +48,18 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Image Border Settings</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="module_data.image_border"></j-opt-border>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Item Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="module_data.image_bgcolor"></j-opt-color>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Items per Row</span>
                     <span class="module-create-option">
                         <j-opt-items-per-row data-ng-model="module_data.items_per_row"></j-opt-items-per-row>
@@ -109,6 +121,21 @@
                         <input type="text" class="journal-number-field" data-ng-model="module_data.margin_top" /> x <input type="text" class="journal-number-field" data-ng-model="module_data.margin_bottom" />
                     </span>
                 </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Module Background</span>
+                    <span class="module-create-option">
+                        <j-opt-background data-ng-model="module_data.module_background" data-bgcolor="true"></j-opt-background>
+                    </span>
+                </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Gutter</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.module_padding">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
             </ul>
         </accordion-group>
 
@@ -136,14 +163,60 @@
                         </switch>
                     </span>
                 </li>
-                <li data-ng-show="section.section_type == 'module'">
-                    <span class="module-create-title">Module Type</span>
+                <li data-ng-show="section.section_type == 'random'">
+                    <span class="module-create-title">Random From</span>
+                       <span class="module-create-option">
+                       <switch data-ng-model="section.random_from">
+                           <switch-option key="all"> &nbsp;&nbsp;&nbsp; All &nbsp;&nbsp;&nbsp;</switch-option>
+                           <switch-option key="category">Category</switch-option>
+                       </switch>
+                    </span>
+                </li>
+                <li data-ng-show="section.section_type == 'random' && section.random_from == 'category'">
+                    <span class="module-create-title">Category</span>
                     <span class="module-create-option">
-                        <switch data-ng-model="section.module_type">
-                            <switch-option key="featured">Featured</switch-option>
-                            <switch-option key="bestsellers">Bestsellers</switch-option>
-                            <switch-option key="specials">Specials</switch-option>
-                            <switch-option key="latest">Latest</switch-option>
+                        <category-search model="section.random_from_category"></category-search>
+                    </span>
+                </li>
+                <li data-ng-show="section.section_type == 'module'">
+                    <span class="module-create-title">Module Type <small data-ng-show="section.section_type == 'module' && (section.module_type === 'related' || section.module_type === 'people-also-bought')">Product Layout Only</small></span>
+                    <span class="module-create-option">
+                        <select data-ng-model="section.module_type" ui-select2="{minimumResultsForSearch: -1}">
+                            <option value="featured">Featured</option>
+                            <option value="bestsellers">Bestsellers</option>
+                            <option value="specials">Specials</option>
+                            <option value="latest">Latest</option>
+                            <option value="related">Related</option>
+                            <option value="people-also-bought">Also Bought</option>
+                            <option value="recently-viewed">Recently Viewed</option>
+                            <option value="most-viewed">Most Viewed</option>
+                        </select>
+                    </span>
+                </li>
+                <li data-ng-show="section.section_type == 'module' && section.module_type == 'featured' && featured_modules !== null">
+                    <span class="module-create-title">Featured Modules</span>
+                    <span class="module-create-option">
+                        <select data-ng-model="section.featured_module_id" ui-select2="{width: 50, minimumResultsForSearch: -1, placeholder: 'Choose Module'}">
+                            <option value=""></option>
+                            <option data-ng-repeat="module in featured_modules" value="{{module.module_id}}">{{module.name}}</option>
+                        </select>
+                    </span>
+                </li>
+                <li data-ng-show="section.section_type == 'module' && section.module_type == 'specials'">
+                    <span class="module-create-title">Today's Specials Only</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="section.todays_specials_only">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li data-ng-show="section.section_type == 'module' && section.module_type == 'specials'">
+                    <span class="module-create-title">Countdown Visibility</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="section.countdown_visibility">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
                         </switch>
                     </span>
                 </li>
@@ -186,6 +259,15 @@
                         </switch>
                     </span>
                 </li>
+                <!--<li data-ng-show="section.section_type == 'module' && (section.module_type === 'featured' || section.module_type === 'bestsellers' || section.module_type === 'specials' || section.module_type === 'latest')">-->
+                    <!--<span class="module-create-title">Auto Category<small>Category Layout Only</small></span>-->
+                       <!--<span class="module-create-option">-->
+                       <!--<switch data-ng-model="section.filter_category">-->
+                           <!--<switch-option key="1">ON</switch-option>-->
+                           <!--<switch-option key="0">OFF</switch-option>-->
+                       <!--</switch>-->
+                    <!--</span>-->
+                <!--</li>-->
                 <li>
                     <span class="module-create-title">Status</span>
                     <span class="module-create-option">

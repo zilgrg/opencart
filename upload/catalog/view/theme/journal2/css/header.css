@@ -1,7 +1,7 @@
 /*
-  Journal - The Ultimate Opencart Theme
-  Version 2.0.5
-  Copyright (c) 2013 Digital Atelier
+  Journal - Advanced Opencart Theme Framework
+  Version 2.4.5
+  Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
 /******************************
@@ -51,7 +51,8 @@ header {
       max-width: 100%;
       max-height: 120px;
       vertical-align: middle;
-      display: inline-block; }
+      display: inline-block;
+      width: auto; }
 
 /******************************
 Top Links
@@ -71,7 +72,7 @@ header .links {
     text-align: center;
     border-right-width: 1px;
     border-right-style: solid;
-    border-right-color: #e4e4e4;
+    border-right-color: #E4E4E4;
     border-bottom: 1px solid transparent;
     padding: 0 6px;
     transition: background-color 0.2s; }
@@ -87,7 +88,7 @@ header .links {
 .journal-header-default .links .no-link,
 .journal-header-menu .links .no-link {
   text-align: center;
-  border-right: 1px solid #e4e4e4; }
+  border-right: 1px solid #E4E4E4; }
 
 .top-menu-link {
   white-space: nowrap;
@@ -119,7 +120,7 @@ header .links {
     .journal-language form .currency-symbol, .journal-currency form .currency-symbol {
       background-color: white;
       padding: 1px 5px;
-      color: #ea2e49; }
+      color: #EA2E49; }
   .journal-language .dropdown-toggle, .journal-currency .dropdown-toggle {
     width: 40px;
     height: 40px;
@@ -154,7 +155,7 @@ header .links {
     background-clip: padding-box;
     background-color: white; }
     .journal-language .dropdown-menu > li, .journal-currency .dropdown-menu > li {
-      border-top: 1px solid #e4e4e4; }
+      border-top: 1px solid #E4E4E4; }
     .journal-language .dropdown-menu > li:first-of-type, .journal-currency .dropdown-menu > li:first-of-type {
       border-top: none; }
     .journal-language .dropdown-menu > li > a, .journal-currency .dropdown-menu > li > a {
@@ -191,10 +192,122 @@ header .links {
         border-bottom-left-radius: inherit; }
 
 .open .dropdown-toggle.btn-default {
-  color: #ea2e49;
+  color: #EA2E49;
   border-color: transparent;
   background-color: transparent; }
 
+.journal-header-default .language-full .journal-language, .journal-header-default .language-full .journal-currency, .journal-header-default .currency-full .journal-language, .journal-header-default .currency-full .journal-currency,
+.journal-header-menu .language-full .journal-language,
+.journal-header-menu .language-full .journal-currency,
+.journal-header-menu .currency-full .journal-language,
+.journal-header-menu .currency-full .journal-currency,
+.journal-header-center .language-full .journal-language,
+.journal-header-center .language-full .journal-currency,
+.journal-header-center .currency-full .journal-language,
+.journal-header-center .currency-full .journal-currency,
+.journal-header-mega .language-full .journal-language,
+.journal-header-mega .language-full .journal-currency,
+.journal-header-mega .currency-full .journal-language,
+.journal-header-mega .currency-full .journal-currency {
+  width: auto;
+  display: inline-block !important;
+  padding-right: 10px; }
+  .journal-header-default .language-full .journal-language .dropdown-toggle, .journal-header-default .language-full .journal-currency .dropdown-toggle, .journal-header-default .currency-full .journal-language .dropdown-toggle, .journal-header-default .currency-full .journal-currency .dropdown-toggle,
+  .journal-header-menu .language-full .journal-language .dropdown-toggle,
+  .journal-header-menu .language-full .journal-currency .dropdown-toggle,
+  .journal-header-menu .currency-full .journal-language .dropdown-toggle,
+  .journal-header-menu .currency-full .journal-currency .dropdown-toggle,
+  .journal-header-center .language-full .journal-language .dropdown-toggle,
+  .journal-header-center .language-full .journal-currency .dropdown-toggle,
+  .journal-header-center .currency-full .journal-language .dropdown-toggle,
+  .journal-header-center .currency-full .journal-currency .dropdown-toggle,
+  .journal-header-mega .language-full .journal-language .dropdown-toggle,
+  .journal-header-mega .language-full .journal-currency .dropdown-toggle,
+  .journal-header-mega .currency-full .journal-language .dropdown-toggle,
+  .journal-header-mega .currency-full .journal-currency .dropdown-toggle {
+    width: auto; }
+    .journal-header-default .language-full .journal-language .dropdown-toggle img, .journal-header-default .language-full .journal-currency .dropdown-toggle img, .journal-header-default .currency-full .journal-language .dropdown-toggle img, .journal-header-default .currency-full .journal-currency .dropdown-toggle img,
+    .journal-header-menu .language-full .journal-language .dropdown-toggle img,
+    .journal-header-menu .language-full .journal-currency .dropdown-toggle img,
+    .journal-header-menu .currency-full .journal-language .dropdown-toggle img,
+    .journal-header-menu .currency-full .journal-currency .dropdown-toggle img,
+    .journal-header-center .language-full .journal-language .dropdown-toggle img,
+    .journal-header-center .language-full .journal-currency .dropdown-toggle img,
+    .journal-header-center .currency-full .journal-language .dropdown-toggle img,
+    .journal-header-center .currency-full .journal-currency .dropdown-toggle img,
+    .journal-header-mega .language-full .journal-language .dropdown-toggle img,
+    .journal-header-mega .language-full .journal-currency .dropdown-toggle img,
+    .journal-header-mega .currency-full .journal-language .dropdown-toggle img,
+    .journal-header-mega .currency-full .journal-currency .dropdown-toggle img {
+      display: inline-block;
+      margin-right: 2px; }
+  .journal-header-default .language-full .journal-language .dropdown-menu, .journal-header-default .language-full .journal-currency .dropdown-menu, .journal-header-default .currency-full .journal-language .dropdown-menu, .journal-header-default .currency-full .journal-currency .dropdown-menu,
+  .journal-header-menu .language-full .journal-language .dropdown-menu,
+  .journal-header-menu .language-full .journal-currency .dropdown-menu,
+  .journal-header-menu .currency-full .journal-language .dropdown-menu,
+  .journal-header-menu .currency-full .journal-currency .dropdown-menu,
+  .journal-header-center .language-full .journal-language .dropdown-menu,
+  .journal-header-center .language-full .journal-currency .dropdown-menu,
+  .journal-header-center .currency-full .journal-language .dropdown-menu,
+  .journal-header-center .currency-full .journal-currency .dropdown-menu,
+  .journal-header-mega .language-full .journal-language .dropdown-menu,
+  .journal-header-mega .language-full .journal-currency .dropdown-menu,
+  .journal-header-mega .currency-full .journal-language .dropdown-menu,
+  .journal-header-mega .currency-full .journal-currency .dropdown-menu {
+    left: auto !important;
+    margin-left: 0 !important; }
+    .journal-header-default .language-full .journal-language .dropdown-menu > li > a, .journal-header-default .language-full .journal-currency .dropdown-menu > li > a, .journal-header-default .currency-full .journal-language .dropdown-menu > li > a, .journal-header-default .currency-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-menu .language-full .journal-language .dropdown-menu > li > a,
+    .journal-header-menu .language-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-menu .currency-full .journal-language .dropdown-menu > li > a,
+    .journal-header-menu .currency-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-center .language-full .journal-language .dropdown-menu > li > a,
+    .journal-header-center .language-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-center .currency-full .journal-language .dropdown-menu > li > a,
+    .journal-header-center .currency-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-mega .language-full .journal-language .dropdown-menu > li > a,
+    .journal-header-mega .language-full .journal-currency .dropdown-menu > li > a,
+    .journal-header-mega .currency-full .journal-language .dropdown-menu > li > a,
+    .journal-header-mega .currency-full .journal-currency .dropdown-menu > li > a {
+      text-align: left; }
+      .journal-header-default .language-full .journal-language .dropdown-menu > li > a img, .journal-header-default .language-full .journal-currency .dropdown-menu > li > a img, .journal-header-default .currency-full .journal-language .dropdown-menu > li > a img, .journal-header-default .currency-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-menu .language-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-menu .language-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-menu .currency-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-menu .currency-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-center .language-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-center .language-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-center .currency-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-center .currency-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-mega .language-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-mega .language-full .journal-currency .dropdown-menu > li > a img,
+      .journal-header-mega .currency-full .journal-language .dropdown-menu > li > a img,
+      .journal-header-mega .currency-full .journal-currency .dropdown-menu > li > a img {
+        margin-right: 2px; }
+    .journal-header-default .language-full .journal-language .dropdown-menu:before, .journal-header-default .language-full .journal-currency .dropdown-menu:before, .journal-header-default .currency-full .journal-language .dropdown-menu:before, .journal-header-default .currency-full .journal-currency .dropdown-menu:before,
+    .journal-header-menu .language-full .journal-language .dropdown-menu:before,
+    .journal-header-menu .language-full .journal-currency .dropdown-menu:before,
+    .journal-header-menu .currency-full .journal-language .dropdown-menu:before,
+    .journal-header-menu .currency-full .journal-currency .dropdown-menu:before,
+    .journal-header-center .language-full .journal-language .dropdown-menu:before,
+    .journal-header-center .language-full .journal-currency .dropdown-menu:before,
+    .journal-header-center .currency-full .journal-language .dropdown-menu:before,
+    .journal-header-center .currency-full .journal-currency .dropdown-menu:before,
+    .journal-header-mega .language-full .journal-language .dropdown-menu:before,
+    .journal-header-mega .language-full .journal-currency .dropdown-menu:before,
+    .journal-header-mega .currency-full .journal-language .dropdown-menu:before,
+    .journal-header-mega .currency-full .journal-currency .dropdown-menu:before {
+      top: -13px;
+      margin-left: 0;
+      left: 3px; }
+
+@media only screen and (max-width: 500px) {
+  .language-full .journal-login, .currency-full .journal-login {
+    padding: 5px 0; }
+  .language-full .journal-language, .language-full .journal-currency, .currency-full .journal-language, .currency-full .journal-currency {
+    padding-left: 10px; }
+    .language-full .journal-language .dropdown-toggle, .language-full .journal-currency .dropdown-toggle, .currency-full .journal-language .dropdown-toggle, .currency-full .journal-currency .dropdown-toggle {
+      height: auto; } }
 /******************************
  Login
 *******************************/
@@ -229,7 +342,7 @@ header .links {
   border-right-color: transparent;
   float: left;
   position: absolute;
-  color: #cccccc;
+  color: #CCCCCC;
   transition: color 0.2s, background-color 0.2s;
   z-index: 9; }
   .button-search i {
@@ -268,6 +381,10 @@ header .links {
   right: 0;
   width: 100%;
   height: 40px; }
+  #cart ul {
+    padding: 0;
+    margin: 0;
+    list-style: none; }
   #cart .heading {
     cursor: pointer;
     float: none;
@@ -276,6 +393,9 @@ header .links {
     border: none;
     position: relative;
     height: 100%;
+    width: 100%;
+    display: block;
+    background-color: transparent;
     z-index: 1; }
     #cart .heading i {
       width: 40px;
@@ -307,7 +427,10 @@ header .links {
         width: 100%; }
   #cart .content {
     visibility: hidden;
+    list-style: none;
     opacity: 0;
+    padding: 0;
+    margin: 0;
     min-width: 360px;
     -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
     position: relative;
@@ -354,7 +477,7 @@ header .links {
     width: 100%;
     margin-bottom: 0; }
     .mini-cart-info table tr {
-      border-bottom: 1px solid #eeeeee; }
+      border-bottom: 1px solid #EEEEEE; }
       .mini-cart-info table tr td {
         color: inherit;
         vertical-align: top;
@@ -367,13 +490,15 @@ header .links {
         width: 1px; }
         .mini-cart-info table tr td.image img {
           text-align: left;
-          max-width: 50px; }
+          max-width: 50px;
+          height: auto; }
       .mini-cart-info table tr td.name {
         padding-left: 5px; }
         .mini-cart-info table tr td.name div {
           line-height: 1; }
       .mini-cart-info table tr td.quantity {
-        text-align: right; }
+        text-align: right;
+        white-space: nowrap; }
       .mini-cart-info table tr td.total {
         text-align: right; }
       .mini-cart-info table tr td.remove {
@@ -383,7 +508,7 @@ header .links {
           display: none; }
         .mini-cart-info table tr td.remove i {
           cursor: pointer;
-          color: #ea2e49;
+          color: #EA2E49;
           transition: color .2s;
           left: 5px; }
         .mini-cart-info table tr td.remove i:before {
@@ -433,6 +558,8 @@ header .links {
     color: inherit; }
   .autocomplete2-suggestion .p-image {
     max-width: 55px; }
+    .autocomplete2-suggestion .p-image img {
+      max-width: 55px; }
   .autocomplete2-suggestion .p-name {
     font-size: 13px;
     margin-bottom: 5px;
@@ -448,7 +575,7 @@ header .links {
       float: left;
       margin-right: 5px;
       text-decoration: line-through;
-      color: #ea2e49; }
+      color: #EA2E49; }
 
 .autocomplete2-selected {
   background-color: transparent !important; }
@@ -457,7 +584,11 @@ header .links {
   border-bottom: none; }
 
 .autocomplete2-selected {
-  background-color: #fafafa; }
+  background-color: #FAFAFA; }
+
+.view-more-link {
+  display: block;
+  padding: 3px 5px; }
 
 /******************************
 HEADER CENTER
@@ -465,7 +596,7 @@ HEADER CENTER
 .journal-desktop .sticky-wrapper {
   max-height: 120px;
   position: relative;
-  z-index: 99; }
+  z-index: 9999; }
 
 .journal-desktop.header-center .sticky-wrapper {
   max-height: 180px; }
@@ -479,9 +610,11 @@ HEADER CENTER
   background-color: transparent; }
   .journal-header-center #logo a {
     height: 100px;
-    transition: all 0; }
+    transition: all 0.2s; }
     .journal-header-center #logo a img {
-      max-height: 100px; }
+      max-height: 100px;
+      width: auto;
+      height: auto; }
   .journal-header-center .journal-menu {
     clear: both;
     z-index: 1; }
@@ -591,10 +724,10 @@ HEADER CENTER
   .journal-header-center #cart .content:before {
     content: "\e61e";
     color: white;
-    font-size: 40px;
+    font-size: 19px;
     position: absolute;
-    top: -5px;
-    right: 0px; }
+    top: 0px;
+    right: 10px; }
   .journal-header-center .autocomplete2-suggestions {
     top: 54px;
     border-top: none;
@@ -606,7 +739,7 @@ HEADER CENTER
     content: "\e61e";
     font-size: 40px;
     position: absolute;
-    top: -20px; }
+    top: -22px; }
   .journal-header-center .autocomplete2-suggestion:first-of-type {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit; }
@@ -656,7 +789,8 @@ HEADER MEGA
 .journal-header-menu #logo a {
   height: 80px; }
   .journal-header-menu #logo a img {
-    max-height: 80px; }
+    max-height: 80px;
+    width: auto; }
 .journal-header-menu .journal-menu {
   clear: both; }
 .journal-header-menu .journal-menu-bg {
@@ -713,9 +847,10 @@ header {
       height: 40px;
       white-space: nowrap;
       overflow: hidden; }
+      .super-menu > li > a span {
+        display: inline-block; }
       .super-menu > li > a i {
-        display: inline-block;
-        padding-bottom: 3px; }
+        display: inline-block; }
         .super-menu > li > a i:before {
           float: left; }
     .super-menu > li.icon-only {
@@ -873,7 +1008,8 @@ MEGA-MENU CATEGORIES
 MEGA-MENU PRODUCTS
 *******************************/
 #header .mega-menu .product-wrapper {
-  margin-right: 20px; }
+  margin-right: 20px;
+  box-shadow: none; }
 #header .mega-menu .product-grid-item {
   margin-bottom: 20px; }
 
@@ -884,7 +1020,8 @@ MEGA-MENU BRANDS
   margin-bottom: 20px; }
   .mega-menu-brands .mega-menu-item img {
     width: 100%;
-    float: left; }
+    float: left;
+    height: auto; }
 
 /******************************
 MEGA-MENU HTML
@@ -901,3 +1038,57 @@ MEGA-MENU HTML
   display: block !important;
   visibility: hidden;
   opacity: 0; }
+
+/******************************
+ MEGA-MENU MIXED
+*******************************/
+.mega-menu .wrapper p span {
+  line-height: 100% !important; }
+.mega-menu .mega-menu-column {
+  float: left;
+  margin: 0 0 -10px 0; }
+  .mega-menu .mega-menu-column:last-of-type > div {
+    margin-right: -20px; }
+  .mega-menu .mega-menu-column .menu-cms-block {
+    clear: both;
+    margin: 0; }
+
+/******************************
+Header Cart
+*******************************/
+.oc2 #cart .content {
+  transition: opacity 0s; }
+  .oc2 #cart .content:before {
+    display: none; }
+  .oc2 #cart .content .cart-wrapper:before {
+    content: "\e61e";
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 0px;
+    right: 10px; }
+.oc2 #cart .heading i:before {
+  margin-top: 4px; }
+.oc2 #cart.visible .content {
+  opacity: 1;
+  visibility: visible; }
+.oc2 #search input {
+  height: 40px; }
+.oc2 .mini-cart-total {
+  padding: 0; }
+  .oc2 .mini-cart-total table {
+    padding: 5px 10px 3px 0; }
+
+.ie9.oc2 .journal-header-center #cart .heading span {
+  position: relative;
+  right: -35px; }
+.ie9.oc2 .journal-header-center #cart .heading i {
+  position: absolute;
+  right: 0;
+  top: 0; }
+.ie9.oc2 .mini-cart-info table tr td.remove i {
+  position: relative;
+  padding-right: 5px; }
+.ie9.oc2 .mini-cart-info table tr td.remove i:before {
+  position: relative;
+  padding-top: 1px; }

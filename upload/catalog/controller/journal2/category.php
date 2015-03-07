@@ -1,6 +1,12 @@
 <?php
 class ControllerJournal2Category extends Controller {
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function refine_images() {
         if (!in_array($this->journal2->settings->get('refine_category'), array('grid', 'carousel'))) return;
         if (!isset($this->request->get['route']) || $this->request->get['route'] !== 'product/category') return;
@@ -13,6 +19,10 @@ class ControllerJournal2Category extends Controller {
             $category_id = (int)array_pop($parts);
 
             $categories = $this->model_catalog_category->getCategories($category_id);
+
+            $image_width = $this->journal2->settings->get('refine_image_width', 175);
+            $image_height = $this->journal2->settings->get('refine_image_height', 175);
+            $image_type = $this->journal2->settings->get('refine_image_type', 'fit');
 
             $data = array();
             foreach ($categories as $category) {
@@ -30,12 +40,10 @@ class ControllerJournal2Category extends Controller {
                 $data[] = array(
                     'name'  => $category['name'] . $product_total,
                     'href'  => $this->url->link('product/category', 'path=' . $path . '_' . $category['category_id']),
-                    'thumb'	=> $this->model_tool_image->resize($category['image'] ? $category['image'] : 'no_image.jpg', $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'))
+                    'thumb'	=> Journal2Utils::resizeImage($this->model_tool_image, $category, $image_width, $image_height, $image_type)
                 );
             }
-            $this->document->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.css');
-            $this->document->addScript('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.js');
-            //$this->document->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.theme.css');
+
             $this->journal2->settings->set('refine_category_images', $data);
         }
     }

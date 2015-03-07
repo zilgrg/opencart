@@ -3,6 +3,12 @@ class ControllerModuleJournal2FullscreenSlider extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
@@ -26,7 +32,7 @@ class ControllerModuleJournal2FullscreenSlider extends Controller {
         $module_data = $this->model_journal2_module->getModule($setting['module_id']);
         if (!$module_data || !isset($module_data['module_data']) || !$module_data['module_data']) return;
 
-        if (Journal2Utils::getProperty($module_data, 'module_data.disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet())) {
+        if (Journal2Utils::getProperty($module_data, 'module_data.disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet())) {
             return;
         }
 
@@ -42,7 +48,11 @@ class ControllerModuleJournal2FullscreenSlider extends Controller {
             $this->data['transition_speed'] = Journal2Utils::getProperty($module_data, 'module_data.transition_speed', '700');
             $this->data['transition_delay'] = Journal2Utils::getProperty($module_data, 'module_data.transition_delay', '3000');
 
-            $this->data['transparent_overlay'] = Journal2Utils::getProperty($module_data, 'module_data.transparent_overlay', '');
+            if (Journal2Utils::getProperty($module_data, 'module_data.transparent_overlay', '')) {
+                $this->data['transparent_overlay'] = Journal2Utils::resizeImage($this->model_tool_image, Journal2Utils::getProperty($module_data, 'module_data.transparent_overlay', ''));
+            } else {
+                $this->data['transparent_overlay'] = '';
+            }
 
             $this->data['images'] = array();
 
@@ -51,34 +61,39 @@ class ControllerModuleJournal2FullscreenSlider extends Controller {
 
             foreach ($images as $image) {
                 if (!$image['status']) continue;
+                $image = Journal2Utils::getProperty($image, 'image');
+                if (is_array($image)) {
+                    $image = Journal2Utils::getProperty($image, $this->config->get('config_language_id'));
+                }
                 $this->data['images'][] = array(
-                    'image' => 'image/' . $image['image'],
+                    'image' => Journal2Utils::resizeImage($this->model_tool_image, $image),
                     'title' => ''
                 );
             }
 
-            $this->template = 'journal2/template/journal2/module/fullscreen_slider.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/fullscreen_slider.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
         $this->document->addStyle('catalog/view/theme/journal2/lib/supersized/css/supersized.css');
         $this->document->addScript('catalog/view/theme/journal2/lib/supersized/js/jquery.easing.min.js');
         $this->document->addScript('catalog/view/theme/journal2/lib/supersized/js/supersized.3.2.7.min.js');
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
 
+        return $output;
     }
 
 }

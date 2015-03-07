@@ -9,12 +9,16 @@ define(['./module'], function(module){
             },
             restrict: 'E',
             templateUrl: 'view/journal2/tpl/directives/j-opt-textarea.html?ver=' + Journal2Config.version,
-            controller: function($scope) {
-                $scope.ngModel = $scope.ngModel || {};
-                $scope.ngModel.value = $scope.ngModel.value || '';
-                $scope.reset = function() {
-                    $scope.ngModel.value = $scope.ngModel.default;
-                };
+            link: function ($scope) {
+                $scope.$watch('ngModel', function (val) {
+                    if (typeof val === 'string') {
+                        $scope.ngModel = {};
+                        $scope.ngModel.value = {};
+                        $scope.ngModel.value.text = val;
+                    } else {
+                        $scope.ngModel = val;
+                    }
+                });
             }
         };
     }]);

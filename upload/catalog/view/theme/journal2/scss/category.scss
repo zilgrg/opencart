@@ -11,10 +11,8 @@ REFINE CATEGORIES + DESCRIPTION
 
 .category-info {
   margin-bottom: $margin;
-  display: table-cell;
   p{
     margin-bottom: 15px;
-    float: left;
   }
 }
 
@@ -28,6 +26,7 @@ REFINE CATEGORIES + DESCRIPTION
     float: left;
   }
 }
+
 /******************************
  REFINE SUBCATEGORIES
 *******************************/
@@ -67,6 +66,7 @@ h2.refine {
   }
   img{
     width: 100%;
+    height: auto;
     margin-bottom: 5px;
   }
 }
@@ -78,7 +78,9 @@ h2.refine {
 }
 
 .refine-category-name {
-  display: block;
+  display: table;
+  width: 100%;
+  text-align: center;
 }
 
 
@@ -145,23 +147,15 @@ h2.refine {
   .display {
     float: left;
     padding-left: 5px;
-    b{
-      display: none;
-    }
     a{
-      display: inline-block;
       position: relative;
-      z-index: 0;
-      margin-right: 5px;
+    }
+    a + a{
+      left: -14px;
       i{
-        transition:color .2s;
+        margin-right: 0 !important;
+        transition: all 0.2s;
       }
-    }
-    a + i{
-      left: -20px;
-    }
-    i + a{
-      left: -15px;
     }
   }
   .limit{
@@ -183,7 +177,6 @@ PRODUCT GRID
   padding-top: $margin;
 }
 
-
 .backface{
   :before, :after{
     -webkit-backface-visibility:hidden;
@@ -196,8 +189,8 @@ PRODUCT GRID
 }
 
 .box-content{
-  display: table;
-  width: 100%;
+ // display: table;
+ // width: 100%;
 }
 
 .product-wrapper{
@@ -218,9 +211,9 @@ PRODUCT GRID
   position: absolute;
   content: "\e61e";
   font-size: 40px;
-  top: -21px;
+  top: -19px;
   left: 50%;
-  margin-left: -13px;
+  margin-left: -12px;
   color:$f4;
   z-index: 0;
 }
@@ -269,6 +262,7 @@ PRODUCT GRID
   }
   .description {
     display: none;
+    padding: 8px;
   }
   .rating {
     display: block;
@@ -348,6 +342,9 @@ PRODUCT LIST
   background-color: $f4;
   margin-bottom: $margin;
   padding: 10px;
+  .product-details{
+    margin-left: 215px;
+  }
   .left{
     position: relative;
   }
@@ -364,11 +361,11 @@ PRODUCT LIST
         width: 100%;
         float: left;
         border-radius: inherit;
+        height: auto;
       }
     }
   }
   .name{
-    margin-left: 215px;
     a {
       font-size: 14px;
       padding-bottom: 5px;
@@ -462,6 +459,14 @@ PRODUCT LIST
           width: 100%;
         }
       }
+    }
+  }
+}
+
+.oc2{
+  .product-grid-item{
+    .compare{
+      padding-left: 0;
     }
   }
 }
@@ -577,7 +582,12 @@ PRODUCT LIST
   .links {
     float: left;
   }
-  a, b{
+  ul, li{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a, b, li{
     display: inline-block;
     width: 26px;
     height: 26px;
@@ -587,10 +597,10 @@ PRODUCT LIST
     background-color: white;
     font-weight: bold;
     font-family: inherit;
-    margin-right: 3px;
+    margin-right: 4px;
     transition:all .2s;
   }
-  b{
+  b, .active{
     background-color: $red;
     color: white;
   }
@@ -602,5 +612,21 @@ PRODUCT LIST
   }
   .links + .results{
     margin-top: 4px;
+  }
+}
+
+
+/******************************
+OC 2.0
+*******************************/
+
+.oc2{
+  .product-list-item {
+    .description {
+      height: auto !important;
+    }
+    .rating{
+      margin-bottom: 0;
+    }
   }
 }

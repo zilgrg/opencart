@@ -2,6 +2,13 @@
 class ControllerModuleJournal2HeadlineRotator extends Controller {
 
     private static $CACHEABLE = null;
+    private $google_fonts = array();
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -29,7 +36,7 @@ class ControllerModuleJournal2HeadlineRotator extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -76,7 +83,15 @@ class ControllerModuleJournal2HeadlineRotator extends Controller {
             $css[] = 'text-align: ' . Journal2Utils::getProperty($module_data, 'text_align', 'center');
             $this->data['text_align'] = Journal2Utils::getProperty($module_data, 'text_align', 'center');
             if (Journal2Utils::getProperty($module_data, 'text_font.value.font_type') === 'google') {
-                $this->journal2->google_fonts->add(Journal2Utils::getProperty($module_data, 'text_font.value.font_name'), Journal2Utils::getProperty($module_data, 'text_font.value.font_subset'), Journal2Utils::getProperty($module_data, 'text_font.value.font_weight'));
+                $font_name = Journal2Utils::getProperty($module_data, 'text_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'text_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'text_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
                 $weight = filter_var(Journal2Utils::getProperty($module_data, 'text_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
                 $css[] = 'font-weight: ' . ($weight ? $weight : 400);
                 $css[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'text_font.value.font_name') . "'";
@@ -118,6 +133,7 @@ class ControllerModuleJournal2HeadlineRotator extends Controller {
                 $this->data['sections'][] = array(
                     'text'              => Journal2Utils::getProperty($section, 'text.value.' . $this->config->get('config_language_id')),
                     'icon'              => Journal2Utils::getIconOptions2(Journal2Utils::getProperty($section, 'icon')),
+                    'cta_icon_position' => Journal2Utils::getProperty($section, 'cta_icon_position', 'right'),
                     'cta'               => Journal2Utils::getProperty($section, 'cta'),
                     'cta_position'      => Journal2Utils::getProperty($section, 'cta_position'),
                     'cta_text'          => Journal2Utils::getProperty($section, 'cta_text.value.' . $this->config->get('config_language_id')),
@@ -131,25 +147,39 @@ class ControllerModuleJournal2HeadlineRotator extends Controller {
             /* bullets */
             $this->data['bullets'] = Journal2Utils::getProperty($module_data, 'bullets') && count($this->data['sections']) > 1 ? true : false;
 
-            $this->template = 'journal2/template/journal2/module/headline_rotator.tpl';
+            /* pause on hover */
+            $this->data['pause_on_hover'] = Journal2Utils::getProperty($module_data, 'pause_on_hover', '1');
+
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/headline_rotator.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
+                $this->journal2->cache->set($cache_property . '_fonts', json_encode($this->google_fonts));
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            if ($fonts = $this->journal2->cache->get($cache_property . '_fonts')) {
+                $fonts = json_decode($fonts, true);
+                if (is_array($fonts)) {
+                    foreach ($fonts as $font) {
+                        $this->journal2->google_fonts->add($font['name'], $font['subset'], $font['weight']);
+                    }
+                }
+            }
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
         $this->document->addScript('catalog/view/theme/journal2/lib/quovolver/jquery.quovolver.js');
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
 }

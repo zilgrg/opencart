@@ -32,16 +32,100 @@
                 <li>
                     <span class="module-create-title">Page Split Ratio <small>Left Side / Right Side</small></span>
                         <span class="module-create-option">
-                <switch data-ng-model="settings.split_ratio">
-                    <switch-option key="split-70-30">70/30</switch-option>
-                    <switch-option key="split-60-40">60/40</switch-option>
-                    <switch-option key="split-50-50">50/50</switch-option>
-                    <switch-option key="split-40-60">40/60</switch-option>
-                    <switch-option key="split-30-70">30/70</switch-option>
-                </switch>
+                            <switch data-ng-model="settings.split_ratio">
+                                <switch-option key="split-70-30">70/30</switch-option>
+                                <switch-option key="split-60-40">60/40</switch-option>
+                                <switch-option key="split-50-50">50/50</switch-option>
+                                <switch-option key="split-40-60">40/60</switch-option>
+                                <switch-option key="split-30-70">30/70</switch-option>
+                            </switch>
                         </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+
+                <!--Product Page Title-->
+                <accordion-group is-open="false">
+                    <accordion-heading>
+                        <div class="accordion-bar bar-level-1">Page Title</div>
+                    </accordion-heading>
+                    <ul>
+                        <li>
+                            <span class="module-create-title">Page Title Position</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="settings.product_page_title_position">
+                                    <switch-option key="top">Top</switch-option>
+                                    <switch-option key="right">Right</switch-option>
+                                </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                <li>
+                    <span class="module-create-title">Page Title Font</span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_title_font"></j-opt-font>
+                                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Page Title Background</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_title_bg"></j-opt-color>
+                                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Border Settings</span>
+                                    <span class="module-create-option">
+                                        <j-opt-border data-ng-model="settings.product_page_title_border"></j-opt-border>
+                                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Line Height <small>Vertical Centering</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.product_page_title_line_height" class="journal-number-field"></j-opt-text>
+                                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Padding <small>Left - Right</small></span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.product_page_title_padding_left" class="journal-sort"></j-opt-text> -
+                                <j-opt-text data-ng-model="settings.product_page_title_padding_right" class="journal-sort"></j-opt-text>
+                            </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Title Overflow <small>Keep long names on the same line</small></span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="settings.product_page_title_overflow">
+                                    <switch-option key="on">ON</switch-option>
+                                    <switch-option key="off">OFF</switch-option>
+                                </switch>
+                            </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Title Align</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_title_align">
+                                            <switch-option key="left">Left</switch-option>
+                                            <switch-option key="center">Center</switch-option>
+                                            <switch-option key="right">Right</switch-option>
+                                        </switch>
+                                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                </ul>
+                    </accordion-group>
+
             </ul>
         </accordion-group>
 
@@ -87,6 +171,16 @@
                     <span class="module-create-title">Cloud Zoom</span>
                         <span class="module-create-option">
                             <switch data-ng-model="settings.product_page_cloud_zoom">
+                                <switch-option key="1">ON</switch-option>
+                                <switch-option key="0">OFF</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li data-ng-show="settings.product_page_cloud_zoom == '1'">
+                    <span class="module-create-title">Inner Zoom</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.product_page_cloud_zoom_inner">
                                 <switch-option key="1">ON</switch-option>
                                 <switch-option key="0">OFF</switch-option>
                             </switch>
@@ -249,7 +343,6 @@
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
 
-
                 <!--Product Labels-->
 
                 <accordion close-others="false">
@@ -291,17 +384,15 @@
                         </ul>
                     </accordion-group>
                 </accordion>
-
             </ul>
         </accordion-group>
+
         <!--Product Options-->
-        <accordion-group is-open="accordion.accordions[2]">
+        <accordion-group is-open="accordion.accordions[3]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Product Details</div>
             </accordion-heading>
             <ul class="module-create-options">
-
-
 
             <li>
                 <span class="module-create-title">Font</span>
@@ -347,12 +438,12 @@
                 </li>
                 <li>
                     <span class="module-create-title">Item Padding <small>Top - Right - Bottom - Left</small></span>
-                            <span class="module-create-option">
-                                <j-opt-text data-ng-model="settings.product_page_options_padding_top" class="journal-sort"></j-opt-text> -
-                                <j-opt-text data-ng-model="settings.product_page_options_padding_right" class="journal-sort"></j-opt-text> -
-                                <j-opt-text data-ng-model="settings.product_page_options_padding_bottom" class="journal-sort"></j-opt-text> -
-                                <j-opt-text data-ng-model="settings.product_page_options_padding_left" class="journal-sort"></j-opt-text>
-                            </span>
+                                <span class="module-create-option">
+                                    <j-opt-text data-ng-model="settings.product_page_options_padding_top" class="journal-sort"></j-opt-text> -
+                                    <j-opt-text data-ng-model="settings.product_page_options_padding_right" class="journal-sort"></j-opt-text> -
+                                    <j-opt-text data-ng-model="settings.product_page_options_padding_bottom" class="journal-sort"></j-opt-text> -
+                                    <j-opt-text data-ng-model="settings.product_page_options_padding_left" class="journal-sort"></j-opt-text>
+                                </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
                 <li>
@@ -388,6 +479,7 @@
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
+
                             <li>
                                 <span class="module-create-title">In Stock Font</span>
                                     <span class="module-create-option">
@@ -402,7 +494,166 @@
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
+                            <li>
+                                <span class="module-create-title">Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_stats_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Section Padding</span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.product_page_stats_padding" class="journal-number-field"></j-opt-text>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <!-- SOLD COUNT -->
 
+                            <accordion-group is-open="false">
+                                <accordion-heading>
+                                    <div class="accordion-bar bar-level-2">Sold Count</div>
+                                </accordion-heading>
+                                <ul class="module-create-options">
+                                    <li>
+                                        <span class="module-create-title">Status</span>
+                                        <span class="module-create-option">
+                                            <switch data-ng-model="settings.product_page_options_sold">
+                                                <switch-option key="1">ON</switch-option>
+                                                <switch-option key="0">OFF</switch-option>
+                                            </switch>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                    <li data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Text</span>
+                                        <span class="module-create-option">
+                                            <j-opt-text-lang data-ng-model="settings.product_page_options_sold_text"></j-opt-text-lang>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                    <li data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Text Font</span>
+                                        <span class="module-create-option">
+                                            <j-opt-font data-ng-model="settings.product_page_options_sold_text_font"></j-opt-font>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+                                    <li data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Count Font</span>
+                                        <span class="module-create-option">
+                                            <j-opt-font data-ng-model="settings.product_page_options_sold_count_font"></j-opt-font>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                    <!--<li data-ng-show="settings.product_page_options_sold == '1'">-->
+                                        <!--<span class="module-create-title">Count Position <small>Before or After Text</small></span>-->
+                                        <!--<span class="module-create-option">-->
+                                            <!--<switch data-ng-model="settings.product_page_options_sold_count_position">-->
+                                                <!--<switch-option key="none">Before &nbsp;&nbsp;</switch-option>-->
+                                                <!--<switch-option key="inline-block">After</switch-option>-->
+                                            <!--</switch>-->
+                                        <!--</span>-->
+                                        <!--<a href="#" target="_blank" class="journal-tip"></a>-->
+                                    <!--</li>-->
+                                    <li  data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Backgrund Color</span>
+                                            <span class="module-create-option">
+                                                <j-opt-color data-ng-model="settings.product_page_options_sold_count_bg"></j-opt-color>
+                                            </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                    <li data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Padding <small>Top - Right - Bottom - Left</small></span>
+                                        <span class="module-create-option">
+                                            <j-opt-text data-ng-model="settings.product_page_options_sold_count_padding_top" class="journal-sort"></j-opt-text> -
+                                            <j-opt-text data-ng-model="settings.product_page_options_sold_count_padding_right" class="journal-sort"></j-opt-text> -
+                                            <j-opt-text data-ng-model="settings.product_page_options_sold_count_padding_bottom" class="journal-sort"></j-opt-text> -
+                                            <j-opt-text data-ng-model="settings.product_page_options_sold_count_padding_left" class="journal-sort"></j-opt-text>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                    <li data-ng-show="settings.product_page_options_sold == '1'">
+                                        <span class="module-create-title">Max Width</span>
+                                        <span class="module-create-option">
+                                            <j-opt-text data-ng-model="settings.product_page_options_sold_count_max_width" class="journal-number-field"></j-opt-text>
+                                        </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+
+                                </ul>
+                            </accordion-group>
+
+                            <!--Brand Image-->
+                            <accordion-group is-open="false">
+                                <accordion-heading>
+                                    <div class="accordion-bar bar-level-2">Brand Image</div>
+                                </accordion-heading>
+                                <ul class="module-create-options">
+                                    <li>
+                                        <span class="module-create-title">Show Brand Image</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.manufacturer_image">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"> </a>
+                                    </li>
+                                    <li data-ng-show="settings.manufacturer_image == '1'">
+                                        <span class="module-create-title">Image Dimensions</span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.manufacturer_image_width" class="journal-number-field"></j-opt-text> x
+                        <j-opt-text data-ng-model="settings.manufacturer_image_height" class="journal-number-field"></j-opt-text>
+                    </span>
+                                    </li>
+                                    <li data-ng-show="settings.manufacturer_image == '1'">
+                                        <span class="module-create-title">Additional Text</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.manufacturer_image_additional_text">
+                            <switch-option key="none">None</switch-option>
+                            <switch-option key="brand">Brand Name</switch-option>
+                            <switch-option key="custom">Custom</switch-option>
+                        </switch>
+                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"> </a>
+                                    </li>
+                                    <li data-ng-show="settings.manufacturer_image == '1' && settings.manufacturer_image_additional_text == 'custom'">
+                                        <span class="module-create-title">Custom Text</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="settings.manufacturer_image_custom_text"></j-opt-text-lang>
+                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"> </a>
+                                    </li>
+
+                                    <li data-ng-show="settings.manufacturer_image == '1'">
+                                        <span class="module-create-title">Text Link Font</span>
+                                        <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_options_brand_font"></j-opt-font>
+                                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+                                    <li data-ng-show="settings.manufacturer_image == '1'">
+                                        <span class="module-create-title">Text Link Hover</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_options_brand_font_hover"></j-opt-color>
+                                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+                                    <li data-ng-show="settings.manufacturer_image == '1'">
+                                        <span class="module-create-title">Brand Image Border Settings</span>
+                                    <span class="module-create-option">
+                                        <j-opt-border data-ng-model="settings.product_page_options_brand_image_border"></j-opt-border>
+                                    </span>
+                                        <a href="#" target="_blank" class="journal-tip"></a>
+                                    </li>
+                                </ul>
+                            </accordion-group>
 
                         </ul>
                     </accordion-group>
@@ -465,6 +716,20 @@
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
+                            <li>
+                                <span class="module-create-title">Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_price_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Section Padding</span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.product_page_price_padding" class="journal-number-field"></j-opt-text>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
 
                         </ul>
                     </accordion-group>
@@ -478,9 +743,36 @@
                         </accordion-heading>
                         <ul class="module-create-options">
                             <li>
+                                <span class="module-create-title">Auto Update Price</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_auto_update_price">
+                                            <switch-option key="1">ON</switch-option>
+                                            <switch-option key="0">OFF</switch-option>
+                                        </switch>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Title Status <small>Available Options</small></span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_title_status">
+                                            <switch-option key="1">ON</switch-option>
+                                            <switch-option key="0">OFF</switch-option>
+                                        </switch>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li data-ng-show="settings.product_page_title_status == '1'">
                                 <span class="module-create-title">Title Font</span>
                                     <span class="module-create-option">
                                         <j-opt-font data-ng-model="settings.product_page_options_title"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li data-ng-show="settings.product_page_title_status == '1'">
+                                <span class="module-create-title">Title Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_options_title_bg"></j-opt-color>
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
@@ -505,13 +797,22 @@
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
+
                             <li>
-                                <span class="module-create-title">Title Background Color</span>
+                                <span class="module-create-title">Background Color</span>
                                     <span class="module-create-option">
-                                        <j-opt-color data-ng-model="settings.product_page_options_title_bg"></j-opt-color>
+                                        <j-opt-color data-ng-model="settings.product_page_option_bg"></j-opt-color>
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>
+                            <li>
+                                <span class="module-create-title">Section Padding</span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.product_page_option_padding" class="journal-number-field"></j-opt-text>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
                             <!--<li>-->
                                 <!--<span class="module-create-title">Options Divider Color</span>-->
                                     <!--<span class="module-create-option">-->
@@ -520,64 +821,126 @@
                                 <!--<a href="#" target="_blank" class="journal-tip"></a>-->
                             <!--</li>-->
 
-                            <li>
-                                <span class="module-create-title">Push Select</span>
-                                    <span class="module-create-option">
-                                        <switch data-ng-model="settings.product_page_options_push_select">
-                                            <switch-option key="1">ON</switch-option>
-                                            <switch-option key="0">OFF</switch-option>
-                                        </switch>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Push Item Radius</span>
-                                    <span class="module-create-option">
-                                        <j-opt-border data-ng-model="settings.product_page_options_push_border" editor="hide-style"></j-opt-border>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Push Select Font</span>
-                                    <span class="module-create-option">
-                                        <j-opt-font data-ng-model="settings.product_page_options_push_select_font"></j-opt-font>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
+                            <accordion>
+                                <accordion-group is-open="false">
+                                    <accordion-heading>
+                                        <div class="accordion-bar bar-level-2">Push Options</div>
+                                    </accordion-heading>
+                                    <ul class="module-create-options">
+                                        <li>
+                                            <span class="module-create-title">Push Select</span>
+                                            <span class="module-create-option">
+                                                <switch data-ng-model="settings.product_page_options_push_select">
+                                                    <switch-option key="1">ON</switch-option>
+                                                    <switch-option key="0">OFF</switch-option>
+                                                </switch>
+                                            </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li>
+                                            <span class="module-create-title">Push Image</span>
+                                            <span class="module-create-option">
+                                                <switch data-ng-model="settings.product_page_options_push_image">
+                                                    <switch-option key="1">ON</switch-option>
+                                                    <switch-option key="0">OFF</switch-option>
+                                                </switch>
+                                            </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li>
+                                            <span class="module-create-title">Push Checkbox</span>
+                                            <span class="module-create-option">
+                                                <switch data-ng-model="settings.product_page_options_push_checkbox">
+                                                    <switch-option key="1">ON</switch-option>
+                                                    <switch-option key="0">OFF</switch-option>
+                                                </switch>
+                                            </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li>
+                                            <span class="module-create-title">Push Radio</span>
+                                            <span class="module-create-option">
+                                                <switch data-ng-model="settings.product_page_options_push_radio">
+                                                    <switch-option key="1">ON</switch-option>
+                                                    <switch-option key="0">OFF</switch-option>
+                                                </switch>
+                                            </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Item Radius</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-border data-ng-model="settings.product_page_options_push_border" editor="hide-style"></j-opt-border>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Select Font</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-font data-ng-model="settings.product_page_options_push_select_font"></j-opt-font>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
 
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Push Background Color</span>
-                                    <span class="module-create-option">
-                                        <j-opt-color data-ng-model="settings.product_page_options_push_select_bg"></j-opt-color>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Background Color</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-color data-ng-model="settings.product_page_options_push_select_bg"></j-opt-color>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
 
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Push Active Font Color</span>
-                                    <span class="module-create-option">
-                                        <j-opt-color data-ng-model="settings.product_page_options_push_select_font_active"></j-opt-color>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Push Active Background</span>
-                                    <span class="module-create-option">
-                                        <j-opt-color data-ng-model="settings.product_page_options_push_select_bg_active"></j-opt-color>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Active Font Color</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-color data-ng-model="settings.product_page_options_push_select_font_active"></j-opt-color>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Active Background</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-color data-ng-model="settings.product_page_options_push_select_bg_active"></j-opt-color>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
 
-                            <li data-ng-show="settings.product_page_options_push_select == '1'">
-                                <span class="module-create-title">Inner Shadow <small>Push Effect</small></span>
-                                    <span class="module-create-option">
-                                        <switch data-ng-model="settings.product_page_options_push_shadow">
-                                            <switch-option key="inset 0 0 8px rgba(0, 0, 0, 0.7)">ON</switch-option>
-                                            <switch-option key="none">OFF</switch-option>
-                                        </switch>
-                                    </span>
-                                <a href="#" target="_blank" class="journal-tip"></a>
-                            </li>
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Inner Shadow <small>Push Effect</small></span>
+                                                <span class="module-create-option">
+                                                    <switch data-ng-model="settings.product_page_options_push_shadow">
+                                                        <switch-option key="inset 0 0 8px rgba(0, 0, 0, 0.7)">ON</switch-option>
+                                                        <switch-option key="none">OFF</switch-option>
+                                                    </switch>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+
+                                        <li>
+                                            <span class="module-create-title">Push Image Border Settings</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-border data-ng-model="settings.product_page_push_image_border"></j-opt-border>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+
+                                        <li data-ng-show="settings.product_page_options_push_select == '1' || settings.product_page_options_push_image == '1' || settings.product_page_options_push_checkbox == '1' || settings.product_page_options_push_radio == '1'">
+                                            <span class="module-create-title">Push Image Border Hover</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-color data-ng-model="settings.product_page_options_push_image_border_hover"></j-opt-color>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        <li>
+                                            <span class="module-create-title">Push Image Dimensions</span>
+                                                <span class="module-create-option">
+                                                    <j-opt-text data-ng-model="settings.product_page_options_push_image_width" class="journal-number-field"></j-opt-text> x <j-opt-text data-ng-model="settings.product_page_options_push_image_height" class="journal-number-field"></j-opt-text>
+                                                </span>
+                                            <a href="#" target="_blank" class="journal-tip"></a>
+                                        </li>
+                                        </ul>
+                                    </accordion-group>
+                                </accordion>
                         </ul>
                     </accordion-group>
                 </accordion>
@@ -589,6 +952,33 @@
                             <div class="accordion-bar bar-level-1">Quantity Buttons</div>
                         </accordion-heading>
                         <ul class="module-create-options">
+                            <li>
+                                <span class="module-create-title">Status</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_qty_status">
+                                            <switch-option key="on">ON</switch-option>
+                                            <switch-option key="off">OFF</switch-option>
+                                        </switch>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"> </a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Quantity Number Font</span>
+                                        <span class="module-create-option">
+                                            <j-opt-font data-ng-model="settings.product_page_qty_font"></j-opt-font>
+                                        </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Input Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_qty_input_color"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
                             <li>
                                 <span class="module-create-title">Buttons Color</span>
                                     <span class="module-create-option">
@@ -724,6 +1114,21 @@
                                 <a href="#" target="_blank" class="journal-tip"> </a>
                             </li>
 
+                            <li>
+                                <span class="module-create-title">Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_cart_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Section Padding</span>
+                                    <span class="module-create-option">
+                                        <j-opt-text data-ng-model="settings.product_page_cart_padding" class="journal-number-field"></j-opt-text>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
                         </ul>
                     </accordion-group>
                 </accordion>
@@ -782,7 +1187,7 @@
             </ul>
         </accordion-group>
         <!--Share Plugin-->
-        <accordion-group is-open="accordion.accordions[3]">
+        <accordion-group is-open="accordion.accordions[4]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Share Plugin</div>
             </accordion-heading>
@@ -862,13 +1267,25 @@
             </ul>
         </accordion-group>
         <!--Product Tabs-->
-        <accordion-group is-open="accordion.accordions[4]">
+        <accordion-group is-open="accordion.accordions[5]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Product Tabs</div>
             </accordion-heading>
             <ul class="module-create-options">
 
                 <!--Tabs-->
+
+                <li>
+                    <span class="module-create-title">Tabs Position <small>Opencart 2.0 only</small></span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.product_page_tabs_position">
+                                <switch-option key="on">Image</switch-option>
+                                <switch-option key="off">Bottom</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
                 <li>
                     <span class="module-create-title">Tabs Font</span>
                         <span class="module-create-option">
@@ -877,7 +1294,7 @@
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
                 <li>
-                    <span class="module-create-title">Tabs Font Hover</span>
+                    <span class="module-create-title">Tabs Font Hover/Active</span>
                         <span class="module-create-option">
                             <j-opt-color data-ng-model="settings.product_page_tabs_font_hover"></j-opt-color>
                         </span>
@@ -891,7 +1308,7 @@
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
                 <li>
-                    <span class="module-create-title">Tabs Background Hover</span>
+                    <span class="module-create-title">Tabs Background Hover/Active</span>
                         <span class="module-create-option">
                             <j-opt-color data-ng-model="settings.product_page_tabs_bg_hover"></j-opt-color>
                         </span>
@@ -977,6 +1394,161 @@
                                 <a href="#" target="_blank" class="journal-tip"> </a>
                             </li>
 
+                        </ul>
+                    </accordion-group>
+                </accordion>
+
+                <!--Specification-->
+
+                <accordion close-others="false">
+                    <accordion-group is-open="false">
+                        <accordion-heading>
+                            <div class="accordion-bar bar-level-1">Tabs Content<span>&nbsp; Specification</span></div>
+                        </accordion-heading>
+                        <ul class="module-create-options">
+
+                            <li>
+                                <span class="module-create-title">Title Font <small>Attribtue Group</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_spec_title_font"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Specification Title Font <small>Attribtue</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_spec_font"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Specification Value Font<small>Attribtue Text</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_spec_value_font"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Specification Title Align</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_spec_title_align">
+                                            <switch-option key="left">Left</switch-option>
+                                            <switch-option key="center">Center</switch-option>
+                                            <switch-option key="right">Right</switch-option>
+                                        </switch>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Specification Value Align</span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.product_page_spec_align">
+                                            <switch-option key="left">Left</switch-option>
+                                            <switch-option key="center">Center</switch-option>
+                                            <switch-option key="right">Right</switch-option>
+                                        </switch>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Title Background</span>
+                        <span class="module-create-option">
+                            <j-opt-color data-ng-model="settings.product_page_spec_title_bg"></j-opt-color>
+                        </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Tab Content Background</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_spec_content_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Table Border Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_spec_border_color"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                        </ul>
+                    </accordion-group>
+                </accordion>
+
+                <!--Review-->
+
+                <accordion close-others="false">
+                    <accordion-group is-open="false">
+                        <accordion-heading>
+                            <div class="accordion-bar bar-level-1">Tabs Content<span>&nbsp; Review</span></div>
+                        </accordion-heading>
+                        <ul class="module-create-options">
+
+                            <li>
+                                <span class="module-create-title">Text Font</span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_review_font"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Author Font</span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_review_font_author"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Date Font</span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_review_font_date"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Review Border Color <small>Opencart 1.5.x</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_review_border"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Heading Font <small>Write a review</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-font data-ng-model="settings.product_page_review_font_heading"></j-opt-font>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Tab Content Background</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.product_page_review_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Note Text Color <small>Opencart 2.0</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.review_tex_danger_color"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Note Text Background <small>Opencart 2.0</small></span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.review_text_danger_color_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
                         </ul>
                     </accordion-group>
                 </accordion>
@@ -1107,7 +1679,7 @@
         </accordion-group>
 
         <!--Product Tags-->
-        <accordion-group is-open="accordion.accordions[5]">
+        <accordion-group is-open="accordion.accordions[6]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Product Tags</div>
             </accordion-heading>
@@ -1179,7 +1751,7 @@
         </accordion-group>
 
         <!--Related Products-->
-        <accordion-group is-open="accordion.accordions[6]">
+        <accordion-group is-open="accordion.accordions[7]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Related Products</div>
             </accordion-heading>

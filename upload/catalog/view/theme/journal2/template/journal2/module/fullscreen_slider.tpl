@@ -1,7 +1,8 @@
 <div class="journal-fullscreen-slider">
     <?php if ($transparent_overlay): ?>
-    <div class="transparent-overlay" style="background-image: url('image/<?php echo $transparent_overlay; ?>');"></div>
+    <div class="transparent-overlay" style="background-image: url('<?php echo $transparent_overlay; ?>');"></div>
     <?php endif; ?>
+    <?php if (is_array($images) && count($images) > 0): ?>
     <script>
         jQuery(function($){
             var opts = {
@@ -13,4 +14,5 @@
             $.supersized(opts);
         });
     </script>
+    <?php endif; ?>
 </div>

@@ -87,30 +87,6 @@
                 <div class="accordion-bar bar-level-0">Columns</div>
             </accordion-heading>
             <ul class="module-create-options">
-
-                <li>
-                    <span class="module-create-title">Links Font</span>
-                    <span class="module-create-option">
-                        <j-opt-font data-ng-model="settings.footer_links"></j-opt-font>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-
-                <li>
-                    <span class="module-create-title">Links Font Hover</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.footer_links_hover"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">HTML Font Color</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.html_font_color"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                
                 <li>
                     <span class="module-create-title">Titles Font</span>
                     <span class="module-create-option">
@@ -150,7 +126,256 @@
                         </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
-                </ul>
+
+                <li>
+                    <span class="module-create-title">Text Links Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_links"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Links Font Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.footer_links_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+
+                <accordion-group is-open="true">
+                    <accordion-heading>
+                        <div class="accordion-bar bar-level-1">HTML Column</div>
+                    </accordion-heading>
+                    <ul class="module-create-options">
+                        <li>
+                            <span class="module-create-title">Headings Font <small>H1 - H3 tags</small></span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_html_heading_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Block Font <small>p tag</small></span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_html_p_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Headings Spacing <small>Padding Bottom</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.footer_html_heading_padding" class="journal-number-field"></j-opt-text>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Paragraph  Spacing <small>Padding Bottom</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.footer_html_p_padding" class="journal-number-field"></j-opt-text>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <!--<li>-->
+                            <!--<span class="module-create-title">HTML Font Color</span>-->
+                    <!--<span class="module-create-option">-->
+                        <!--<j-opt-color data-ng-model="settings.html_font_color"></j-opt-color>-->
+                    <!--</span>-->
+                            <!--<a href="#" target="_blank" class="journal-tip"> </a>-->
+                        <!--</li>-->
+                        <li>
+                            <span class="module-create-title">HTML Text Line Height <small>In pixels</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.html_line_height" class="journal-number-field"></j-opt-text>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        </ul>
+                    </accordion-group>
+
+
+                <accordion-group is-open="true">
+                    <accordion-heading>
+                        <div class="accordion-bar bar-level-1">Product Column</div>
+                    </accordion-heading>
+                    <ul class="module-create-options">
+                        <li>
+                            <span class="module-create-title">Image Dimensions</span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.footer_product_image_width" class="journal-number-field"></j-opt-text> x
+                                <j-opt-text data-ng-model="settings.footer_product_image_height" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Item Padding <small>Spacing between products</small></span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.footer_product_padding" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Product Name Overflow </span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.footer_product_name_overflow">
+                            <switch-option key="nowrap">ON</switch-option>
+                            <switch-option key="normal">OFF</switch-option>
+                        </switch>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Name Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_product_name_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Name Font Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.footer_product_name_font_hover"></j-opt-color>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Price Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_product_price_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Old Price Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_product_old_price_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Divider Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.footer_product_divider"></j-opt-color>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Divider Type</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="settings.footer_product_divider_type">
+                                    <switch-option key="solid">Solid</switch-option>
+                                    <switch-option key="dashed">Dashed</switch-option>
+                                    <switch-option key="dotted">Dotted</switch-option>
+                                </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                    </ul>
+                </accordion-group>
+
+                <!--Blog Column-->
+
+                <accordion-group is-open="true">
+                    <accordion-heading>
+                        <div class="accordion-bar bar-level-1">Blog Post Column</div>
+                    </accordion-heading>
+                    <ul class="module-create-options">
+                        <li>
+                            <span class="module-create-title">Image Dimensions</span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.footer_post_image_width" class="journal-number-field"></j-opt-text> x
+                                <j-opt-text data-ng-model="settings.footer_post_image_height" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Item Padding <small>Spacing between posts</small></span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.footer_post_padding" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Post Title Overflow </span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.footer_post_name_overflow">
+                            <switch-option key="nowrap">ON</switch-option>
+                            <switch-option key="normal">OFF</switch-option>
+                        </switch>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Post Title Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.footer_post_name_font"></j-opt-font>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Post Title Font Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.footer_post_name_font_hover"></j-opt-color>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Date Font</span>
+                            <span class="module-create-option">
+                                <j-opt-font data-ng-model="settings.footer_post_price_date"></j-opt-font>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Date Icon Color</span>
+                                <span class="module-create-option">
+                                    <j-opt-color data-ng-model="settings.footer_post_date_icon_color"></j-opt-color>
+                                </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Comments Icon Color</span>
+                                <span class="module-create-option">
+                                    <j-opt-color data-ng-model="settings.footer_post_comment_icon_color"></j-opt-color>
+                                </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+
+                        <li>
+                            <span class="module-create-title">Divider Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.footer_post_divider"></j-opt-color>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Divider Type</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.footer_post_divider_type">
+                            <switch-option key="solid">Solid</switch-option>
+                            <switch-option key="dashed">Dashed</switch-option>
+                            <switch-option key="dotted">Dotted</switch-option>
+                        </switch>
+                    </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                    </ul>
+                </accordion-group>
+                    </ul>
             </accordion-group>
         <accordion-group is-open="accordion.accordions[2]">
             <accordion-heading>
@@ -176,6 +401,13 @@
                     <span class="module-create-title">Icon Background Hover</span>
                     <span class="module-create-option">
                         <j-opt-color data-ng-model="settings.contacts_icon_bg_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Icon Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.contacts_icon_hover"></j-opt-color>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
@@ -293,7 +525,6 @@
                             <switch-option key="none">OFF</switch-option>
                             <switch-option key="0 0 7px rgba(0,0,0,.4)">Normal</switch-option>
                             <switch-option key="0 6px 20px rgba(0,0,0,.2)">Soft</switch-option>
-
                         </switch>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>

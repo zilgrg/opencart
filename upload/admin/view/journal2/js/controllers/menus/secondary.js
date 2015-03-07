@@ -7,7 +7,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     icon: {
                     },
                     hide_on_mobile: '0',
-                    mobile_view: 'both',
+                    mobile_view: 'icon',
                     menu: {
                         menu_type: 'opencart',
                         menu_item: {
@@ -83,7 +83,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.setSetting('secondary_menu', $scope.store_id, { items: $scope.items, close_others: $scope.close_others }).then(function (response) {
                 Spinner.hide($src);

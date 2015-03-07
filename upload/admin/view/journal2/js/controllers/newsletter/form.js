@@ -14,12 +14,19 @@ define(['./../module', 'underscore'], function (module, _) {
             module_text: {},
             module_text_font: '',
             module_background: {},
+            module_border: {},
             module_padding: '',
-            module_split: '100:100',
+            text_position: 'left',
             input_height: '',
             input_placeholder: {},
+            input_bg_color: {},
+            input_font: '',
+            input_border: {},
             button_text: {},
+            button_font: '',
+            button_background: {},
             button_icon: {},
+            button_border: {},
             button_offset_top: '',
             button_offset_left: '',
             background: {},
@@ -46,7 +53,7 @@ define(['./../module', 'underscore'], function (module, _) {
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -67,7 +74,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

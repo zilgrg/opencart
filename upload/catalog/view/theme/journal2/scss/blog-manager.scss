@@ -32,7 +32,6 @@ BLOG MANAGER for JOURNAL
   .articleHeader {
     margin: 0;
     h1{
-      color: white;
       padding-left: 10px;
       line-height: 40px;
       max-height: 40px;
@@ -282,4 +281,27 @@ BLOG MANAGER for JOURNAL
 #column-right .recentComments li > a + i + a,
 #column-left .recentComments li > a + i + a{
   padding: 0;
+}
+
+#column-right .recentArticles li,
+#column-right .popularArticles li,
+#column-left .recentArticles li,
+#column-left .popularArticles li,
+#column-right .recentComments li,
+#column-left .recentComments li{
+  background-color: transparent;
+}
+
+.blogCategories li{
+  background-image: none;
+}
+
+#comments .pagination{
+  font-size: inherit;
+  padding: 10px;
+}
+
+#blogArticle .articleHeader h1{
+  border: inherit;
+  padding: inherit;
 }

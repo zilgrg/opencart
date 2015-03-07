@@ -7,6 +7,15 @@ class ControllerJournal2Snippets extends Controller {
     private $s_image = null;
     private $s_rating = null;
 
+    const IMG_WIDTH = 200;
+    const IMG_HEIGHT = 200;
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function index() {
         $this->load->model('tool/image');
 
@@ -17,23 +26,20 @@ class ControllerJournal2Snippets extends Controller {
         }
         /* end of blog manager compatibility */
 
+        $this->s_url = Journal2Cache::getCurrentUrl();
+
         switch ($this->journal2->page->getType()) {
             case 'product':
                 $this->load->model('catalog/product');
                 $product_info = $this->model_catalog_product->getProduct($this->journal2->page->getId());
                 if ($product_info) {
                     $this->s_title = $product_info['name'];
-                    $this->s_description = trim(utf8_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, 150));
-                    $url = '';
-                    if (isset($this->request->get['path'])) {
-                        $url .= '&path=' . $this->request->get['path'];
-                    }
-                    $url .= '&product_id=' . $product_info['product_id'];
-                    $this->s_url = $this->url->link('product/product', $url);
-                    $this->s_image = $this->model_tool_image->resize($product_info['image'], 200, 200);
+                    $this->s_description = trim(utf8_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, 300));
+                    $this->s_image = Journal2Utils::staticAsset('image/' . $product_info['image']);
                     $this->s_rating = (int)$product_info['rating'];
 
                     $this->journal2->settings->set('product_google_snippet', 'itemscope itemtype="http://schema.org/Product"');
+                    $this->journal2->settings->set('product_price_currency', $this->currency->getCode());
                     $this->journal2->settings->set('product_num_reviews', $product_info['reviews']);
                     $this->journal2->settings->set('product_in_stock', $product_info['quantity'] > 0 ? 'yes' : 'no');
                     /* review ratings */
@@ -92,9 +98,8 @@ class ControllerJournal2Snippets extends Controller {
                 $category_info = $this->model_catalog_category->getCategory($category_id);
                 if ($category_info) {
                     $this->s_title = $category_info['name'];
-                    $this->s_description = trim(utf8_substr(strip_tags(html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8')), 0, 150));
-                    $this->s_url = $this->url->link('product/category', '&path=' . $this->journal2->page->getId());
-                    $this->s_image = $this->model_tool_image->resize($category_info['image'], 200, 200);
+                    $this->s_description = trim(utf8_substr(strip_tags(html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8')), 0, 300));
+                    $this->s_image = Journal2Utils::staticAsset('image/' . $category_info['image']);
                 }
                 break;
             default:
@@ -108,17 +113,14 @@ class ControllerJournal2Snippets extends Controller {
                 } else {
                     $this->s_description = $meta_description  . '...';
                 }
-                $this->s_url = $this->config->get('config_url');
-                $this->s_image = $this->model_tool_image->resize($this->config->get('config_logo'), 200, 200);
+                $this->s_image = Journal2Utils::resizeImage($this->model_tool_image, $this->config->get('config_logo'), self::IMG_WIDTH, self::IMG_HEIGHT, 'fit');
                 break;
         }
 
-        $this->journal2->settings->set('fb_meta', array(
-            'og:title'          => $this->s_title,
-            'og:description'    => $this->s_description,
-            'og:url'            => $this->s_url,
-            'og:image'          => $this->s_image
-        ));
+        $this->journal2->settings->set('fb_meta_title'      , $this->s_title);
+        $this->journal2->settings->set('fb_meta_description', $this->s_description);
+        $this->journal2->settings->set('fb_meta_url'        , $this->s_url);
+        $this->journal2->settings->set('fb_meta_image'      , $this->s_image);
     }
 
 }

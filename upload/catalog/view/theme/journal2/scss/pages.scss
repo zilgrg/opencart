@@ -26,6 +26,26 @@
   }
   .quantity{
     min-width: 110px;
+    text-align: center;
+    .input-group{
+      display: inline-block;
+      input{
+        margin-right: 5px;
+        border-radius: 4px;
+      }
+      .btn-primary{
+        background-color: $blue;
+        &:hover{
+          background-color: darken($blue, 10%);
+        }
+      }
+      .btn-danger{
+        background-color: $red;
+        &:hover{
+          background-color: darken($red, 10%);
+        }
+      }
+    }
   }
   .price, .total{
     font-weight: bold;
@@ -59,14 +79,12 @@
   }
 }
 
-
-
 #content.sc-page{
+  .content p, .action-area p{
+    padding: 10px;
+    font-size: 13px;
+  }
   .content{
-    p{
-      padding: 10px;
-      font-size: 13px;
-    }
     table.radio {
       .highlight td {
         border-bottom: 1px solid $e4;
@@ -75,6 +93,10 @@
         border-bottom: none;
       }
     }
+  }
+  a + .text-danger{
+    color: $red;
+    background-color: transparent;
   }
 }
 
@@ -149,7 +171,63 @@ label {
   }
 }
 
+.oc2{
+  .action-area{
+    .panel-group{
+      margin-bottom: 0;
+    }
+    .panel-body{
+      label{
+        display: inline-block;
+        margin-bottom: 5px;
+      }
+      .input-group{
+        input[type="text"]{
+          min-width: 300px;
+        }
+        .button{
+          margin-left: 5px;
+        }
+      }
+    }
+    .form-group{
+      clear: both;
+      margin-top: 10px;
+      label{
+        min-width: 150px;
+        float: left;
+        margin-bottom: 0;
+      }
+      input[type="text"]{
+        max-width: 160px;
+      }
+    }
+  }
+  .checkout #accordion{
+    overflow: hidden;
+  }
+  .checkout-content{
+    background-color: transparent;
+    padding: 0;
+    display: block;
+    .right{
+      .form-group{
+        margin-bottom: 8px;
+      }
+    }
+    p, .radio{
+      padding: 10px 0 0 0;
+    }
+  }
+}
 
+.order-list{
+  .list{
+    td{
+      text-align: center;
+    }
+  }
+}
 /******************************
  CHECKOUT PAGE
 *******************************/
@@ -187,11 +265,12 @@ label {
   display: none;
   position: relative;
   &:after{
-    content: ".";
-    display: block;
-    visibility: hidden;
+    content: "";
+    display: table;
     clear: both;
-    height: 0;
+  }
+  table.radio td:first-child{
+    width: 25px;
   }
   p{
     padding: 10px 0;
@@ -269,6 +348,22 @@ label {
 .newsletter-page{
   table.form{
     padding-top: 0;
+  }
+}
+
+.oc2{
+  .oc-newsletter{
+    .form-horizontal .form-group > label{
+      width: auto;
+      padding-top: 10px;
+    }
+    .form-horizontal .form-group .radio-inline{
+      width: auto;
+    }
+    .form-horizontal .form-group label + div{
+      float: none;
+      padding-top: 0;
+    }
   }
 }
 
@@ -446,6 +541,53 @@ BRANDS
   margin-bottom: 10px;
 }
 
+.oc2{
+  .contact-page{
+    h2{
+      margin-bottom: 15px;
+    }
+    .fa{
+      top: -1px;
+      font-size: 16px;
+    }
+    .col{
+      float: left;
+      width: 25%;
+      padding-left: 15px;
+      strong{
+        display:inline-block;
+        margin-bottom: 5px;
+      }
+      &:first-of-type{
+        padding-left: 0;
+      }
+    }
+    .col-sm-10{
+      width: 75%;
+      margin-bottom: 5px;
+    }
+    input[name='captcha']{
+      margin: 0;
+    }
+    .panel-body{
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+  }
+  .img-thumbnail{
+    max-width: 100%;
+    height: auto;
+  }
+  address{
+    margin-bottom: 20px;
+  }
+}
+
+.route-account-return-add fieldset .radio label,
+.route-account-return-add fieldset .radio-inline{
+  width: 100% !important;
+}
+
 
 /******************************
  SEARCH PAGE
@@ -457,11 +599,31 @@ BRANDS
   }
   .content{
     margin: 15px 0;
+    padding-bottom: 5px;
+    overflow: hidden;
     input[type="text"]{
       width: 265px;
     }
     select{
       margin: 10px;
     }
+    > div{
+      float: left;
+      position: relative;
+    }
+    .s-check{
+      top: 7px;
+    }
+  }
+}
+
+
+/******************************
+ COMPARE
+*******************************/
+
+.compare-info{
+  img{
+    max-width: 100% !important;
   }
 }

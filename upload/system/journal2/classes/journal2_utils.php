@@ -128,7 +128,7 @@ class Journal2Utils {
         );
     }
 
-    public static function getIconOptions($item) {
+    public static function getIconOptions($item, $text = '') {
         $icon_left = null;
         $icon_right = null;
         /* item icon */
@@ -162,9 +162,9 @@ class Journal2Utils {
                     $icon_options[] = 'left: ' . Journal2Utils::getProperty($item, 'icon.options.left') . 'px';
                 }
                 if (Journal2Utils::getProperty($item, 'icon_position', 'left') === 'left') {
-                    $icon_left = '<i><img style="margin-right: 5px; ' . implode('; ', $icon_options) . '" src="image/' . Journal2Utils::getProperty($item, 'icon.image') . '" alt="" title="" /></i>';
+                    $icon_left = '<i><img style="margin-right: 5px; ' . implode('; ', $icon_options) . '" src="image/' . Journal2Utils::getProperty($item, 'icon.image') . '" alt="' . $text . '" title="' . $text . '" /></i>';
                 } else {
-                    $icon_right = '<i><img style="margin-left: 5px; ' . implode('; ', $icon_options) . '"  src="image/' . Journal2Utils::getProperty($item, 'icon.image') . '" alt="" title="" /></i>';
+                    $icon_right = '<i><img style="margin-left: 5px; ' . implode('; ', $icon_options) . '"  src="image/' . Journal2Utils::getProperty($item, 'icon.image') . '" alt="' . $text . '" title="' . $text . '" /></i>';
                 }
                 break;
         }
@@ -309,12 +309,32 @@ class Journal2Utils {
         return $res;
     }
 
-    public static function optimizeImage($image) {
-        global $registry;
-        $registry->get('load')->model('tool/image');
+    public static function resizeImage($tool, $image, $width = '', $height = '', $resize_type = '') {
+        if (is_array($image)) {
+            $image = self::getProperty($image, 'image', 'no_image.jpg');
+        }
+        if (!$image || !file_exists(DIR_IMAGE . $image) || !is_file(DIR_IMAGE . $image)) {
+            $image = Front::$IS_OC2 ? 'no_image.png' : 'no_image.jpg';
+        }
         list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . $image);
-        return $registry->get('model_tool_image')->resize($image, $width_orig, $height_orig);
-
+        if (!is_numeric($width)) {
+            $width = $width_orig;
+        }
+        if (!is_numeric($height)) {
+            $height = $height_orig;
+        }
+        if ($resize_type === 'crop') {
+            $ratio = (float)$width / $height;
+            $ratio_orig = (float)$width_orig / $height_orig;
+            if ($ratio > $ratio_orig) {
+                $resize_type = 'w';
+            } else {
+                $resize_type = 'h';
+            }
+        } else {
+            $resize_type = '';
+        }
+        return $tool->resize($image, $width, $height, $resize_type);
     }
 
     public static function canGenerateImages() {
@@ -348,7 +368,7 @@ class Journal2Utils {
         $bgColor = array($bgcolor[0], $bgcolor[1], $bgcolor[2]);
 
         /* get text */
-        $text = strtoupper($text ? $text : 'Out Of Stock');
+        //$text = strtoupper($text ? $text : 'Out Of Stock');
         $text = "     {$text}     ";
 
         /* generate image name */
@@ -378,7 +398,7 @@ class Journal2Utils {
             imagepng($image, DIR_IMAGE . 'cache/' . $file_name);
         }
 
-        return 'image/cache/' . $file_name;
+        return self::staticAsset('image/cache/' . $file_name);
     }
 
     public static function getRibbonSize($size) {
@@ -394,7 +414,23 @@ class Journal2Utils {
     }
 
     public static function imgElement($src, $alt = '', $width = '', $height = '') {
-        return 'src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height .'"';
+        return 'class="lazy" data-src="' . $src . '" alt="' . $alt . '" width="' . $width . '" height="' . $height .'"';
+    }
+
+    public static function getLogo($config) {
+        if (!$config->get('config_logo') || !file_exists(DIR_IMAGE . $config->get('config_logo'))) {
+            return '';
+        }
+
+        $name = $config->get('config_name');
+        $image = $config->get('config_logo');
+
+        list($width, $height) = getimagesize(DIR_IMAGE . $image);
+        global $registry;
+
+        $image = self::resizeImage($registry->get('model_tool_image'), $image);
+
+        return "<img src=\"$image\" width=\"$width\" height=\"$height\" alt=\"$name\" title=\"$name\" />";
     }
 
     public static function getHostName() {
@@ -402,4 +438,43 @@ class Journal2Utils {
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         return $protocol . '://' . $host;
     }
+
+    public static function gravatar($email, $default = '', $size = 50, $alt = '') {
+//        return '<img class="avatar" src="' . $default .'" width="' . $size . '" height="' . $size . '" alt="' . $alt . '" />';
+        return '<img class="avatar" src="https://s.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?s=' . $size . '" width="' . $size . '" height="' . $size . '" alt="' . $alt . '" />';
+    }
+
+    public static function staticAsset($url) {
+        if (self::isExternalResource($url)) {
+            return $url;
+        }
+        $https = isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'));
+        if ($https && defined('HTTPS_STATIC_CDN')) {
+            return HTTPS_STATIC_CDN . $url;
+        }
+        if (defined('HTTP_STATIC_CDN')) {
+            return HTTP_STATIC_CDN . $url;
+        }
+        global $config;
+        return ($https ? $config->get('config_ssl') : $config->get('config_url')) .  $url;
+    }
+
+    public static function isEnquiryProduct($obj, $product_id) {
+        if ($obj->journal2->settings->get('enquiry_products') === 'all') {
+            return true;
+        }
+        return (bool)$obj->journal2->settings->get('enquiry_products.' . $product_id, false);
+    }
+
+    public static function isLocalResource($url) {
+        if (strpos($url, '//') === 0) {
+            return false;
+        }
+        return !filter_var($url, FILTER_VALIDATE_URL);
+    }
+
+    public static function isExternalResource($url) {
+        return !self::isLocalResource($url);
+    }
+
 }

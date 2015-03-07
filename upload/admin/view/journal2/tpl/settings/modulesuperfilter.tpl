@@ -8,7 +8,6 @@
         <?php if (defined('J2ENV')): ?>
         <a class="btn blue" data-ng-show="skin_id < 100" data-ng-click="saveDefault($event)">Export</a>
         <?php endif; ?>
-        <!--<a class="btn blue" data-ng-click="multiStore($event)">MultiStore</a>-->
         <a class="btn blue" data-ng-click="saveAs($event)">Save As</a>
         <a class="btn green" data-ng-click="save($event)">Save</a>
         <a class="btn red" data-ng-show="skin_id < 100" data-ng-click="reset($event)">Reset</a>
@@ -40,7 +39,36 @@
                 </li>
 
                 <li>
-                    <span class="module-create-title">Font</span>
+                    <span class="module-create-title">Heading Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.filter_heading_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Heading Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.filter_heading_bg"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Heading Border</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="settings.filter_heading_border"></j-opt-border>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Heading Height <small>Line Height</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.filter_heading_height" class="journal-number-field"></j-opt-text>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Option Font</span>
                         <span class="module-create-option">
                             <j-opt-font data-ng-model="settings.filter_font"></j-opt-font>
                         </span>
@@ -48,28 +76,16 @@
                 </li>
 
                 <li>
-                    <span class="module-create-title">Active Text Color</span>
+                    <span class="module-create-title">Active Option Font Color</span>
                         <span class="module-create-option">
                             <j-opt-color data-ng-model="settings.filter_active_text"></j-opt-color>
                         </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
 
-                <li>
-                    <span class="module-create-title">Image Border Settings</span>
-                        <span class="module-create-option">
-                            <j-opt-border data-ng-model="settings.filter_border"></j-opt-border>
-                        </span>
-                    <a href="#" target="_blank" class="journal-tip"></a>
-                </li>
 
-                <li>
-                    <span class="module-create-title">Active Image Border Color</span>
-                        <span class="module-create-option">
-                            <j-opt-color data-ng-model="settings.filter_active_border"></j-opt-color>
-                        </span>
-                    <a href="#" target="_blank" class="journal-tip"></a>
-                </li>
+
+
                 <li>
                     <span class="module-create-title">Section Background Color</span>
                         <span class="module-create-option">
@@ -98,34 +114,7 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
-                <li>
-                    <span class="module-create-title">Heading Font</span>
-                    <span class="module-create-option">
-                        <j-opt-font data-ng-model="settings.filter_heading_font"></j-opt-font>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">Heading Background Color</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.filter_heading_bg"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">Heading Border</span>
-                    <span class="module-create-option">
-                        <j-opt-border data-ng-model="settings.filter_heading_border"></j-opt-border>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">Heading Height</span>
-                    <span class="module-create-option">
-                        <j-opt-text data-ng-model="settings.filter_heading_height" class="journal-number-field"></j-opt-text>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"></a>
-                </li>
+
                 <li>
                     <span class="module-create-title">Section Max Height <small>Generates Scrollbar</small></span>
                     <span class="module-create-option">
@@ -177,6 +166,61 @@
                             </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+
+                <li>
+                    <span class="module-create-title">Image Border Settings</span>
+                        <span class="module-create-option">
+                            <j-opt-border data-ng-model="settings.filter_border"></j-opt-border>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Active Image Border Color</span>
+                        <span class="module-create-option">
+                            <j-opt-color data-ng-model="settings.filter_active_border"></j-opt-color>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Category Image Size</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.filter_cat_image_size">
+                            <switch-option key="12.5">Tiny</switch-option>
+                            <switch-option key="16.666666">Small</switch-option>
+                            <switch-option key="20">Medium</switch-option>
+                            <switch-option key="25">Large</switch-option>
+                            <switch-option key="33.333333">Larger</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Brands Image Size</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.filter_brand_image_size">
+                            <switch-option key="12.5">Tiny</switch-option>
+                            <switch-option key="16.666666">Small</switch-option>
+                            <switch-option key="20">Medium</switch-option>
+                            <switch-option key="25">Large</switch-option>
+                            <switch-option key="33.333333">Larger</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Options Image Size</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.filter_image_size">
+                            <switch-option key="12.5">Tiny</switch-option>
+                            <switch-option key="16.666666">Small</switch-option>
+                            <switch-option key="20">Medium</switch-option>
+                            <switch-option key="25">Large</switch-option>
+                            <switch-option key="33.333333">Larger</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
                 <li>
                     <span class="module-create-title">Loading Text</span>
                     <span class="module-create-option">
@@ -205,6 +249,36 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+                <li>
+                    <span class="module-create-title">Tags Title Text</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="settings.filter_tags_text"></j-opt-text-lang>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Availability Title Text</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="settings.filter_availability_text"></j-opt-text-lang>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">In Stock Text</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="settings.filter_availability_yes_text"></j-opt-text-lang>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Out of Stock Text</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="settings.filter_availability_no_text"></j-opt-text-lang>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+
                 <!--<li>-->
                     <!--<span class="module-create-title">No Products Text</span>-->
                     <!--<span class="module-create-option">-->

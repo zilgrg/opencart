@@ -83,6 +83,15 @@
                         </switch>
                     </span>
                 </li>
+                <li data-ng-hide="module_data.hideonmobile == '1'">
+                    <span class="module-create-title">Touch Drag</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.touch_drag">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
                 <li>
                     <span class="module-create-title">Preload Images</span>
                     <span class="module-create-option">
@@ -165,7 +174,7 @@
                     <li>
                         <span class="module-create-title">Slide Image</span>
                         <span class="module-create-option">
-                            <image-select image="slide.image"></image-select>
+                            <image-select-lang image="slide.image"></image-select-lang>
                         </span>
                     </li>
                     <li>

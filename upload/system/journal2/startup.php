@@ -1,6 +1,7 @@
 <?php
 /* version */
-define('JOURNAL_VERSION', '2.1.4');
+define('JOURNAL_VERSION', '2.4.8');
+
 
 /* check if journal should be loaded */
 $load_theme = !(defined('BLOCK_JOURNAL') && BLOCK_JOURNAL === true);
@@ -11,48 +12,128 @@ if (php_sapi_name() === "cli") {
 }
 
 /* detect if is admin access */
+if (Front::$IS_ADMIN) {
+    $load_theme = false;
+}
+
+/* detect if is install access */
+if (Front::$IS_INSTALLER) {
+    $load_theme = false;
+}
+
+/* check if current theme is journal2 */
+if (!Front::$IS_JOURNAL) {
+    $load_theme = false;
+}
+
 if ($load_theme) {
-    foreach ($this->pre_action as $act) {
-        if ($act->getClass() === 'Controllercommonhome' && ($act->getMethod() === 'login' || $act->getMethod() === 'permission')) {
-            $load_theme = false;
-            break;
+    if (Front::$IS_OC2) {
+        /* block OpenCart 2.0 */
+        if (defined('J2ENV')) {
+            global $config;
+            $config->set('config_template', 'journal2_oc2');
+        }
+
+        /* check if DIR_CATALOG is defined */
+        if (defined('DIR_CATALOG')) {
+            echo '
+                <h3>Opencart OCMod config.php error detected. </h3>
+                <p>Your config.php file creates a conflict with OCMod, probably caused by 1-click Opencart installers.</p>
+                <p><strong>Solution:</strong> Edit config.php from your Opencart root installation and replace all lines of code found after: <pre>//DIR</pre> and before: <pre>//DB</pre> with the following:</p>
+                <pre>
+// DIR
+define(\'DIR_ROOT\'           , \'' . realpath(dirname(__FILE__)  . '/../../') .'/\');
+define(\'DIR_APPLICATION\'    , DIR_ROOT . \'catalog/\');
+define(\'DIR_SYSTEM\'         , DIR_ROOT . \'system/\');
+define(\'DIR_LANGUAGE\'       , DIR_ROOT . \'catalog/language/\');
+define(\'DIR_TEMPLATE\'       , DIR_ROOT . \'catalog/view/theme/\');
+define(\'DIR_CONFIG\'         , DIR_ROOT . \'system/config/\');
+define(\'DIR_IMAGE\'          , DIR_ROOT . \'image/\');
+define(\'DIR_CACHE\'          , DIR_ROOT . \'system/cache/\');
+define(\'DIR_DOWNLOAD\'       , DIR_ROOT . \'system/download/\');
+define(\'DIR_UPLOAD\'         , DIR_ROOT . \'system/upload/\');
+define(\'DIR_LOGS\'           , DIR_ROOT . \'system/logs/\');
+define(\'DIR_MODIFICATION\'   , DIR_ROOT . \'system/modification/\');
+                </pre>
+            ';
+            exit();
+        }
+
+        /* check if DIR_MODIFICATION is writable */
+        if (!is_writable(DIR_MODIFICATION)) {
+            echo '
+                <h3>Journal Installation Error</h3>
+                <p><b>' . DIR_MODIFICATION . '</b> is not writable. Contact your hosting provider for more information.</p>
+            ';
+            exit();
+        }
+
+        /* check oc modifications */
+        global $loader;
+        if (!method_exists($loader, '__get')) {
+            echo '
+                <h3>Journal Installation Error</h3>
+                <p>Access OpenCart Modifications Page and hit the Refresh button. <a href="http://docs.digital-atelier.com/opencart/journal/images/mods.png" target="_blank">See example.</a></p>
+            ';
+            exit();
+        }
+    } else {
+        /* check if Journal 1.x is active */
+        foreach ($this->pre_action as $act) {
+            if ($act->getMethod() === 'journal_cp') {
+                echo '
+            <h3>Journal Installation Error</h3>
+            <p>Open <b>index.php</b> from the root directory of your setup and remove this line of code as it is not needed anymore in Journal2:</p>
+            <pre>$controller->addPreAction(new Action(\'module/journal_cp\'));</pre>
+        ';
+                exit();
+            }
         }
     }
 }
 
-/* detect js maps */
-if ($load_theme) {
-    $_route_ = isset($this->registry->get('request')->get['_route_']) ? $this->registry->get('request')->get['_route_'] : null;
-    if ($_route_ !== null && in_array($_route_, array('admin/view/journal2/lib/underscore/underscore-min.map'))) {
-        $load_theme = false;
-    }
+/* Check if Modules are enabled */
+if ($load_theme && $this->registry->get('db')->query('show tables like "' . DB_PREFIX . 'journal2_config"')->num_rows === 0) {
+    echo '
+        <h3>Journal Installation Error</h3>
+        <p>Journal2 module is not installed.</p>
+    ';
+    exit();
 }
 
-/* detect if is install access */
+/* Check Template Version */
 if ($load_theme) {
-    if (in_array($action->getClass(), array('Controllerupgrade', 'Controllerstep1', 'Controllerstep2', 'Controllerstep3', 'Controllerstep4'))) {
-        $load_theme = false;
+    if (Front::$IS_OC2 && version_compare(VERSION, '2.0.1', '<')) {
+        echo '
+            <h3>Journal Installation Error</h3>
+            <p>You are using an outdated OpenCart 2.x version. Journal only works with the latest Opencart 2.x version.<br/>Please download and install the latest Opencart 2.x version from the official <a href="http://www.opencart.com/index.php?route=download/download" target="_blank">downloads page</a>.</p>
+        ';
+        exit();
     }
-}
-
-/* check if current theme is journal2 */
-if ($load_theme) {
-    if ($this->registry->get('config')->get('config_template') !== 'journal2') {
-        $load_theme = false;
+    global $config;
+    require_once DIR_TEMPLATE . $config->get('config_template') . '/template/version.php';
+    if (Front::$IS_OC2 && JOURNAL_TEMPLATE_VERSION !== 2) {
+        echo '
+            <h3>Journal Installation Error</h3>
+            <p>You have OpenCart 2.x but you have installed Journal for OpenCart 1.5.x. Read installation instructions for Opencart 2.x <a href="http://docs.digital-atelier.com/opencart/journal/#/settings/install" target="_blank">here.</a></p>
+        ';
+        exit();
+    }
+    if (!Front::$IS_OC2 && JOURNAL_TEMPLATE_VERSION !== 1) {
+        echo '
+            <h3>Journal Installation Error</h3>
+            <p>You have OpenCart 1.5.x but you have installed Journal for OpenCart 2.x. Read installation instructions for Opencart 1.5.x <a href="http://docs.digital-atelier.com/opencart/journal/#/settings/install" target="_blank">here.</a></p>
+        ';
+        exit();
     }
 }
 
 /* start Journal 2 engine */
 if ($load_theme) {
+    /* load journal2 */
     require_once(DIR_SYSTEM . 'journal2/classes/journal2.php');
     Journal2::startTimer('Engine');
     define('JOURNAL_INSTALLED', true);
-
-    /* Check if Modules are enabled */
-    if ($this->registry->get('db')->query('show tables like "' . DB_PREFIX . 'journal2_config"')->num_rows === 0) {
-        echo '<h3>Error</h3>Journal2 module is not installed.';
-        exit();
-    }
 
     /* Get current route */
     $current_route = isset($this->registry->get('request')->get['route']) ? $this->registry->get('request')->get['route'] : null;
@@ -60,13 +141,13 @@ if ($load_theme) {
     /* Utils */
     require_once(DIR_SYSTEM . 'journal2/classes/journal2_utils.php');
 
+    /* DB Upgrade */
+    require_once(DIR_SYSTEM . 'journal2/classes/journal2_db_upgrade.php');
+    Journal2DBUpgrade::check();
+
     /* Load journal2 class */
     $journal2 = new Journal2();
     $this->registry->set('journal2', $journal2);
-
-    /* Mobile Detect */
-    require_once(DIR_SYSTEM . 'journal2/lib/Mobile_Detect.php');
-    $journal2->mobile_detect = new Mobile_Detect();
 
     /* Load Cache class */
     require_once(DIR_SYSTEM . 'journal2/classes/journal2_cache.php');
@@ -77,8 +158,8 @@ if ($load_theme) {
     $journal2->html_classes = new Journal2HtmlClasses($this->registry);
 
     /* Add mobile / tablet class */
-    if ($journal2->mobile_detect->isMobile()) {
-        if ($journal2->mobile_detect->isTablet()) {
+    if (Journal2Cache::$mobile_detect->isMobile()) {
+        if (Journal2Cache::$mobile_detect->isTablet()) {
             $journal2->html_classes->addClass('tablet');
         } else {
             $journal2->html_classes->addClass('mobile');
@@ -86,10 +167,6 @@ if ($load_theme) {
     } else {
         $journal2->html_classes->addClass('journal-desktop');
     }
-
-    /* Route Parser */
-    require_once(DIR_SYSTEM . 'journal2/classes/journal2_page.php');
-    $journal2->page = new Journal2Page($this->registry, $journal2->html_classes);
 
     /* Load journal2 config */
     require_once(DIR_SYSTEM . 'journal2/classes/journal2_config.php');
@@ -108,6 +185,11 @@ if ($load_theme) {
     $journal2->google_fonts = new Journal2GoogleFonts();
 
     /* Controllers */
+    if ($current_route === 'module/journal2_popup/show') {
+        $this->execute(new Action('module/journal2_popup/show'));
+        die();
+    }
+
     if ($current_route !== 'module/journal2_side_blocks/load') {
         $this->execute(new Action('journal2/settings'));
         if (!$journal2->cache->getDeveloperMode()) {
@@ -120,16 +202,36 @@ if ($load_theme) {
         }
     }
 
-    if (!in_array($current_route, array('module/journal2_side_blocks/load', 'journal2/assets/js', 'journal2/assets/css', 'journal2/assets/outofstock'))) {
+    /* Blog sitemap */
+    if ($current_route === 'information/sitemap') {
+        $this->execute(new Action('journal2/settings/sitemap'));
+    }
+
+    /* Route Parser */
+    require_once(DIR_SYSTEM . 'journal2/classes/journal2_page.php');
+    $journal2->page = new Journal2Page($this->registry, $journal2->html_classes);
+
+    /* Calculate columns */
+    $this->execute(new Action('journal2/settings/columns'));
+
+    if (!in_array($current_route, array('module/journal2_side_blocks/load', 'journal2/assets/js', 'journal2/assets/css', 'journal2/assets/outofstock', 'product/product/captcha', 'information/contact/captcha', 'tool/captcha'))) {
+        $this->execute(new Action('journal2/product_tabs'));
+        $this->execute(new Action('journal2/product_tabs/enquiry'));
         $this->execute(new Action('journal2/modules'));
-        $this->execute(new Action('journal2/menu/header', (array('primary_menu'))));
-        $this->execute(new Action('journal2/menu/header', (array('secondary_menu'))));
-        $this->execute(new Action('journal2/menu/mega', (array('mega_menu'))));
-        $this->execute(new Action('journal2/menu/footer', (array('footer_menu'))));
+        if (Front::$IS_OC2) {
+            $this->execute(new Action('journal2/menu/header',   'primary_menu'));
+            $this->execute(new Action('journal2/menu/header',   'secondary_menu'));
+            $this->execute(new Action('journal2/menu/mega',     'mega_menu'));
+            $this->execute(new Action('journal2/menu/footer',   'footer_menu'));
+        } else {
+            $this->execute(new Action('journal2/menu/header',   (array('primary_menu'))));
+            $this->execute(new Action('journal2/menu/header',   (array('secondary_menu'))));
+            $this->execute(new Action('journal2/menu/mega',     (array('mega_menu'))));
+            $this->execute(new Action('journal2/menu/footer',   (array('footer_menu'))));
+        }
 
         $this->execute(new Action('journal2/snippets'));
         $this->execute(new Action('journal2/category/refine_images'));
-        $this->execute(new Action('journal2/product_tabs'));
     }
 
     Journal2::stopTimer('Engine');

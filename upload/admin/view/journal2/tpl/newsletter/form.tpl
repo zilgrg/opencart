@@ -51,19 +51,23 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Module Border Settings</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="module_data.module_border"></j-opt-border>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Module Padding</span>
                     <span class="module-create-option">
                         <input type="text" class="journal-input journal-number-field" data-ng-model="module_data.module_padding" />
                     </span>
                 </li>
                 <li>
-                    <span class="module-create-title">Module Split</span>
+                    <span class="module-create-title">Text Position</span>
                     <span class="module-create-option">
-                        <switch data-ng-model="module_data.module_split">
-                            <switch-option key="33.33333:66.66666">1/2</switch-option>
-                            <switch-option key="50:50">1/1</switch-option>
-                            <switch-option key="66.66666:33.33333">2/1</switch-option>
-                            <switch-option key="100:100">FullWidth</switch-option>
+                        <switch data-ng-model="module_data.text_position">
+                            <switch-option key="left">Left</switch-option>
+                            <switch-option key="top">Top</switch-option>
                         </switch>
                     </span>
                 </li>
@@ -80,15 +84,51 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Input Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="module_data.input_bg_color"></j-opt-color>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Input Text Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="module_data.input_font"></j-opt-font>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Input Border Settings</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="module_data.input_border"></j-opt-border>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Button Text</span>
                     <span class="module-create-option">
                         <j-opt-text-lang data-ng-model="module_data.button_text"></j-opt-text-lang>
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Button Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="module_data.button_font"></j-opt-font>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Button Background</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="module_data.button_background"></j-opt-color>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Button Icon</span>
                     <span class="module-create-option">
                         <icon-select data-ng-model="module_data.button_icon"></icon-select>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Button Border Settings</span>
+                    <span class="module-create-option">
+                        <j-opt-border data-ng-model="module_data.button_border"></j-opt-border>
                     </span>
                 </li>
                 <li>

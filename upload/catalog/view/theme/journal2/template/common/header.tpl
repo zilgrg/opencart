@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
     if (!defined('JOURNAL_INSTALLED')) {
         echo '
@@ -8,7 +9,6 @@
         exit();
     }
 ?>
-<!DOCTYPE html>
 <html dir="<?php echo $direction; ?>" lang="<?php echo $lang; ?>" class="<?php echo $this->journal2->html_classes->getAll(); ?>" data-j2v="<?php echo JOURNAL_VERSION; ?>">
 <head>
 <meta charset="UTF-8" />
@@ -20,18 +20,25 @@
 <!--[if lt IE 9]><script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
 <title><?php echo $title; ?></title>
 <base href="<?php echo $base; ?>" />
+<?php if ($meta_title = $this->journal2->settings->get('blog_meta_title')): ?>
+<meta name="title" content="<?php echo $meta_title; ?>" />
+<?php endif; ?>
 <?php if ($description) { ?>
 <meta name="description" content="<?php echo $description; ?>" />
 <?php } ?>
 <?php if ($keywords) { ?>
 <meta name="keywords" content="<?php echo $keywords; ?>" />
 <?php } ?>
-<?php foreach($this->journal2->settings->get('fb_meta', array()) as $key => $value): ?>
-<meta property="<?php echo $key; ?>" content="<?php echo $value; ?>" />
-<?php endforeach; ?>
+<meta property="og:title" content="<?php echo $this->journal2->settings->get('fb_meta_title'); ?>" />
+<meta property="og:description" content="<?php echo $this->journal2->settings->get('fb_meta_description'); ?>" />
+<meta property="og:url" content="<?php echo $this->journal2->settings->get('fb_meta_url'); ?>" />
+<meta property="og:image" content="<?php echo $this->journal2->settings->get('fb_meta_image'); ?>" />
 <?php if ($icon) { ?>
 <link href="<?php echo $icon; ?>" rel="icon" />
 <?php } ?>
+<?php if ($blog_feed_url = $this->journal2->settings->get('blog_blog_feed_url')): ?>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo $blog_feed_url; ?>" />
+<?php endif; ?>
 <?php foreach ($links as $link) { ?>
 <link href="<?php echo $link['href']; ?>" rel="<?php echo $link['rel']; ?>" />
 <?php } ?>
@@ -68,7 +75,7 @@
 <?php endif; ?>
 <?php $this->journal2->minifier->addScript('catalog/view/theme/journal2/js/journal.js', 'header'); ?>
 <?php echo $this->journal2->minifier->js('header'); ?>
-<!--[if (gte IE 6)&(lte IE 8)]><script src="catalog/view/theme/journal2/lib/selectivizr/selectivizr.js"></script><![endif]-->
+<!--[if (gte IE 6)&(lte IE 8)]><script src="catalog/view/theme/journal2/lib/selectivizr/selectivizr.min.js"></script><![endif]-->
 <?php if (isset($stores)): /* v1541 compatibility */ ?>
 <?php if ($stores) { ?>
 <script type="text/javascript"><!--
@@ -81,8 +88,21 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
 <?php } ?>
 <?php endif; /* end v1541 compatibility */ ?>
 <?php echo $google_analytics; ?>
+<?php if ($this->journal2->settings->get('show_countdown', 'never') !== 'never' || $this->journal2->settings->get('show_countdown_product_page', 'on') == 'on'): ?>
+<script>
+    Journal.COUNTDOWN = {
+        DAYS    : "<?php echo $this->journal2->settings->get('countdown_days', 'Days'); ?>",
+        HOURS   : "<?php echo $this->journal2->settings->get('countdown_hours', 'Hours'); ?>",
+        MINUTES : "<?php echo $this->journal2->settings->get('countdown_min', 'Min'); ?>",
+        SECONDS : "<?php echo $this->journal2->settings->get('countdown_sec', 'Sec'); ?>"
+    };
+</script>
+<?php endif; ?>
 </head>
 <body>
+<?php if ($this->journal2->settings->get('config_header_modules')):  ?>
+<?php echo $this->journal2->settings->get('config_header_modules'); ?>
+<?php endif; ?>
 <?php if ($this->journal2->config->admin_warnings): ?>
 <div class="admin-warning"><?php echo $this->journal2->config->admin_warnings; ?></div>
 <?php endif; ?>
@@ -127,7 +147,16 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
             $header_type = $header_type . '.nosearch';
         }
     }
-    require DIR_TEMPLATE . "journal2/template/journal2/headers/{$header_type}.tpl";
+    if (class_exists('VQMod')) {
+        global $vqmod;
+        if ($vqmod !== null) {
+            require $vqmod->modCheck(DIR_TEMPLATE . $this->config->get('config_template') . "/template/journal2/headers/{$header_type}.tpl");
+        } else {
+            require VQMod::modCheck(DIR_TEMPLATE . $this->config->get('config_template') . "/template/journal2/headers/{$header_type}.tpl");
+        }
+    } else {
+        require DIR_TEMPLATE . $this->config->get('config_template') . "/template/journal2/headers/{$header_type}.tpl";
+    }
 ?>
 <?php if ($this->journal2->settings->get('config_top_modules')): ?>
 <div id="top-modules">
@@ -136,7 +165,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
 <?php endif; ?>
 
 <div class="extended-container">
-<div id="container" class="j-container" <?php echo $this->journal2->settings->get('product_google_snippet'); ?>>
+<div id="container" class="j-container">
 
 <?php if(isset($error)): /* v156 compatibility */ ?>
 <?php if ($error) { ?>

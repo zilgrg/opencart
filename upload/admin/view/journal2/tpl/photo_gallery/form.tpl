@@ -33,12 +33,6 @@
                     </span>
                 </li>
                 <li>
-                    <span class="module-create-title">Thumbs Limit</span>
-                    <span class="module-create-option">
-                        <input type="text" class="journal-input journal-sort" data-ng-model="module_data.thumbs_limit" />
-                    </span>
-                </li>
-                <li>
                     <span class="module-create-title">Items per Row</span>
                     <span class="module-create-option">
                         <j-opt-items-per-row data-ng-model="module_data.items_per_row"></j-opt-items-per-row>
@@ -56,6 +50,22 @@
                         <switch data-ng-model="module_data.carousel">
                             <switch-option key="1">ON</switch-option>
                             <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li data-ng-show="module_data.carousel == '0'">
+                    <span class="module-create-title">Thumbs Limit</span>
+                    <span class="module-create-option">
+                        <input type="text" class="journal-input journal-sort" data-ng-model="module_data.thumbs_limit" />
+                    </span>
+                </li>
+                <li data-ng-show="module_data.carousel == '0'">
+                    <span class="module-create-title">Thumbs Dimensions</span>
+                    <span class="module-create-option">
+                        <input type="text" class="journal-number-field" data-ng-model="module_data.thumbs_width" /> x <input type="text" class="journal-number-field" data-ng-model="module_data.thumbs_height" />
+                        <switch data-ng-model="module_data.thumbs_type">
+                            <switch-option key="fit">Fit</switch-option>
+                            <switch-option key="crop">Crop &nbsp;&nbsp;</switch-option>
                         </switch>
                     </span>
                 </li>

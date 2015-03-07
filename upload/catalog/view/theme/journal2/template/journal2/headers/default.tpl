@@ -8,7 +8,7 @@
             <?php if ($logo) { ?>
             <div id="logo">
                 <a href="<?php echo str_replace($home, 'index.php?route=common/home', ''); ?>">
-                    <img src="<?php echo $logo;?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" />
+                    <?php echo Journal2Utils::getLogo($this->config); ?>
                 </a>
             </div>
             <?php } ?>
@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <?php if (!$this->journal2->mobile_detect->isMobile() || !$this->journal2->settings->get('responsive_design')): ?>
+        <?php if (!Journal2Cache::$mobile_detect->isMobile() || !$this->journal2->settings->get('responsive_design')): ?>
         <div class="journal-cart j-min xs-100 sm-100 md-33 lg-25 xl-25">
             <?php echo $cart; ?>
         </div>
@@ -39,6 +39,9 @@
         </div>
 
         <div class="journal-search row j-min xs-100 sm-100 md-33 lg-25 xl-25">
+            <?php if (Front::$IS_OC2): ?>
+            <?php echo $search; ?>
+            <?php else: ?>
             <div>
                 <div id="search" class="j-min">
                     <div class="button-search j-min"><i></i></div>
@@ -53,9 +56,10 @@
                     <?php endif; /* end v1541 compatibility */ ?>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
 
-        <?php if ($this->journal2->mobile_detect->isMobile() && $this->journal2->settings->get('responsive_design')): ?>
+        <?php if (Journal2Cache::$mobile_detect->isMobile() && $this->journal2->settings->get('responsive_design')): ?>
         <div class="journal-cart j-min xs-100 sm-100 md-33 lg-25 xl-25">
             <?php echo $cart; ?>
         </div>
@@ -65,7 +69,7 @@
             <?php echo $this->journal2->settings->get('config_mega_menu'); ?>
         </div>
     </div>
-    <?php if ($this->journal2->mobile_detect->isMobile() && $this->journal2->settings->get('responsive_design')): ?>
+    <?php if (Journal2Cache::$mobile_detect->isMobile() && $this->journal2->settings->get('responsive_design')): ?>
     <script>
         if($(window).width() < 980){
             $('.journal-header-default .journal-search').after($('.journal-header-default .journal-cart'));

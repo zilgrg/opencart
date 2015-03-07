@@ -67,7 +67,7 @@
         </ul>
     </div>
     <?php if ($type === 'accordion'): ?>
-    <script type="text/javascript"><!--
+    <script>
         $('#journal-side-category-<?php echo $module; ?> .box-category a i').click(function(e, first){
             e.preventDefault();
             $('+ ul', $(this).parent()).slideToggle(first ? 0 : 400);
@@ -76,6 +76,6 @@
             return false;
         });
         $('#journal-side-category-<?php echo $module; ?> .is-active i').trigger('click', true);
-    //--></script>
+    </script>
     <?php endif; ?>
 </div>

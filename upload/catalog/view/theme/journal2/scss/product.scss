@@ -22,8 +22,9 @@ PRODUCT PAGE
   }
 }
 
+
 .product-info {
-  overflow: auto;
+  overflow: hidden;
   margin-bottom: 20px;
   position: relative;
   width: 100%;
@@ -35,12 +36,11 @@ PRODUCT PAGE
 
   //LEFT SIDE
   .left{
-
     .image {
       padding: 0;
       text-align: left;
       position: relative;
-      overflow: hidden;
+      //display: table;
       *{
         -webkit-transform: translateZ(0) scale(1.0, 1.0);
       }
@@ -56,7 +56,7 @@ PRODUCT PAGE
       overflow: hidden;
       position: relative;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
       a {
         position: relative;
         display: inline-block;
@@ -65,6 +65,7 @@ PRODUCT PAGE
         img {
           width: 100%;
           float: left;
+          height: auto;
         }
         &:hover{
           opacity: .8;
@@ -76,6 +77,9 @@ PRODUCT PAGE
         }
       }
     }
+    .product-tabs, .journal-custom-tab{
+      clear: both;
+    }
   }
 
   .gallery-text{
@@ -83,6 +87,7 @@ PRODUCT PAGE
     padding: 10px 0 0 0;
     color: $gray;
     cursor: pointer;
+    clear: both;
     span{
       display: inline-block;
       position: relative;
@@ -93,15 +98,22 @@ PRODUCT PAGE
   }
 
   //RIGHT SIDE
+  .product-sold-count.ps-right{
+    display: none;
+  }
+
   .right{
-      padding-left: 20px;
+     padding-left: 20px;
     .product-options{
       background-color: transparent;
       overflow: hidden;
     }
-      > div > div{
+      > div > div, > div > ul{
         position: relative;
         overflow: hidden;
+        &.social{
+          overflow: visible;
+        }
       }
       .description {
         line-height: 17px;
@@ -110,6 +122,9 @@ PRODUCT PAGE
         }
         span {
           padding-right: 3px;
+        }
+        .product-sold-count.ps-left{
+          padding-right: 1px;
         }
       }
       .price {
@@ -124,6 +139,7 @@ PRODUCT PAGE
         color: white;
         padding: 3px 6px;
         top: -3px;
+        margin-right: 5px;
       }
       .price-tax {
         font-size: 13px;
@@ -134,7 +150,7 @@ PRODUCT PAGE
       .price .reward {
         display: block;
         font-size: 12px;
-        margin-top:7px;
+        margin:5px 0;
         font-weight: normal;
         small{
           font-size:inherit;
@@ -159,9 +175,31 @@ PRODUCT PAGE
           display: none;
         }
 
-        &.push-1{
+        &.push-select, &.push-image, &.push-checkbox, &.push-radio{
           .option b + br{
             display: none;
+          }
+          .option-image {
+            li {
+              padding: 0;
+              span {
+                display: block;
+                img {
+                  margin-right: 0;
+                  float: left;
+                  transition: all 0.2s;
+                  border: 2px solid $light;
+                  &:hover{
+                    border-color: $quartz;
+                  }
+                }
+              }
+              &.selected{
+                span img{
+                  border-color: $quartz;
+                }
+              }
+            }
           }
         }
 
@@ -170,8 +208,7 @@ PRODUCT PAGE
           display: inline-block;
           padding-bottom: 0px;
           width: 100%;
-          margin-bottom: 10px;
-          //border-bottom: 1px solid $e4;
+          margin-bottom: 5px;
           label{
             font-weight: normal;
             transition:color .2s;
@@ -185,7 +222,7 @@ PRODUCT PAGE
           b {
             font-size: 12px;
             display: block;
-            padding: 6px 0;
+            padding: 2px 0 1px 0;
             font-weight: normal;
             &:after{
               content:"";
@@ -198,7 +235,7 @@ PRODUCT PAGE
           }
 
           span {
-            padding: 8px 2px 3px 0;
+            padding: 8px 3px 3px 0;
           }
           input[type='text'],textarea {
             min-width: 100%;
@@ -225,17 +262,17 @@ PRODUCT PAGE
         label {
           display: block;
           width: 100%;
-          height: 100%;
+          height: auto;
           padding-right: 0;
         }
         img {
           margin-right: 5px;
           cursor: pointer;
-          max-width: 50px;
         }
       }
       .cart {
         border-bottom: none;
+        overflow: hidden;
         div {
           .qty{
             width: 34%;
@@ -284,6 +321,9 @@ PRODUCT PAGE
             display: inline-block;
             width: 63%;
             float: right;
+            &.enquiry-button{
+              width: 100% !important;
+            }
             .button-cart-text:before{
               margin-right: 8px;
               line-height: 100%;
@@ -311,7 +351,7 @@ PRODUCT PAGE
           text-align: center;
           padding: 2px 0 4px 0;
           a{
-            padding: 0 20px;
+            padding: 0 15px;
             border: none;
             color: $blue;
             font-size: 12px;
@@ -373,6 +413,9 @@ PRODUCT PAGE
           line-height: 23px;
           cursor: pointer;
           transition:all .2s;
+          span{
+            padding: 0 !important;
+          }
         }
       }
     }
@@ -421,6 +464,61 @@ PRODUCT PAGE
   }
 }
 
+.push-checkbox{
+  .checkbox,
+  input[type="checkbox"],
+  input[type="checkbox"]+ label,
+  input[type="checkbox"]+ label + br{
+    display: none !important;
+  }
+}
+.push-select{
+  select{
+    display: none !important;
+  }
+}
+.push-radio {
+  .radio,
+  input[type="radio"],
+  input[type="radio"] + label,
+  input[type="radio"] + label + br{
+    display: none !important;
+  }
+}
+table.option-image {
+  input[type="radio"],
+  input[type="radio"] + label,
+  input[type="radio"] + label + br {
+    display: inherit !important;
+  }
+}
+.push-image{
+  table.option-image {
+    input[type="radio"],
+    input[type="radio"] + label,
+    input[type="radio"] + label + br {
+      display: none !important;
+    }
+  }
+  table.option-image{
+    display: none !important;
+  }
+}
+
+.oc2{
+  .product-info .option ul{
+    margin: 0;
+    li{
+      margin: 0 8px 7px 0;
+    }
+  }
+}
+
+
+.ie .product-info .right .cart div input[name=quantity]{
+  line-height: 100%;
+}
+
 .social {
   margin-bottom: 20px;
   padding: 7px 8px 10px 0;
@@ -429,17 +527,21 @@ PRODUCT PAGE
   background-repeat: no-repeat;
   background-size: 20px;
   span  {
-    min-height: 22px !important;
+    min-height: 20px !important;
     display: block;
     float: left;
-    padding-bottom: 3px;
+    overflow: hidden;
   }
+}
+
+.left .social{
+  margin-top: 10px;
+  padding: 10px;
 }
 
 .social-loaded{
   background-color: inherit;
   display: table;
-  margin-bottom: -5px;
 }
 
 .attribute {
@@ -447,16 +549,14 @@ PRODUCT PAGE
   width: 100%;
   border-top: 1px solid $e4;
   border-left: 1px solid $e4;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   thead td, thead tr td:first-child {
     color: #333745;
     font-size: 14px;
-    font-weight: bold;
     background: #f4f4f4;
     text-align: left;
   }
   tr td:first-child {
-    font-weight: bold;
     text-align: center;
     width: 20%;
   }
@@ -499,7 +599,17 @@ input[name='captcha'] {
 
 #tabs{
   overflow: hidden;
-  a{
+  list-style: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  li:last-of-type{
+    border-radius: inherit;
+  }
+  li, a{
+    float: left;;
+  }
+  a, li a{
     line-height: 37px;
     &:last-of-type{
       border-top-right-radius: inherit;
@@ -507,17 +617,19 @@ input[name='captcha'] {
   }
 }
 
-#tabs a {
-  float: left;
-  padding: 0 15px;
-  text-align: center;
-  text-decoration: none;
-  display: none;
-  transition:all .2s;
-  box-shadow: inset 0 -3px 6px -2px rgba(0,0,0,.5);
+#tabs{
+  a, li a{
+    padding: 0 15px;
+    text-align: center;
+    text-decoration: none;
+    //display: none;
+    transition:all .2s;
+    box-shadow: inset 0 -3px 6px -2px rgba(0,0,0,.5);
+  }
 }
 
-#tabs a.selected {
+#tabs a.selected,
+#tabs li.active a{
   background-color: $f4;
   box-shadow: none;
   color: $dark;
@@ -541,7 +653,8 @@ input[name='captcha'] {
 }
 
 .product-info .left .journal-custom-tab{
-   margin-top: 15px;
+  margin-top: 15px;
+  overflow: hidden;
 }
 
 .tab-related, #tab-related{
@@ -605,6 +718,20 @@ input[name='captcha'] {
   padding-bottom: 0;
 }
 
+.oc2{
+  #tab-review{
+    .form-group label{
+      width: auto;
+      padding: 0;
+    }
+    input[name='captcha']{
+      display: block;
+      clear: both;
+      margin-left: 10px;
+      margin-bottom: 0;
+    }
+  }
+}
 
 /******************************
  TAGS
@@ -678,6 +805,35 @@ img.outofstock{
   pointer-events:none;
 }
 
+.ie9 .label-sale b{
+  display:inline-block;
+  width:110%;
+}
+
+.hide-cart{
+  .cart.outofstock{
+    .button {
+      opacity: .4;
+      pointer-events: none;
+      cursor: default;
+    }
+    .button.enquiry-button,
+    #more-details{
+      opacity: 1;
+      cursor: auto;
+      pointer-events: auto;
+    }
+  }
+  td.outofstock > .btn-primary, td img.outofstock{
+    opacity: .4;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.enquiry-button .button i{
+  margin-right: 0 !important;
+}
 
 /******************************
  QUICKVIEW
@@ -792,7 +948,7 @@ img.outofstock{
   }
 
   //open/close animation
-  .mfp-iframe {
+  .mfp-iframe, .journal-popup {
     opacity: 0;
     transition: all 0.2s ease-in-out;
     -webkit-transform: scale(.7);
@@ -808,7 +964,7 @@ img.outofstock{
 
   /* animate in */
   &.mfp-ready {
-    .mfp-iframe {
+    .mfp-iframe, .journal-popup {
       opacity: 1;
       -webkit-transform: scale(1);
       -moz-transform: scale(1);
@@ -822,7 +978,7 @@ img.outofstock{
 
   /* animate out */
   &.mfp-removing {
-    .mfp-iframe {
+    .mfp-iframe, .journal-popup {
       -webkit-transform: scale(.7);
       -moz-transform: scale(.7);
       -ms-transform: scale(.7);
@@ -833,19 +989,163 @@ img.outofstock{
       opacity: 0;
     }
   }
-  .zoomContainer{
-    position: fixed !important;
+  .zm-viewer, .zm-handler{
+    cursor: default;
   }
 }
+
+.mfp-bg {
+  z-index: 9999999;
+}
+.mfp-wrap{
+  z-index: 99999999;
+}
+
 
 /******************************
  CLOUD ZOOM
 *******************************/
 
-.quickview .zoomWindowContainer > div{
-  cursor: pointer !important;
+.zm-viewer{
+  position:absolute;
+  display:none;
+  overflow:hidden;
+  background:url("../lib/image-zoom/loading.gif")  no-repeat center center ;
+  cursor:pointer;
+  z-index:999;
+}
+.zm-handler{
+  position:absolute !important;
+  display:none;
+  overflow:hidden ;
+  cursor:pointer;
+  border:none !important;
+}
+.zm-handlerarea{
+  background:url("../lib/image-zoom/lens.png");
+  opacity:.9;
+  position:relative;
+}
+.zm-description{
+  position:absolute;
+  bottom:6px;
+  left:6px;
+  right:6px;
+  background-color:#eee;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  color: rgba(0,0,0,.6);
+  font-size: 13px;
+  text-align: center;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.3);
+  padding:4px;
 }
 
-.zoomContainer{
-  z-index: 98;
+.followViewer, .standardViewer {
+  border:2px solid #fefefe;
+  border:4px solid rgba(255, 255, 255, .2);
+  box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+}
+
+
+/******************************
+OC2
+*******************************/
+
+.oc2{
+  .list-unstyled{
+    margin-top: 0;
+    padding: 0;
+    list-style: none;
+    border: 0;
+  }
+  .product-info{
+    .right{
+      .price-old{
+        float: left;
+      }
+      .options .option {
+        div label:before {
+          display: none;
+        }
+        .input-group-btn{
+          padding: 0;
+        }
+        > label{
+          margin-bottom: 5px;
+        }
+        label{
+          display: block;
+        }
+      }
+    }
+  }
+  .rating{
+    .fa-stack{
+      width:auto;
+      height: auto;
+      line-height: 100%;
+      padding: 0 8px;
+      display: inline;
+    }
+    .fa-star{
+      color: $yel;
+    }
+    .fa-star + .fa-star-o{
+      color: $yel;
+    }
+    .fa-star-o{
+      color: $gray;
+    }
+    a{
+      position: relative;
+      top: -1px;
+      &:first-of-type{
+        margin-left: 10px;
+      }
+    }
+  }
+  #tabs{
+    margin-top: 20px;
+  }
+  .tab-content{
+    display: none;
+    &.active{
+      display: block;
+    }
+    #captcha{
+      margin-left: 10px;
+    }
+  }
+  &.quickview .tab-content{
+    display: block;
+  }
+  .product-info .left .tabs-content .journal-custom-tab{
+    border-radius: inherit;
+    border-top-width: inherit;
+    margin-top: 0;
+  }
+  #tab-review{
+    .form-group{
+      font-size: 12px;
+    }
+    input[type='radio'],
+    input[type='checkbox']{
+      margin: 4px 0 0;
+    }
+    form{
+      table td{
+        > p{
+          margin: 10px 0;
+        }
+        &:first-of-type{
+          width: 50px !important;
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+  .attribute strong{
+    font-weight: inherit;
+  }
 }

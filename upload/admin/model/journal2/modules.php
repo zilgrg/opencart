@@ -76,14 +76,19 @@ class ModelJournal2Modules extends Model{
      *
      */
     public function multi_modules() {
-        $query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'journal2_modules WHERE module_type IN ("journal2_slider", "journal2_simple_slider", "journal2_static_banners")');
+        $types = array(
+            'journal2_slider'           => 'Revolution Slider',
+            'journal2_static_banners'   => 'Banners'
+        );
+
+        $query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'journal2_modules WHERE module_type IN ("journal2_slider", "journal2_static_banners")');
 
         $modules = array();
 
         foreach ($query->rows as $row) {
             if (!isset($modules[$row['module_type']])) {
                 $modules[$row['module_type']] = array(
-                    'module_type'   => $row['module_type'],
+                    'module_type'   => isset($types[$row['module_type']]) ? $types[$row['module_type']] : $row['module_type'],
                     'modules'       => array()
                 );
             }
@@ -203,9 +208,27 @@ class ModelJournal2Modules extends Model{
         }
 
         $module_type = $this->get_data['module_type'];
-        $modules = $this->config->get('journal2_' . $module_type . '_module');
+        $modules = array();
 
-        return is_array($modules) ? $modules : array();
+        if (Front::$IS_OC2) {
+            $query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'layout_module WHERE `code` LIKE "journal2_' . $this->db->escape($module_type) . '%"');
+            foreach ($query->rows as $row) {
+                $parts = explode('.', $row['code']);
+                $modules[] = array(
+                    'module_id' => $parts[1],
+                    'layout_id' => $row['layout_id'],
+                    'position'  => $row['position'],
+                    'sort_order'=> $row['sort_order'],
+                    'status'    => $this->config->get('journal2_' . $module_type . '_' . $row['layout_module_id'] . '_status')
+                );
+            }
+        } else {
+            $modules = $this->config->get('journal2_' . $module_type . '_module');
+        }
+
+        $modules = is_array($modules) ? $modules : array();
+
+        return $modules;
     }
 
     /*
@@ -228,11 +251,21 @@ class ModelJournal2Modules extends Model{
 
         $module_type = 'journal2_' . $this->get_data['module_type'];
         $module_data = $this->post_data['module_data'];
-        $this->load->model('setting/extension');
-        $this->model_setting_extension->uninstallJ2Extension('module', $module_type);
-        $this->model_setting_extension->install('module', $module_type);
-        $this->load->model('setting/setting');
-        $this->model_setting_setting->editSetting($module_type, array($module_type . '_module' => $module_data));
+
+        if (Front::$IS_OC2) {
+            $this->db->query('DELETE FROM ' . DB_PREFIX . 'layout_module WHERE `code` LIKE "' . $this->db->escape($module_type) . '%"');
+            $this->db->query('DELETE FROM ' . DB_PREFIX . 'setting WHERE `code` LIKE "' . $this->db->escape($module_type) . '"');
+            foreach ($module_data as $module) {
+                $this->db->query('INSERT INTO ' . DB_PREFIX . 'layout_module (`layout_id`, `code`, `position`, `sort_order`) VALUES (' . (int)$module['layout_id'] . ', "' . $this->db->escape($module_type . '.' . (int)$module['module_id']) . '", "' . $this->db->escape($module['position']) . '", ' . (int)$module['sort_order'] . ')');
+                $this->db->query('INSERT INTO ' . DB_PREFIX . 'setting (`code`, `key`, `value`, `serialized`) VALUES ("' . $this->db->escape($module_type) . '", "' . $this->db->escape($module_type . '_' . (int)$this->db->getLastId() . '_status') . '", "' . (int)$module['status'] . '", 0)');
+            }
+        } else {
+            $this->load->model('setting/extension');
+            $this->load->model('setting/setting');
+            $this->model_setting_extension->uninstallJ2Extension('module', $module_type);
+            $this->model_setting_extension->install('module', $module_type);
+            $this->model_setting_setting->editSetting($module_type, array($module_type . '_module' => $module_data));
+        }
 
         Journal2Cache::deleteModuleCache("module_journal_{$this->get_data['module_type']}");
 

@@ -1,6 +1,12 @@
 <?php
 class ControllerJournal2LayoutParser extends Controller {
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function index() {
         $this->load->model('design/layout');
         $this->load->model('catalog/category');

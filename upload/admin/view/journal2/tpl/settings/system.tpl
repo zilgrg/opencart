@@ -99,7 +99,11 @@
 
         <accordion-group is-open="true" data-ng-show="settings.developer_mode == 0">
             <accordion-heading>
-                <div class="accordion-bar bar-level-0">Modules Cache</div>
+                <div class="accordion-bar bar-level-0">
+                    Modules Cache
+                    <a class="toggle-modules accordion-remove" data-ng-click="toggle_modules($event, 0)">Disable All</a>
+                    <a class="toggle-modules accordion-remove" data-ng-click="toggle_modules($event, 1)">Enable All</a>
+                </div>
             </accordion-heading>
             <ul class="module-create-options">
                 <li>
@@ -222,18 +226,68 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
-                <?php if (defined('J2ENV')): ?>
                 <li>
-                    <span class="module-create-title">Multi Modules</span>
+                    <span class="module-create-title">Advanced Grid</span>
                     <span class="module-create-option">
-                        <switch data-ng-model="settings.multi_modules_cache">
+                        <switch data-ng-model="settings.advanced_grid_cache">
                             <switch-option key="1">ON</switch-option>
                             <switch-option key="0">OFF</switch-option>
                         </switch>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
-                <?php endif; ?>
+                <li>
+                    <span class="module-create-title">Carousel Grid</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.carousel_grid_cache">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Side Products</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.side_products_cache">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+            </ul>
+        </accordion-group>
+
+        <accordion-group is-open="true">
+            <accordion-heading>
+                <div class="accordion-bar bar-level-0">Database Indexes</div>
+            </accordion-heading>
+            <ul class="module-create-options">
+                <li data-ng-show="table_columns === null">
+                    <span class="module-create-title">Actions</span>
+                    <span class="module-create-option">
+                        <a class="btn blue" data-ng-click="getDatabaseIndexStatus($event)">Check Indexes</a>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li data-ng-show="table_columns !== null">
+                    <span class="module-create-title">Columns Not Indexed</span>
+                    <span class="module-create-option">
+                        {{table_columns.length == 0 ? 'All columns are indexed.' : ''}}
+                        <ul>
+                            <li data-ng-repeat="column in table_columns" data-ng-class="{indexed: column.index}">{{column.column + (column.status ? ' - ' + column.status : '')}}</li>
+                        </ul>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li data-ng-show="table_columns !== null && table_columns.length > 0">
+                    <span class="module-create-title">Actions</span>
+                    <span class="module-create-option">
+                        <a class="btn blue" data-ng-click="addDatabaseIndexes($event)">Add Indexes</a>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
             </ul>
         </accordion-group>
     </accordion>

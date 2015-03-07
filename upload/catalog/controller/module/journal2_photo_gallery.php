@@ -3,6 +3,12 @@ class ControllerModuleJournal2PhotoGallery extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
@@ -29,7 +35,7 @@ class ControllerModuleJournal2PhotoGallery extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -83,7 +89,7 @@ class ControllerModuleJournal2PhotoGallery extends Controller {
             }
 
             /* carousel */
-            $this->data['carousel'] = Journal2Utils::getProperty($module_data, 'carousel');
+            $this->data['carousel'] = in_array($setting['position'], array('column_left', 'column_right')) ? false : Journal2Utils::getProperty($module_data, 'carousel');
             if ($this->data['carousel']) {
                 $this->data['items_per_row'] = Journal2Utils::getProperty($module_data, 'items_per_row.value');
                 $this->data['arrows'] = Journal2Utils::getProperty($module_data, 'carousel_arrows');
@@ -103,38 +109,40 @@ class ControllerModuleJournal2PhotoGallery extends Controller {
             $images = Journal2Utils::sortArray($images);
 
             /* generate images */
-            $thumb_limit = Journal2Utils::getProperty($module_data, 'thumbs_limit', PHP_INT_MAX);
+            $this->data['thumbs_limit']  = Journal2Utils::getProperty($module_data, 'thumbs_limit', PHP_INT_MAX);
+            $this->data['thumbs_width']  = Journal2Utils::getProperty($module_data, 'thumbs_width', 200);
+            $this->data['thumbs_height'] = Journal2Utils::getProperty($module_data, 'thumbs_height', 200);
+            $this->data['thumbs_type']   = Journal2Utils::getProperty($module_data, 'thumbs_type', 'crop');
             $this->data['images'] = array();
             foreach ($images as $image) {
-                if ($thumb_limit <= 0) break;
                 if (isset($image['status']) && !$image['status']) continue;
-                list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . $image['image']);
                 $this->data['images'][] = array(
                     'name'      => Journal2Utils::getProperty($image, 'name.value.' . $this->config->get('config_language_id'), ''),
-                    'image'     => 'image/' . Journal2Utils::getProperty($image, 'image'),
-                    'thumb'     => $this->model_tool_image->resize(Journal2Utils::getProperty($image, 'image'), 200, 200, $width_orig < $height_orig ? 'w' : 'h')
+                    'image'     => Journal2Utils::resizeImage($this->model_tool_image, $image),
+                    'thumb'     => Journal2Utils::resizeImage($this->model_tool_image, $image, $this->data['thumbs_width'], $this->data['thumbs_height'], $this->data['thumbs_type']),
                 );
-                $thumb_limit--;
             }
 
-            $this->template = 'journal2/template/journal2/module/photo_gallery.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/photo_gallery.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
         $this->document->addScript('catalog/view/theme/journal2/lib/swipebox/source/jquery.swipebox.js');
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 }

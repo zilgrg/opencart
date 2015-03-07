@@ -1,18 +1,26 @@
 /*
-  Journal - The Ultimate Opencart Theme
-  Version 2.0.5
-  Copyright (c) 2013 Digital Atelier
+  Journal - Advanced Opencart Theme Framework
+  Version 2.4.5
+  Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
 /******************************
  SECOND IMAGE
 *******************************/
-.product-grid-second-image .product-grid-item .image > a.has-second-image, .product-list-second-image .product-list-item .image > a.has-second-image {
+.product-grid-item .image > a, .product-list-item .image > a {
+  background-position: 500px !important; }
+
+.product-grid-second-image .product-grid-item .image > a.has-second-image,
+.product-list-second-image .product-list-item .image > a.has-second-image {
   background-size: 100% 100% !important; }
-.product-grid-second-image .product-grid-item:hover .image > a.has-second-image > img, .product-list-second-image .product-list-item:hover .image > a.has-second-image > img {
-  opacity: 0;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  transition: opacity .2s ease-out; }
+.product-grid-second-image .product-grid-item:hover .image a.has-second-image,
+.product-list-second-image .product-list-item:hover .image a.has-second-image {
+  background-position: 0 !important; }
+  .product-grid-second-image .product-grid-item:hover .image a.has-second-image img,
+  .product-list-second-image .product-list-item:hover .image a.has-second-image img {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    transition: opacity .2s ease-out; }
 
 .section-brand .product-grid-item:hover .image > a.has-second-image > img, .section-brand .product-list-item:hover .image > a.has-second-image > img,
 .section-category .product-grid-item:hover .image > a.has-second-image > img,
@@ -20,12 +28,10 @@
 .carousel-brand .product-grid-item:hover .image > a.has-second-image > img,
 .carousel-brand .product-list-item:hover .image > a.has-second-image > img,
 .carousel-category .product-grid-item:hover .image > a.has-second-image > img,
-.carousel-category .product-list-item:hover .image > a.has-second-image > img,
-.side-column .product-grid-item:hover .image > a.has-second-image > img,
-.side-column .product-list-item:hover .image > a.has-second-image > img {
+.carousel-category .product-list-item:hover .image > a.has-second-image > img {
   opacity: 1;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  transition: opacity 0; }
+  transition: opacity 0.2s; }
 
 /******************************
  NOTIFICATION
@@ -35,7 +41,7 @@
   right: 20px;
   position: fixed;
   height: auto;
-  z-index: 9999;
+  z-index: 99999999;
   background-color: #f4f4f4;
   padding: 10px; }
 
@@ -44,7 +50,7 @@
   height: 30px;
   position: absolute;
   right: 3px;
-  top: 12px;
+  top: 13px;
   visibility: visible !important;
   transition: all 0.2s;
   opacity: 0;
@@ -57,8 +63,8 @@
 
 .ui-pnotify-title {
   display: block;
-  background-color: #5f6874;
-  padding: 5px 7px 7px 7px;
+  background-color: #5F6874;
+  padding: 3px 10px 5px;
   margin-bottom: 10px; }
 
 .ui-pnotify-text {
@@ -85,7 +91,7 @@ html.swipebox {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99999 !important;
+  z-index: 9999999 !important;
   overflow: hidden;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -193,43 +199,31 @@ html.swipebox {
 @-moz-keyframes rightSpring {
   0% {
     margin-left: 0px; }
-
   50% {
     margin-left: -30px; }
-
   100% {
     margin-left: 0px; } }
-
 @-moz-keyframes leftSpring {
   0% {
     margin-left: 0px; }
-
   50% {
     margin-left: 30px; }
-
   100% {
     margin-left: 0px; } }
-
 @-webkit-keyframes rightSpring {
   0% {
     margin-left: 0px; }
-
   50% {
     margin-left: -30px; }
-
   100% {
     margin-left: 0px; } }
-
 @-webkit-keyframes leftSpring {
   0% {
     margin-left: 0px; }
-
   50% {
     margin-left: 30px; }
-
   100% {
     margin-left: 0px; } }
-
 /* Skin
 --------------------------*/
 #swipebox-overlay {
@@ -310,7 +304,7 @@ html.swipebox {
     position: relative;
     width: 40%; }
   .sticky-header .button-search {
-    border-left: 1px solid #e4e4e4; }
+    border-left: 1px solid #E4E4E4; }
   .sticky-header .autocomplete2-suggestions {
     box-shadow: 0 1px 8px -5px rgba(0, 0, 0, 0.5); }
   .sticky-header.journal-header-menu #logo a img {
@@ -354,8 +348,8 @@ SIDE BLOCKS
 .side-block-left,
 .side-block-right {
   position: fixed;
-  top: 220px;
-  z-index: 98; }
+  top: 0;
+  z-index: 999999; }
   .side-block-left *,
   .side-block-right * {
     -webkit-transform: translateZ(0) scale(1, 1); }
@@ -373,6 +367,8 @@ SIDE BLOCKS
 
 .side-block-content p {
   margin: 0; }
+  .side-block-content p a {
+    transition: all 0.2s; }
 
 .side-block-content {
   min-height: 50px;
@@ -409,7 +405,7 @@ SCROLL TOP
 .scroll-top {
   display: none;
   position: fixed;
-  z-index: 99;
+  z-index: 9999;
   right: 5px;
   bottom: 0px;
   padding: 8px;
@@ -436,7 +432,15 @@ TOOLTIPS
 *******************************/
 [data-hint]:before {
   border: 7px solid transparent;
-  display: none; }
+  display: none;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d; }
+
+.hint--top, .hint--left, .hint--right {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d; }
 
 .hint--top:before {
   left: 50%;
@@ -450,6 +454,9 @@ TOOLTIPS
 
 .hint--left:before {
   border-left-color: #333745; }
+
+.ie9 .hint--top:after, .ie8 .hint--top:after {
+  left: -50%; }
 
 .hint--top:after,
 .hint--top:focus:after {
@@ -496,3 +503,101 @@ TOOLTIPS
   -moz-transform: translate3d(0, 0, 0) translateY(-8px) translateX(0);
   -ms-transform: translate3d(0, 0, 0) translateY(-8px) translateX(0);
   transform: translate3d(0, 0, 0) translateY(-8px) translateX(0); }
+
+/******************************
+ Countdown
+*******************************/
+.countdown {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: all 0.2s;
+  visibility: hidden;
+  opacity: 0;
+  bottom: 0;
+  z-index: 999;
+  width: 100%;
+  display: table;
+  padding: 3px 0; }
+  .countdown span {
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    font-size: 14px;
+    font-weight: bold;
+    border-right: 1px solid white;
+    width: 25%;
+    color: white;
+    text-align: center; }
+    .countdown span:last-of-type {
+      border-right: 0; }
+    .countdown span div {
+      display: block;
+      font-size: 10px;
+      font-weight: normal;
+      border: 0;
+      text-align: center;
+      width: 100%;
+      overflow: hidden;
+      padding: 0 3px; }
+
+@media only screen and (max-width: 760px) {
+  .countdown {
+    padding: 0; } }
+.ipad .countdown,
+.safari .countdown {
+  padding: 0;
+  min-height: 35px; }
+
+.countdown-on .countdown {
+  visibility: visible;
+  opacity: 1; }
+.countdown-on.product-grid-item .countdown {
+  display: table; }
+
+.product-info .right > div .countdown {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: auto;
+  visibility: visible;
+  opacity: 1;
+  display: table;
+  width: 100%;
+  padding: 5px 0;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit; }
+  .product-info .right > div .countdown span {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 5px;
+    position: relative;
+    font-size: 19px;
+    font-weight: bold;
+    border-right: 1px solid #f4f4f4;
+    color: white;
+    text-align: center; }
+    .product-info .right > div .countdown span:last-of-type {
+      border-right: 0; }
+    .product-info .right > div .countdown span div {
+      display: block;
+      font-size: 11px;
+      font-weight: normal;
+      border: 0;
+      text-align: center;
+      width: 100%;
+      overflow: hidden;
+      padding: 0 3px; }
+
+/******************************
+ BRAND LOGO
+*******************************/
+.brand-logo {
+  display: table; }
+  .brand-logo a {
+    display: block;
+    vertical-align: middle;
+    padding-right: 5px; }
+  .brand-logo:after {
+    content: "";
+    display: table;
+    width: 100%;
+    clear: both; }

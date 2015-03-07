@@ -3,6 +3,8 @@ define(['./module', 'underscore'], function(module, _){
     module
         .factory('FontDefaults', function () {
             return {
+                fonts: null,
+                font_subsets: null,
                 system: function () {
                     return {
                         font_type: 'none',
@@ -37,7 +39,7 @@ define(['./module', 'underscore'], function(module, _){
                 });
             };
         })
-        .directive('jOptFont', ['Rest', 'FontDefaults', 'Spinner', function(Rest,  FontDefaults, Spinner) {
+        .directive('jOptFont', ['Rest', 'FontDefaults', 'Spinner', function(Rest, FontDefaults, Spinner) {
             return {
                 replace: true,
                 require: '?ngModel',
@@ -47,20 +49,6 @@ define(['./module', 'underscore'], function(module, _){
                 restrict: 'E',
                 templateUrl: 'view/journal2/tpl/directives/j-opt-font.html?ver=' + Journal2Config.version,
                 controller: ['$timeout', '$scope', '$modal', function($timeout, $scope, $modal) {
-                    $scope.fonts = [];
-                    Rest.getFonts().then(function(fonts){
-                        $scope.fonts = fonts;
-                        $scope.font_subsets = _
-                            .chain(fonts.google_fonts)
-                            .map(function(font){
-                                return font.subsets;
-                            })
-                            .reduce(function(a, b){
-                                return a.concat(b);
-                            })
-                            .uniq()
-                            .value();
-                    });
                     $scope.ngModel = $scope.ngModel || {};
                     $scope.ngModel.value = $scope.ngModel.value || new FontDefaults.system();
 
@@ -72,11 +60,32 @@ define(['./module', 'underscore'], function(module, _){
                                 fonts: function() { return $scope.fonts; },
                                 font_subsets: function() { return $scope.font_subsets; }
                             },
-                            controller: function($scope, $rootScope, $modalInstance, fonts, ngModel, font_subsets) {
+                            controller: function($scope, ngModel, $modalInstance) {
                                 ngModel = ngModel || {};
-                                $scope.fonts = fonts;
                                 $scope.font = ngModel.value || new FontDefaults.system();
-                                $scope.font_subsets = font_subsets;
+                                $scope.fonts = [];
+                                $scope.font_subsets = [];
+                                if (FontDefaults.fonts !== null) {
+                                    $scope.fonts = FontDefaults.fonts;
+                                    $scope.font_subsets = FontDefaults.font_subsets;
+                                } else {
+                                    Rest.getFonts().then(function(fonts) {
+                                        $scope.fonts = fonts;
+                                        $scope.font_subsets = _
+                                            .chain(fonts.google_fonts)
+                                            .map(function (font) {
+                                                return font.subsets;
+                                            })
+                                            .reduce(function (a, b) {
+                                                return a.concat(b);
+                                            })
+                                            .uniq()
+                                            .value();
+                                        FontDefaults.fonts = $scope.fonts;
+                                        FontDefaults.font_subsets = $scope.font_subsets;
+                                        $scope.fontChanged($scope.font);
+                                    });
+                                }
                                 // preview text
                                 $scope.dummyText = 'The quick brown Fox jumps over the lazy Dog.';
                                 $scope.isEditable = false;

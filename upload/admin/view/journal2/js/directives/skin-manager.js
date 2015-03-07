@@ -30,7 +30,7 @@ define(['./module'], function (module) {
                                 });
 
                                 $scope.save = function ($event) {
-                                    var $src = $($event.srcElement);
+                                    var $src = $($event.target || $event.srcElement);
                                     Spinner.show($src);
                                     var promises = {};
                                     _.each($scope.stores, function (store) {

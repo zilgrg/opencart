@@ -2,8 +2,14 @@
 class ControllerModuleJournal2SuperFilter extends Controller {
 
     private $filters;
-    private static $IMG_WIDTH = 42;
-    private static $IMG_HEIGHT = 42;
+    private static $IMG_WIDTH = 69;
+    private static $IMG_HEIGHT = 69;
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -23,21 +29,42 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         }
 
         Journal2::startTimer(get_class($this));
-
+        
         if (!isset($this->request->get['route'])) {
             return;
         }
-        if (!in_array($this->request->get['route'], array('product/category', 'product/manufacturer/info', 'product/search', 'product/special'))) {
-            return;
+
+         switch ($this->request->get['route']) {
+            case 'product/category':
+                if(!isset($this->request->get['path'])) return;
+                $path = explode('_', $this->request->get['path']);
+                $data = array('filter_category_id' => end($path));
+                $this->load->model('catalog/product');
+                if($this->model_catalog_product->getTotalProducts($data) == 0) return;
+                break;
+            case 'product/manufacturer/info':
+                if(!isset($this->request->get['manufacturer_id'])) return;
+                break;
+            case 'product/search':
+                if(!isset($this->request->get['search']) && !isset($this->request->get['tag'])) return;
+                break;
+            case 'product/special':
+                $this->load->model('catalog/product');
+                if($this->model_catalog_product->getTotalProductSpecials() == 0) return;
+                break;
+            default:
+                return;
         }
 
-        if ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) return;
+        if (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) return;
         if (!isset($setting['module_id'])) return;
         $this->journal2->settings->set('config_j2sf', 'on');
-        $this->getFilters((int)$setting['module_id']);
+        $output = $this->getFilters((int)$setting['module_id']);
         $this->document->addScript('catalog/view/theme/journal2/lib/jquery.address/jquery.address.js');
 
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
     public function filters() {
@@ -57,6 +84,11 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         $this->data['filter_action_url'] = 'index.php?route=module/journal2_super_filter/filters&amp;module_id=' . $module_id;
         $this->data['products_action_url'] = 'index.php?route=module/journal2_super_filter/products&amp;module_id=' . $module_id;
         $this->data['module_id'] = $module_id;
+
+        /* quick error fix */
+        $this->data['manufacturer_id'] = '';
+        $this->data['search'] = '';
+        $this->data['tag'] = '';
 
         /* reset button */
         $this->data['reset'] = Journal2Utils::getProperty($module_data, 'reset');
@@ -80,6 +112,10 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         $this->data['text_price'] = trim($this->language->get('text_price'), ': ');
         $this->data['text_tags']  = trim($this->language->get('text_tags'), ': ');
 
+        /* image width / height */
+        $this->data['image_width'] = self::$IMG_WIDTH;
+        $this->data['image_height'] = self::$IMG_HEIGHT;
+
         $data = array();
 
         if ($ajax) {
@@ -97,7 +133,6 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             if ($category_id) {
                 $this->data['path'] = $category_id;
                 $data['path'] = $category_id;
-
             }else{
                 $this->data['path'] = "";
             }
@@ -141,6 +176,8 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             }
         }
 
+        $show_product_count = (int)Journal2Utils::getProperty($module_data, 'product_count', 1);
+
         /* filter groups */
         $filter_groups = array();
 
@@ -149,18 +186,18 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         $this->data['category_type'] = $module_data['category_type'];
         $this->data['categories'] = array();
 
-        if ($module_data['category'] != 'off' && $data['route'] == 'product/category') {
+        if ($module_data['category'] != 'off') {
             $results = $this->model_journal2_super_filter->getCategories($data);
             foreach ($results as $result) {
                 $this->data['categories'][] = array(
                     'category_id'	=> $result['category_id'],
-                    'name'		    => trim($result['name']) . ' (' . $result['total'] . ')',
-                    'image'         => $this->model_tool_image->resize($result['image'] ? $result['image'] : 'no_image.jpg', self::$IMG_WIDTH, self::$IMG_HEIGHT),
+                    'name'		    => trim($result['name']) . ( $show_product_count ? ' (' . $result['total'] . ')' : ''),
+                    'image'         => $this->model_tool_image->resize($result['image'] ? $result['image'] : (Front::$IS_OC2 ? 'placeholder.png' : 'no_image.jpg'), self::$IMG_WIDTH, self::$IMG_HEIGHT),
                     'keyword'		=> $this->keyword($result['name'])
                 );
             }
             if ($this->data['categories']) {
-                $this->template = 'journal2/template/journal2/module/super_filter_categories.tpl';
+                $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_categories.tpl';
                 $filter_groups[] = array(
                     'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.c'),
                     'html'          => $this->render()
@@ -178,13 +215,13 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             foreach ($results as $result) {
                 $this->data['manufacturers'][] = array(
                     'manufacturer_id'	=> $result['manufacturer_id'],
-                    'name'			    => trim($result['name']) . ' (' . $result['total'] . ')',
-                    'image'             => $this->model_tool_image->resize($result['image'] ? $result['image'] : 'no_image.jpg', self::$IMG_WIDTH, self::$IMG_HEIGHT),
+                    'name'			    => trim($result['name']) . ( $show_product_count ? ' (' . $result['total'] . ')' : ''),
+                    'image'             => $this->model_tool_image->resize($result['image'] ? $result['image'] : (Front::$IS_OC2 ? 'placeholder.png' : 'no_image.jpg'), self::$IMG_WIDTH, self::$IMG_HEIGHT),
                     'keyword'			=> $this->keyword($result['name'])
                 );
             }
             if ($this->data['manufacturers']) {
-                $this->template = 'journal2/template/journal2/module/super_filter_manufacturers.tpl';
+                $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_manufacturers.tpl';
                 $filter_groups[] = array(
                     'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.m'),
                     'html'          => $this->render()
@@ -202,8 +239,8 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             $values = array();
             foreach ($result['values'] as $value) {
                 $values[] = array(
-                    'text'		=> trim($value['text']),
-                    'name'		=> trim($value['text']) . ' (' . $value['total'] . ')',
+                    'text'		=> rawurlencode(trim($value['text'])),
+                    'name'		=> trim($value['text']) . ( $show_product_count ? ' (' . $value['total'] . ')' : ''),
                     'keyword'	=> $this->keyword($result['attribute_name'] . " " . $value['text'])
                 );
             }
@@ -214,7 +251,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 'type'              => Journal2Utils::getProperty($module_data, 'attributes_type.' . $key, 'single'),
                 'values'			=> $values,
             );
-            $this->template = 'journal2/template/journal2/module/super_filter_attributes.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_attributes.tpl';
             $filter_groups[] = array(
                 'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.a_' . $result['attribute_id']),
                 'html'          => $this->render()
@@ -233,8 +270,8 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             foreach ($result['values'] as $value) {
                 $values[] = array(
                     'option_value_id'	=> $value['option_value_id'],
-                    'option_value_name'	=> trim($value['option_value_name']) . ' (' . $value['total'] . ')',
-                    'image'				=> $this->model_tool_image->resize($value['image'] ? $value['image'] : 'no_image.jpg', self::$IMG_WIDTH, self::$IMG_HEIGHT),
+                    'option_value_name'	=> trim($value['option_value_name']) . ( $show_product_count ? ' (' . $value['total'] . ')' : ''),
+                    'image'				=> $this->model_tool_image->resize($value['image'] ? $value['image'] : (Front::$IS_OC2 ? 'placeholder.png' : 'no_image.jpg'), self::$IMG_WIDTH, self::$IMG_HEIGHT),
                     'keyword'			=> $this->keyword($result['option_name'] . " " .$value['option_value_name'])
                 );
             }
@@ -245,7 +282,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 'type'          => Journal2Utils::getProperty($module_data, 'options_type.' . $key, 'single'),
                 'values'		=> $values,
             );
-            $this->template = 'journal2/template/journal2/module/super_filter_options.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_options.tpl';
             $filter_groups[] = array(
                 'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.o_' . $result['option_id']),
                 'html'          => $this->render()
@@ -257,17 +294,28 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             foreach ($results as $result) {
                 $this->data['tags'][] = array(
                     'text'      => trim($result['name']),
-                    'name'      => trim($result['name']) . ' (' . $result['total'] . ')',
+                    'name'      => trim($result['name']) . ( $show_product_count ? ' (' . $result['total'] . ')' : ''),
                     'keyword'   => $this->keyword($result['name'])
                 );
             }
             if (isset($this->data['tags'])) {
-                $this->template = 'journal2/template/journal2/module/super_filter_tags.tpl';
+                $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_tags.tpl';
                 $filter_groups[] = array(
-                    'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.m'),
+                    'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.t'),
                     'html'          => $this->render()
                 );
             }
+        }
+
+        // Availability
+        if (Journal2Utils::getProperty($module_data, 'availability')) {
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_availability.tpl';
+            $this->data['availability_yes'] = false;
+            $this->data['availability_no'] = false;
+            $filter_groups[] = array(
+                'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.a'),
+                'html'          => $this->render()
+            );
         }
 
         // Price
@@ -288,18 +336,26 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             $this->data['price_filter'] = false;
         }
 
+        if ($this->data['price_filter']) {
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_price.tpl';
+            $filter_groups[] = array(
+                'sort_order'    => Journal2Utils::getProperty($module_data, 'sort_orders.p'),
+                'html'          => $this->render()
+            );
+        }
+
         if (!count($filter_groups) && $this->data['price_filter'] === false) {
             return;
         }
 
         $this->data['filter_groups'] = Journal2Utils::sortArray($filter_groups);
 
-        $this->template = 'journal2/template/journal2/module/super_filter.tpl';
+        $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter.tpl';
 
         if ($ajax) {
             $this->response->setOutput($this->render());
         }else{
-            $this->render();
+            return $this->render();
         }
     }
 
@@ -309,10 +365,13 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         $options = array();
         $attributes = array();
         $tags = array();
+        $availability = array();
 
         $filters = $this->filters;
 
         foreach (explode("/", $this->request->post['filters']) as $fragment) {
+            // $fragment = rawurldecode($fragment);
+
             $pattern = '/-c(((\d+)(,*))+)/';
             if (preg_match($pattern, $fragment)) {
                 preg_match($pattern, $fragment, $values);
@@ -336,7 +395,10 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 $text = $text[1];
                 preg_match($pattern , $fragment, $attribute_id);
                 $attribute_id = $attribute_id[1];
-                $attributes[$attribute_id][] = array('attribute_id' => $attribute_id, 'text' => $text);
+                $attributes[$attribute_id] = array();
+                foreach (explode(",", $text) as $a) {
+                	$attributes[$attribute_id][] = rawurldecode($a);
+                }
             }
 
             $pattern = '/-o(\d+)-v/';
@@ -354,6 +416,15 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 foreach (explode(",", $values[1]) as $value) {
                     $tags[] = $value;
                 }
+            }
+
+            $pattern = '/availability=(.+)/';
+            if (preg_match($pattern, $fragment)) {
+                preg_match($pattern, $fragment, $values);
+                foreach (explode(",", $values[1]) as $value) {
+                    $availability[$value] = $value;
+                }
+                $availability = array_values($availability);
             }
 
             if (preg_match("/sort=/", $fragment)) {
@@ -420,6 +491,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             'attributes'		=> $attributes,
             'options'			=> $options,
             'tags'              => $tags,
+            'availability'      => $availability,
             'minPrice'			=> $minPrice,
             'maxPrice'			=> $maxPrice,
             'sort' 				=> $sort,
@@ -431,6 +503,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         );
         if (isset($this->request->post['manufacturer_id']) && strlen($this->request->post['manufacturer_id']) > 0) {
             $data['manufacturers'][] = $this->request->post['manufacturer_id'];
+            $data['manufacturer_id'] = $this->request->post['manufacturer_id'];
         }
 
         if (isset($this->request->post['path']) && strlen($this->request->post['path'] > 0)) {
@@ -517,7 +590,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
 
         $product_total = $this->model_journal2_super_filter->getTotalProducts($data);
 
-        $results = $this->model_journal2_super_filter->getProducts($data);
+        $results = $this->model_journal2_super_filter->getProductsWithData($data);
 
         $url = '';
 
@@ -525,14 +598,14 @@ class ControllerModuleJournal2SuperFilter extends Controller {
             if ($result['image']) {
                 $image = $this->model_tool_image->resize($result['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
             } else {
-                $image = false;
+                $image = $this->model_tool_image->resize(Front::$IS_OC2 ? 'placeholder.png' : 'no_image.jpg', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
             }
 
             $image2 = false;
 
             $results = $this->model_catalog_product->getProductImages($result['product_id']);
             if (count($results) > 0) {
-                $image2 = $this->model_tool_image->resize($results[0]['image'] ? $results[0]['image'] : 'data/journal2/no_image_large.jpg', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
+                $image2 = $this->model_tool_image->resize($results[0]['image'] ? $results[0]['image'] : (Front::$IS_OC2 ? 'placeholder.png' : 'no_image.jpg'), $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
             }
 
             if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
@@ -571,6 +644,15 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                     break;
             }
 
+            $date_end = false;
+            if ($special && $this->journal2->settings->get('show_countdown', 'never') !== 'never') {
+                $this->load->model('journal2/product');
+                $date_end = $this->model_journal2_product->getSpecialCountdown($result['product_id']);
+                if ($date_end === '0000-00-00') {
+                    $date_end = false;
+                }
+            }
+
             $this->data['products'][] = array(
                 'product_id'  => $result['product_id'],
                 'thumb'       => $image,
@@ -579,6 +661,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 'description' => utf8_substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..',
                 'price'       => $price,
                 'special'     => $special,
+                'date_end'    => $date_end,
                 'tax'         => $tax,
                 'rating'      => $result['rating'],
                 'reviews'     => sprintf($this->language->get('text_reviews'), (int)$result['reviews']),
@@ -613,6 +696,10 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         }
 
         $this->data['pagination'] = $pagination->render();
+
+        if (Front::$IS_OC2) {
+            $this->data['results'] = sprintf($this->language->get('text_pagination'), ($product_total) ? (($data['page'] - 1) * $data['limit']) + 1 : 0, ((($data['page'] - 1) * $data['limit']) > ($product_total - $data['limit'])) ? $product_total : ((($data['page'] - 1) * $data['limit']) + $data['limit']), $product_total, ceil($product_total / $data['limit']));
+        }
 
 
         $this->data['order'] = $data['order'];
@@ -695,7 +782,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
 
         $this->data['continue'] = $this->url->link('common/home');
 
-        $this->template = 'journal2/template/journal2/module/super_filter_product.tpl';
+        $this->template = $this->config->get('config_template') . '/template/journal2/module/super_filter_product.tpl';
 
         $this->response->setOutput($this->render());
     }

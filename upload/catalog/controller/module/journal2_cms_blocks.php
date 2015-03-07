@@ -5,6 +5,12 @@ class ControllerModuleJournal2CmsBlocks extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
@@ -30,7 +36,7 @@ class ControllerModuleJournal2CmsBlocks extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -53,6 +59,11 @@ class ControllerModuleJournal2CmsBlocks extends Controller {
                 $css[] = 'padding-right: ' . $padding;
             } else {
                 $css[] = 'max-width: ' . $this->journal2->settings->get('site_width', 1024) . 'px';
+                $css = array_merge($css, Journal2Utils::getBackgroundCssProperties(Journal2Utils::getProperty($module_data, 'module_background')));
+                if (Journal2Utils::getProperty($module_data, 'module_padding')) {
+                    $this->data['gutter_on_class'] = 'gutter-on';
+                    $css[] = 'padding: 20px';
+                }
             }
             $this->data['css'] = implode('; ', $css);
         }
@@ -113,23 +124,25 @@ class ControllerModuleJournal2CmsBlocks extends Controller {
                 $this->data['grid_classes'] = Journal2Utils::getProductGridClasses(Journal2Utils::getProperty($module_data, 'items_per_row.value'), $this->journal2->settings->get('site_width', 1024), $columns);
             }
 
-            $this->template = 'journal2/template/journal2/module/cms_blocks.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/cms_blocks.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
 }

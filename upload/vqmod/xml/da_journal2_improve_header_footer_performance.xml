@@ -8,14 +8,14 @@
     <file path="catalog/controller/common/" name="header.php">
         <operation error="skip">
             <search position="replace" trim="true"><![CDATA[$categories = $this->model_catalog_category->getCategories(0);]]></search>
-            <add><![CDATA[$categories = array();]]></add>
+            <add><![CDATA[$categories = $this->registry->get('config')->get('config_template') === 'journal2' ? array() : $this->model_catalog_category->getCategories(0);]]></add>
         </operation>
     </file>
 
     <file path="catalog/controller/common/" name="footer.php">
         <operation error="skip">
             <search position="replace" trim="true"><![CDATA[foreach ($this->model_catalog_information->getInformations() as $result) {]]></search>
-            <add><![CDATA[foreach (array() as $result) {]]></add>
+            <add><![CDATA[foreach ($this->registry->get('config')->get('config_template') === 'journal2' ? array() : $this->model_catalog_information->getInformations() as $result) {]]></add>
         </operation>
     </file>
 

@@ -3,8 +3,12 @@ class ControllerJournal2Search extends Controller {
 
     private static $SHOW_PRICE = true;
     private static $SHOW_IMAGES = true;
-    private static $IMAGE_WIDTH = 50;
-    private static $IMAGE_HEIGHT = 50;
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($reg) {
         parent::__construct($reg);
@@ -19,12 +23,16 @@ class ControllerJournal2Search extends Controller {
 
         if(isset($this->request->get['search'])) {
 
-            $results = $this->model_journal2_search->search($this->request->get['search']);
+            $results = $this->model_journal2_search->search($this->request->get['search'], $this->journal2->settings->get('autosuggest_limit', 0), $this->journal2->settings->get('search_autocomplete_include_description', '1') === '1');
+
+            $image_width    = $this->journal2->settings->get('autosuggest_product_image_width', 50);
+            $image_height   = $this->journal2->settings->get('autosuggest_product_image_height', 50);
+            $image_type     = $this->journal2->settings->get('autosuggest_product_image_type', 'fit');
 
             foreach($results as $result) {
                 $result = $this->model_catalog_product->getProduct($result['product_id']);
                 if (self::$SHOW_IMAGES) {
-                    $image = $this->model_tool_image->resize($result['image'] ? $result['image'] : 'no_image.jpg', self::$IMAGE_WIDTH, self::$IMAGE_HEIGHT);
+                    $image = Journal2Utils::resizeImage($this->model_tool_image, $result['image'], $image_width, $image_height, $image_type);
                 } else {
                     $image = null;
                 }
@@ -49,6 +57,9 @@ class ControllerJournal2Search extends Controller {
                     'special' => $special
                 );
             }
+
+            $json['view_more_text'] = $this->journal2->settings->get('autosuggest_view_more_text', 'View More');
+            $json['view_more_url'] = $this->url->link('product/search', '&search=' . urlencode(html_entity_decode($this->request->get['search'], ENT_QUOTES, 'UTF-8')));
         }
 
         $this->response->setOutput(json_encode($json));

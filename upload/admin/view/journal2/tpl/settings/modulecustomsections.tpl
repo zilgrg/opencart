@@ -24,7 +24,7 @@
     <accordion id="main-accordion" close-others="accordion.close_others">
         <accordion-group is-open="accordion.accordions[0]">
             <accordion-heading>
-                <div class="accordion-bar bar-level-0">Custom Sections</div>
+                <div class="accordion-bar bar-level-0">General</div>
             </accordion-heading>
             <ul class="module-create-options">
 
@@ -40,6 +40,13 @@
                     <span class="module-create-title">Title Bar Background</span>
                     <span class="module-create-option">
                         <j-opt-color data-ng-model="settings.cs_title_bg"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Fullwidth Bar Background <small>Top or Bottom Positions</small></span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.cs_fullwidth_title_bg"></j-opt-color>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
@@ -89,8 +96,84 @@
                         </switch>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>                
+                </li>
 
+                <li>
+                    <span class="module-create-title">Dividers on End <small>If Fullwidth Background</small></span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.cs_fullwidth_divider">
+                            <switch-option key="on">ON</switch-option>
+                            <switch-option key="off">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+            </ul>
+        </accordion-group>
+        <accordion-group is-open="accordion.accordions[1]">
+            <accordion-heading>
+                <div class="accordion-bar bar-level-0">Product Grid Override</div>
+            </accordion-heading>
+            <ul class="module-create-options">
+                <!-- Product Grid General-->
+                <li>
+                    <span class="module-create-title">Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.cs_product_grid_item_bg"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Background Hover Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.cs_product_grid_details_bg_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Padding</span>
+                        <span class="module-create-option">
+                              <j-opt-text data-ng-model="settings.cs_product_grid_item_padding" class="journal-number-field"></j-opt-text>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Border Settings</span>
+                        <span class="module-create-option">
+                            <j-opt-border data-ng-model="settings.cs_product_grid_item_border"></j-opt-border>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Hover Border Color</span>
+                        <span class="module-create-option">
+                            <j-opt-color data-ng-model="settings.cs_product_grid_hover_border"></j-opt-color>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Soft Shadow</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.cs_product_grid_soft_shadow">
+                                <switch-option key="1px 1px 0px rgba(0,0,0,.04)">ON</switch-option>
+                                <switch-option key="none">OFF</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Shadow</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.cs_product_grid_shadow">
+                                <switch-option key="hover">Hover</switch-option>
+                                <switch-option key="always">Always</switch-option>
+                                <switch-option key="never">Never</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
             </ul>
         </accordion-group>
     </accordion>

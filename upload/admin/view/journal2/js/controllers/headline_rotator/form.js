@@ -11,9 +11,11 @@ define(['./../module', 'underscore'], function (module, _) {
         $scope.module_data = {
             module_name: 'New Module',
             transition_delay: '4000',
+            pause_on_hover: '1',
             text_font: {},
             text_background: {},
-            bullets: '1',
+            text_align: 'center',
+            bullets: '0',
             bullets_position: 'center',
             top_bottom_placement: 0,
             background: {},
@@ -35,6 +37,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     menu_type: 'custom'
                 },
                 cta_icon: {},
+                cta_icon_position: 'right',
                 cta_new_window: '0',
                 cta_text: {},
                 cta_position: 'center',
@@ -72,7 +75,7 @@ define(['./../module', 'underscore'], function (module, _) {
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -93,7 +96,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

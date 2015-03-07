@@ -74,13 +74,22 @@ define(['./../module', 'underscore'], function (module, _) {
                     text_bgcolor: '',
                     text_hover_color: '',
                     text_hover_bg_color: '',
+                    text_border: {},
+                    text_hover_border_color: '',
+                    text_padding_top: '',
+                    text_padding_right: '',
+                    text_padding_bottom: '',
+                    text_padding_left: '',
+                    text_line_height: '',
+                    text_align: 'center',
                     x: '',
                     y: '',
                     animation_in: 'fade',
                     animation_out: 'fadeout',
                     custom_in_transition_x: '',
                     custom_in_transition_y: '',
-                    custom_in_transition_z: '',
+                    custom_in_scale_x: '',
+                    custom_in_scale_y: '',
                     custom_in_rotation_x: '',
                     custom_in_rotation_y: '',
                     custom_in_rotation_z: '',
@@ -90,7 +99,8 @@ define(['./../module', 'underscore'], function (module, _) {
                     custom_in_opacity: '1',
                     custom_out_transition_x: '',
                     custom_out_transition_y: '',
-                    custom_out_transition_z: '',
+                    custom_out_scale_x: '',
+                    custom_out_scale_y: '',
                     custom_out_rotation_x: '',
                     custom_out_rotation_y: '',
                     custom_out_rotation_z: '',
@@ -261,7 +271,7 @@ define(['./../module', 'underscore'], function (module, _) {
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -282,7 +292,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

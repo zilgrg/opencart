@@ -38,7 +38,6 @@
 
 .login-content .left p:first-child {
   font-size: 15px;
-  font-weight: bold;
   margin-top: 7px;
 }
 
@@ -56,12 +55,10 @@
 
 .login-content .right p:first-child {
   font-size: 15px;
-  font-weight: bold;
   margin-top: 7px;
 }
 
 .login-content .right b {
-  font-weight: normal;
   display: block;
   margin-top: 18px;
 }
@@ -353,6 +350,10 @@ COMPARE
   }
 }
 
+.buttons{
+  //clear: both;
+}
+
 .pagination + .buttons{
   margin-top: 5px;
 }
@@ -486,3 +487,20 @@ RETURNS
 .download-list .download-info {
   text-align: right;
 }
+
+.oc2{
+  .account-text{
+    margin-bottom: 15px;
+  }
+  .login-wrap{
+    .form-group{
+      margin-top: 15px;
+    }
+  }
+}
+
+
+
+
+
+

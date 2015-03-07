@@ -72,27 +72,14 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
-              <li>
-                    <span class="module-create-title">Module Font Color</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.side_module_font_color"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">Module Links Color</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.side_module_link_color"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
-                <li>
-                    <span class="module-create-title">Module Links Hover Color</span>
-                    <span class="module-create-option">
-                        <j-opt-color data-ng-model="settings.side_module_link_hover"></j-opt-color>
-                    </span>
-                    <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>
+              <!--<li>-->
+                    <!--<span class="module-create-title">Module Font Color</span>-->
+                    <!--<span class="module-create-option">-->
+                        <!--<j-opt-color data-ng-model="settings.side_module_font_color"></j-opt-color>-->
+                    <!--</span>-->
+                    <!--<a href="#" target="_blank" class="journal-tip"> </a>-->
+                <!--</li>-->
+
 
 
 
@@ -136,6 +123,20 @@
                 <div class="accordion-bar bar-level-0">Side Category</div>
             </accordion-heading>
             <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Category Links Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.side_module_link_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Links Hover Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.side_module_link_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
                 <li>
                     <span class="module-create-title">Background Hover / Active Color</span>
                     <span class="module-create-option">
@@ -246,9 +247,59 @@
 
         <accordion-group is-open="accordion.accordions[2]">
             <accordion-heading>
-                <div class="accordion-bar bar-level-0">Product Modules</div>
+                <div class="accordion-bar bar-level-0">Side Products</div>
             </accordion-heading>
             <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Image Dimensions <small>Width x Height</small></span>
+                        <span class="module-create-option">
+                            <j-opt-text data-ng-model="settings.side_product_image_width" class="journal-number-field"></j-opt-text> x
+                            <j-opt-text data-ng-model="settings.side_product_image_height" class="journal-number-field"></j-opt-text>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Product Name Overflow </span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.side_product_name_overflow">
+                            <switch-option key="nowrap">ON</switch-option>
+                            <switch-option key="normal">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Name Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.side_product_name_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Name Font Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.side_product_name_font_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Price Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.side_product_price_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Old Price Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.side_product_old_price_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
                 <li>
                     <span class="module-create-title">Image Border Settings</span>
                     <span class="module-create-option">

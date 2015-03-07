@@ -2,6 +2,13 @@
 class ControllerModuleJournal2Slider extends Controller {
 
     private static $CACHEABLE = null;
+    private $google_fonts = array();
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -9,6 +16,7 @@ class ControllerModuleJournal2Slider extends Controller {
             return;
         }
         $this->load->model('journal2/module');
+        $this->load->model('journal2/menu');
         $this->load->model('tool/image');
         $this->load->model('catalog/product');
         $this->load->model('catalog/category');
@@ -32,7 +40,7 @@ class ControllerModuleJournal2Slider extends Controller {
         if (!$module_data || !isset($module_data['module_data']) || !$module_data['module_data']) return;
         $module_data = $module_data['module_data'];
 
-        if (Journal2Utils::getProperty($module_data, 'hideonmobile') && $this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'hideonmobile') && Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -78,7 +86,6 @@ class ControllerModuleJournal2Slider extends Controller {
                     break;
                 case 'top':
                 case 'bottom':
-                case 'multi_module':
                     $width = $this->journal2->settings->get('site_width', 1024);
                     if (Journal2Utils::getProperty($module_data, 'fullwidth')) {
                         $this->data['width'] = "max-width: 100%";
@@ -88,6 +95,12 @@ class ControllerModuleJournal2Slider extends Controller {
                         $this->data['slider_class'] = 'journal-slider';
                     }
                     break;
+                case 'multi_module':
+                    $width = $setting['width'];
+                    $height = $setting['height'];
+                    $this->data['width'] = "max-width: {$width}px";
+                    $this->data['slider_class'] = 'journal-slider';
+                    break;
             }
 
             /* global style data */
@@ -95,7 +108,8 @@ class ControllerModuleJournal2Slider extends Controller {
 
             $this->data['js_options'] = Journal2Utils::getProperty($module_data, 'js_options', array());
             $this->data['js_options']['startwidth'] = $width;
-            $this->data['js_options']['startheight'] = Journal2Utils::getProperty($module_data, 'height', 400);
+            $this->data['js_options']['startheight'] = $height;
+            $this->data['height'] = $height;
 
             if (Journal2Utils::getProperty($module_data, 'hidecaptionsonmobile')) {
                 $this->data['js_options']['hideAllCaptionAtLimit'] = 760;
@@ -118,13 +132,6 @@ class ControllerModuleJournal2Slider extends Controller {
                 }
                 $slide_data[] = 'data-transition="' . Journal2Utils::getProperty($slide, 'transition', 'fade') . '"';
                 $slide_data[] = 'data-easing="' . Journal2Utils::getProperty($slide, 'easing', 'Expo.easeOut') . '"';
-                if (Journal2Utils::getProperty($slide, 'thumb')) {
-                    list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . Journal2Utils::getProperty($slide, 'thumb', 'no_image.jpg'));
-                    $slide_data[] = 'data-thumb="' . $this->model_tool_image->resize(Journal2Utils::getProperty($slide, 'thumb', 'no_image.jpg'), $this->data['js_options']['thumbWidth'], $this->data['js_options']['thumbHeight'], $width_orig < $height_orig ? 'w' : 'h') . '"';
-                } else {
-                    list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . Journal2Utils::getProperty($slide, 'image', 'no_image.jpg'));
-                    $slide_data[] = 'data-thumb="' . $this->model_tool_image->resize(Journal2Utils::getProperty($slide, 'image', 'no_image.jpg'), $this->data['js_options']['thumbWidth'], $this->data['js_options']['thumbHeight'], $width_orig < $height_orig ? 'w' : 'h') . '"';
-                }
                 $slide_data[] = 'data-masterspeed="' . Journal2Utils::getProperty($slide, 'masterspeed', 800) . '"';
                 if (Journal2Utils::getProperty($slide, 'slotamount')) {
                     $slide_data[] = 'data-slotamount="' . Journal2Utils::getProperty($slide, 'slotamount') . '"';
@@ -132,7 +139,7 @@ class ControllerModuleJournal2Slider extends Controller {
                 if (Journal2Utils::getProperty($slide, 'delay')) {
                     $slide_data[] = 'data-delay="' . Journal2Utils::getProperty($slide, 'delay') . '"';
                 }
-                $link = $this->getLink(Journal2Utils::getProperty($slide, 'link'));
+                $link = $this->model_journal2_menu->getLink(Journal2Utils::getProperty($slide, 'link'));
                 if ($link) {
                     $slide_data[] = 'data-link="' . $link . '"';
                     if (Journal2Utils::getProperty($slide, 'link_new_window')) {
@@ -173,13 +180,28 @@ class ControllerModuleJournal2Slider extends Controller {
                     $css = array();
                     switch (Journal2Utils::getProperty($caption, 'type')) {
                         case 'image':
-                            $image = Journal2Utils::optimizeImage(Journal2Utils::getProperty($caption, 'image', 'no_image.jpg'));
+                            $image = Journal2Utils::getProperty($caption, 'image', 'no_image.jpg');
+                            if (is_array($image)) {
+                                $image = Journal2Utils::getProperty($image, $this->config->get('config_language_id'));
+                            }
+                            if (!$image || !file_exists(DIR_IMAGE . $image)) {
+                                $image = 'no_image.jpg';
+                            }
+                            $image = Journal2Utils::resizeImage($this->model_tool_image, $image);
                             $alt = Journal2Utils::getProperty($caption, 'caption_name');
                             $content = '<img src="' . $image . '" alt="' . $alt .'" />';
                             break;
                         case 'text':
                             if (Journal2Utils::getProperty($caption, 'text_font.value.font_type') === 'google') {
-                                $this->journal2->google_fonts->add(Journal2Utils::getProperty($caption, 'text_font.value.font_name'), Journal2Utils::getProperty($caption, 'text_font.value.font_subset'), Journal2Utils::getProperty($caption, 'text_font.value.font_weight'));
+                                $font_name = Journal2Utils::getProperty($caption, 'text_font.value.font_name');
+                                $font_subset = Journal2Utils::getProperty($caption, 'text_font.value.font_subset');
+                                $font_weight = Journal2Utils::getProperty($caption, 'text_font.value.font_weight');
+                                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                                $this->google_fonts[] = array(
+                                    'name'  => $font_name,
+                                    'subset'=> $font_subset,
+                                    'weight'=> $font_weight
+                                );
                                 $weight = filter_var(Journal2Utils::getProperty($caption, 'text_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
                                 $css[] = 'font-weight: ' . ($weight ? $weight : 400);
                                 $css[] = "font-family: '" . Journal2Utils::getProperty($caption, 'text_font.value.font_name') . "'";
@@ -196,6 +218,7 @@ class ControllerModuleJournal2Slider extends Controller {
                             if (Journal2Utils::getProperty($caption, 'text_font.value.color.value.color')) {
                                 $css[] = 'color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($caption, 'text_font.value.color.value.color'));
                             }
+                            $css[] = 'text-align: ' . Journal2Utils::getProperty($caption, 'text_align', 'center');
                             if (Journal2Utils::getProperty($caption, 'text_bgcolor.value.color')) {
                                 $css[] = 'background-color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($caption, 'text_bgcolor.value.color'));
                             }
@@ -205,11 +228,33 @@ class ControllerModuleJournal2Slider extends Controller {
                             if (Journal2Utils::getProperty($caption, 'text_hover_bg_color.value.color')) {
                                 $this->data['global_style'][] = "#jcaption-{$module}-{$caption_id}:hover { background-color: " . Journal2Utils::getColor(Journal2Utils::getProperty($caption, 'text_hover_bg_color.value.color')) . " !important; }";
                             }
+                            if (Journal2Utils::getProperty($caption, 'text_border')) {
+                                $css = array_merge($css, Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($caption, 'text_border')));
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_hover_border_color.value.color')) {
+                                $this->data['global_style'][] = "#jcaption-{$module}-{$caption_id}:hover { border-color: " . Journal2Utils::getColor(Journal2Utils::getProperty($caption, 'text_hover_border_color.value.color')) . " !important; }";
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_padding_top') !== null) {
+                                $css[] = 'padding-top: ' . Journal2Utils::getProperty($caption, 'text_padding_top') . 'px';
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_padding_right') !== null) {
+                                $css[] = 'padding-right: ' . Journal2Utils::getProperty($caption, 'text_padding_right') . 'px';
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_padding_bottom') !== null) {
+                                $css[] = 'padding-bottom: ' . Journal2Utils::getProperty($caption, 'text_padding_bottom') . 'px';
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_padding_left') !== null) {
+                                $css[] = 'padding-left: ' . Journal2Utils::getProperty($caption, 'text_padding_left') . 'px';
+                            }
+                            if (Journal2Utils::getProperty($caption, 'text_line_height')) {
+                                $css[] = 'line-height: ' . Journal2Utils::getProperty($caption, 'text_line_height') . 'px';
+                            }
                             $content = Journal2Utils::getProperty($caption, 'text.value.' . $this->config->get('config_language_id'));
                             break;
                         case 'video':
                             if (Journal2Utils::getProperty($caption, 'video_fullwidth')) {
                                 $caption_classes[] = 'fullscreenvideo';
+                                $caption_data[] = 'data-forceCover="1"';
                                 $width = '100%';
                                 $height = '100%';
                             } else {
@@ -220,7 +265,7 @@ class ControllerModuleJournal2Slider extends Controller {
                                 case 'youtube':
                                     $video_id = Journal2Utils::getProperty($caption, 'video_yt_id');
                                     if (!$video_id) continue;
-                                    $content = '<iframe src="//www.youtube.com/embed/' . $video_id .'?hd=1&amp;wmode=opaque&amp;controls=1&amp;showinfo=0" width="' . $width . '" height="' . $height . '"></iframe>';
+                                    $content = '<iframe src="//www.youtube.com/embed/' . $video_id .'?enablejsapi=1&html5=1&amp;hd=1&amp;wmode=opaque&amp;controls=1&amp;showinfo=0;rel=0;" width="' . $width . '" height="' . $height . '"></iframe>';
                                     break;
                                 case 'vimeo':
                                     $video_id = Journal2Utils::getProperty($caption, 'video_vm_id');
@@ -229,7 +274,7 @@ class ControllerModuleJournal2Slider extends Controller {
                                     break;
                                 case 'local':
                                     $file_extensions = array('mp4', 'webm', 'ogg');
-                                    $content = '<video class="video-js vjs-default-skin" preload="none" loop  controls width="' . $width . 'px" height="' . $height .'px" data-setup="{}"';
+                                    $content = '<video class="" preload="none" width="' . $width . '" height="' . $height .'" data-setup="{}" controls';
                                     $poster_path = Journal2Utils::getProperty($caption, 'video_path') . '.png';
                                     if (file_exists(DIR_APPLICATION . '../' .  $poster_path)) {
                                         $content .= ' poster="' . $poster_path . '" data-setup="{}"';
@@ -246,6 +291,7 @@ class ControllerModuleJournal2Slider extends Controller {
                             }
                             if (Journal2Utils::getProperty($caption, 'video_autoplay')) {
                                 $caption_data[] = 'data-autoplay="true"';
+                                $caption_data[] = 'data-forcerewind="on"';
                             } else {
                                 $caption_data[] = 'data-autoplay="false"';
                             }
@@ -271,49 +317,55 @@ class ControllerModuleJournal2Slider extends Controller {
                         $custom_in = array();
                         $custom_out = array();
                         // in
-                        if (Journal2Utils::getProperty($caption, 'custom_in_transition_x')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_transition_x') !== null) {
                             $custom_in[] = 'x:' . Journal2Utils::getProperty($caption, 'custom_in_transition_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_transition_y')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_transition_y') !== null) {
                             $custom_in[] = 'y:' . Journal2Utils::getProperty($caption, 'custom_in_transition_y');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_transition_z')) {
-                            $custom_in[] = 'z:' . Journal2Utils::getProperty($caption, 'custom_in_transition_z');
+                        if (Journal2Utils::getProperty($caption, 'custom_in_scale_x') !== null) {
+                            $custom_in[] = 'scaleX:' . Journal2Utils::getProperty($caption, 'custom_in_scale_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_x')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_scale_y') !== null) {
+                            $custom_in[] = 'scaleY:' . Journal2Utils::getProperty($caption, 'custom_in_scale_y');
+                        }
+                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_x') !== null) {
                             $custom_in[] = 'rotationX:' . Journal2Utils::getProperty($caption, 'custom_in_rotation_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_y')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_y') !== null) {
                             $custom_in[] = 'rotationY:' . Journal2Utils::getProperty($caption, 'custom_in_rotation_y');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_z')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_rotation_z') !== null) {
                             $custom_in[] = 'rotationZ:' . Journal2Utils::getProperty($caption, 'custom_in_rotation_z');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_in_transform_perspective', '500')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_in_transform_perspective', '500') !== null) {
                             $custom_in[] = 'transformPerspective:' . Journal2Utils::getProperty($caption, 'custom_in_transform_perspective', '500');
                         }
                         $custom_in[] = 'opacity:' . Journal2Utils::getProperty($caption, 'custom_in_opacity');
                         $custom_in[] = 'transformOrigin:' . Journal2Utils::getProperty($caption, 'transformOriginXin', 'center') . ' ' . Journal2Utils::getProperty($caption, 'transformOriginYin', 'center');
                         // out
-                        if (Journal2Utils::getProperty($caption, 'custom_out_transition_x')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_transition_x') !== null) {
                             $custom_out[] = 'x:' . Journal2Utils::getProperty($caption, 'custom_out_transition_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_transition_y')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_transition_y') !== null) {
                             $custom_out[] = 'y:' . Journal2Utils::getProperty($caption, 'custom_out_transition_y');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_transition_z')) {
-                            $custom_out[] = 'z:' . Journal2Utils::getProperty($caption, 'custom_out_transition_z');
+                        if (Journal2Utils::getProperty($caption, 'custom_out_scale_x') !== null) {
+                            $custom_out[] = 'scaleX:' . Journal2Utils::getProperty($caption, 'custom_out_scale_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_x')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_scale_y') !== null) {
+                            $custom_out[] = 'scaleY:' . Journal2Utils::getProperty($caption, 'custom_out_scale_y');
+                        }
+                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_x') !== null) {
                             $custom_out[] = 'rotationX:' . Journal2Utils::getProperty($caption, 'custom_out_rotation_x');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_y')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_y') !== null) {
                             $custom_out[] = 'rotationY:' . Journal2Utils::getProperty($caption, 'custom_out_rotation_y');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_z')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_rotation_z') !== null) {
                             $custom_out[] = 'rotationZ:' . Journal2Utils::getProperty($caption, 'custom_out_rotation_z');
                         }
-                        if (Journal2Utils::getProperty($caption, 'custom_out_transform_perspective', '500')) {
+                        if (Journal2Utils::getProperty($caption, 'custom_out_transform_perspective', '500') !== null) {
                             $custom_out[] = 'transformPerspective:' . Journal2Utils::getProperty($caption, 'custom_out_transform_perspective', '500');
                         }
                         $custom_out[] = 'opacity:' . Journal2Utils::getProperty($caption, 'custom_out_opacity');
@@ -322,26 +374,38 @@ class ControllerModuleJournal2Slider extends Controller {
                         $caption_data[] = 'data-customout="' . implode(';',$custom_out) . '"';
                     }
 
-                    $link = $this->getLink(Journal2Utils::getProperty($caption, 'link'));
-                    if ($link) {
-                        if (Journal2Utils::getProperty($caption, 'link_new_window')) {
-                            $content = '<a href="' . $link . '" target="_blank">' . $content . '</a>';
-                        } else {
-                            $content = '<a href="' . $link . '">' . $content . '</a>';
-                        }
-                    }
-
                     $_captions[] = array(
                         'id'            => "{$module}-{$caption_id}",
                         'content'       => $content,
                         'data'          => implode(' ', $caption_data),
                         'classes'       => implode(' ', $caption_classes),
-                        'css'           => implode('; ', $css)
+                        'css'           => implode('; ', $css),
+                        'link'          => $this->model_journal2_menu->getLink(Journal2Utils::getProperty($caption, 'link')),
+                        'target'        => Journal2Utils::getProperty($caption, 'link_new_window') ? ' target="_blank"' : ''
                     );
                 }
 
+                $image = Journal2Utils::getProperty($slide, 'image');
+                if (is_array($image)) {
+                    $image = Journal2Utils::getProperty($image, $this->config->get('config_language_id'));
+                }
+                if (!file_exists(DIR_IMAGE . $image)) {
+                    $image = 'no_image.jpg';
+                }
+
+                $thumb = Journal2Utils::getProperty($slide, 'thumb');
+                if (is_array($thumb)) {
+                    $thumb = Journal2Utils::getProperty($thumb, $this->config->get('config_language_id'));
+                }
+
+                if (!$thumb || !file_exists(DIR_IMAGE . $thumb)) {
+                    $thumb = $image;
+                }
+
+                $slide_data[] = 'data-thumb="' . Journal2Utils::resizeImage($this->model_tool_image, $thumb, $this->data['js_options']['thumbWidth'], $this->data['js_options']['thumbHeight'], 'crop') . '"';
+
                 $_slides[] = array(
-                    'image'     => Journal2Utils::optimizeImage(Journal2Utils::getProperty($slide, 'image', 'no_image.jpg')),
+                    'image'     => Journal2Utils::resizeImage($this->model_tool_image, $image),
                     'name'      => Journal2Utils::getProperty($slide, 'slide_name'),
                     'data'      => implode(' ', $slide_data),
                     'captions'  => $_captions
@@ -353,79 +417,41 @@ class ControllerModuleJournal2Slider extends Controller {
             $this->data['js_options']['thumbAmount'] = min($this->data['js_options']['thumbAmount'], count($this->data['slides']));
             $this->data['timer'] = Journal2Utils::getProperty($module_data, 'timer');
             $this->data['preload_images'] = Journal2Utils::getProperty($module_data, 'preload_images', '1');
-            $this->data['height'] = $height;
             $this->data['hide_on_mobile_class'] = Journal2Utils::getProperty($module_data, 'hideonmobile') ? 'hide-on-mobile' : '';
+            $this->data['dummy_image'] = Journal2Utils::resizeImage($this->model_tool_image, 'data/journal2/transparent.png');
 
-            $this->template = 'journal2/template/journal2/module/slider_advanced.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/slider_advanced.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
+                $this->journal2->cache->set($cache_property . '_fonts', json_encode($this->google_fonts));
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            if ($fonts = $this->journal2->cache->get($cache_property . '_fonts')) {
+                $fonts = json_decode($fonts, true);
+                if (is_array($fonts)) {
+                    foreach ($fonts as $font) {
+                        $this->journal2->google_fonts->add($font['name'], $font['subset'], $font['weight']);
+                    }
+                }
+            }
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
         $this->document->addStyle('catalog/view/theme/journal2/lib/rs-plugin/css/settings.css');
-        $this->document->addScript('catalog/view/theme/journal2/lib/rs-plugin/js/jquery.themepunch.plugins.min.js');
+        $this->document->addScript('catalog/view/theme/journal2/lib/rs-plugin/js/jquery.themepunch.tools.min.js');
         $this->document->addScript('catalog/view/theme/journal2/lib/rs-plugin/js/jquery.themepunch.revolution.min.js');
+
+        $output = $this->render();
 
         Journal2::stopTimer(get_class($this));
 
-    }
-
-    private function getLink($link) {
-        $href = null;
-        /* menu type */
-        switch ($link['menu_type']) {
-            case 'category':
-                $category_info = $this->model_catalog_category->getCategory(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$category_info) continue;
-                $href = $this->url->link('product/category', 'path=' . $category_info['category_id']);
-                break;
-            case 'product':
-                $product_info = $this->model_catalog_product->getProduct(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$product_info) continue;
-                $href = $this->url->link('product/product', 'product_id=' . $product_info['product_id']);
-                break;
-            case 'manufacturer':
-                $manufacturer_info = $this->model_catalog_manufacturer->getManufacturer(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$manufacturer_info) continue;
-                $href = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_info['manufacturer_id']);
-                break;
-            case 'information':
-                $information_info = $this->model_catalog_information->getInformation(Journal2Utils::getProperty($link, 'menu_item.id', -1));
-                if (!$information_info) continue;
-                $href = $this->url->link('information/information', 'information_id=' .  $information_info['information_id']);
-                break;
-            case 'opencart':
-                $customer_name = null;
-                switch ($link['menu_item']['page']) {
-                    case 'login':
-                        $link['menu_item']['page'] = $this->customer->isLogged() ? 'account/account' : 'account/login';
-                        $customer_name = $this->customer->getFirstName();
-                        break;
-                    case 'register':
-                        $link['menu_item']['page'] = $this->customer->isLogged() ? 'account/logout' : 'account/register';
-                        break;
-                    case 'account/wishlist':
-                        break;
-                    default:
-                }
-                $href = $link['menu_item']['page'] === 'common/home' ? $this->journal2->config->base_url : $this->url->link($link['menu_item']['page'], '', 'SSL');
-                break;
-            case 'custom':
-                $href = Journal2Utils::getProperty($link, 'menu_item.url');
-                break;
-        }
-
-        return $href;
+        return $output;
     }
 
 }

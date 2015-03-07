@@ -21,7 +21,7 @@ define(['./../module', 'underscore'], function (module, _) {
         }
 
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             var promises = {
                 settings: Rest.saveSettings($scope.settings, $scope.category, $scope.skin_id)
@@ -42,7 +42,7 @@ define(['./../module', 'underscore'], function (module, _) {
         $scope.saveAs = function ($event) {
             var skinName = prompt('Enter skin\'s name:');
             if (skinName !== null) {
-                var $src = $($event.srcElement);
+                var $src = $($event.target || $event.srcElement);
                 Spinner.show($src);
                 Rest.saveSettingsAs(skinName, $scope.settings, $scope.category, $scope.skin_id).then(function (response) {
                     Spinner.hide($src);
@@ -55,7 +55,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.saveDefault = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.saveSettings($scope.settings, $scope.category, $scope.skin_id).then(function (response) {
                 Rest.export().then(function (response) {
@@ -72,7 +72,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.reset = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.loadDefaultSettings($scope.category, $scope.skin_id).then(function (settings) {
                 if (!_.isArray(settings)) {
@@ -91,7 +91,7 @@ define(['./../module', 'underscore'], function (module, _) {
             if (!confirm('Are you sure?')) {
                 return;
             }
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.deleteSkin($scope.skin_id).then(function (settings) {
                 Journal2Config.active_skin = 1;

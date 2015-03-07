@@ -5,6 +5,10 @@
         <option value="manufacturer">Manufacturer</option>
         <option value="information">Information</option>
         <option value="opencart">OpenCart Page</option>
+        <option value="blog_home">Blog Home</option>
+        <option value="blog_category">Blog Category</option>
+        <option value="blog_post">Blog Post</option>
+        <option value="popup">Popup Module</option>
         <option value="custom">Custom</option>
     </select>
     <span ng-switch on="ngModel.menu_type">
@@ -12,6 +16,12 @@
         <product-search ng-switch-when="product" model="ngModel.menu_item"></product-search>
         <manufacturer-search ng-switch-when="manufacturer" model="ngModel.menu_item"></manufacturer-search>
         <information-search ng-switch-when="information" model="ngModel.menu_item"></information-search>
+        <blog-category-search ng-switch-when="blog_category" model="ngModel.menu_item"></blog-category-search>
+        <blog-post-search ng-switch-when="blog_post" model="ngModel.menu_item"></blog-post-search>
+        <select ng-switch-when="popup" ui-select2="{minimumResultsForSearch: -1, placeholder: 'Choose module...'}" data-ng-model="ngModel.menu_item">
+            <option value=""></option>
+            <option data-ng-repeat="module in popup_modules" value="{{module.module_id}}">{{module.module_data.module_name}}</option>
+        </select>
         <input ng-switch-when="custom" class="journal-input" type="text" data-ng-model="ngModel.menu_item.url" placeholder="Url" />
         <select ng-switch-when="opencart" ui-select2="{minimumResultsForSearch: -1}" data-ng-model="ngModel.menu_item.page">
             <option value="common/home">Home</option>

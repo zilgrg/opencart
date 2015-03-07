@@ -28,7 +28,7 @@
             <add><![CDATA[
                 <?php if ($journal2): ?>
                 <li id="journal2-module">
-                    <a href="<?php echo $journal2; ?>" class="top">Journal 2</a>
+                    <a href="<?php echo $journal2; ?>" class="top">Journal</a>
                     <ul>
                         <li><a href="<?php echo $journal2_clear_cache; ?>">Clear Cache</a></li>
                     </ul>

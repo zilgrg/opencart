@@ -10,6 +10,9 @@ define(['./module'], function (module) {
                 templateUrl: 'view/journal2/tpl/directives/ckeditor.html?ver=' + Journal2Config.version,
                 link: function ($scope) {
                     $scope.languages = Journal2Config.languages;
+                    $scope.$watch('ngModel', function (val) {
+                        $scope.ngModel = val || {};
+                    });
                 }
             };
         }])

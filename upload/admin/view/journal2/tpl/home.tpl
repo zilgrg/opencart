@@ -2,7 +2,7 @@
     <div class="module-header">
         <div class='module-name'>Dashboard<span>Welcome</span></div>
         <div class="module-buttons">
-            <a class="btn blue j-demos" target="_blank" data-ng-click="save($event)">Demos</a>
+            <a href="http://journal.digital-atelier.com" class="btn blue j-demos" target="_blank" data-ng-click="save($event)">Demos</a>
             <a href="http://docs.digital-atelier.com/opencart/journal" class="btn blue j-docs" target="_blank" data-ng-click="save($event)">Documentation</a>
             <a href="http://support.digital-atelier.com/" target="_blank" class="btn blue j-sup" data-ng-click="save($event)">Support</a>
         </div>

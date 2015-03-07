@@ -1,6 +1,12 @@
 <?php
 class ControllerJournal2Ajax extends Controller {
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($reg) {
         parent::__construct($reg);
     }
@@ -48,13 +54,13 @@ class ControllerJournal2Ajax extends Controller {
             }
 
             foreach ($option_ids as $option_id) {
-                foreach (Journal2Utils::getProperty($option, 'option_value', array()) as $option_value) {
+                foreach (Journal2Utils::getProperty($option, Front::$IS_OC2 ? 'product_option_value' : 'option_value', array()) as $option_value) {
                     if ($option_id == $option_value['product_option_value_id']) {
                         $quantity = min($quantity, (int)$option_value['quantity']);
                         if ($option_value['price_prefix'] === '+') {
-                            $extra += $option_value['price'];
+                            $extra += (float)$option_value['price'];
                         } else {
-                            $extra -= $option_value['price'];
+                            $extra -= (float)$option_value['price'];
                         }
                     }
                 }

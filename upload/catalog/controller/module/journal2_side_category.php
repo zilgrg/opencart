@@ -3,6 +3,12 @@ class ControllerModuleJournal2SideCategory extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
@@ -27,7 +33,7 @@ class ControllerModuleJournal2SideCategory extends Controller {
         $module_data = $this->model_journal2_module->getModule($setting['module_id']);
         if (!$module_data || !isset($module_data['module_data']) || !$module_data['module_data']) return;
 
-        if ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) return;
+        if (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) return;
 
         $hash = isset($this->request->server['REQUEST_URI']) ? md5($this->request->server['REQUEST_URI']) : null;
 
@@ -64,7 +70,16 @@ class ControllerModuleJournal2SideCategory extends Controller {
                     $parts = array();
                 }
 
-                $query = $this->db->query("SELECT c.category_id, c.parent_id, cd.name, (SELECT COUNT(p.product_id) FROM " . DB_PREFIX . "product_to_category p2c LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id = p2c.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)  WHERE p.status = '1' AND p.date_available <= NOW()  AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND p2c.category_id = c.category_id) as total FROM " . DB_PREFIX . "category c  LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id)  LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)  WHERE cd.language_id = '" . (int)$this->config->get('config_language_id') . "'  AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'   AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
+                $sql  = "SELECT c.category_id, c.parent_id, cd.name ";
+
+                if ($this->config->get('config_product_count')) {
+                    $sql  .= ", (SELECT COUNT(p.product_id) FROM " . DB_PREFIX . "product_to_category p2c LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id = p2c.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)  WHERE p.status = '1' AND p.date_available <= NOW()  AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND p2c.category_id = c.category_id) as total ";
+                }
+
+                $sql .= "FROM " . DB_PREFIX . "category c  LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id)  LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)  WHERE cd.language_id = '" . (int)$this->config->get('config_language_id') . "'  AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'   AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)";
+
+
+                $query = $this->db->query($sql);
 
                 $results = array();
 
@@ -72,11 +87,13 @@ class ControllerModuleJournal2SideCategory extends Controller {
                     $results[$row['parent_id']][] = $row;
                 }
 
-                $tree = $this->generateMultiLevelCategoryMenu($results, $results[0], '', $parts);
+                if (is_array($results) && isset($results['0'])) {
+                    $tree = $this->generateMultiLevelCategoryMenu($results, $results[0], '', $parts);
 
-                if ($this->config->get('config_product_count')) {
-                    for ($i = 0; $i < count($tree); $i++) {
-                        $this->sum($tree[$i]);
+                    if ($this->config->get('config_product_count')) {
+                        for ($i = 0; $i < count($tree); $i++) {
+                            $this->sum($tree[$i]);
+                        }
                     }
                 }
             }
@@ -86,7 +103,7 @@ class ControllerModuleJournal2SideCategory extends Controller {
 
             foreach (Journal2Utils::getProperty($module_data, 'module_data.sections', array()) as $item_data) {
                 $item = array(
-                    'name' => Journal2Utils::getProperty($item_data, 'name.value.' . $this->config->get('config_language_id')),
+                    'name' => Journal2Utils::getProperty($item_data, 'name.value.' . $this->config->get('config_language_id'), 'Not translated'),
                     'href' => $this->model_journal2_menu->getLink(Journal2Utils::getProperty($item_data, 'link')),
                     'target' => Journal2Utils::getProperty($item_data, 'new_window') ? 'target="_blank"' : '',
                     'sort_order' => Journal2Utils::getProperty($item_data, 'sort_order')
@@ -109,23 +126,25 @@ class ControllerModuleJournal2SideCategory extends Controller {
             $this->data['bottom_items'] = $bottom_items;
             $this->data['show_total'] = $this->config->get('config_product_count');
 
-            $this->template = 'journal2/template/journal2/module/side_category.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/side_category.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
     private function generateMultiLevelCategoryMenu(&$list, $parent, $path, $parts){
@@ -149,8 +168,8 @@ class ControllerModuleJournal2SideCategory extends Controller {
 
     private function sum(&$tree){
         if (isset($tree['subcategories'])) {
-            foreach ($tree['subcategories'] as $child){
-                $tree['total'] += $this->sum($child);
+            foreach ($tree['subcategories'] as $level => $child){
+                $tree['total'] += $this->sum($tree['subcategories'][$level]);
             }
         }
         return $tree['total'];

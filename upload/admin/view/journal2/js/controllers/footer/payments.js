@@ -31,7 +31,7 @@ define(['./../module', 'underscore'], function (module, _) {
         });
 
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.setSetting('payments', $scope.store_id, { payments: $scope.payments, close_others: $scope.close_others }).then(function (response) {
                 Spinner.hide($src);

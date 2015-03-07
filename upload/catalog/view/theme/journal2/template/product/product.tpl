@@ -5,15 +5,17 @@
     <?php } ?>
 </div>
 <?php echo $column_left; ?><?php echo $column_right; ?>
-<div id="content">
+<div id="content" itemscope itemtype="http://schema.org/Product">
+<?php if ($this->journal2->settings->get('product_page_title_position', 'top') === 'top'): ?>
 <h1 class="heading-title" itemprop="name"><?php echo $heading_title; ?></h1>
+<?php endif; ?>
 
 <?php echo $content_top; ?>
   <div class="product-info <?php echo $this->journal2->settings->get('split_ratio'); ?>" data-respond="start: 620px; end: 630px; interval: 10px;">
+    <meta itemprop="url" content="<?php echo $breadcrumb['href']; ?>" />
     <?php if ($thumb || $images) { ?>
     <div class="left">
       <?php if ($thumb) { ?>
-      <meta itemprop="image" content="<?php echo $popup; ?>" />
       <div class="image">
           <?php if (isset($labels) && is_array($labels)): ?>
           <?php foreach ($labels as $label => $name): ?>
@@ -24,7 +26,7 @@
           <?php endif; ?>
           <?php endforeach; ?>
           <?php endif; ?>
-          <a href="<?php echo $popup; ?>" title="<?php echo $heading_title; ?>"><img src="<?php echo $thumb; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" id="image" data-zoom-image="<?php echo $popup; ?>" /></a>
+          <a href="<?php echo $popup; ?>" title="<?php echo $heading_title; ?>"><img src="<?php echo $thumb; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" id="image" data-largeimg="<?php echo $popup; ?>" itemprop="image"  /></a>
       </div>
       <?php if($this->journal2->settings->get('product_page_gallery')): ?>
           <div class="gallery-text"><span><?php echo $this->journal2->settings->get('product_page_gallery_text'); ?></span></div>
@@ -37,7 +39,7 @@
         <a href="<?php echo isset($popup_fixed) ? $popup_fixed : $popup; ?>" title="<?php echo $heading_title; ?>"><img src="<?php echo isset($thumb_fixed) ? $thumb_fixed : $thumb; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" /></a>
         <?php } ?>
         <?php foreach ($images as $image) { ?>
-        <a href="<?php echo $image['popup']; ?>" title="<?php echo $heading_title; ?>"><img src="<?php echo $image['thumb']; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" /></a>
+        <a href="<?php echo $image['popup']; ?>" title="<?php echo $heading_title; ?>"><img src="<?php echo $image['thumb']; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" itemprop="image" /></a>
         <?php } ?>
       </div>
         <?php if ($this->journal2->settings->get('product_page_gallery_carousel')): ?>
@@ -56,7 +58,7 @@
                     navigationText : false,
                     stopOnHover: true,
                     cssAnimation: false,
-                    slideSpeed: <?php echo (int)$this->journal2->settings->get('product_page_gallery_carousel_transition_speed', 400) ?>,
+                    paginationSpeed: <?php echo (int)$this->journal2->settings->get('product_page_gallery_carousel_transition_speed', 400) ?>,
                     margin:parseInt('<?php echo $this->journal2->settings->get('product_page_additional_spacing', 12) ?>', 10)
                 };
                 <?php if (!$this->journal2->settings->get('product_page_gallery_carousel_autoplay')): ?>
@@ -70,7 +72,7 @@
                 <?php if (!$this->journal2->settings->get('product_page_gallery_carousel_touch_drag')): ?>
                 opts.touchDrag = false;
                 <?php endif; ?>
-                jQuery110("#product-gallery").owlCarousel(opts);
+                jQuery("#product-gallery").owlCarousel(opts);
                 <?php if ($this->journal2->settings->get('product_page_gallery_carousel_arrows') == 'hover' || $this->journal2->settings->get('product_page_gallery_carousel_arrows') == 'always'): ?>
                 $('#product-gallery .owl-buttons').addClass('side-buttons');
                 <?php endif; ?>
@@ -99,7 +101,7 @@
         <?php } ?>
         <?php } ?>
       </div>
-        <?php if ($this->journal2->settings->get('share_buttons_status') && (!$this->journal2->mobile_detect->isMobile() || ($this->journal2->mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'left' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
+        <?php if ($this->journal2->settings->get('share_buttons_status') && (!Journal2Cache::$mobile_detect->isMobile() || (Journal2Cache::$mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'left' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
         <div class="social share-this <?php echo $this->journal2->settings->get('share_buttons_disable_on_mobile', 1) ? 'hide-on-mobile' : ''; ?>">
             <div class="social-loaded">
                 <script type="text/javascript">var switchTo5x=true;</script>
@@ -112,10 +114,11 @@
         </div>
         <?php endif; ?>
     </div>
-    <?php } else { ?>
-    <div class="left no-images">No images available!</div>
     <?php } ?>
     <div class="right">
+    <?php if ($this->journal2->settings->get('product_page_title_position', 'top') === 'right'): ?>
+    <h1 class="heading-title" itemprop="name"><?php echo $heading_title; ?></h1>
+    <?php endif; ?>
     <div class="product-options">
     <?php foreach ($this->journal2->settings->get('additional_product_description_top', array()) as $tab): ?>
     <div class="journal-custom-tab">
@@ -132,24 +135,45 @@
         <?php if($this->journal2->settings->get('product_views')): ?>
         <span class="product-views-count"><?php echo $this->journal2->settings->get('product_page_options_views_text'); ?>: <?php echo $this->journal2->settings->get('product_views'); ?></span>
         <?php endif; ?>
+        <?php if($this->journal2->settings->get('manufacturer_image') == 'on'): ?>
+        <span class="brand-logo">
+            <a href="<?php echo $manufacturers; ?>" class="brand-image">
+                <img src="<?php echo $manufacturer_image; ?>" width="<?php echo $manufacturer_image_width; ?>" height="<?php echo $manufacturer_image_height; ?>" alt="<?php echo $manufacturer; ?>" />
+            </a>
+            <?php if(isset($manufacturer_image_name) && $manufacturer_image_name): ?>
+            <a href="<?php echo $manufacturers; ?>" class="brand-logo-text">
+                <?php echo $manufacturer_image_name; ?>
+            </a>
+            <?php endif; ?>
+        </span>
+        <?php else: ?>
         <?php if ($manufacturer) { ?>
-        <span><?php echo $text_manufacturer; ?></span> <a href="<?php echo $manufacturers; ?>"><?php echo $manufacturer; ?></a><br />
+        <span class="p-brand"><?php echo $text_manufacturer; ?></span> <a href="<?php echo $manufacturers; ?>" itemprop="manufacturer"><?php echo $manufacturer; ?></a><br />
         <?php } ?>
-        <span><?php echo $text_model; ?></span> <?php echo $model; ?><br />
+        <?php endif; ?>
+        <span  class="p-model"><?php echo $text_model; ?></span> <span class="p-model" itemprop="model"><?php echo $model; ?></span><br />
         <?php if ($reward) { ?>
-        <span><?php echo $text_reward; ?></span> <?php echo $reward; ?><br />
+        <span class="p-rewards"><?php echo $text_reward; ?></span> <span class="p-rewards"><?php echo $reward; ?></span><br />
         <?php } ?>
-        <span><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $stock; ?></span></div>
+        <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $stock; ?></span>
+      </div>
+    <?php if($this->journal2->settings->get('product_sold')): ?>
+    <div class="product-sold-count-text"><?php echo $this->journal2->settings->get('product_sold'); ?></div>
+    <?php endif; ?>
+    <?php if (isset($date_end) && $date_end && $this->journal2->settings->get('show_countdown_product_page', 'on') == 'on'): ?>
+      <div class="countdown-wrapper"><div class="expire-text"><?php echo $this->journal2->settings->get('countdown_product_page_title'); ?></div><div class="countdown"></div></div>
+      <script>Journal.countdown($('.right .countdown'), '<?php echo $date_end; ?>');</script>
+      <?php endif; ?>
       <?php if ($price) { ?>
       <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-        <meta itemprop="price" content="<?php echo $special? $special : $price; ?>" />
+        <meta itemprop="priceCurrency" content="<?php echo $this->journal2->settings->get('product_price_currency'); ?>" />
         <?php if ($this->journal2->settings->get('product_in_stock') === 'yes'): ?>
         <link itemprop="availability"  href="http://schema.org/InStock" />
         <?php endif; ?>
         <?php if (!$special) { ?>
-        <span class="product-price"><?php echo $price; ?></span>
+        <span class="product-price" itemprop="price"><?php echo $price; ?></span>
         <?php } else { ?>
-        <span class="price-old"><?php echo $price; ?></span> <span class="price-new"><?php echo $special; ?></span>
+        <span class="price-old"><?php echo $price; ?></span> <span class="price-new" itemprop="price"><?php echo $special; ?></span>
         <?php } ?>
         <?php if ($tax) { ?>
         <span class="price-tax"><?php echo $text_tax; ?> <?php echo $tax; ?></span>
@@ -183,12 +207,12 @@
       <?php endif; ?>
       <?php endif; /* end v156 compatibility */ ?>
       <?php if ($options) { ?>
-      <div class="options push-<?php echo $this->journal2->settings->get('product_page_options_push_select'); ?>">
+      <div class="options <?php echo $this->journal2->settings->get('product_page_options_push_classes'); ?>">
         <h3><?php echo $text_option; ?></h3>
         <br />
         <?php foreach ($options as $option) { ?>
         <?php if ($option['type'] == 'select') { ?>
-        <div id="option-<?php echo $option['product_option_id']; ?>" class="option">
+        <div id="option-<?php echo $option['product_option_id']; ?>" class="option option-<?php echo $option['type']; ?>">
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
@@ -207,7 +231,7 @@
         <br />
         <?php } ?>
         <?php if ($option['type'] == 'radio') { ?>
-        <div id="option-<?php echo $option['product_option_id']; ?>" class="option">
+        <div id="option-<?php echo $option['product_option_id']; ?>" class="option option-<?php echo $option['type']; ?>">
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
@@ -225,7 +249,7 @@
         <br />
         <?php } ?>
         <?php if ($option['type'] == 'checkbox') { ?>
-        <div id="option-<?php echo $option['product_option_id']; ?>" class="option">
+        <div id="option-<?php echo $option['product_option_id']; ?>" class="option option-<?php echo $option['type']; ?>">
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
@@ -243,7 +267,7 @@
         <br />
         <?php } ?>
         <?php if ($option['type'] == 'image') { ?>
-        <div id="option-<?php echo $option['product_option_id']; ?>" class="option">
+        <div id="option-<?php echo $option['product_option_id']; ?>" class="option option-<?php echo $option['type']; ?>">
           <?php if ($option['required']) { ?>
           <span class="required">*</span>
           <?php } ?>
@@ -327,11 +351,15 @@
         <?php } ?>
         <?php } ?>
       </div>
-      <?php if ($this->journal2->settings->get('product_page_options_push_select')): ?>
       <script>Journal.enableSelectOptionAsButtonsList();</script>
-      <?php endif; ?>
       <?php } ?>
-      <div class="cart">
+      <div class="cart <?php echo isset($labels) && is_array($labels) && isset($labels['outofstock']) ? 'outofstock' : ''; ?>">
+        <?php if($this->journal2->settings->get('hide_add_to_cart_button')): ?>
+        <?php foreach ($this->journal2->settings->get('additional_product_enquiry', array()) as $tab): ?>
+        <div><?php echo $tab['content']; ?></div>
+        <?php endforeach; ?>
+        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+        <?php else: ?>
         <div><span class="qty"><span class="text-qty"><?php echo $text_qty; ?></span>
           <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" data-min-value="<?php echo $minimum; ?>" autocomplete="off" /></span>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
@@ -366,6 +394,7 @@
         <?php if ($minimum > 1) { ?>
         <div class="minimum"><?php echo $text_minimum; ?></div>
         <?php } ?>
+        <?php endif; ?>
       </div>
       <div class="wishlist-compare">
           <span class="links">
@@ -375,16 +404,19 @@
       </div>
       <?php if ($review_status) { ?>
       <div class="review" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-        <meta itemprop="ratingValue" content="<?php echo $rating; ?>" /><meta itemprop="reviewCount" content="<?php echo $this->journal2->settings->get('product_num_reviews'); ?>" />
+        <meta itemprop="ratingValue" content="<?php echo $rating; ?>" />
+        <meta itemprop="reviewCount" content="<?php echo $this->journal2->settings->get('product_num_reviews'); ?>" />
+        <meta itemprop="bestRating" content="5" />
+        <meta itemprop="worstRating" content="1" />
         <div><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $rating; ?>.png" alt="<?php echo $reviews; ?>" />&nbsp;&nbsp;<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?php echo $reviews; ?></a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?php echo $text_write; ?></a></div>
         <div class="share"><!-- AddThis Button BEGIN -->
-          <div class="addthis_default_style"><a class="addthis_button_compact"><?php echo $text_share; ?></a> <a class="addthis_button_email"></a><a class="addthis_button_print"></a> <a class="addthis_button_facebook"></a> <a class="addthis_button_twitter"></a></div>
-          <script type="text/javascript" src="//s7.addthis.com/js/250/addthis_widget.js"></script> 
-          <!-- AddThis Button END --> 
+          <!--<div class="addthis_default_style"><a class="addthis_button_compact"><?php echo $text_share; ?></a> <a class="addthis_button_email"></a><a class="addthis_button_print"></a> <a class="addthis_button_facebook"></a> <a class="addthis_button_twitter"></a></div>-->
+          <!--<script type="text/javascript" src="//s7.addthis.com/js/250/addthis_widget.js"></script>-->
+          <!-- AddThis Button END -->
         </div>
       </div>
       <?php } ?>
-      <?php if ($this->journal2->settings->get('share_buttons_status') && (!$this->journal2->mobile_detect->isMobile() || ($this->journal2->mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'right' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
+      <?php if ($this->journal2->settings->get('share_buttons_status') && (!Journal2Cache::$mobile_detect->isMobile() || (Journal2Cache::$mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'right' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
       <div class="social share-this <?php echo $this->journal2->settings->get('share_buttons_disable_on_mobile', 1) ? 'hide-on-mobile' : ''; ?>">
           <div class="social-loaded">
               <script type="text/javascript">var switchTo5x=true;</script>
@@ -410,7 +442,7 @@
   </div>
   </div>
   </div>
-<?php if ($this->journal2->settings->get('share_buttons_status') && (!$this->journal2->mobile_detect->isMobile() || ($this->journal2->mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'bottom' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
+<?php if ($this->journal2->settings->get('share_buttons_status') && (!Journal2Cache::$mobile_detect->isMobile() || (Journal2Cache::$mobile_detect->isMobile() && !$this->journal2->settings->get('share_buttons_disable_on_mobile', 1))) && $this->journal2->settings->get('share_buttons_position') === 'bottom' && count($this->journal2->settings->get('config_share_buttons', array()))): ?>
 <div class="social share-this <?php echo $this->journal2->settings->get('share_buttons_disable_on_mobile', 1) ? 'hide-on-mobile' : ''; ?>">
         <div class="social-loaded">
             <script type="text/javascript">var switchTo5x=true;</script>
@@ -423,7 +455,10 @@
     </div>
     <?php endif; ?>
 
-  <div id="tabs" class="htabs"><a href="#tab-description"><?php echo $tab_description; ?></a>
+  <div id="tabs" class="htabs">
+    <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
+    <a href="#tab-description"><?php echo $tab_description; ?></a>
+    <?php } ?>
     <?php if ($attribute_groups) { ?>
     <a href="#tab-attribute"><?php echo $tab_attribute; ?></a>
     <?php } ?>
@@ -440,7 +475,9 @@
   <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
   <div id="additional-product-tab-<?php echo $index; ?>" class="tab-content journal-custom-tab"><?php echo $tab['content']; ?></div>
   <?php endforeach; ?>
+  <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
+  <?php } ?>
   <?php if ($attribute_groups) { ?>
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">
@@ -509,6 +546,7 @@
   <?php } ?>
 <?php if ($products && $this->journal2->settings->get('related_products_status')) { ?>
 <div class="box related-products <?php echo $this->journal2->settings->get('related_products_carousel') ? 'journal-carousel' : ''; ?>">
+   <div>
     <div class="box-heading"><?php echo $tab_related; ?></div>
     <div class="box-product">
         <?php foreach ($products as $product) { ?>
@@ -533,6 +571,25 @@
                     <?php endif; ?>
                     <?php endif; ?>
                 </div>
+                <?php } else { ?>
+                <div class="image">
+                    <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
+                    <img class="first-image" src="<?php echo $this->journal2->settings->get('product_no_image'); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
+                    </a>
+                    <?php if (isset($product['labels']) && is_array($product['labels'])): ?>
+                    <?php foreach ($product['labels'] as $label => $name): ?>
+                    <?php if ($label === 'outofstock'): ?>
+                    <img class="outofstock" <?php echo Journal2Utils::getRibbonSize($this->journal2->settings->get('out_of_stock_ribbon_size')); ?> style="position: absolute; top: 0; left: 0" src="<?php echo Journal2Utils::generateRibbon($name, $this->journal2->settings->get('out_of_stock_ribbon_size'), $this->journal2->settings->get('out_of_stock_font_color'), $this->journal2->settings->get('out_of_stock_bg')); ?>" alt="" />
+                    <?php else: ?>
+                    <span class="label-<?php echo $label; ?>"><b><?php echo $name; ?></b></span>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php if($this->journal2->settings->get('product_grid_wishlist_icon_position') === 'image' && $this->journal2->settings->get('product_grid_wishlist_icon_display', '') === 'icon'): ?>
+                    <div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');" class="hint--top" data-hint="<?php echo $button_wishlist; ?>"><i class="wishlist-icon"></i><span class="button-wishlist-text"><?php echo $button_wishlist;?></span></a></div>
+                    <div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');" class="hint--top" data-hint="<?php echo $button_compare; ?>"><i class="compare-icon"></i><span class="button-compare-text"><?php echo $button_compare;?></span></a></div>
+                    <?php endif; ?>
+                    <?php endif; ?>
+                </div>
                 <?php } ?>
                 <div class="product-details">
                 <div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>
@@ -541,17 +598,23 @@
                     <?php if (!$product['special']) { ?>
                     <?php echo $product['price']; ?>
                     <?php } else { ?>
-                    <span class="price-old"><?php echo $product['price']; ?></span> <span class="price-new"><?php echo $product['special']; ?></span>
+                    <span class="price-old"><?php echo $product['price']; ?></span> <span class="price-new" <?php echo isset($product['date_end']) && $product['date_end'] ? "data-end-date='{$product['date_end']}'" : ""; ?>><?php echo $product['special']; ?></span>
                     <?php } ?>
                 </div>
                 <?php } ?>
                 <?php if ($product['rating']) { ?>
-                <div class="rating"><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $product['rating']; ?>.png" alt="<?php echo $product['reviews']; ?>" /></div>
+                <div class="rating"><img width="83" height="15" src="<?php echo Journal2Utils::staticAsset("catalog/view/theme/default/image/stars-{$product['rating']}.png"); ?>" alt="<?php echo $product['reviews']; ?>" /></div>
                 <?php } ?>
                 <hr>
-                <div class="cart">
+                <?php if (Journal2Utils::isEnquiryProduct($this, $product['product_id'])): ?>
+                <div class="cart enquiry-button">
+                    <a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $product['product_id']; ?>');" data-clk="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>
+                </div>
+                <?php else: ?>
+                <div class="cart <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
                     <a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>
                 </div>
+                <?php endif; ?>
                 <div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');" class="hint--top" data-hint="<?php echo $button_wishlist; ?>"><i class="wishlist-icon"></i><span class="button-wishlist-text"><?php echo $button_wishlist;?></span></a></div>
                 <div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');" class="hint--top" data-hint="<?php echo $button_compare; ?>"><i class="compare-icon"></i><span class="button-compare-text"><?php echo $button_compare;?></span></a></div>
                 </div>
@@ -559,7 +622,20 @@
         </div>
         <?php } ?>
     </div>
+  </div>
 </div>
+<?php /* enable countdown */ ?>
+<?php if ($this->journal2->settings->get('show_countdown', 'never') !== 'never'): ?>
+<script>
+$('.related-products .product-grid-item > div').each(function () {
+    var $new = $(this).find('.price-new');
+    if ($new.length && $new.attr('data-end-date')) {
+        $(this).find('.image').append('<div class="countdown"></div>');
+    }
+    Journal.countdown($(this).find('.countdown'), $new.attr('data-end-date'));
+});
+</script>
+<?php endif; ?>
 <?php if ($this->journal2->settings->get('related_products_carousel')): ?>
 <?php
         $grid = Journal2Utils::getItemGrid($this->journal2->settings->get('related_products_items_per_row'), $this->journal2->settings->get('site_width', 1024), $this->journal2->settings->get('config_columns_count'));
@@ -578,7 +654,7 @@
             navigation:true,
             scrollPerPage:true,
             navigationText : false,
-            slideSpeed:parseInt('<?php echo $this->journal2->settings->get('related_products_carousel_transition_speed', 400); ?>', 10),
+            paginationSpeed:parseInt('<?php echo $this->journal2->settings->get('related_products_carousel_transition_speed', 400); ?>', 10),
             margin:15
         }
         <?php if (!$this->journal2->settings->get('related_products_carousel_autoplay')): ?>
@@ -592,7 +668,7 @@
         <?php if (!$this->journal2->settings->get('related_products_carousel_touch_drag')): ?>
         opts.touchDrag = false;
         <?php endif; ?>
-        jQuery110(".related-products .box-product").owlCarousel(opts);
+        jQuery(".related-products .box-product").owlCarousel(opts);
         <?php if ($this->journal2->settings->get('related_products_carousel_arrows') === 'side'): ?>
         $('.related-products .box-product .owl-buttons').addClass('side-buttons');
         <?php endif; ?>
@@ -644,6 +720,9 @@ $('select[name="profile_id"], input[name="quantity"]').change(function(){
 });
 
 $('#button-cart').bind('click', function() {
+    if ($('.hide-cart .right .cart.outofstock').length) {
+        return false;
+    }
 	$.ajax({
 		url: 'index.php?route=checkout/cart/add',
 		type: 'post',
@@ -673,7 +752,13 @@ $('#button-cart').bind('click', function() {
 
 				$('#cart-total').html(json['total']);
 
-				$('html, body').animate({ scrollTop: 0 }, 'slow');
+          if (Journal.scrollToTop) {
+              $('html, body').animate({ scrollTop: 0 }, 'slow');
+          }
+
+                if (json['redirect']) {
+                    location = json['redirect'];
+                }
 			}
 		}
 	});

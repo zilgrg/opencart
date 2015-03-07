@@ -2,6 +2,14 @@
 class ControllerModuleJournal2Carousel extends Controller {
 
     private static $CACHEABLE = null;
+    private $has_random_products = false;
+    private $has_items = false;
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -14,6 +22,7 @@ class ControllerModuleJournal2Carousel extends Controller {
         $this->load->model('catalog/product');
         $this->load->model('catalog/category');
         $this->load->model('catalog/manufacturer');
+        $this->load->model('tool/image');
 
         if (self::$CACHEABLE === null) {
             self::$CACHEABLE = (bool)$this->journal2->settings->get('config_system_settings.carousel_cache');
@@ -33,7 +42,7 @@ class ControllerModuleJournal2Carousel extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -56,11 +65,16 @@ class ControllerModuleJournal2Carousel extends Controller {
                 $css[] = 'padding-right: ' . $padding;
             } else {
                 $css[] = 'max-width: ' . $this->journal2->settings->get('site_width', 1024) . 'px';
+                $css = array_merge($css, Journal2Utils::getBackgroundCssProperties(Journal2Utils::getProperty($module_data, 'module_background')));
+                if (Journal2Utils::getProperty($module_data, 'module_padding')) {
+                    $this->data['gutter_on_class'] = 'gutter-on';
+                    $css[] = 'padding: 20px';
+                }
             }
             $this->data['css'] = implode('; ', $css);
         }
 
-        $cache_property = "module_journal_carousel_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}";
+        $cache_property = "module_journal_carousel_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}" . $this->journal2->cache->getRouteCacheKey();
 
         $cache = $this->journal2->cache->get($cache_property);
 
@@ -95,7 +109,21 @@ class ControllerModuleJournal2Carousel extends Controller {
             $this->data['image_width'] = Journal2Utils::getProperty($module_data, 'image_width', $this->config->get('config_image_product_width'));
             $this->data['image_height'] = Journal2Utils::getProperty($module_data, 'image_height', $height = $this->config->get('config_image_product_height'));
             $this->data['image_resize_type'] = Journal2Utils::getProperty($module_data, 'image_type', 'fit');
-            $this->data['dummy_image'] = $this->model_tool_image->resize('data/journal2/transparent.png', 100, 100);
+            $this->data['dummy_image'] = $this->model_tool_image->resize('data/journal2/transparent.png', $this->data['image_width'], $this->data['image_height']);
+
+            /* image border */
+            if (Journal2Utils::getProperty($module_data, 'image_border')) {
+                $this->data['image_border_css'] = implode('; ', Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($module_data, 'image_border')));
+            } else {
+                $this->data['image_border_css'] = null;
+            }
+
+            /* image background color */
+            if (Journal2Utils::getProperty($module_data, 'image_bgcolor.value.color')) {
+                $this->data['image_bgcolor'] = 'background-color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'image_bgcolor.value.color'));
+            } else {
+                $this->data['image_bgcolor'] = null;
+            }
 
             switch ($this->data['module_type']) {
                 case 'product':
@@ -117,6 +145,10 @@ class ControllerModuleJournal2Carousel extends Controller {
                     $sections = Journal2Utils::sortArray($sections);
                     $this->generateManufacturerSections($sections);
                     break;
+            }
+
+            if (!$this->has_items) {
+                return;
             }
 
             $columns = in_array($setting['position'], array('top', 'bottom')) ? 0 : $this->journal2->settings->get('config_columns_count', 0);
@@ -145,31 +177,31 @@ class ControllerModuleJournal2Carousel extends Controller {
             }
             $this->data['show_title_class'] = $this->data['show_title'] ? '' : 'no-heading';
 
-            $this->template = "journal2/template/journal2/module/carousel_{$this->data['module_type']}.tpl";
-            if (self::$CACHEABLE === true) {
+            $this->template = $this->config->get('config_template') . "/template/journal2/module/carousel_{$this->data['module_type']}.tpl";
+
+            if (self::$CACHEABLE === true && !$this->has_random_products) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
-        $this->document->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.css');
-        $this->document->addScript('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.js');
-        $this->document->addScript('catalog/view/javascript/jquery/tabs.js');
+        $output = $this->render();
 
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
     private function generateProductSections($sections_data) {
         $section_index = 0;
+
+        $product_id = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : null;
 
         foreach ($sections_data as $section) {
             if (!$section['status']) continue;
@@ -177,22 +209,40 @@ class ControllerModuleJournal2Carousel extends Controller {
             $products = array();
             $section_products = array();
             $section_name = Journal2Utils::getProperty($section, 'section_title.value.' . $this->config->get('config_language_id'), 'Not Translated');
-            $limit = Journal2Utils::getProperty($section, 'items_limit', 5);
+            $todays_specials =
+                Journal2Utils::getProperty($section, 'section_type') === 'module' &&
+                Journal2Utils::getProperty($section, 'module_type') === 'specials' &&
+                Journal2Utils::getProperty($section, 'todays_specials_only') === '1';
+            $limit = $todays_specials ? PHP_INT_MAX : Journal2Utils::getProperty($section, 'items_limit', 5);
 
             switch (Journal2Utils::getProperty($section, 'section_type')) {
                 case 'module':
                     switch (Journal2Utils::getProperty($section, 'module_type')) {
                         case 'featured':
-                            $products = $this->model_journal2_product->getFeatured($limit);
+                            $products = $this->model_journal2_product->getFeatured($limit, Journal2Utils::getProperty($section, 'featured_module_id'), Journal2Utils::getProperty($section, 'filter_category', 0) !== null);
                             break;
                         case 'bestsellers':
-                            $products = $this->model_journal2_product->getBestsellers($limit);
+                            $products = $this->model_journal2_product->getBestsellers($limit, Journal2Utils::getProperty($section, 'filter_category', 0) !== null);
                             break;
                         case 'specials':
-                            $products = $this->model_journal2_product->getSpecials($limit);
+                            $products = $this->model_journal2_product->getSpecials($limit, Journal2Utils::getProperty($section, 'filter_category', 0) !== null);
                             break;
                         case 'latest':
-                            $products = $this->model_journal2_product->getLatest($limit);
+                            $products = $this->model_journal2_product->getLatest($limit, Journal2Utils::getProperty($section, 'filter_category', 0) !== null);
+                            break;
+                        case 'related':
+                            $products = $this->model_journal2_product->getProductRelated($product_id, $limit);
+                            break;
+                        case 'people-also-bought':
+                            $products = $this->model_journal2_product->getPeopleAlsoBought($product_id, $limit);
+                            break;
+                        case 'most-viewed':
+                            $products = $this->model_journal2_product->getMostViewed($limit);
+                            $this->has_random_products = true;
+                            break;
+                        case 'recently-viewed':
+                            $products = $this->model_journal2_product->getRecentlyViewed($limit);
+                            $this->has_random_products = true;
                             break;
                     }
                     break;
@@ -214,6 +264,7 @@ class ControllerModuleJournal2Carousel extends Controller {
                     }
                     break;
                 case 'random':
+                    $this->has_random_products = true;
                     $random_type = Journal2Utils::getProperty($section, 'random_from', 'all');
                     $category_id = $random_type === 'category' ? Journal2Utils::getProperty($section, 'random_from_category.id', -1) : -1;
                     $random_products = $this->model_journal2_product->getRandomProducts($limit, $category_id);
@@ -226,7 +277,8 @@ class ControllerModuleJournal2Carousel extends Controller {
             }
 
             foreach ($products as $product) {
-                $image = $this->getImage($product['image'] ? $product['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type']);
+                $this->has_items = true;
+                $image = Journal2Utils::resizeImage($this->model_tool_image, $product['image'] ? $product['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type']);
 
                 if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
                     $price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
@@ -260,17 +312,33 @@ class ControllerModuleJournal2Carousel extends Controller {
                 $image2 = false;
 
                 if (!$this->journal2->html_classes->hasClass('mobile') && count($results) > 0) {
-                    $image2 = $this->getImage($results[0]['image'] ? $results[0]['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type']);
+                    $image2 = Journal2Utils::resizeImage($this->model_tool_image, $results[0]['image'] ? $results[0]['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type']);
+                }
+
+                $date_end = false;
+                if ($special) {
+                    $date_end = $this->model_journal2_product->getSpecialCountdown($product['product_id']);
+                    if ($todays_specials && date('Y-m-d', strtotime(date('Y-m-d') . "+1 days")) !== date('Y-m-d', strtotime($date_end))) {
+                        continue;
+                    }
+                    if ($date_end === '0000-00-00') {
+                        $date_end = false;
+                    }
+                    if ($this->journal2->settings->get('show_countdown', 'never') === 'never') {
+                        $date_end = false;
+                    }
                 }
 
                 $product_data = array(
                     'product_id'    => $product['product_id'],
                     'section_class' => $product_sections,
+                    'classes'       => Journal2Utils::getProperty($section, 'section_type') === 'module' && Journal2Utils::getProperty($section, 'module_type') === 'specials' && Journal2Utils::getProperty($section, 'countdown_visibility', '0') == '1' ? 'countdown-on' : '',
                     'thumb'         => $image,
                     'thumb2'        => $image2,
                     'name'          => $product['name'],
                     'price'         => $price,
                     'special'       => $special,
+                    'date_end'      => $date_end,
                     'rating'        => $rating,
                     'description'   => utf8_substr(strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..',
                     'tax'           => $tax,
@@ -329,6 +397,7 @@ class ControllerModuleJournal2Carousel extends Controller {
                     }
             }
             foreach ($categories as $category) {
+                $this->has_items = true;
                 $category_info = $this->model_catalog_category->getCategory($category['category_id']);
                 if (!$category_info) continue;
 
@@ -339,7 +408,7 @@ class ControllerModuleJournal2Carousel extends Controller {
                     'section_class' => $category_sections,
                     'name'          => $category_info['name'],
                     'href'          => $this->url->link('product/category', 'path=' . $parent_id . $category_info['category_id']),
-                    'thumb'         => $this->getImage($category_info['image'] ? $category_info['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type'])
+                    'thumb'         => Journal2Utils::resizeImage($this->model_tool_image, $category_info['image'] ? $category_info['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type'])
                 );
 
                 $section_categories[] = $category_data;
@@ -385,6 +454,7 @@ class ControllerModuleJournal2Carousel extends Controller {
             }
 
             foreach ($manufacturers as $manufacturer) {
+                $this->has_items = true;
                 $manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer['manufacturer_id']);
                 if (!$manufacturer_info) continue;
 
@@ -395,7 +465,7 @@ class ControllerModuleJournal2Carousel extends Controller {
                     'section_class' => $manufacturer_sections,
                     'name'          => $manufacturer_info['name'],
                     'href'          => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_info['manufacturer_id']),
-                    'thumb'         => $this->getImage($manufacturer_info['image'] ? $manufacturer_info['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type'])
+                    'thumb'         => Journal2Utils::resizeImage($this->model_tool_image, $manufacturer_info['image'] ? $manufacturer_info['image'] : 'data/journal2/no_image_large.jpg', $this->data['image_width'], $this->data['image_height'], $this->data['image_resize_type'])
                 );
 
                 $section_manufacturers[] = $manufacturer_data;
@@ -416,21 +486,6 @@ class ControllerModuleJournal2Carousel extends Controller {
 
             $section_index++;
         }
-    }
-
-    private function getImage($image, $width, $height, $resize_type) {
-        if (!is_numeric($width)) {
-            $width = $this->config->get('config_image_product_width');
-        }
-        if (!is_numeric($height)) {
-            $height = $this->config->get('config_image_product_height');
-        }
-        if($resize_type === 'fit'){
-            $resize_type = '';
-        } else {
-            $resize_type = $width < $height ? 'h' : 'w';
-        }
-        return $this->model_tool_image->resize($image, $width, $height, $resize_type);
     }
 
 }

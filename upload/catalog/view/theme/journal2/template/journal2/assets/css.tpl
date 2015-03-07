@@ -21,6 +21,21 @@
 }
 <?php endif; ?>
 
+<?php if ($this->journal2->settings->get('leading_element')): ?>
+.home-page #container:before{
+  content: url('image/<?php echo $this->journal2->settings->get('leading_element'); ?>');
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('product_page_qty_status', 'on') === 'off'): ?>
+.product-info .right .cart div .qty{
+display:none;
+}
+.product-info .right .cart div .button{
+width:100%;
+}
+<?php endif; ?>
+
 <?php if($this->journal2->settings->get('hide_cart', 'off') === 'on'): ?>
 /*Hide Add to cart*/
 .journal-cart{
@@ -33,6 +48,37 @@
    max-width: <?php echo $this->journal2->settings->get('site_width', 1024); ?>px;
 }
 
+.extended-container:before{
+  display:<?php echo $this->journal2->settings->get('breadcrumb_status'); ?>;
+}
+
+<?php if($this->journal2->settings->get('product_page_options_sold_count_position', 'none') === 'inline-block'): ?>
+.product-sold-count.ps-left{
+    display:none;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('product_page_title_overflow', 'on') === 'off'): ?>
+.product-page .heading-title{
+    white-space:normal;
+    height:auto;
+    min-height:40px;
+    line-height:100%;
+    padding-bottom:12px;
+    padding-top:12px;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('category_page_title_overflow', 'on') === 'off'): ?>
+.category-page .heading-title{
+    white-space:normal;
+    height:auto;
+    min-height:40px;
+    line-height:100%;
+    padding-bottom:12px;
+    padding-top:12px;
+}
+<?php endif; ?>
 
 <?php if($this->journal2->settings->get('responsive_design') === '1'): ?>
 @media only screen and (max-width:<?php echo $this->journal2->settings->get('site_width') + 20;?>px) {
@@ -53,11 +99,14 @@
 }
 <?php endif; ?>
 
-<?php if($this->journal2->settings->get('product_compare_link_status', 'off') === 'off'): ?>
-.product-compare{
-display:none;
+
+<?php if($this->journal2->settings->get('product_compare_link_status', 'on') === 'off'): ?>
+.product-filter .product-compare{
+    display:none;
 }
 <?php endif; ?>
+
+
 
 <?php if($this->journal2->settings->get('hide_category_image', '1') === '0'): ?>
 .category-info .image{
@@ -150,10 +199,68 @@ text-align:right;
 
 <?php if($this->journal2->settings->get('product_grid_shadow', 'never') === 'never'): ?>
 .product-wrapper{
-  box-shadow: none !important;
+  box-shadow: none;
 }
 <?php endif; ?>
 
+
+<?php if($this->journal2->settings->get('cs_product_grid_shadow', 'never') === 'hover'): ?>
+.custom-sections.section-product .product-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('cs_product_grid_shadow', 'never') === 'always'): ?>
+.custom-sections.section-product .product-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('cs_product_grid_shadow', 'never') === 'never'): ?>
+.custom-sections.section-product .product-wrapper{
+  box-shadow: none;
+}
+<?php endif; ?>
+
+
+
+<?php if($this->journal2->settings->get('carousel_product_grid_shadow', 'never') === 'hover'): ?>
+.journal-carousel.carousel-product .product-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('carousel_product_grid_shadow', 'never') === 'always'): ?>
+.journal-carousel.carousel-product .product-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('carousel_product_grid_shadow', 'never') === 'never'): ?>
+.journal-carousel.carousel-product .product-wrapper{
+  box-shadow: none;
+}
+<?php endif; ?>
+
+
+
+<?php if($this->journal2->settings->get('carousel_brand_product_grid_shadow', 'never') === 'hover'): ?>
+.journal-carousel.carousel-brand .product-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('carousel_brand_product_grid_shadow', 'never') === 'always'): ?>
+.journal-carousel.carousel-brand .product-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('carousel_brand_product_grid_shadow', 'never') === 'never'): ?>
+.journal-carousel.carousel-brand .product-wrapper{
+  box-shadow: none;
+}
+<?php endif; ?>
 
 <?php if($this->journal2->settings->get('product_grid_latest_label_status', 'block') === 'none'): ?>
 .product-grid-item .image .label-latest + .label-sale{
@@ -174,6 +281,10 @@ text-align:right;
 display:none;
 }
 <?php endif; ?>
+
+.enquiry-button .button i:before{
+  color:<?php echo $this->journal2->settings->get('product_grid_button_icon:color');?>;
+}
 
 <?php if($this->journal2->settings->get('product_grid_button_icon_display', 'text') === 'icon'): ?>
 .product-grid-item .cart .button-left-icon:before{
@@ -221,6 +332,95 @@ display:none;
 }
 <?php endif; ?>
 
+
+
+/* BLOG */
+
+<?php if($this->journal2->settings->get('post_grid_button_icon_position', 'left') === 'right' || $this->journal2->settings->get('posts_grid_button_icon_position', 'left') === 'right'): ?>
+.post-button-left-icon{
+ display:none;
+}
+.post-button-right-icon{
+ display:inline;
+}
+<?php endif; ?>
+
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'hover'): ?>
+.post-module .post-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'always'): ?>
+.post-module .post-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'never'): ?>
+.post-module .post-wrapper{
+  box-shadow: none !important;
+}
+<?php endif; ?>
+
+
+
+<?php if($this->journal2->settings->get('post_grid_shadow', 'never') === 'hover'): ?>
+.post-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('post_grid_shadow', 'never') === 'always'): ?>
+.post-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('post_grid_shadow', 'never') === 'never'): ?>
+.post-wrapper{
+  box-shadow: none !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'hover'): ?>
+.post-module .post-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'always'): ?>
+.post-module .post-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('posts_grid_shadow', 'never') === 'never'): ?>
+.post-module .post-wrapper{
+  box-shadow: none !important;
+}
+<?php endif; ?>
+
+
+
+<?php if($this->journal2->settings->get('post_list_shadow', 'never') === 'hover'): ?>
+.blog-list-view .post-wrapper:hover{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('post_list_shadow', 'never') === 'always'): ?>
+.blog-list-view .post-wrapper{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.20) !important;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('post_list_shadow', 'never') === 'never'): ?>
+.blog-list-view.posts .post-wrapper{
+  box-shadow: none !important;
+}
+<?php endif; ?>
 
 
 <?php if($this->journal2->settings->get('product_grid_details_tip', 'always') === 'hover'): ?>
@@ -325,7 +525,7 @@ display:none;
 /* Product Grid Wishlist/Compare */
 
 <?php if($this->journal2->settings->get('product_grid_wishlist_icon_display', 'text') === 'text'): ?>
-.product-grid-item .wishlist a i, 
+.product-grid-item .wishlist a i,
 .product-grid-item .compare a i{
   display:none;
 }
@@ -358,13 +558,13 @@ display:none;
 <?php endif; ?>
 
 <?php if($this->journal2->settings->get('product_grid_wishlist_icon_display', 'text') === 'both'): ?>
-.product-grid-item .wishlist a i, 
+.product-grid-item .wishlist a i,
 .product-grid-item .compare a i{
   border:0;
   background-color:transparent !important;
   padding:0 5px;
 }
-.product-grid-item .wishlist a i:before, 
+.product-grid-item .wishlist a i:before,
 .product-grid-item .compare a i:before{
   line-height:100%;
 }
@@ -374,7 +574,7 @@ display:none;
 <?php if($this->journal2->settings->get('product_grid_wishlist_icon_position', 'button') === 'image' && $this->journal2->settings->get('product_grid_wishlist_icon_display', 'icon') === 'icon'): ?>
 .product-grid-item .product-details .wishlist,
 .product-grid-item .product-details .compare,
-.product-list-item .image .wishlist, 
+.product-list-item .image .wishlist,
 .product-list-item .image .compare,
 .product-grid-item .image .button-wishlist-text,
 .product-grid-item .image .button-compare-text{
@@ -385,12 +585,12 @@ display:none;
 
 
 <?php if($this->journal2->settings->get('product_grid_wishlist_icon_on_hover', 'on') == 'on' && $this->journal2->settings->get('product_grid_wishlist_icon_position', 'button') == 'image' && $this->journal2->settings->get('product_grid_wishlist_icon_display', '') == 'icon'): ?>
-.product-grid-item .image .wishlist, 
+.product-grid-item .image .wishlist,
 .product-grid-item .image .compare{
   visibility:hidden;
   opacity:0;
 }
-.product-grid-item:hover .image .wishlist, 
+.product-grid-item:hover .image .wishlist,
 .product-grid-item:hover .image .compare{
   visibility:visible;
   opacity:1;
@@ -424,6 +624,9 @@ display:none;
   height:<?php echo $this->journal2->settings->get('product_grid_button_height_px');?>px;
   line-height:<?php echo $this->journal2->settings->get('product_grid_button_height_px');?>px;
   padding:0;
+}
+.product-grid-item .cart{
+  height:<?php echo $this->journal2->settings->get('product_grid_button_height_px');?>px;
 }
 <?php endif; ?>
 
@@ -658,6 +861,11 @@ table.list td{
   opacity:1;
 }
 <?php endif; ?>
+<?php if($this->journal2->settings->get('label_latest_status', 'always') === 'never'): ?>
+  .label-latest{
+  display:none !important;
+  }
+<?php endif; ?>
 <?php if($this->journal2->settings->get('label_special_status', 'always') === 'hover'): ?>
 .label-sale{
   visibility:hidden;
@@ -679,6 +887,12 @@ img.outofstock{
 }
 <?php endif; ?>
 
+<?php if($this->journal2->settings->get('out_of_stock_status', 'always') === 'never'): ?>
+img.outofstock{
+  display:none !important;
+}
+<?php endif; ?>
+
 <?php if($this->journal2->settings->get('product_list_latest_label_status', 'block') === 'none'): ?>
 .product-list-item .image .label-latest + .label-sale{
   top: 5px;
@@ -692,7 +906,7 @@ img.outofstock{
 
 <?php if($this->journal2->settings->get('extended_layout_top_spacing', 'on') === 'off'): ?>
 
-  .extended-layout #column-left, 
+  .extended-layout #column-left,
   .extended-layout #column-right{
     padding:0;
   }
@@ -730,7 +944,7 @@ img.outofstock{
 .boxed-header .is-sticky header{
   left:50%;
   margin-left:-<?php echo $this->journal2->settings->get('site_width') / 2; ?>px;
-} 
+}
 
 .boxed-header .journal-header-center .journal-links{
   padding-left: 10px;
@@ -745,15 +959,16 @@ img.outofstock{
   padding-right: 20px;
 }
 @media only screen and (max-width: 760px) {
-  .boxed-header .journal-header-center .journal-search, 
+  .boxed-header .journal-header-center .journal-search,
   .boxed-header .journal-header-center .journal-links{
     padding-left: 0;
   }
-  .boxed-header .journal-header-center .journal-cart, 
+  .boxed-header .journal-header-center .journal-cart,
   .boxed-header .journal-header-center .journal-secondary{
     padding-right: 0;
   }
 }
+
 @media only screen and (max-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
 .boxed-header .is-sticky header{
   left:0;
@@ -768,6 +983,11 @@ img.outofstock{
   .copyright{
     padding-left: 15px;
   }
+  <?php if($this->journal2->settings->get('mega_header_align', 'center') === 'left'): ?>
+  .journal-header-mega #logo a, .breadcrumb{
+      padding-left:15px;
+  }
+<?php endif; ?>
 }
 
 
@@ -782,7 +1002,8 @@ header .links > a{
     border-color:<?php echo $this->journal2->settings->get('top_menu_border_color');?>
 }
 
-.journal-header-center #cart .content:before{
+.journal-header-center #cart .content:before,
+.oc2 #cart .content .cart-wrapper:before{
   color:<?php echo $this->journal2->settings->get('cart_content_bg');?>
 }
 
@@ -800,29 +1021,32 @@ header .top-menu-link{
 }
 <?php endif; ?>
 
-.journal-language .dropdown-menu:before, 
+.journal-language .dropdown-menu:before,
 .journal-currency .dropdown-menu:before{
   color:<?php echo $this->journal2->settings->get('lang_drop_bg');?>
 }
 
-.journal-header-center .journal-language form > div, 
+.journal-header-center .journal-language form > div,
 .journal-header-center .journal-currency form > div{
   border-left-style:<?php echo $this->journal2->settings->get('lang_divider_type');?>;
   border-right-style:<?php echo $this->journal2->settings->get('lang_divider_type');?>;
 }
 
-
-::-webkit-input-placeholder {
+#search ::-webkit-input-placeholder {
   color:<?php echo $this->journal2->settings->get('search_placeholder_color');?>;
+  font-family: inherit;
 }
-:-moz-placeholder {
+#search :-moz-placeholder {
   color:<?php echo $this->journal2->settings->get('search_placeholder_color');?>;
+  font-family: inherit;
 }
-::-moz-placeholder {
+#search ::-moz-placeholder {
   color:<?php echo $this->journal2->settings->get('search_placeholder_color');?>;
+  font-family: inherit;
 }
-:-ms-input-placeholder {
+#search :-ms-input-placeholder {
   color:<?php echo $this->journal2->settings->get('search_placeholder_color');?>;
+  font-family: inherit;
 }
 
 .button-search{
@@ -842,7 +1066,7 @@ header .journal-login{
 }
 
 @media only screen and (max-width: 760px) {
-  .journal-header-center #search input, 
+  .journal-header-center #search input,
   .journal-header-center .button-search{
       border-radius:0;
   }
@@ -856,7 +1080,7 @@ header .journal-login{
   header .journal-login{
       border-bottom-style:<?php echo $this->journal2->settings->get('search_divider_type');?>;
   }
-  
+
   .journal-menu .mobile-menu > li{
     border-bottom-color:<?php echo $this->journal2->settings->get('menu_divider');?>;
     border-bottom-style:<?php echo $this->journal2->settings->get('menu_divider_type');?>;
@@ -891,7 +1115,46 @@ header .journal-login{
   }
 <?php endif; ?>
 
-.mega-menu-categories .mega-menu-item, 
+<?php if($this->journal2->settings->get('catalog_product_page_cart', 'block') === 'none'): ?>
+  .quickview .product-info .right .cart{
+    display:none;
+  }
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('catalog_grid_cs_cart', 'block') === 'none'): ?>
+  .custom-sections .product-grid-item .product-details .cart{
+    display:none !important;
+  }
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('catalog_grid_side_carousel_cart', 'block') === 'none'): ?>
+  .side-column .product-grid-item .product-details .cart{
+    display:none !important;
+  }
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('catalog_grid_carousel_cart', 'block') === 'none'): ?>
+  #content .journal-carousel .product-grid-item .product-details .cart,
+  #top-modules .journal-carousel .product-grid-item .product-details .cart,
+  #bottom-modules .journal-carousel .product-grid-item .product-details .cart{
+    display:none !important;
+  }
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('product_page_title_status', '1') === '0'): ?>
+  .product-info .right .options h3{
+    display:none;
+  }
+  .product-info .right .option-image:first-of-type{
+    margin-top:0;
+  }
+<?php endif; ?>
+
+.product-info .right .options.push-1 .option-image li.selected span img{
+  border-color:<?php echo $this->journal2->settings->get('product_page_options_push_image_border_hover');?>;
+}
+
+.mega-menu-categories .mega-menu-item,
 .mega-menu-brands .mega-menu-item,
 .mega-menu-html .mega-menu-item,
 #header .mega-menu .product-grid-item{
@@ -900,6 +1163,26 @@ header .journal-login{
 .mega-menu > div{
   margin-bottom:-<?php echo $this->journal2->settings->get('menu_categories_item_margin');?>px;
   margin-right:-<?php echo $this->journal2->settings->get('menu_categories_item_margin');?>px;
+}
+
+.mega-menu .mega-menu-column:last-of-type > div{
+   margin-right:-<?php echo $this->journal2->settings->get('menu_categories_item_margin');?>px;
+}
+
+.mega-menu-column > div > h3, .mega-menu .mega-menu-column .menu-cms-block{
+  margin-right:<?php echo $this->journal2->settings->get('menu_categories_item_margin');?>px;
+}
+.mega-menu .mega-menu-column:last-of-type > h3,
+.mega-menu .mega-menu-column:last-of-type > div > h3,
+.mega-menu .mega-menu-column:last-of-type > .menu-cms-block,
+.mega-menu .mega-menu-column.mega-menu-html-block > div{
+  margin-right:0;
+}
+
+@media only screen and (max-width: 760px) {
+  .mega-menu .mega-menu-column > div{
+   margin-right:-<?php echo $this->journal2->settings->get('menu_categories_item_margin');?>px;
+  }
 }
 
 .journal-sf .sf-image .box-content ul{
@@ -923,7 +1206,7 @@ header .journal-login{
 <?php endif; ?>
 
 <?php if($this->journal2->settings->get('catalog_grid_cart', 'block') === 'none' || $this->journal2->settings->get('catalog_grid_carousel_cart', 'block') === 'none' || $this->journal2->settings->get('catalog_grid_side_carousel_cart', 'block') === 'none' || $this->journal2->settings->get('catalog_grid_cs_cart', 'block') === 'none' || $this->journal2->settings->get('catalog_grid_main_menu_cart', 'block') === 'none'): ?>
-.product-grid-item .price + hr, 
+.product-grid-item .price + hr,
 .product-grid-item .price + .rating + hr{
   display:block;
 }
@@ -981,6 +1264,7 @@ footer .contacts .hint--top:before{
   border-top-color: <?php echo $this->journal2->settings->get('footer_tooltip_bg_color');?>;
 }
 
+
 .side-column .box-category,
 .side-column .box-content,
 .side-column .box-content > div,
@@ -988,6 +1272,7 @@ footer .contacts .hint--top:before{
 .side-column .oc-module .product-grid-item:last-of-type{
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
+  border-radius:inherit;
 }
 
 
@@ -1012,18 +1297,18 @@ background-color:<?php echo $this->journal2->settings->get('main_menu_bg_color')
 }
 
 
-.journal-header-default .links > a, 
+.journal-header-default .links > a,
 .journal-header-menu .links > a{
   border-bottom-color: transparent;
 }
 
 @media only screen and (max-width: 760px) {
-.journal-header-default .links > a, 
+.journal-header-default .links > a,
 .journal-header-menu .links > a{
   border-bottom-color: <?php echo $this->journal2->settings->get('top_menu_border_color');?>;
 }
 }
-.nav-numbers a:hover, 
+.nav-numbers a:hover,
 .nav-numbers li.active a{
   -webkit-backface-visibility: hidden;
   -webkit-transform: scale(<?php echo $this->journal2->settings->get('text_rotator_bullet_scale');?>);
@@ -1031,7 +1316,7 @@ background-color:<?php echo $this->journal2->settings->get('main_menu_bg_color')
   -ms-transform: scale(<?php echo $this->journal2->settings->get('text_rotator_bullet_scale');?>);
   transform: scale(<?php echo $this->journal2->settings->get('text_rotator_bullet_scale');?>);
 }
-.headline-mode .nav-numbers a:hover, 
+.headline-mode .nav-numbers a:hover,
 .headline-mode .nav-numbers li.active a{
   -webkit-backface-visibility: hidden;
   -webkit-transform: scale(<?php echo $this->journal2->settings->get('headline_bullet_scale');?>);
@@ -1039,9 +1324,9 @@ background-color:<?php echo $this->journal2->settings->get('main_menu_bg_color')
   -ms-transform: scale(<?php echo $this->journal2->settings->get('headline_bullet_scale');?>);
   transform: scale(<?php echo $this->journal2->settings->get('headline_bullet_scale');?>);
 }
-.tp-bullets.simplebullets.round .bullet.selected, 
+.tp-bullets.simplebullets.round .bullet.selected,
 .tp-bullets.simplebullets.round .bullet:hover,
-.journal-simple-slider .owl-controls .owl-page.active span, 
+.journal-simple-slider .owl-controls .owl-page.active span,
 .journal-simple-slider .owl-controls.clickable .owl-page:hover span{
   -webkit-backface-visibility: hidden;
   -webkit-transform: scale(<?php echo $this->journal2->settings->get('slider_bullet_scale');?>);
@@ -1050,7 +1335,7 @@ background-color:<?php echo $this->journal2->settings->get('main_menu_bg_color')
   transform: scale(<?php echo $this->journal2->settings->get('slider_bullet_scale');?>);
 }
 
-.owl-controls .owl-page.active span, 
+.owl-controls .owl-page.active span,
 .owl-controls.clickable .owl-page:hover span{
   -webkit-transform: scale(<?php echo $this->journal2->settings->get('carousel_bullet_scale');?>);
   -moz-transform: scale(<?php echo $this->journal2->settings->get('carousel_bullet_scale');?>);
@@ -1059,10 +1344,7 @@ background-color:<?php echo $this->journal2->settings->get('main_menu_bg_color')
 }
 
 @media only screen and (max-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
-#top-modules .static-banners,
-#bottom-modules .static-banners{
-  padding:0 20px;
-}
+
 .bottom-footer.fullwidth-bar .copyright{
   padding-left: 15px;
 }
@@ -1123,18 +1405,16 @@ margin-right:240px;
 
 }
 
-.zoomContainer{
-  overflow:hidden;
-}
-
 .mega-menu{
   max-width:<?php echo $this->journal2->settings->get('site_width');?>px;
   /* margin-top:<?php echo 0 + $this->journal2->settings->get('main_menu_border:border-bottom-width');?>px; */
 }
 
+/*
 .mega-menu > div > div:first-child .wishlist .hint--top:after{
   left:53px;
 }
+*/
 
 
 
@@ -1146,7 +1426,7 @@ height:130px;
 .journal-header-center #logo a img{
 max-height:130px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:45px;
 }
@@ -1160,7 +1440,7 @@ max-height:210px;
 .journal-header-center .j-100, .journal-header-center #logo a{
 height:100px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:0;
 }
@@ -1181,7 +1461,7 @@ height:150px;
 .journal-header-center #logo a img{
 max-height:150px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:55px;
 }
@@ -1195,7 +1475,7 @@ max-height:230px;
 .journal-header-center .j-100, .journal-header-center #logo a{
 height:100px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:0;
 }
@@ -1215,7 +1495,7 @@ height:170px;
 .journal-header-center #logo a img{
 max-height:170px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:65px;
 }
@@ -1229,7 +1509,7 @@ max-height:250px;
 .journal-header-center .j-100, .journal-header-center #logo a{
 height:100px;
 }
-.journal-header-center .journal-search, 
+.journal-header-center .journal-search,
 .journal-header-center .journal-cart{
 top:0;
 }
@@ -1261,14 +1541,31 @@ max-height:100px;
 }
 <?php endif; ?>
 
+<?php if($this->journal2->settings->get('filter_image_size', 'medium') === 'tiny'): ?>
+.product-grid-item .price{
+  width:100%;
+}
+<?php endif; ?>
 
-.zoomContainer{
- padding-left:<?php echo $this->journal2->settings->get('product_page_image_border:border-width');?>;
- padding-top:<?php echo $this->journal2->settings->get('product_page_image_border:border-width');?>;
+
+.product-grid-item.display-icon .wishlist-icon:before,
+.product-grid-item.display-icon .compare-icon:before{
+  line-height:<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_bg_height');?>px;
 }
 
 .journal-header-center #cart .heading i{
   height:<?php echo 40 - $this->journal2->settings->get('cart_heading_border:border-width');?>px;
+}
+
+.journal-desktop .menu-floated .float-left{
+  border-right-style:<?php echo $this->journal2->settings->get('menu_divider_type');?>;
+}
+
+.column.products > h3{
+  margin-bottom:<?php echo 12 - $this->journal2->settings->get('footer_product_padding');?>px;
+}
+.column.products{
+  padding-bottom:<?php echo 12 - $this->journal2->settings->get('footer_product_padding');?>px;
 }
 
 .side-column .journal-gallery .box-heading{
@@ -1291,9 +1588,125 @@ max-height:100px;
   padding-left: <?php echo (int)$this->journal2->settings->get('side_category_link_padding_left') + 5 * (int)$this->journal2->settings->get('side_category_sub_left_padding');?>px;
 }
 
+@media only screen and (max-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
+  .breadcrumb{
+    padding-left:10px;
+  }
+}
+
+<?php if($this->journal2->settings->get('cs_fullwidth_divider', 'off') === 'on'): ?>
+.custom-sections .box-heading.box-sections{
+    border-left-width:1px;
+    border-right-width:1px;
+}
+<?php endif; ?>
+
+.custom-sections .box-heading.box-sections{
+    border-left-style:<?php echo $this->journal2->settings->get('cs_title_divider_type');?>;
+}
+<?php if($this->journal2->settings->get('carousel_product_shadow_mask', 'off') === 'on'):?>
+
+#top-modules .carousel-product > div,
+#bottom-modules .carousel-product > div,
+.side-column .carousel-product > div,
+#top-modules .carousel-category > div,
+#bottom-modules .carousel-category > div,
+.side-column .carousel-category > div,
+#top-modules .journal-carousel.post-module > div,
+#bottom-modules .journal-carousel.post-module > div{
+    margin-left:-11px;
+    margin-right:-11px;
+    padding:0 11px;
+}
+<?php endif; ?>
+<?php if($this->journal2->settings->get('carousel_brand_shadow_mask', 'off') === 'on'): ?>
+#top-modules .carousel-brand > div,
+#bottom-modules .carousel-brand > div,
+.side-column .carousel-brand > div{
+    margin-left:-10px;
+    margin-right:-10px;
+    padding:0 10px;
+  }
+<?php endif; ?>
 
 
+<?php if($this->journal2->settings->get('post_title_overflow', 'on') === 'off'): ?>
+.blog-post .heading-title{
+  white-space:normal;
+  height:auto;
+  line-height:22px;
+  padding:8px 0;
+}
+<?php endif; ?>
 
+<?php if($this->journal2->settings->get('module_title_overflow', 'on') === 'off'): ?>
+.post-module .box-heading{
+  white-space:normal;
+  height:auto;
+  line-height:22px;
+  padding:8px 0;
+}
+<?php endif; ?>
+
+.posts.blog-list-view .post-item-details{
+    width: <?php echo 100 - $this->journal2->settings->get('post_list_image_width'); ?>%;
+}
+
+
+.side-column .box.cms-blocks .box-heading{
+  margin-bottom:<?php echo $this->journal2->settings->get('side_cms_margin');?>px;
+}
+
+@media only screen and (min-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
+  .safari5 #footer,
+  .safari5.boxed-header header{
+     width: <?php echo $this->journal2->settings->get('site_width', 1024); ?>px;
+  }
+}
+
+@media only screen and (max-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
+  .tp-banner-container{
+    height:auto !important;
+  }
+}
+
+@media only screen and (max-width: <?php echo $this->journal2->settings->get('site_width') + 15;?>px) {
+#top-modules>div, #bottom-modules>div{
+  padding-left:20px;
+  padding-right:20px;
+}
+}
+
+
+<?php if($this->journal2->settings->get('show_countdown', 'never') === 'always'): ?>
+.product-grid-item .countdown,
+.product-list-item .countdown {
+    opacity: 1;
+    visibility: visible;
+}
+<?php endif; ?>
+<?php if($this->journal2->settings->get('show_countdown', 'never') === 'hover'): ?>
+.product-grid-item:hover .countdown,
+.product-list-item:hover .countdown {
+    opacity: 1;
+    visibility: visible;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('show_countdown', 'never') === 'hidden'): ?>
+.product-grid-item .countdown,
+.product-list-item .countdown {
+  display:none;
+}
+<?php endif; ?>
+
+
+<?php if ($this->journal2->settings->get('product_page_cloud_zoom_inner') === '0'): ?>
+.zm-viewer{
+  display:none;
+  border-left:1px solid white;
+}
+<?php endif; ?>
 
 
 /* Custom CSS */

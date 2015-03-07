@@ -153,6 +153,8 @@
                 </li>
             </ul>
         </accordion-group>
+
+        <!--Out of Stock-->
         <accordion-group is-open="accordion.accordions[2]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Out of Stock</div>
@@ -198,7 +200,7 @@
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
 
-                <li  data-ng-hide="settings.out_of_stock_status == 'never'">
+                <li>
                     <span class="module-create-title">Disable Add to Cart Button</span>
                         <span class="module-create-option">
                             <switch data-ng-model="settings.out_of_stock_disable_button">
@@ -207,6 +209,13 @@
                             </switch>
                         </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Disabled Button Opacity <small>.5 = 50%</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.out_of_stock_disable_button_opacity" class="journal-number-field"></j-opt-text>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
                 
             </ul>

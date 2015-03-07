@@ -1,16 +1,21 @@
 <div class="box journal-gallery <?php echo $hide_on_mobile_class; ?> <?php echo $carousel ? 'journal-carousel' : ''; ?> <?php echo isset($arrows) && $arrows === 'top' ? 'arrows-top' : ''; ?>" id="journal-gallery-<?php echo $module; ?>" style="<?php echo isset($css) ? $css : ''; ?>">
+   <div>
     <?php if ($title): ?>
     <div class="box-heading"><?php echo $title; ?></div>
     <?php endif; ?>
     <div class="box-content">
-    <?php foreach ($images as $image): ?>
+    <?php $index = 0; foreach ($images as $image): ?>
         <div class="gallery-thumb <?php echo !$carousel ? $grid_classes : ''; ?>">
-            <a href="<?php echo $image['image']; ?>" style="<?php echo $image_border; ?>" data-thumb="<?php echo $image['thumb']; ?>" class="swipebox" title="<?php echo $image['name']; ?>">
+            <a href="<?php echo $image['image']; ?>" style="<?php echo $image_border; ?>; <?php echo !$carousel && $index >= $thumbs_limit ? 'display: none' : ''; ?>" data-thumb="<?php echo $image['thumb']; ?>" class="swipebox" title="<?php echo $image['name']; ?>">
                 <div class="item-hover"></div>
-                <img src="<?php echo $image['thumb']; ?>" alt="<?php echo $image['name']; ?>" />
+                <?php if ($carousel): ?>
+                <img class="lazyOwl" width="<?php echo $thumbs_width; ?>" height="<?php echo $thumbs_height; ?>" data-src="<?php echo $image['thumb']; ?>" alt="<?php echo $image['name']; ?>" />
+                <?php else: ?>
+                <img src="<?php echo $image['thumb']; ?>" width="<?php echo $thumbs_width; ?>" height="<?php echo $thumbs_height; ?>" alt="<?php echo $image['name']; ?>" />
+                <?php endif; ?>
             </a>
         </div>
-    <?php endforeach; ?>
+    <?php $index++; endforeach; ?>
     </div>
     <?php if ($carousel): ?>
     <?php
@@ -27,16 +32,17 @@
         (function () {
             var opts = $.parseJSON('<?php echo json_encode($grid); ?>');
 
-            jQuery110("#journal-gallery-<?php echo $module; ?> .box-content").owlCarousel({
+            jQuery("#journal-gallery-<?php echo $module; ?> .box-content").owlCarousel({
                 itemsCustom:opts,
+                lazyLoad: true,
                 autoPlay: <?php echo $autoplay ? $autoplay : 'false'; ?>,
                 touchDrag: <?php echo $touch_drag ? 'true' : 'false'; ?>,
                 stopOnHover: <?php echo $pause_on_hover ? 'true' : 'false'; ?>,
                 navigation:true,
                 scrollPerPage:true,
                 navigationText : false,
-                slideSpeed: <?php echo $slide_speed; ?>,
-                margin:10
+                paginationSpeed: <?php echo $slide_speed; ?>,
+                margin:15
             });
             <?php if ($arrows === 'side'): ?>
             $('#journal-gallery-<?php echo $module; ?> .owl-buttons').addClass('side-buttons');
@@ -54,7 +60,17 @@
     <?php endif; ?>
     <script>
         $(function(){
-            $('#journal-gallery-<?php echo $module; ?> .swipebox').swipebox();
+            $('#journal-gallery-<?php echo $module; ?> .swipebox').swipebox({
+                <?php if ($carousel && $autoplay): ?>
+                beforeOpen: function (){
+                    jQuery("#journal-gallery-<?php echo $module; ?> .box-content").trigger('owl.stop');
+                },
+                afterClose: function (){
+                    jQuery("#journal-gallery-<?php echo $module; ?> .box-content").trigger('owl.play', <?php echo $autoplay; ?>);
+                }
+                <?php endif; ?>
+            });
         });
     </script>
+</div>
 </div>

@@ -1,5 +1,5 @@
 <div class="module-header">
-    <div class='module-name'>Product Tabs <span>All Tabs</span></div>
+    <div class='module-name'>Product Tabs / Blocks<span>All Tabs</span></div>
     <div class="module-buttons">
         <a href="<?php echo $base_href;?>#/module/{{module_type}}/form" class="btn blue">Create New</a>
     </div>
@@ -9,7 +9,7 @@
         <div class="accordion-bar bar-level-0 bar-expand" >
         </div>
         <accordion close-others="false">
-            <accordion-group data-ng-repeat="module in modules" is-open="opened_modules[module.module_id]">
+            <accordion-group data-ng-repeat="module in filterModules(modules, paginationCurrentPage)" is-open="opened_modules[module.module_id]">
                 <accordion-heading>
                     <div class="accordion-bar bar-level-0 bar-pt">
                         {{module.module_data.module_name}}
@@ -20,5 +20,6 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
+        <pagination ng-show="paginationTotalItems > 10" total-items="paginationTotalItems" page="paginationCurrentPage" max-size="16" class="pagination-sm" boundary-links="true"></pagination>
     </div>
 </form>

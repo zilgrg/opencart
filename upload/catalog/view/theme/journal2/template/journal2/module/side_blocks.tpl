@@ -6,7 +6,7 @@
     <?php endif; ?>
     <?php endif; ?>
     <?php if ($type === 'block'): ?>
-    <div class="side-block-icon" style="background-color: <?php echo $icon_bgcolor; ?>; <?php echo $icon_border; ?>"><?php echo $icon; ?></div>
+    <div class="side-block-icon" style="width: <?php echo $icon_width; ?>; height: <?php echo $icon_height; ?>; line-height: <?php echo $icon_height; ?>; background-color: <?php echo $icon_bgcolor; ?>; <?php echo $icon_border; ?>; <?php echo $pos_offset; ?>"><?php echo $icon; ?></div>
     <div class="side-block-content" style="background-color: <?php echo $content_bgcolor; ?>; padding: <?php echo $content_padding; ?>" data-url="<?php echo $url; ?>">Loading...</div>
     <?php endif; ?>
 </div>

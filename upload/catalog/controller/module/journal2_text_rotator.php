@@ -2,6 +2,13 @@
 class ControllerModuleJournal2TextRotator extends Controller {
 
     private static $CACHEABLE = null;
+    private $google_fonts = array();
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -10,6 +17,7 @@ class ControllerModuleJournal2TextRotator extends Controller {
         }
         $this->load->model('journal2/module');
         $this->load->model('journal2/menu');
+        $this->load->model('tool/image');
 
         if (self::$CACHEABLE === null) {
             self::$CACHEABLE = (bool)$this->journal2->settings->get('config_system_settings.text_rotator_cache');
@@ -29,7 +37,7 @@ class ControllerModuleJournal2TextRotator extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -70,13 +78,23 @@ class ControllerModuleJournal2TextRotator extends Controller {
             $this->data['transition_delay'] = Journal2Utils::getProperty($module_data, 'transition_delay', 4000);
             $this->data['bullets_position'] = Journal2Utils::getProperty($module_data, 'bullets_position', 'center');
 
+            $this->data['title'] = Journal2Utils::getProperty($module_data, 'module_title.value.' . $this->config->get('config_language_id'), '');
+
             /* quote options */
             $css = array();
 
             $css[] = 'text-align: ' . Journal2Utils::getProperty($module_data, 'text_align', 'center');
             $this->data['text_align'] = Journal2Utils::getProperty($module_data, 'text_align', 'center');
             if (Journal2Utils::getProperty($module_data, 'text_font.value.font_type') === 'google') {
-                $this->journal2->google_fonts->add(Journal2Utils::getProperty($module_data, 'text_font.value.font_name'), Journal2Utils::getProperty($module_data, 'text_font.value.font_subset'), Journal2Utils::getProperty($module_data, 'text_font.value.font_weight'));
+                $font_name = Journal2Utils::getProperty($module_data, 'text_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'text_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'text_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
                 $weight = filter_var(Journal2Utils::getProperty($module_data, 'text_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
                 $css[] = 'font-weight: ' . ($weight ? $weight : 400);
                 $css[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'text_font.value.font_name') . "'";
@@ -100,7 +118,15 @@ class ControllerModuleJournal2TextRotator extends Controller {
             $css = array();
 
             if (Journal2Utils::getProperty($module_data, 'author_font.value.font_type') === 'google') {
-                $this->journal2->google_fonts->add(Journal2Utils::getProperty($module_data, 'author_font.value.font_name'), Journal2Utils::getProperty($module_data, 'author_font.value.font_subset'), Journal2Utils::getProperty($module_data, 'author_font.value.font_weight'));
+                $font_name = Journal2Utils::getProperty($module_data, 'author_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'author_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'author_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
                 $weight = filter_var(Journal2Utils::getProperty($module_data, 'author_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
                 $css[] = 'font-weight: ' . ($weight ? $weight : 400);
                 $css[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'author_font.value.font_name') . "'";
@@ -155,38 +181,57 @@ class ControllerModuleJournal2TextRotator extends Controller {
             $sections = Journal2Utils::getProperty($module_data, 'sections', array());
             $sections = Journal2Utils::sortArray($sections);
 
+            $image_width  = Journal2Utils::getProperty($module_data, 'image_width', 150);
+            $image_height = Journal2Utils::getProperty($module_data, 'image_height', 150);
+
             foreach ($sections as $section) {
                 if (!$section['status']) continue;
                 $this->data['sections'][] = array(
-                    'author' => Journal2Utils::getProperty($section, 'author'),
-                    'image' => Journal2Utils::getProperty($section, 'image'),
-                    'text' => Journal2Utils::getProperty($section, 'text.value.' . $this->config->get('config_language_id')),
-                    'icon' => Journal2Utils::getIconOptions2(Journal2Utils::getProperty($section, 'icon'))
+                    'author'        => Journal2Utils::getProperty($section, 'author'),
+                    'image'         => $section['image'] ? Journal2Utils::resizeImage($this->model_tool_image, $section, $image_width, $image_height, 'crop') : false,
+                    'image_width'   => $image_width,
+                    'image_height'  => $image_height,
+                    'text'          => Journal2Utils::getProperty($section, 'text.value.' . $this->config->get('config_language_id')),
+                    'icon'          => Journal2Utils::getIconOptions2(Journal2Utils::getProperty($section, 'icon'))
                 );
             }
 
             /* bullets */
             $this->data['bullets'] = Journal2Utils::getProperty($module_data, 'bullets') && count($this->data['sections']) > 1 ? true : false;
 
-            $this->template = 'journal2/template/journal2/module/text_rotator.tpl';
+            /* pause on hover */
+            $this->data['pause_on_hover'] = Journal2Utils::getProperty($module_data, 'pause_on_hover', '1');
+
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/text_rotator.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
+                $this->journal2->cache->set($cache_property . '_fonts', json_encode($this->google_fonts));
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            if ($fonts = $this->journal2->cache->get($cache_property . '_fonts')) {
+                $fonts = json_decode($fonts, true);
+                if (is_array($fonts)) {
+                    foreach ($fonts as $font) {
+                        $this->journal2->google_fonts->add($font['name'], $font['subset'], $font['weight']);
+                    }
+                }
+            }
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
         $this->document->addScript('catalog/view/theme/journal2/lib/quovolver/jquery.quovolver.js');
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
 }

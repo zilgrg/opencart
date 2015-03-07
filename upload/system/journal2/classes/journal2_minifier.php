@@ -18,7 +18,6 @@ class Journal2Minifier {
 
     private $minify_css = false;
     private $minify_js = false;
-    private $salt = null;
 
     private $path = null;
     private $dir = null;
@@ -33,23 +32,6 @@ class Journal2Minifier {
         $this->cache = $cache;
         $this->path = Journal2Cache::getCachePath();
         $this->dir = Journal2Cache::getCacheDir();
-    }
-
-    public function getSalt() {
-        if ($this->salt !== null) {
-            return $this->salt;
-        }
-        if (!$this->cache->canCache() || $this->cache->getDeveloperMode()) {
-            return null;
-        }
-        $file = $this->path . 'salt';
-        if (!file_exists($file)) {
-            $this->salt = md5(mt_rand());
-            file_put_contents($file, $this->salt);
-        } else {
-            $this->salt = file_get_contents($file);
-        }
-        return $this->salt;
     }
 
     public function getMinifyCss() {
@@ -69,17 +51,23 @@ class Journal2Minifier {
     }
 
     public function addStyle($href) {
+        if ($href === 'catalog/view/javascript/jquery/owl-carousel/owl.carousel.css') {
+            return;
+        }
         $this->styles[md5($href)] = $href;
     }
 
     public function addScript($src, $position = 'header') {
+        if ($src === 'catalog/view/javascript/jquery/owl-carousel/owl.carousel.min.js') {
+            return;
+        }
         $this->scripts[$position][md5($src)] = $src;
     }
 
-    public function css() {
+    public function css($src = false) {
         if ($this->cache->canCache() && !$this->cache->getDeveloperMode() && $this->minify_css) {
             /* generate file if not exits */
-            $combined_css_file = '_' . $this->getSalt() . '_' . $this->getHash($this->styles, 'css');
+            $combined_css_file = '_' . $this->getHash($this->styles, 'css');
             if (!file_exists($this->path . $combined_css_file)) {
                 /* parse all styles, generate corresponding minified css file */
                 foreach ($this->styles as $style) {
@@ -87,7 +75,6 @@ class Journal2Minifier {
                     if (!file_exists($file)) {
                         $css_file = realpath(DIR_SYSTEM . '../' . $this->removeQueryString($style));
                         if (!file_exists($css_file)) {
-                            trigger_error("{$style} css file not found!");
                             continue;
                         }
                         $content = file_get_contents($css_file);
@@ -112,15 +99,23 @@ class Journal2Minifier {
                 }
 
                 /* append journal.css at the end */
-                $content_min = Minify_CSS::minify(file_get_contents($this->path . $this->cache->getJournalAssetsFileName('css')), array(
-                    'preserveComments'  => false,
-                    'currentDir' => realpath($this->path . '../')
-                ));
+                $options = array(
+                    'preserveComments'      => false,
+                );
+                if (Journal2Utils::staticAsset('') === '') {
+                    $options['currentDir'] = realpath($this->path . '../');
+                } else {
+                    $options['prependRelativePath'] = Journal2Utils::staticAsset('');
+                }
+                $content_min = Minify_CSS::minify(file_get_contents($this->path . $this->cache->getJournalAssetsFileName('css')), $options);
                 fwrite($fh, $content_min);
                 flock($fh, LOCK_UN);
                 fclose($fh);
             }
             /* return link tag */
+            if ($src) {
+                return Journal2Utils::staticAsset($this->dir . $combined_css_file);
+            }
             return $this->printStyle($this->dir . $combined_css_file);
         }
         $assets = '';
@@ -130,10 +125,10 @@ class Journal2Minifier {
         return $assets;
     }
 
-    public function js($position = 'header') {
+    public function js($position = 'header', $src= false) {
         if ($this->cache->canCache() && !$this->cache->getDeveloperMode() && $this->minify_js) {
             /* generate file if not exits */
-            $combined_js_file = '_' . $this->getSalt() . '_' . $this->getHash($this->scripts[$position], 'js');
+            $combined_js_file = '_' . $this->getHash($this->scripts[$position], 'js', $this->cache->getLanguageId());
             if (!file_exists($this->path . $combined_js_file)) {
                 /* parse all scripts, generate corresponding minified js file */
                 foreach ($this->scripts[$position] as $script) {
@@ -141,7 +136,6 @@ class Journal2Minifier {
                     if (!file_exists($file)) {
                         $js_file = realpath(DIR_SYSTEM . '../' . $this->removeQueryString($script));
                         if (!file_exists($js_file)) {
-                            trigger_error("{$script} js file not found!");
                             continue;
                         }
                         $content = file_get_contents($js_file);
@@ -170,6 +164,9 @@ class Journal2Minifier {
                 fclose($fh);
             }
             /* return link tag */
+            if ($src) {
+                return Journal2Utils::staticAsset($this->dir . $combined_js_file);
+            }
             if ($position === 'footer') {
                 return $this->printScript($this->dir . $combined_js_file, ' defer');
             }
@@ -182,7 +179,7 @@ class Journal2Minifier {
         return $assets;
     }
 
-    private function getHash($files, $ext) {
+    private function getHash($files, $ext, $language = '') {
         $hash = '';
         if (is_array($files)) {
             foreach ($files as $file) {
@@ -193,16 +190,17 @@ class Journal2Minifier {
         }
         $hash .= JOURNAL_VERSION;
         $hash .= Journal2Utils::getHostName();
+        $hash .= $language;
         return md5($hash) . '.' . $ext;
     }
 
     private function printStyle($href) {
-        return '<link rel="stylesheet" href="' . $this->addJournalVersion($href, $this->minify_css) . '"/>' . PHP_EOL;
+        return '<link rel="stylesheet" href="' . Journal2Utils::staticAsset($this->addJournalVersion($href, $this->minify_css)) . '"/>' . PHP_EOL;
     }
 
     private function printScript($src, $def = '') {
         $def = rtrim($def) . ' ';
-        return '<script type="text/javascript"' . $def . 'src="' . $this->addJournalVersion($src, $this->minify_css) .  '"></script>' . PHP_EOL;
+        return '<script type="text/javascript"' . $def . 'src="' . Journal2Utils::staticAsset($this->addJournalVersion($src, $this->minify_css)) .  '"></script>' . PHP_EOL;
     }
 
     private function removeQueryString($file) {

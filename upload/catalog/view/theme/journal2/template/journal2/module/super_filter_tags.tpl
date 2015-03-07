@@ -1,5 +1,5 @@
 <div class="box sf-tags">
-    <div class="box-heading"><?php echo $text_tags; ?></div>
+    <div class="box-heading"><?php echo $this->journal2->settings->get('filter_tags_text'); ?></div>
     <div class="box-content">
         <ul class="<?php echo $this->journal2->settings->get('filter_show_box') ? '' : 'hide-checkbox'; ?>">
             <?php foreach ($tags as $t) { ?>

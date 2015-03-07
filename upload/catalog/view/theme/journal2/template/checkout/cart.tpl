@@ -208,7 +208,6 @@
       <?php } ?>
     </table>
   </div>
-  </div>
   <div class="buttons">
       <div class="right"><a href="<?php echo $checkout; ?>" class="button button-checkout"><?php echo $button_checkout; ?></a></div>
       <div class="center"><a href="<?php echo $continue; ?>" class="button button-shopping"><?php echo $button_shopping; ?></a></div>

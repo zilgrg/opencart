@@ -6,7 +6,7 @@
             <?php if ($logo) { ?>
             <div id="logo">
                 <a href="<?php echo str_replace($home, 'index.php?route=common/home', ''); ?>">
-                    <img src="<?php echo $logo;?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" />
+                    <?php echo Journal2Utils::getLogo($this->config); ?>
                 </a>
             </div>
             <?php } ?>
@@ -32,6 +32,9 @@
         </div>
 
         <div class="journal-search row j-min  xs-100 sm-100 md-66 lg-30 xl-30">
+            <?php if (Front::$IS_OC2): ?>
+            <?php echo $search; ?>
+            <?php else: ?>
             <div>
                 <div id="search" class="j-min">
                     <div class="button-search j-min"><i></i></div>
@@ -46,6 +49,7 @@
                     <?php endif; /* end v1541 compatibility */ ?>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
 
         <div class="journal-menu j-min xs-100 sm-100 md-100 lg-75 xl-75">

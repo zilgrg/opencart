@@ -1,4 +1,4 @@
-<?php $type = $this->journal2->settings->get('cpanel.header_language_currency_currency', 'symbol'); ?>
+<?php $type = $this->journal2->settings->get('currency_display', 'symbol'); ?>
 <?php if (count($currencies) > 1): ?>
 <?php
     $current_currency = '';
@@ -10,6 +10,9 @@
                     break;
                 case 'text':
                     $current_currency = "{$currency['title']}";
+                    break;
+                case 'code':
+                    $current_currency = "{$currency['code']}";
                     break;
                 case 'full':
                     $current_currency = $currency['symbol_left'] ? "<span class='currency-symbol'>{$currency['symbol_left']}</span> {$currency['title']}" : "{$currency['title']} <span class='currency-symbol'>{$currency['symbol_right']}</span>";
@@ -33,6 +36,9 @@
                         <?php if ($type === 'text'): ?>
                         <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['title']; ?></a></li>
                         <?php endif; ?>
+                        <?php if ($type === 'code'): ?>
+                        <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['code']; ?></a></li>
+                        <?php endif; ?>
                         <?php if ($type === 'full'): ?>
                         <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['symbol_left'];?> <?php echo $currency['title']; ?></a></li>
                         <?php endif; ?>
@@ -42,6 +48,9 @@
                         <?php endif; ?>
                         <?php if ($type === 'text'): ?>
                         <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['title']; ?></a></li>
+                        <?php endif; ?>
+                        <?php if ($type === 'code'): ?>
+                        <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['code']; ?></a></li>
                         <?php endif; ?>
                         <?php if ($type === 'full'): ?>
                         <li><a onclick="$(this).closest('form').find('input[name=\'currency_code\']').val('<?php echo $currency['code']; ?>'); $(this).closest('form').submit();"><?php echo $currency['title']; ?> <?php echo $currency['symbol_right']; ?></a></li>

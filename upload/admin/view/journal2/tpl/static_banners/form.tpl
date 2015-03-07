@@ -45,6 +45,18 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Overlay Icon</span>
+                    <span class="module-create-option">
+                        <icon-select data-ng-model="module_data.icon"></icon-select>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Overlay Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="module_data.bgcolor"></j-opt-color>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Disable on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="module_data.disable_mobile">
@@ -81,6 +93,21 @@
                         <input type="text" class="journal-number-field" data-ng-model="module_data.margin_top" /> x <input type="text" class="journal-number-field" data-ng-model="module_data.margin_bottom" />
                     </span>
                 </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Module Background</span>
+                    <span class="module-create-option">
+                        <j-opt-background data-ng-model="module_data.module_background" data-bgcolor="true"></j-opt-background>
+                    </span>
+                </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Gutter</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.module_padding">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
             </ul>
         </accordion-group>
 
@@ -92,7 +119,7 @@
                 <li>
                     <span class="module-create-title">Image</span>
                     <span class="module-create-option">
-                        <image-select image="section.image"></image-select>
+                        <image-select-lang image="section.image"></image-select-lang>
                     </span>
                 </li>
                 <li>
@@ -102,7 +129,7 @@
                     </span>
                 </li>
                 <li>
-                    <span class="module-create-title">Open in New Window</span>
+                    <span class="module-create-title">Open in New Tab</span>
                     <span class="module-create-option">
                         <switch data-ng-model="section.link_new_window">
                             <switch-option key="1">ON</switch-option>

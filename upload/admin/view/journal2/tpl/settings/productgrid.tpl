@@ -126,7 +126,16 @@
                         </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
-
+                <li>
+                    <span class="module-create-title">Show Rating Stars</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.product_grid_show_ratings">
+                                <switch-option key="block">ON</switch-option>
+                                <switch-option key="none">OFF</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
                 <li>
                     <span class="module-create-title">Rating Stars Offset <small>X / Y</small></span>
                     <span class="module-create-option">
@@ -135,7 +144,20 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
-
+                <li>
+                    <span class="module-create-title">Rating Stars Color <small>Opencart 2.0</small></span>
+                        <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.rating_stars_color" class="journal-number-field"></j-opt-color>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Rating Stars Outline Color <small>Opencart 2.0</small></span>
+                        <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.rating_stars_outline_color" class="journal-number-field"></j-opt-color>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
             </ul>
         </accordion-group>
         <!--Product Labels-->
@@ -177,8 +199,9 @@
 
             </ul>
         </accordion-group>
+
         <!--Product Details-->
-        <accordion-group is-open="accordion.accordions[3]">
+        <accordion-group is-open="accordion.accordions[4]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Product Details</div>
             </accordion-heading>
@@ -224,7 +247,7 @@
                 </li>
 
                 <li>
-                    <span class="module-create-title">Product Name Overflow</span>
+                    <span class="module-create-title">Product Name Overflow <small>Keep names on the same line.</small></span>
                         <span class="module-create-option">
                             <switch data-ng-model="settings.product_grid_name_overflow">
                                 <switch-option key="nowrap">ON</switch-option>
@@ -333,6 +356,16 @@
                         <j-opt-text data-ng-model="settings.product_grid_details_tip_offset_y" class="journal-sort"></j-opt-text>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Hide Description</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.product_grid_description">
+                                <switch-option key="none">ON</switch-option>
+                                <switch-option key="block">OFF</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
             </ul>
         </accordion-group>
@@ -516,7 +549,7 @@
             </ul>
         </accordion-group>
         <!--Button Override-->
-        <accordion-group is-open="accordion.accordions[4]">
+        <accordion-group is-open="accordion.accordions[6]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Add to Cart Button</div>
             </accordion-heading>
@@ -695,7 +728,7 @@
         </accordion-group>
 
         <!--Wishlist / Compare-->
-        <accordion-group is-open="accordion.accordions[6]">
+        <accordion-group is-open="accordion.accordions[7]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Wishlist / Compare</div>
             </accordion-heading>

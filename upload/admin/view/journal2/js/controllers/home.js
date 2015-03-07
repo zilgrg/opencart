@@ -34,7 +34,8 @@ define(['./module', 'underscore', 'underscore.string'], function (module, _, _S)
             'Product tabs'   : 'Product Tabs',
             'Moduletextrotator'   : 'Text Rotator',
             'Slider'   : 'Revolution Slider',
-            'Simple slider'   : 'Journal Slider'
+            'Simple slider'   : 'Journal Slider',
+            'Advanced grid'   : 'Advanced Grid'
 
 
         };

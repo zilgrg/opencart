@@ -5,6 +5,12 @@ class ControllerModuleJournal2SideBlocks extends Controller {
 
     private static $CACHEABLE = null;
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function __construct($registry) {
         parent::__construct($registry);
         if (!defined('JOURNAL_INSTALLED')) {
@@ -23,13 +29,15 @@ class ControllerModuleJournal2SideBlocks extends Controller {
             return;
         }
 
+        if (Journal2Cache::$mobile_detect->isMobile()) return;
+
         Journal2::startTimer(get_class($this));
+
+        $this->journal2->html_classes->addClass('side-blocks-active');
 
         /* get module data from db */
         $module_data = $this->model_journal2_module->getModule($setting['module_id']);
         if (!$module_data || !isset($module_data['module_data']) || !$module_data['module_data']) return;
-
-        if ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) return;
 
         $cache_property = "module_journal_side_blocks_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}";
 
@@ -75,9 +83,9 @@ class ControllerModuleJournal2SideBlocks extends Controller {
                     $this->data['type'] = 'block';
                     $this->data['url'] = 'index.php?route=module/journal2_side_blocks/load&amp;module_id=' . $setting['module_id'];
                     $this->data['content_padding'] = Journal2Utils::getProperty($module_data, 'module_data.content_padding', 0) . 'px';
-                    if (Journal2Utils::getProperty($module_data, 'module_data.content_width')) {
-                        $css[] = 'width: ' . Journal2Utils::getProperty($module_data, 'module_data.content_width', 50) . 'px';
-                        $css[] = (Journal2Utils::getProperty($module_data, 'module_data.alignment') === 'left' ? 'left' : 'right') . ': -' . Journal2Utils::getProperty($module_data, 'module_data.content_width', 50) . 'px';
+                    if (Journal2Utils::getProperty($module_data, 'module_data.content_width', 300)) {
+                        $css[] = 'width: ' . Journal2Utils::getProperty($module_data, 'module_data.content_width', 300) . 'px';
+                        $css[] = (Journal2Utils::getProperty($module_data, 'module_data.alignment') === 'left' ? 'left' : 'right') . ': -' . Journal2Utils::getProperty($module_data, 'module_data.content_width', 300) . 'px';
                     }
                     if (Journal2Utils::getProperty($module_data, 'module_data.content_bg_color')) {
                         $this->data['content_bgcolor'] = Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'module_data.content_bg_color'));
@@ -97,23 +105,25 @@ class ControllerModuleJournal2SideBlocks extends Controller {
             $this->data['alignment'] = Journal2Utils::getProperty($module_data, 'module_data.alignment');
             $this->data['css'] = implode('; ', $css);
 
-            $this->template = 'journal2/template/journal2/module/side_blocks.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/side_blocks.tpl';
+
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
     public function load() {

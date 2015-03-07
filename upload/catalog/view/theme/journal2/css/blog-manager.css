@@ -1,7 +1,7 @@
 /*
-  Journal - The Ultimate Opencart Theme
-  Version 2.0.5
-  Copyright (c) 2013 Digital Atelier
+  Journal - Advanced Opencart Theme Framework
+  Version 2.4.5
+  Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
 /******************************
@@ -28,7 +28,6 @@ BLOG MANAGER for JOURNAL
 #blogArticle .articleHeader {
   margin: 0; }
   #blogArticle .articleHeader h1 {
-    color: white;
     padding-left: 10px;
     line-height: 40px;
     max-height: 40px;
@@ -42,7 +41,7 @@ BLOG MANAGER for JOURNAL
   #blogArticle .articleHeader > span {
     display: block;
     padding: 5px 0;
-    color: #5f6874; }
+    color: #5F6874; }
 
 .articleBottom {
   clear: both; }
@@ -97,7 +96,7 @@ BLOG MANAGER for JOURNAL
   #column-right .recentArticles li, #column-right .popularArticles li, #column-left .recentArticles li, #column-left .popularArticles li {
     float: none;
     background-color: #f4f4f4;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid #E4E4E4;
     margin: 0; }
     #column-right .recentArticles li > a, #column-right .popularArticles li > a, #column-left .recentArticles li > a, #column-left .popularArticles li > a {
       display: inline-block;
@@ -122,7 +121,7 @@ BLOG MANAGER for JOURNAL
   #column-right .recentComments li, #column-left .recentComments li {
     float: none;
     background-color: #f4f4f4;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid #E4E4E4;
     padding-top: 10px;
     overflow: hidden; }
     #column-right .recentComments li > a, #column-left .recentComments li > a {
@@ -201,3 +200,22 @@ BLOG MANAGER for JOURNAL
 #column-right .recentComments li > a + i + a,
 #column-left .recentComments li > a + i + a {
   padding: 0; }
+
+#column-right .recentArticles li,
+#column-right .popularArticles li,
+#column-left .recentArticles li,
+#column-left .popularArticles li,
+#column-right .recentComments li,
+#column-left .recentComments li {
+  background-color: transparent; }
+
+.blogCategories li {
+  background-image: none; }
+
+#comments .pagination {
+  font-size: inherit;
+  padding: 10px; }
+
+#blogArticle .articleHeader h1 {
+  border: inherit;
+  padding: inherit; }

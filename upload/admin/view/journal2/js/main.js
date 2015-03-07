@@ -7,6 +7,7 @@ require.config({
         'angular'           : '../lib/angular/angular.min',
         'angular-route'     : '../lib/angular/angular-route.min',
         'angular-ls'        : '../lib/angular/angular-local-storage',
+        'angular-table'     : '../lib/angular-table/ng-table.min',
         'underscore'        : '../lib/underscore/underscore.min',
         'underscore.string' : '../lib/underscore/underscore-string.min',
         'idTabs'            : '../lib/idTabs/jquery.idTabs',
@@ -14,6 +15,7 @@ require.config({
         'select2'           : '../lib/select2/select2.min',
         'angular-select2'   : '../lib/select2/select2-directive',
         'angular-bootstrap' : '../lib/ui.bootstrap/ui-bootstrap-tpls-0.6.0.min',
+        'angular-file'      : '../lib/angular-file-upload/angular-file-upload.min',
         'spin'              : '../lib/spin.js/spin.min',
         'simple-slider'     : '../lib/simple-slider/js/simple-slider'
     },
@@ -30,6 +32,9 @@ require.config({
         'angular-strap': {
             deps: ['angular']
         },
+        'angular-table': {
+            deps: ['angular']
+        },
         'underscore': {
             exports: '_'
         },
@@ -43,6 +48,9 @@ require.config({
             deps: ['angular', 'select2']
         },
         'angular-bootstrap': {
+            deps: ['angular']
+        },
+        'angular-file': {
             deps: ['angular']
         }
     },

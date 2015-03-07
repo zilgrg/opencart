@@ -7,6 +7,8 @@ define(['./../module', 'underscore'], function (module, _) {
         /* scope vars */
         $scope.module_type = 'product_tabs';
         $scope.default_language = Journal2Config.languages.default;
+        $scope.stores = Journal2Config.stores;
+        $scope.popup_modules = [];
 
         $scope.module_data = {
             module_name: 'New Module',
@@ -17,14 +19,25 @@ define(['./../module', 'underscore'], function (module, _) {
             icon_bg_color: '',
             icon_width: '',
             icon_height: '',
+            content_type: 'custom',
             content: {},
+            popup: '',
             global: 1,
             products: [],
+            categories: [],
+            manufacturers: [],
+            store_id: -1,
             status: 1,
             sort_order: '',
             position: 'tab',
             option_position: 'top'
         };
+
+        Rest.getModules('popup').then(function (response) {
+            $scope.popup_modules = response;
+        }, function (error) {
+            alert(error);
+        });
 
         if ($scope.module_id) {
             Rest.getModule($scope.module_id).then(function (response) {
@@ -38,17 +51,17 @@ define(['./../module', 'underscore'], function (module, _) {
             Spinner.hide();
         }
 
-        $scope.addProduct = function () {
-            $scope.module_data.products.push({ });
+        $scope.addItem = function (items) {
+            items.push({ });
         };
 
-        $scope.removeProduct = function ($index) {
-            $scope.module_data.products.splice($index, 1);
+        $scope.removeItem = function (items, $index) {
+            items.splice($index, 1);
         };
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -69,7 +82,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

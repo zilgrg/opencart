@@ -120,7 +120,7 @@
                         <a href="#" target="_blank" class="journal-tip"> </a>
                     </li>
                     <li  data-ng-hide="settings.extended_layout === '1'">
-                        <span class="module-create-title">Container Border Radius <small>Boxed Layout</small></span>
+                        <span class="module-create-title">Container Border Radius <small>Home Page</small></span>
                                 <span class="module-create-option">
                                     <j-opt-border data-ng-model="settings.container_border" editor="hide-style"></j-opt-border>
                                 </span>
@@ -361,6 +361,16 @@
             </accordion-heading>
             <ul class="module-create-options">
                 <li>
+                    <span class="module-create-title">Status</span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.breadcrumb_status">
+                                <switch-option key="block">ON</switch-option>
+                                <switch-option key="none">OFF</switch-option>
+                            </switch>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
                     <span class="module-create-title">Font</span>
                     <span class="module-create-option">
                         <j-opt-font data-ng-model="settings.breadcrumb_font"></j-opt-font>
@@ -375,9 +385,30 @@
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
                 <li>
+                    <span class="module-create-title">Active Link Font</span>
+                    <span class="module-create-option">
+                        <j-opt-font data-ng-model="settings.breadcrumb_active_font"></j-opt-font>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Active Link Font Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.breadcrumb_active_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
                     <span class="module-create-title">Background Color</span>
                     <span class="module-create-option">
                         <j-opt-color data-ng-model="settings.breadcrumb_bg_color"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Fullwidth Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.breadcrumb_full_bg_color"></j-opt-color>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
@@ -395,6 +426,14 @@
                                 </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+                <li>
+                    <span class="module-create-title">Line Height <small>Vertical Centering</small> </span>
+                                <span class="module-create-option">
+                                    <j-opt-text data-ng-model="settings.breadcrumb_line_height" class="journal-number-field"></j-opt-text>
+                                </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
                 <li>
                     <span class="module-create-title">Text Align</span>
                     <span class="module-create-option">
@@ -424,12 +463,24 @@
                 </li>
             </ul>
         </accordion-group>
+
         <!--Scroll to Top-->
         <accordion-group is-open="accordion.accordions[6]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Scroll to Top</div>
             </accordion-heading>
             <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Scroll to Top when Adding to Cart/Wishlist/Compare</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.scroll_to_top">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
                 <li>
                     <span class="module-create-title">Scroll to Top Button</span>
                                 <span class="module-create-option">
@@ -455,7 +506,31 @@
                                     <j-opt-color data-ng-model="settings.scroll_top_icon_hover"></j-opt-color>
                                 </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
-                </li>                        </ul>
+                </li>
+            </ul>
+        </accordion-group>
+        <!--Leading Element-->
+        <accordion-group is-open="false">
+            <accordion-heading>
+                <div class="accordion-bar bar-level-0">Optional Leading Element</div>
+            </accordion-heading>
+            <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Element Image<small>Visible under transparent sliders</small></span>
+                    <span class="module-create-option">
+                        <j-opt-image data-ng-model="settings.leading_element"></j-opt-image>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Offset Positioning<small>Left - Top</small></span>
+                                <span class="module-create-option">
+                                    <j-opt-text data-ng-model="settings.lead_offset_left" class="journal-sort"></j-opt-text> -
+                                    <j-opt-text data-ng-model="settings.lead_offset_top" class="journal-sort"></j-opt-text>
+                                </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+            </ul>
         </accordion-group>
     </accordion>
 </div>

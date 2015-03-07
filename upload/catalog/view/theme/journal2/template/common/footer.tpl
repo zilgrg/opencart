@@ -28,9 +28,9 @@
             <div class="payments">
                 <?php foreach ($this->journal2->settings->get('config_payments') as $payment): ?>
                 <?php if ($payment['url']): ?>
-                <a href="<?php echo $payment['url']; ?>" <?php echo $payment['target']; ?>><img <?php echo Journal2Utils::imgElement($payment['image'], $payment['name'], 51, 32); ?> /></a>
+                <a href="<?php echo $payment['url']; ?>" <?php echo $payment['target']; ?>><img src="<?php echo $this->journal2->settings->get('config_payments_dummy'); ?>" <?php echo Journal2Utils::imgElement($payment['image'], $payment['name'], $payment['width'], $payment['height']); ?> /></a>
                 <?php else: ?>
-                <img <?php echo Journal2Utils::imgElement($payment['image'], $payment['name'], 51, 32); ?> />
+                <img src="<?php echo $this->journal2->settings->get('config_payments_dummy'); ?>" <?php echo Journal2Utils::imgElement($payment['image'], $payment['name'], $payment['width'], $payment['height']); ?> />
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -57,6 +57,9 @@
             var table = new AsciiTable('Journal2 Profiler');
             table.setAlignRight(1);
             $.each(timers, function (index, value) {
+                if (value < 0) {
+                    value = 0;
+                }
                 if (value < 100000) {
                     table.addRow(index.replace('ControllerModuleJournal2', ''), Math.round(value * 1000) + ' ms');
                 }

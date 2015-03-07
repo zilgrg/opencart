@@ -3,18 +3,18 @@
         <?php foreach ($slides as $slide): ?>
             <?php if ($preload_images): ?>
                 <?php if ($slide['link']): ?>
-                    <div class="item"><a href="<?php echo $slide['link']; ?>" <?php echo $slide['target']; ?>><img class="lazyOwl" data-src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/></a></div>
+                    <div class="item"><a href="<?php echo $slide['link']; ?>" <?php echo $slide['target']; ?>><img width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" class="lazyOwl" data-src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/></a></div>
                 <?php else: ?>
                     <div class="item">
-                        <img class="lazyOwl" data-src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/>
+                        <img width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" class="lazyOwl" data-src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/>
                     </div>
                 <?php endif; ?>
             <?php else: ?>
                 <?php if ($slide['link']): ?>
-                    <div class="item"><a href="<?php echo $slide['link']; ?>" <?php echo $slide['target']; ?>><img src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/></a></div>
+                    <div class="item"><a href="<?php echo $slide['link']; ?>" <?php echo $slide['target']; ?>><img width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/></a></div>
                 <?php else: ?>
                     <div class="item">
-                        <img src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/>
+                        <img width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" src="<?php echo $slide['image']; ?>" alt="<?php echo $slide['name']; ?>"/>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -25,7 +25,7 @@
             var opts = $.parseJSON('<?php echo json_encode($js_options); ?>');
             opts.singleItem = true;
             opts.navigationText = false;
-            jQuery110('#journal-simple-slider-<?php echo $module; ?>').owlCarousel(opts);
+            jQuery('#journal-simple-slider-<?php echo $module; ?>').owlCarousel(opts);
         })();
     </script>
 </div>

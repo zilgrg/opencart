@@ -1,4 +1,4 @@
-<div id="journal-cms-block-<?php echo $module; ?>" class="box cms-blocks <?php echo $hide_on_mobile_class; ?>" style="<?php echo isset($css) ? $css : ''; ?>">
+<div id="journal-cms-block-<?php echo $module; ?>" class="box cms-blocks <?php echo $hide_on_mobile_class; ?> <?php echo isset($gutter_on_class) ? $gutter_on_class : ''; ?>" style="<?php echo isset($css) ? $css : ''; ?>">
     <?php if ($title): ?>
     <div class="box-heading"><?php echo $title; ?></div>
     <?php endif; ?>

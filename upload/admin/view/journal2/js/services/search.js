@@ -3,7 +3,7 @@ define(['./module'], function (module) {
     module
         .factory('Search', [function () {
             return {
-                generateOptions: function (url, id, placeholder) {
+                generateOptions: function (url, id, placeholder, key) {
                     return {
                         initSelection: function (element) { },
                         minimumInputLength: 1,
@@ -18,8 +18,9 @@ define(['./module'], function (module) {
                                 };
                             },
                             results: function (data, page) {
+                                data = data.response[key] ? data.response[key] : data.response;
                                 return {
-                                    results: _.map(data.response, function (item) {
+                                    results: _.map(data, function (item) {
                                         return {
                                             id: item[id],
                                             name: item.name

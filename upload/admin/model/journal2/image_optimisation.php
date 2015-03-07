@@ -1,6 +1,4 @@
 <?php
-require_once DIR_SYSTEM . 'journal2/classes/journal2_image_optimiser.php';
-
 class ModelJournal2ImageOptimisation extends Model{
 
     private $post_data;
@@ -16,12 +14,15 @@ class ModelJournal2ImageOptimisation extends Model{
         if (!defined('J2ENV')) {
             return array();
         }
+        require_once DIR_SYSTEM . 'journal2/classes/journal2_image_optimiser.php';
         return Journal2ImageOptimiser::getStatus();
     }
 
     public function process() {
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
+
+        require_once DIR_SYSTEM . 'journal2/classes/journal2_image_optimiser.php';
 
         if ($this->user->hasPermission('modify', 'module/journal2')) {
             $all = isset($this->get_data['all']) && $this->get_data['all'] === 'true';

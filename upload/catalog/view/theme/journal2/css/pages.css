@@ -1,7 +1,7 @@
 /*
-  Journal - The Ultimate Opencart Theme
-  Version 2.0.5
-  Copyright (c) 2013 Digital Atelier
+  Journal - Advanced Opencart Theme Framework
+  Version 2.4.5
+  Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
 /******************************
@@ -22,7 +22,21 @@
     float: left;
     margin-left: 10px; }
 .cart-info .quantity {
-  min-width: 110px; }
+  min-width: 110px;
+  text-align: center; }
+  .cart-info .quantity .input-group {
+    display: inline-block; }
+    .cart-info .quantity .input-group input {
+      margin-right: 5px;
+      border-radius: 4px; }
+    .cart-info .quantity .input-group .btn-primary {
+      background-color: #428bca; }
+      .cart-info .quantity .input-group .btn-primary:hover {
+        background-color: #3071a9; }
+    .cart-info .quantity .input-group .btn-danger {
+      background-color: #EA2E49; }
+      .cart-info .quantity .input-group .btn-danger:hover {
+        background-color: #d01530; }
 .cart-info .price, .cart-info .total {
   font-weight: bold; }
 .cart-info table {
@@ -38,19 +52,22 @@
 .cart-info tbody td {
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #e4e4e4; }
+  border-bottom-color: #E4E4E4; }
 .cart-info tbody td.image {
   padding-left: 0; }
 .cart-info tbody tr:last-of-type td {
   border-bottom: none; }
 
-#content.sc-page .content p {
+#content.sc-page .content p, #content.sc-page .action-area p {
   padding: 10px;
   font-size: 13px; }
 #content.sc-page .content table.radio .highlight td {
-  border-bottom: 1px solid #e4e4e4; }
+  border-bottom: 1px solid #E4E4E4; }
 #content.sc-page .content table.radio .highlight:last-of-type td {
   border-bottom: none; }
+#content.sc-page a + .text-danger {
+  color: #EA2E49;
+  background-color: transparent; }
 
 .cart-module > div {
   display: none; }
@@ -102,6 +119,38 @@ label {
   .action-area h3 {
     padding: 10px 12px; }
 
+.oc2 .action-area .panel-group {
+  margin-bottom: 0; }
+.oc2 .action-area .panel-body label {
+  display: inline-block;
+  margin-bottom: 5px; }
+.oc2 .action-area .panel-body .input-group input[type="text"] {
+  min-width: 300px; }
+.oc2 .action-area .panel-body .input-group .button {
+  margin-left: 5px; }
+.oc2 .action-area .form-group {
+  clear: both;
+  margin-top: 10px; }
+  .oc2 .action-area .form-group label {
+    min-width: 150px;
+    float: left;
+    margin-bottom: 0; }
+  .oc2 .action-area .form-group input[type="text"] {
+    max-width: 160px; }
+.oc2 .checkout #accordion {
+  overflow: hidden; }
+.oc2 .checkout-content {
+  background-color: transparent;
+  padding: 0;
+  display: block; }
+  .oc2 .checkout-content .right .form-group {
+    margin-bottom: 8px; }
+  .oc2 .checkout-content p, .oc2 .checkout-content .radio {
+    padding: 10px 0 0 0; }
+
+.order-list .list td {
+  text-align: center; }
+
 /******************************
  CHECKOUT PAGE
 *******************************/
@@ -131,11 +180,11 @@ label {
   display: none;
   position: relative; }
   .checkout-content:after {
-    content: ".";
-    display: block;
-    visibility: hidden;
-    clear: both;
-    height: 0; }
+    content: "";
+    display: table;
+    clear: both; }
+  .checkout-content table.radio td:first-child {
+    width: 25px; }
   .checkout-content p {
     padding: 10px 0; }
   .checkout-content .left {
@@ -185,6 +234,15 @@ label {
   bottom: 30px; }
 
 .newsletter-page table.form {
+  padding-top: 0; }
+
+.oc2 .oc-newsletter .form-horizontal .form-group > label {
+  width: auto;
+  padding-top: 10px; }
+.oc2 .oc-newsletter .form-horizontal .form-group .radio-inline {
+  width: auto; }
+.oc2 .oc-newsletter .form-horizontal .form-group label + div {
+  float: none;
   padding-top: 0; }
 
 /******************************
@@ -271,7 +329,7 @@ BRANDS
     margin-bottom: 10px; }
 
 .manufacturer-heading {
-  background: #5f6874;
+  background: #5F6874;
   font-size: 15px;
   font-weight: bold;
   padding: 5px 8px;
@@ -307,14 +365,59 @@ BRANDS
   width: 48%;
   margin-bottom: 10px; }
 
+.oc2 .contact-page h2 {
+  margin-bottom: 15px; }
+.oc2 .contact-page .fa {
+  top: -1px;
+  font-size: 16px; }
+.oc2 .contact-page .col {
+  float: left;
+  width: 25%;
+  padding-left: 15px; }
+  .oc2 .contact-page .col strong {
+    display: inline-block;
+    margin-bottom: 5px; }
+  .oc2 .contact-page .col:first-of-type {
+    padding-left: 0; }
+.oc2 .contact-page .col-sm-10 {
+  width: 75%;
+  margin-bottom: 5px; }
+.oc2 .contact-page input[name='captcha'] {
+  margin: 0; }
+.oc2 .contact-page .panel-body {
+  margin-bottom: 20px;
+  overflow: hidden; }
+.oc2 .img-thumbnail {
+  max-width: 100%;
+  height: auto; }
+.oc2 address {
+  margin-bottom: 20px; }
+
+.route-account-return-add fieldset .radio label,
+.route-account-return-add fieldset .radio-inline {
+  width: 100% !important; }
+
 /******************************
  SEARCH PAGE
 *******************************/
 #content.search-page .buttons + h2 {
   margin-bottom: 15px; }
 #content.search-page .content {
-  margin: 15px 0; }
+  margin: 15px 0;
+  padding-bottom: 5px;
+  overflow: hidden; }
   #content.search-page .content input[type="text"] {
     width: 265px; }
   #content.search-page .content select {
     margin: 10px; }
+  #content.search-page .content > div {
+    float: left;
+    position: relative; }
+  #content.search-page .content .s-check {
+    top: 7px; }
+
+/******************************
+ COMPARE
+*******************************/
+.compare-info img {
+  max-width: 100% !important; }

@@ -68,6 +68,8 @@ define(['./../module', 'underscore'], function (module, _) {
                         }
                     },
                     top_bottom_placement: 0,
+                    module_background:{},
+                    module_padding:'0',
                     background: {},
                     disable_mobile: '0',
                     fullwidth: '0',
@@ -75,6 +77,8 @@ define(['./../module', 'underscore'], function (module, _) {
                     margin_bottom: '',
                     show_title: '1',
                     brand_name: '1',
+                    image_border: {},
+                    image_bgcolor: '',
                     image_width: '',
                     image_height: '',
                     image_type: 'fit',
@@ -95,6 +99,9 @@ define(['./../module', 'underscore'], function (module, _) {
                     category: '',
                     items_limit: 5,
                     module_type: 'featured',
+                    todays_specials_only: '0',
+                    countdown_visibility: '0',
+                    filter_category: '0',
                     link: {
                         menu_type: 'custom',
                         url: ''
@@ -147,27 +154,35 @@ define(['./../module', 'underscore'], function (module, _) {
         /* scope vars */
         $scope.module_type = 'custom_sections';
         $scope.default_language = Journal2Config.languages.default;
+        $scope.featured_modules = [];
 
         $scope.module_data = new CustomSectionsFactory.SuperSection();
 
         /* get data */
+        var data = {
+            featured_modules: Rest.getFeaturedModules()
+        };
+
         if ($scope.module_id) {
-            Rest.getModule($scope.module_id).then(function (response) {
-                $scope.module_data = _.extend($scope.module_data, response.module_data);
-                Spinner.hide();
-            }, function (error) {
-                Spinner.hide();
-                console.error(error);
-            });
-        } else {
+            data.modules = Rest.getModule($scope.module_id);
+        }
+
+        Rest.all(data, function (response) {
+            $scope.featured_modules = response.featured_modules;
+            if (response.modules) {
+                $scope.module_data = _.extend($scope.module_data, response.modules.module_data);
+            }
+            Spinner.hide();
+        }, function (error) {
             $scope.module_data.general_is_open = true;
             $scope.module_data.top_bottom_is_open = true;
             Spinner.hide();
-        }
+            alert(error);
+        });
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -188,7 +203,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

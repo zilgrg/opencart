@@ -1,12 +1,34 @@
 <?php
 class ControllerJournal2Settings extends Controller {
 
+    private static $CACHEABLE = null;
+
     private $css_settings = array();
     private $js_settings = array();
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function index() {
         $this->load->model('journal2/db');
         $this->load->model('tool/image');
+
+        // admin mode
+        $this->load->library('user');
+        $this->user = new User($this->registry);
+        if ($this->user->isLogged()) {
+            $this->journal2->html_classes->addClass('is-admin');
+        }
+
+        // customer
+        if ($this->customer->isLogged()) {
+            $this->journal2->html_classes->addClass('is-customer');
+        } else {
+            $this->journal2->html_classes->addClass('is-guest');
+        }
 
         // get current store config settings
         $db_config_settings = $this->model_journal2_db->getConfigSettings();
@@ -21,10 +43,15 @@ class ControllerJournal2Settings extends Controller {
             $skin_id = 1;
         }
 
-        $developer_mode = $this->journal2->settings->get('config_system_settings.developer_mode');
+        $developer_mode = $this->journal2->settings->get('config_system_settings.developer_mode', '1');
+        if (!$developer_mode) {
+            self::$CACHEABLE = true;
+        }
 
         $this->journal2->cache->setDeveloperMode($developer_mode);
-        $this->journal2->minifier->setMinifyCss((bool)$this->journal2->settings->get('config_system_settings.minify_css'));
+        if (!$this->journal2->html_classes->hasClass('ie9')) {
+            $this->journal2->minifier->setMinifyCss((bool)$this->journal2->settings->get('config_system_settings.minify_css'));
+        }
         $this->journal2->minifier->setMinifyJs((bool)$this->journal2->settings->get('config_system_settings.minify_js'));
 
         $this->journal2->cache->setSkinId($skin_id);
@@ -33,7 +60,7 @@ class ControllerJournal2Settings extends Controller {
 
         $cache = $this->journal2->cache->get($cache_property);
 
-        if ($cache === null) {
+        if ($cache === null || self::$CACHEABLE !== true) {
             // load current skin settings
             $db_skin_settings = $this->model_journal2_db->getSkinSettings($skin_id);
 
@@ -69,7 +96,9 @@ class ControllerJournal2Settings extends Controller {
                 'css'       => $this->css_settings
             );
 
-            $this->journal2->cache->set($cache_property, json_encode($cached));
+            if (self::$CACHEABLE === true) {
+                $this->journal2->cache->set($cache_property, json_encode($cached));
+            }
         } else {
             $cache = json_decode($cache, true);
             $this->css_settings = $cache['css'];
@@ -87,10 +116,28 @@ class ControllerJournal2Settings extends Controller {
         // assign css settings
         $this->journal2->css_settings = $this->css_settings;
 
+        // LazyLoad dummy image
+        $this->journal2->settings->set('product_dummy_image', Journal2Utils::resizeImage($this->model_tool_image, 'data/journal2/transparent.png', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'crop'));
+        $this->journal2->settings->set('product_no_image'   , Journal2Utils::resizeImage($this->model_tool_image, 'data/journal2/no_image_large.png', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')));
+
         // add jquery + jquery ui
-        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery/jquery-1.8.3.min.js', 'header');
-        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery.ui/jquery-ui-1.8.24.min.js', 'header');
-        $this->journal2->minifier->addStyle('catalog/view/javascript/jquery/ui/themes/ui-lightness/jquery-ui-1.8.16.custom.css');
+        if (Front::$IS_OC2) {
+            //$this->journal2->minifier->addStyle('catalog/view/javascript/bootstrap/css/bootstrap.min.css');
+            $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/j-strap.css');
+            $this->journal2->minifier->addStyle('catalog/view/javascript/font-awesome/css/font-awesome.min.css');
+            $this->journal2->minifier->addScript('catalog/view/javascript/jquery/jquery-2.1.1.min.js', 'header');
+            $this->journal2->minifier->addScript('catalog/view/javascript/bootstrap/js/bootstrap.min.js', 'header');
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery/jquery-migrate-1.2.1.min.js', 'header');
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery.ui/jquery-ui-slider.min.js', 'header');
+            $this->journal2->minifier->addStyle('catalog/view/theme/journal2/lib/jquery.ui/jquery-ui-slider.min.css');
+        } else {
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery/jquery-1.8.3.min.js', 'header');
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery.ui/jquery-ui-1.8.24.min.js', 'header');
+            $this->journal2->minifier->addStyle('catalog/view/javascript/jquery/ui/themes/ui-lightness/jquery-ui-1.8.16.custom.css');
+        }
+        if ($this->journal2->html_classes->hasClass('tablet')) {
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/touch-punch/jquery.ui.touch-punch.min.js', 'header');
+        }
 
         // opencart scripts
         $this->journal2->minifier->addScript('catalog/view/javascript/common.js', 'header');
@@ -100,32 +147,77 @@ class ControllerJournal2Settings extends Controller {
         if (VERSION === '1.5.4' || VERSION === '1.5.4.1') {
             $this->journal2->minifier->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
             $this->journal2->minifier->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox.js', 'header');
-            $this->journal2->minifier->addScript('catalog/view/javascript/jquery/tabs.js', 'header');
         }
+
+        // add jquery tabs
+        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/jquery.tabs/tabs.js', 'header');
 
         // add owl carousel
         $this->journal2->minifier->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.css');
+        $this->journal2->minifier->addStyle('catalog/view/theme/journal2/lib/owl-carousel/owl.transitions.css');
         $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/owl-carousel/owl.carousel.js');
 
         // add swipebox
         $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/swipebox/source/jquery.swipebox.js', 'footer');
 
         // add magnific popup
-        if (!$this->journal2->html_classes->hasClass('mobile')) {
-            $this->journal2->minifier->addStyle('catalog/view/theme/journal2/lib/magnific-popup/magnific-popup.css');
-            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/magnific-popup/jquery.magnific-popup.min.js', 'header');
-        }
+        $this->journal2->minifier->addStyle('catalog/view/theme/journal2/lib/magnific-popup/magnific-popup.css');
+        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/magnific-popup/jquery.magnific-popup.min.js', 'header');
 
         // add other plugins
+        $this->document->addScript('catalog/view/theme/journal2/lib/lazy/jquery.lazy.1.6.min.js');
         $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/actual/jquery.actual.min.js', 'header');
         $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/hover-intent/jquery.hoverIntent.min.js', 'footer');
-//        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/responsive-elements/responsive-elements.js', 'footer');
+        $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/countdown/jquery.countdown.js', 'header');
         $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/pnotify/jquery.pnotify.min.js', 'footer');
-        if (!$this->journal2->html_classes->hasClass('mobile')) {
+        if (!$this->journal2->html_classes->hasClass('mobile') && !$this->journal2->html_classes->hasClass('tablet')) {
             $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/autocomplete2/jquery.autocomplete2.min.js', 'footer');
             $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/respond/respond.js', 'footer');
-            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/elevatezoom/jquery.elevateZoom-3.0.8.min.js', 'header');
+            $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/image-zoom/jquery.imagezoom.min.js', 'header');
             $this->journal2->minifier->addScript('catalog/view/theme/journal2/lib/sticky/jquery.sticky.js', 'footer');
+        }
+
+        // category image width/height
+        $this->journal2->settings->set('config_image_width', $this->config->get('config_image_product_width'), 250);
+        $this->journal2->settings->set('config_image_height', $this->config->get('config_image_product_height'), 250);
+    }
+
+    public function columns() {
+        $cols = 0;
+        if ($this->journal2->page->hasModules('column_left')) {
+            $cols ++;
+        }
+        if ($this->journal2->page->hasModules('column_right')) {
+            $cols ++;
+        }
+        if ($cols == 1){
+            $this->journal2->html_classes->addClass('one-column');
+        }
+        if ($cols == 2){
+            $this->journal2->html_classes->addClass('two-columns');
+        }
+        $this->journal2->settings->set('config_columns_count', $cols);
+        $this->journal2->settings->set('product_grid_classes', Journal2Utils::getProductGridClasses($this->journal2->settings->get('category_page_products_per_row'), $this->journal2->settings->get('site_width', 1024), $cols));
+        if (!$this->journal2->settings->get('related_products_carousel')) {
+            $this->journal2->settings->set('related_products_grid_classes', Journal2Utils::getProductGridClasses($this->journal2->settings->get('related_products_items_per_row'), $this->journal2->settings->get('site_width', 1024), $cols));
+        }
+
+        // product views
+        if (($this->journal2->page->getType() === 'product' || $this->journal2->page->getType() === 'quickview')) {
+            $this->load->model('journal2/product');
+            if ($this->journal2->settings->get('product_page_options_views')) {
+                $this->journal2->settings->set('product_views', $this->model_journal2_product->getProductViews($this->journal2->page->getId()));
+            }
+            if ($this->journal2->settings->get('product_page_options_sold')) {
+                $text = $this->journal2->settings->get('product_page_options_sold_text', ' Product(s) Sold');
+                $count = '<span>' . $this->model_journal2_product->getProductSoldCount($this->journal2->page->getId()) . '</span>';
+                if (strpos($text, '%s') !== FALSE) {
+                    $text = sprintf($text, $count);
+                } else {
+                    $text = $count . $text;
+                }
+                $this->journal2->settings->set('product_sold', $text);
+            }
         }
     }
 
@@ -175,7 +267,9 @@ class ControllerJournal2Settings extends Controller {
                             $this->css_settings[$md5_selector]['properties'][] = $this->parseCssValue('font-size', Journal2Utils::getProperty($setting, 'value.options.font_size'));
                         }
                         if (Journal2Utils::getProperty($setting, 'value.options.color.value.color')) {
-                            $this->css_settings[$md5_selector]['properties'][] = $this->parseCssValue('color', Journal2Utils::getColor(Journal2Utils::getProperty($setting, 'value.options.color.value.color')));
+                            $color = Journal2Utils::getColor(Journal2Utils::getProperty($setting, 'value.options.color.value.color'));
+                            $this->css_settings[$md5_selector]['properties'][] = $this->parseCssValue('color', $color);
+                            $this->journal2->settings->set($setting['name'] . ':color', $color);
                         }
                         if (Journal2Utils::getProperty($setting, 'value.options.top')) {
                             $this->css_settings[$md5_selector]['properties'][] = $this->parseCssValue('top', Journal2Utils::getProperty($setting, 'value.options.top') . 'px');
@@ -217,24 +311,24 @@ class ControllerJournal2Settings extends Controller {
                 if (Journal2Utils::getProperty($setting, 'value.font_type') === 'google') {
                     $this->journal2->google_fonts->add(Journal2Utils::getProperty($setting, 'value.font_name'), Journal2Utils::getProperty($setting, 'value.font_subset'), Journal2Utils::getProperty($setting, 'value.font_weight'));
                     $weight = filter_var(Journal2Utils::getProperty($setting, 'value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-weight: ' . ($weight ? $weight : 400);
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-family: "' . Journal2Utils::getProperty($setting, 'value.font_name') . '"';
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-weight: ' . ($weight ? $weight : 400) . $setting['css']['property'];
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-family: "' . Journal2Utils::getProperty($setting, 'value.font_name') . '"' . $setting['css']['property'];
                 }
                 if (Journal2Utils::getProperty($setting, 'value.font_type') === 'system') {
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-weight: ' . Journal2Utils::getProperty($setting, 'value.font_weight');
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-family: ' . Journal2Utils::getProperty($setting, 'value.font_family');
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-weight: ' . Journal2Utils::getProperty($setting, 'value.font_weight') . $setting['css']['property'];
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-family: ' . Journal2Utils::getProperty($setting, 'value.font_family') . $setting['css']['property'];
                 }
                 if (Journal2Utils::getProperty($setting, 'value.font_type') !== 'none') {
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-style: ' . Journal2Utils::getProperty($setting, 'value.font_style');
-                    $this->css_settings[$md5_selector]['properties'][] = 'font-size: ' . Journal2Utils::getProperty($setting, 'value.font_size');
-                    $this->css_settings[$md5_selector]['properties'][] = 'text-transform: ' . Journal2Utils::getProperty($setting, 'value.text_transform');
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-style: ' . Journal2Utils::getProperty($setting, 'value.font_style') . $setting['css']['property'];
+                    $this->css_settings[$md5_selector]['properties'][] = 'font-size: ' . Journal2Utils::getProperty($setting, 'value.font_size') . $setting['css']['property'];
+                    $this->css_settings[$md5_selector]['properties'][] = 'text-transform: ' . Journal2Utils::getProperty($setting, 'value.text_transform') . $setting['css']['property'];
                     if (Journal2Utils::getProperty($setting, 'value.letter_spacing')) {
-                        $this->css_settings[$md5_selector]['properties'][] = 'letter-spacing: ' . Journal2Utils::getProperty($setting, 'value.letter_spacing') . 'px';
+                        $this->css_settings[$md5_selector]['properties'][] = 'letter-spacing: ' . Journal2Utils::getProperty($setting, 'value.letter_spacing') . 'px' . $setting['css']['property'];
                     }
                 }
                 if (Journal2Utils::getProperty($setting, 'value.color.value.color')) {
                     $color = Journal2Utils::getColor(Journal2Utils::getProperty($setting, 'value.color.value.color'));
-                    $this->css_settings[$md5_selector]['properties'][] = 'color: ' . $color;
+                    $this->css_settings[$md5_selector]['properties'][] = 'color: ' . $color . $setting['css']['property'];
                     $this->journal2->settings->set($setting['name'] . ':color', $color);
                 }
                 break;
@@ -331,8 +425,15 @@ class ControllerJournal2Settings extends Controller {
     }
 
     private function processSettings() {
+        if ($this->config->get('config_maintenance')) {
+            $this->journal2->html_classes->addClass('maintenance-mode');
+        }
         if ($this->journal2->settings->get('responsive_design')) {
             $this->journal2->html_classes->addClass('responsive-layout');
+        }
+
+        if ($this->journal2->settings->get('mobile_menu_on', 'phone') === 'tablet') {
+            $this->journal2->html_classes->addClass('mobile-menu-on-tablet');
         }
         if($this->journal2->settings->get('extended_layout', '0') === '1'){
             $this->journal2->html_classes->addClass('extended-layout');
@@ -358,38 +459,38 @@ class ControllerJournal2Settings extends Controller {
         }
         $this->journal2->html_classes->addClass('backface');
 
-        $cols = 0;
-        if ($this->journal2->page->hasModules('column_left')) {
-            $cols ++;
-        }
-        if ($this->journal2->page->hasModules('column_right')) {
-            $cols ++;
-        }
-        if ($cols == 1){
-            $this->journal2->html_classes->addClass('one-column');
-        }
-        if ($cols == 2){
-            $this->journal2->html_classes->addClass('two-columns');
-        }
-        $this->journal2->settings->set('config_columns_count', $cols);
-        $this->journal2->settings->set('product_grid_classes', Journal2Utils::getProductGridClasses($this->journal2->settings->get('category_page_products_per_row'), $this->journal2->settings->get('site_width', 1024), $cols));
-        if (!$this->journal2->settings->get('related_products_carousel')) {
-            $this->journal2->settings->set('related_products_grid_classes', Journal2Utils::getProductGridClasses($this->journal2->settings->get('related_products_items_per_row'), $this->journal2->settings->get('site_width', 1024), $cols));
-        }
-
         /* second images */
-        if (!$this->journal2->mobile_detect->isMobile() && $this->journal2->settings->get('product_grid_second_image') === '1') {
+        if (!Journal2Cache::$mobile_detect->isMobile() && $this->journal2->settings->get('product_grid_second_image') === '1') {
             $this->journal2->html_classes->addClass('product-grid-second-image');
+        } else {
+            $this->journal2->html_classes->addClass('product-grid-no-second-image');
         }
 
-        if (!$this->journal2->mobile_detect->isMobile() && $this->journal2->settings->get('product_list_second_image') === '1') {
+        if (!Journal2Cache::$mobile_detect->isMobile() && $this->journal2->settings->get('product_list_second_image') === '1') {
             $this->journal2->html_classes->addClass('product-list-second-image');
+        } else {
+            $this->journal2->html_classes->addClass('product-list-no-second-image');
         }
 
-        // product views
-        if (($this->journal2->page->getType() === 'product' || $this->journal2->page->getType() === 'quickview')  && $this->journal2->settings->get('product_page_options_views')) {
-            $this->load->model('journal2/product');
-            $this->journal2->settings->set('product_views', $this->model_journal2_product->getProductViews($this->journal2->page->getId()));
+        // push options
+        $classes = array();
+        if ($this->journal2->settings->get('product_page_options_push_select') == '1') {
+            $classes[] = 'push-select';
+        }
+        if ($this->journal2->settings->get('product_page_options_push_image') == '1') {
+            $classes[] = 'push-image';
+        }
+        if ($this->journal2->settings->get('product_page_options_push_checkbox') == '1') {
+            $classes[] = 'push-checkbox';
+        }
+        if ($this->journal2->settings->get('product_page_options_push_radio') == '1') {
+            $classes[] = 'push-radio';
+        }
+        $this->journal2->settings->set('product_page_options_push_classes', implode(' ', $classes));
+
+        // disable add to cart
+        if ($this->journal2->settings->get('out_of_stock_disable_button') === '1') {
+            $this->journal2->html_classes->addClass('hide-cart');
         }
 
         $this->processFooter();
@@ -405,21 +506,55 @@ class ControllerJournal2Settings extends Controller {
         $payments = $this->journal2->settings->get('config_payments.payments', array());
         $payments = Journal2Utils::sortArray($payments);
         $payment_methods = array();
+        $width = '';
+        $height = '';
         foreach ($payments as $payment) {
+            $image = Journal2Utils::getProperty($payment, 'image');
+            if (!$image || !file_exists(DIR_IMAGE . $image)) {
+                $image = Front::$IS_OC2 ? 'no_image.png' : 'no_image.jpg';
+            }
+            list($width, $height) = getimagesize(DIR_IMAGE . $image);
             $payment_methods[] = array(
-                'image'     => 'image/' . Journal2Utils::getProperty($payment, 'image', 'no_image.jpg'),
+                'image'     => Journal2Utils::resizeImage($this->model_tool_image, $image),
                 'name'      => Journal2Utils::getProperty($payment, 'name.value.' . $this->config->get('config_language_id')),
                 'url'       => Journal2Utils::getProperty($payment, 'link.value.text'),
                 'target'    => Journal2Utils::getProperty($payment, 'new_window') ? ' target="_blank"' : '',
+                'width'     => $width,
+                'height'    => $height
             );
         }
         $this->journal2->settings->set('config_payments', $payment_methods);
+        if ($payment_methods) {
+            $this->journal2->settings->set('config_payments_dummy', $this->model_tool_image->resize('data/journal2/transparent.png', $width, $height));
+        }
 
         /* custom classes */
         $classes = array();
         if (!$copyright_text) $classes[] = 'no-copyright';
         if (!$payment_methods) $classes[] = 'no-payments';
         $this->journal2->settings->set('config_footer_classes', implode(' ', $classes));
+    }
+
+    public function sitemap() {
+        $this->load->model('journal2/blog');
+
+        if (!$this->model_journal2_blog->isEnabled()) {
+            return;
+        }
+
+        $blog_categories = array();
+        $categories = $this->model_journal2_blog->getCategories();
+        foreach ($categories as $category) {
+            $blog_categories[] = array(
+                'name'  => $category['name'],
+                'href'  => $this->url->link('journal2/blog', 'journal_blog_category_id=' . $category['category_id'])
+            );
+        }
+
+        $this->journal2->settings->set('blog_sitemap', '1');
+        $this->journal2->settings->set('blog_name', $this->journal2->settings->get('config_blog_settings.title.value.' . $this->config->get('config_language_id'), 'Journal Blog'));
+        $this->journal2->settings->set('blog_href', $this->url->link('journal2/blog'));
+        $this->journal2->settings->set('blog_categories', $blog_categories);
     }
 
 }

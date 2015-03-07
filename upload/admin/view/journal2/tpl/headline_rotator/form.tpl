@@ -83,6 +83,15 @@
                         </switch>
                     </span>
                 </li>
+                <li>
+                    <span class="module-create-title">Pause on Hover</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.pause_on_hover">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
             </ul>
         </accordion-group>
         <accordion-group is-open="module_data.top_bottom_is_open">
@@ -156,6 +165,15 @@
                     <span class="module-create-title">Button Icon</span>
                     <span class="module-create-option">
                         <icon-select data-ng-model="section.cta_icon"></icon-select>
+                    </span>
+                </li>
+                <li data-ng-show="section.cta == '1'">
+                    <span class="module-create-title">Icon Position</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="section.cta_icon_position">
+                            <switch-option key="left">Left</switch-option>
+                            <switch-option key="right">Right</switch-option>
+                        </switch>
                     </span>
                 </li>
                 <li data-ng-show="section.cta == '1'">

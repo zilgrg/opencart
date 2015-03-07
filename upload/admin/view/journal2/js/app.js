@@ -7,6 +7,7 @@ define([
     'angular-ls',
     'angular-bootstrap',
     'angular-select2',
+    'angular-table',
     'simple-slider',
     'controllers/index',
     'directives/index',
@@ -16,6 +17,7 @@ define([
 
     var app = ng.module('journal', [
         'ngRoute',
+        'ngTable',
         '$strap.directives',
         'ui.bootstrap',
         'ui.select2',
@@ -117,9 +119,29 @@ define([
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/notification&token=' + Journal2Config.token,
                 controller: 'NotificationSettingsController'
             })
+            .when('/settings/countdown/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/countdown&token=' + Journal2Config.token,
+                controller: 'CountdownSettingsController'
+            })
             .when('/settings/quickview/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/quickview&token=' + Journal2Config.token,
                 controller: 'QuickviewSettingsController'
+            })
+            .when('/settings/blog/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/blog&token=' + Journal2Config.token,
+                controller: 'BlogSettingsController'
+            })
+            .when('/settings/blogmodules/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/blogmodules&token=' + Journal2Config.token,
+                controller: 'BlogModulesSettingsController'
+            })
+            .when('/settings/blogpostpage/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/blogpostpage&token=' + Journal2Config.token,
+                controller: 'BlogPostPageSettingsController'
+            })
+            .when('/settings/bloglanguage/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/bloglanguage&token=' + Journal2Config.token,
+                controller: 'BlogLanguageSettingsController'
             })
             .when('/settings/header/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/header&token=' + Journal2Config.token,
@@ -145,6 +167,10 @@ define([
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/moduleheadlinerotator&token=' + Journal2Config.token,
                 controller: 'ModuleHeadlineRotatorSettingsController'
             })
+            .when('/settings/modulenewsletter/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/modulenewsletter&token=' + Journal2Config.token,
+                controller: 'ModuleNewsletterSettingsController'
+            })
             .when('/settings/moduletextrotator/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/moduletextrotator&token=' + Journal2Config.token,
                 controller: 'ModuleTextRotatorSettingsController'
@@ -152,6 +178,10 @@ define([
             .when('/settings/modulephotogallery/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/modulephotogallery&token=' + Journal2Config.token,
                 controller: 'ModulePhotoGallerySettingsController'
+            })
+            .when('/settings/modulepopup/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/modulepopup&token=' + Journal2Config.token,
+                controller: 'ModulePopupSettingsController'
             })
             .when('/settings/moduleslider/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/moduleslider&token=' + Journal2Config.token,
@@ -222,6 +252,11 @@ define([
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/system&token=' + Journal2Config.token,
                 controller: 'SystemSettingsController'
             })
+            /* import_export */
+            .when('/settings/import_export', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/import_export&token=' + Journal2Config.token,
+                controller: 'ImportExportSettingsController'
+            })
             /* menus */
             .when('/menus/primary/:store_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=menus/primary&token=' + Journal2Config.token,
@@ -247,6 +282,84 @@ define([
             .when('/footer/payments/:store_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=footer/payments&token=' + Journal2Config.token,
                 controller: 'FooterPaymentsController'
+            })
+            /* blog */
+            .when('/blog/settings/:store_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/settings&token=' + Journal2Config.token,
+                controller: 'GeneralBlogSettingsController'
+            })
+            .when('/blog/categories', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/categories/all&token=' + Journal2Config.token,
+                controller: 'BlogCategoriesAllController'
+            })
+            .when('/blog/categories/form/:category_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/categories/form&token=' + Journal2Config.token,
+                controller: 'BlogCategoriesFormController'
+            })
+            .when('/blog/posts', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/posts/all&token=' + Journal2Config.token,
+                controller: 'BlogPostsAllController'
+            })
+            .when('/blog/posts/form/:post_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/posts/form&token=' + Journal2Config.token,
+                controller: 'BlogPostsFormController'
+            })
+            .when('/blog/comments', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/comments/all&token=' + Journal2Config.token,
+                controller: 'BlogCommentsAllController'
+            })
+            .when('/blog/comments/form/:comment_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog/comments/form&token=' + Journal2Config.token,
+                controller: 'BlogCommentsFormController'
+            })
+            /* blog modules */
+            .when('/module/blog_categories/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/categories/all&token=' + Journal2Config.token,
+                controller: 'BlogModuleCategoriesAllController'
+            })
+            .when('/module/blog_categories/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/categories/form&token=' + Journal2Config.token,
+                controller: 'BlogModuleCategoriesFormController'
+            })
+            .when('/module/blog_comments/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/comments/all&token=' + Journal2Config.token,
+                controller: 'BlogModuleCommentsAllController'
+            })
+            .when('/module/blog_comments/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/comments/form&token=' + Journal2Config.token,
+                controller: 'BlogModuleCommentsFormController'
+            })
+            .when('/module/blog_search/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/search/all&token=' + Journal2Config.token,
+                controller: 'BlogModuleSearchAllController'
+            })
+            .when('/module/blog_search/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/search/form&token=' + Journal2Config.token,
+                controller: 'BlogModuleSearchFormController'
+            })
+            .when('/module/blog_side_posts/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/side_posts/all&token=' + Journal2Config.token,
+                controller: 'BlogModuleSidePostsAllController'
+            })
+            .when('/module/blog_side_posts/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/side_posts/form&token=' + Journal2Config.token,
+                controller: 'BlogModuleSidePostsFormController'
+            })
+            .when('/module/blog_posts/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/posts/all&token=' + Journal2Config.token,
+                controller: 'BlogModulePostsAllController'
+            })
+            .when('/module/blog_posts/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/posts/form&token=' + Journal2Config.token,
+                controller: 'BlogModulePostsFormController'
+            })
+            .when('/module/blog_tags/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/tags/all&token=' + Journal2Config.token,
+                controller: 'BlogModuleTagsAllController'
+            })
+            .when('/module/blog_tags/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=blog_modules/tags/form&token=' + Journal2Config.token,
+                controller: 'BlogModuleTagsFormController'
             })
             /* custom blocks */
             .when('/module/cms_blocks/all/:module_id?', {
@@ -330,13 +443,22 @@ define([
                 controller: 'ProductTabsFormController'
             })
             /* multi module */
-            .when('/module/multi_modules/all/:module_id?', {
-                templateUrl: 'index.php?route=module/journal2/tpl&tpl=multi_modules/all&token=' + Journal2Config.token,
-                controller: 'MultiModulesAllController'
+            .when('/module/advanced_grid/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=advanced_grid/all&token=' + Journal2Config.token,
+                controller: 'AdvancedGridAllController'
             })
-            .when('/module/multi_modules/form/:module_id?', {
-                templateUrl: 'index.php?route=module/journal2/tpl&tpl=multi_modules/form&token=' + Journal2Config.token,
-                controller: 'MultiModulesFormController'
+            .when('/module/advanced_grid/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=advanced_grid/form&token=' + Journal2Config.token,
+                controller: 'AdvancedGridFormController'
+            })
+            /* carousel grid */
+            .when('/module/carousel_grid/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=carousel_grid/all&token=' + Journal2Config.token,
+                controller: 'CarouselGridAllController'
+            })
+            .when('/module/carousel_grid/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=carousel_grid/form&token=' + Journal2Config.token,
+                controller: 'CarouselGridFormController'
             })
             /* side category */
             .when('/module/side_category/all/:module_id?', {
@@ -392,6 +514,15 @@ define([
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=super_filter/form&token=' + Journal2Config.token,
                 controller: 'SuperFilterFormController'
             })
+            /* side products */
+            .when('/module/side_products/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=side_products/all&token=' + Journal2Config.token,
+                controller: 'SideProductsAllController'
+            })
+            .when('/module/side_products/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=side_products/form&token=' + Journal2Config.token,
+                controller: 'SideProductsFormController'
+            })
             /* newsletter */
             .when('/module/newsletter/all/:module_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=newsletter/all&token=' + Journal2Config.token,
@@ -400,6 +531,15 @@ define([
             .when('/module/newsletter/form/:module_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=newsletter/form&token=' + Journal2Config.token,
                 controller: 'NewsletterFormController'
+            })
+            /* popup */
+            .when('/module/popup/all/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=popup/all&token=' + Journal2Config.token,
+                controller: 'PopupAllController'
+            })
+            .when('/module/popup/form/:module_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=popup/form&token=' + Journal2Config.token,
+                controller: 'PopupFormController'
             });
     }]);
 
@@ -411,7 +551,7 @@ define([
                 $('>ul', $(this)).removeClass('hide-menu').stop(true, true).fadeOut(0);
             });
 
-            $('#nav li > ul').live('click', function () {
+            $('#nav li > ul').on('click', function () {
                 $(this).addClass('hide-menu');
             });
 
@@ -426,7 +566,7 @@ define([
         });
 
         /* tips */
-        $('a.journal-tip').live('click', function () {
+        $('a.journal-tip').on('click', function () {
             var model = $(this).closest('li').find('[data-ng-model]').attr('data-ng-model').replace('settings.', '');
             window.open('http://docs.digital-atelier.com/opencart/journal/tips/' + model + '.jpg', '_blank');
             return false;

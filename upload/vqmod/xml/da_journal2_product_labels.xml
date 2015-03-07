@@ -41,6 +41,36 @@
         </operation>
 	</file>
 
+    <file path="catalog/controller/product/compare.php">
+        <operation error="skip">
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+            <add><![CDATA[
+                $this->load->model('journal2/product');
+            ]]></add>
+        </operation>
+        <operation error="skip">
+            <search position="after"><![CDATA['thumb'        => $image,]]></search>
+            <add><![CDATA[
+                'labels'        => $this->model_journal2_product->getLabels($product_info['product_id']),
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/account/wishlist.php">
+        <operation error="skip">
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+            <add><![CDATA[
+                $this->load->model('journal2/product');
+            ]]></add>
+        </operation>
+        <operation error="skip">
+            <search position="after"><![CDATA['thumb'      => $image,]]></search>
+            <add><![CDATA[
+                'labels'        => $this->model_journal2_product->getLabels($product_info['product_id']),
+            ]]></add>
+        </operation>
+    </file>
+
     <file path="catalog/controller/product/" name="special.php">
         <operation error="skip">
             <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>

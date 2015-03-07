@@ -2,22 +2,25 @@
     <h3>Background Settings</h3>
 </div>
 <style>
-    .modal-body {
+    .modal:not(#modal-image) .modal-body {
         max-height: 450px !important;
     }
 
-    .modal-body > div {
+    .modal-open{
+        overflow-y: auto;
+    }
+
+    .modal:not(#modal-image) .modal-body > div {
         margin-top: 1px;
-        padding: 10px;
-        padding-left: 15px;
+        padding: 10px 10px 0 15px;
         background-color: #f4f4f4;
     }
 
-    .modal-body > div > span{
+    .modal:not(#modal-image) .modal-body > div > span{
         display: inline-block;
         margin-bottom: 5px;
     }
-    .modal-footer{
+    .modal:not(#modal-image) .modal-footer{
         padding-bottom: 0;
     }
 
@@ -42,7 +45,7 @@
     }
 
 </style>
-<div class="modal-body">
+<div class="modal-body bg-editor">
     <!--<pre>{{ngModel|json}}</pre>-->
     <div class="popup-option" style="overflow: hidden; margin-top: 0">
         <div class="in-opt" data-ng-show="bgcolor">

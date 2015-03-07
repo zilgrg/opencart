@@ -99,13 +99,13 @@
                 </li>
                 <li>
                     <span class="module-create-title">Title Text Align</span>
-                                    <span class="module-create-option">
-                                        <switch data-ng-model="settings.quickview_title_align">
-                                            <switch-option key="left">Left</switch-option>
-                                            <switch-option key="center">Center</switch-option>
-                                            <switch-option key="right">Right</switch-option>
-                                        </switch>
-                                    </span>
+                        <span class="module-create-option">
+                            <switch data-ng-model="settings.quickview_title_align">
+                                <switch-option key="left">Left</switch-option>
+                                <switch-option key="center">Center</switch-option>
+                                <switch-option key="right">Right</switch-option>
+                            </switch>
+                        </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
 
@@ -147,6 +147,21 @@
                 </li>
 
                 <li  data-ng-show="settings.quickview_status == '1'">
+                    <span class="module-create-title">More Details Button Background Color</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.quickview_more_details_bg_color"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li  data-ng-show="settings.quickview_status == '1'">
+                    <span class="module-create-title">More Details Button Background Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.quickview_more_details_bg_color_hover"></j-opt-color>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
+                <li  data-ng-show="settings.quickview_status == '1'">
                     <span class="module-create-title">More Details Icon</span>
                         <span class="module-create-option">
                             <j-opt-icon data-ng-model="settings.quickview_more_details_icon"></j-opt-icon>
@@ -162,9 +177,9 @@
                 </li>
                 <li  data-ng-show="settings.quickview_status == '1'">
                     <span class="module-create-title">Tooltip Background Color</span>
-                            <span class="module-create-option">
-                                <j-opt-color data-ng-model="settings.quickview_more_details_tip_bg"></j-opt-color>
-                            </span>
+                        <span class="module-create-option">
+                            <j-opt-color data-ng-model="settings.quickview_more_details_tip_bg"></j-opt-color>
+                        </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
 
@@ -199,6 +214,14 @@
                             </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
+                <li  data-ng-show="settings.quickview_status == '1'">
+                    <span class="module-create-title">Description Font</span>
+                            <span class="module-create-option">
+                                <j-opt-font data-ng-model="settings.quickview_description_font" editor="hide-style"></j-opt-font>
+                            </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
             </ul>
         </accordion-group>
 

@@ -75,6 +75,21 @@
                         <input type="text" class="journal-number-field" data-ng-model="module_data.margin_top" /> x <input type="text" class="journal-number-field" data-ng-model="module_data.margin_bottom" />
                     </span>
                 </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Module Background</span>
+                    <span class="module-create-option">
+                        <j-opt-background data-ng-model="module_data.module_background" data-bgcolor="true"></j-opt-background>
+                    </span>
+                </li>
+                <li data-ng-show="module_data.fullwidth == 0">
+                    <span class="module-create-title">Gutter</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.module_padding">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
             </ul>
         </accordion-group>
         <accordion-group data-ng-repeat="section in module_data.sections" is-open="section.is_open">

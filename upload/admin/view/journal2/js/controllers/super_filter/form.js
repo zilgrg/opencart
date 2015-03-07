@@ -14,8 +14,10 @@ define(['./../module', 'underscore'], function (module, _) {
         $scope.module_data = {
             module_name: 'New Module',
             reset: 1,
+            product_count: 1,
             price: 1,
             tags : 1,
+            availability: 1,
             tax_class_id: -1,
             manufacturer: 'list',
             manufacturer_type: 'multi',
@@ -61,7 +63,7 @@ define(['./../module', 'underscore'], function (module, _) {
 
         /* save data */
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if ($scope.module_id) {
                 Rest.editModule($scope.module_id, $scope.module_data).then(function () {
@@ -82,7 +84,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.delete = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             if (!confirm('Delete module "' + $scope.module_data.module_name + '"?')) {
                 Spinner.hide($src);

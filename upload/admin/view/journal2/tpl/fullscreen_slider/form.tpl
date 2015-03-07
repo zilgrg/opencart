@@ -71,7 +71,7 @@
                 <li>
                     <span class="module-create-title">Image</span>
                     <span class="module-create-option">
-                        <image-select image="image.image"></image-select>
+                        <image-select-lang image="image.image"></image-select-lang>
                     </span>
                 </li>
                 <li>

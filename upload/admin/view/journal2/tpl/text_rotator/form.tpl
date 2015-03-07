@@ -27,6 +27,12 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Module Title</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="module_data.module_title"></j-opt-text-lang>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Transition Delay </span>
                     <span class="module-create-option">
                         <input type="text" class="journal-input journal-number-field" data-ng-model="module_data.transition_delay" required />
@@ -82,6 +88,12 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Image Dimensions</span>
+                    <span class="module-create-option">
+                        <input type="text" class="journal-number-field" data-ng-model="module_data.image_width" /> x <input type="text" class="journal-number-field" data-ng-model="module_data.image_height" />
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Image Border Settings</span>
                     <span class="module-create-option">
                         <j-opt-border data-ng-model="module_data.image_border"></j-opt-border>
@@ -110,6 +122,15 @@
                     <span class="module-create-title">Disable on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="module_data.disable_mobile">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Pause on Hover</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.pause_on_hover">
                             <switch-option key="1">ON</switch-option>
                             <switch-option key="0">OFF</switch-option>
                         </switch>

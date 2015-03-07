@@ -12,7 +12,7 @@
             <label class="close-others hint--top" data-hint="Close Others"><input type="checkbox" data-ng-model="close_others" /></label>
         </div>
         <accordion close-others="close_others">
-            <accordion-group data-ng-repeat="module in modules" is-open="opened_modules[module.module_id]">
+            <accordion-group data-ng-repeat="module in filterModules(modules, paginationCurrentPage)" is-open="opened_modules[module.module_id]">
                 <accordion-heading>
                     <div class="accordion-bar bar-level-0" data-ng-class="{'no-placements': module.module_placements.length == 0}">
                         {{module.module_data.module_name}}
@@ -59,5 +59,6 @@
                 </ul>
             </accordion-group>
         </accordion>
+        <pagination ng-show="paginationTotalItems > 10" total-items="paginationTotalItems" page="paginationCurrentPage" max-size="16" class="pagination-sm" boundary-links="true"></pagination>
     </div>
 </form>

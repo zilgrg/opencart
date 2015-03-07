@@ -14,16 +14,21 @@ define(['./module'], function (module) {
                 $scope.rows = $element.attr('data-rows') || 5;
                 $scope.cols = $element.attr('data-cols') || 10;
                 $scope.languages = Journal2Config.languages;
-                $scope.ngModel = $scope.ngModel || {};
-                $scope.ngModel.value = $scope.ngModel.value || {};
-                _.each($scope.languages.languages, function (language) {
-                    $scope.ngModel.value[language.language_id] = $scope.ngModel.value[language.language_id] || '';
-                });
+
                 $scope.reset = function () {
                     _.each($scope.languages.languages, function (language) {
                         $scope.ngModel.value[language.language_id] = $scope.ngModel.default;
                     });
                 };
+
+                $scope.$watch('ngModel', function (val) {
+                    val = val || {};
+                    val.value = val.value || {};
+                    if (Object.prototype.toString.call(val.value) === '[object Array]') {
+                        val.value = {};
+                    }
+                    $scope.ngModel = val;
+                });
             }
         };
     }]);

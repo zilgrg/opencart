@@ -10,7 +10,9 @@ define(['./module'], function(module){
             getTopCategories: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/catalog/top_categories', 'token=' + Journal2Config.token));
             },
-
+            getFeaturedModules: function() {
+                return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/catalog/get_featured', 'token=' + Journal2Config.token));
+            },
             getAllModules: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/modules/all', 'token=' + Journal2Config.token));
             },
@@ -38,7 +40,6 @@ define(['./module'], function(module){
             saveModulePlacement: function(module_type, module_data) {
                 return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/modules/save', 'module_type=' + module_type, 'token=' + Journal2Config.token), {'module_data' : module_data});
             },
-
             findProducts: function(filter_name) {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/catalog/products', 'filter_name=' + filter_name, 'token=' + Journal2Config.token));
             },
@@ -51,19 +52,15 @@ define(['./module'], function(module){
             findInformation: function(filter_name) {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/catalog/information', 'filter_name=' + filter_name, 'token=' + Journal2Config.token));
             },
-
             getTransitions: function() {
                 return Ajax.get(Url.generateLink('view/journal2/tpl/slider2/transitions.json'));
             },
-
             getFonts: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/fonts/get', 'token=' + Journal2Config.token));
             },
-
             getIcons: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/fonts/icons', 'token=' + Journal2Config.token));
             },
-
             loadSettings: function(category, theme_id) {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/settings/load', 'token=' + Journal2Config.token, 'category=' + category, 'theme_id=' + theme_id));
             },
@@ -88,31 +85,45 @@ define(['./module'], function(module){
             export: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/settings/export', 'token=' + Journal2Config.token));
             },
-
             getSetting: function(key, store_id) {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/settings/get', 'key=' + key, 'store_id=' + store_id, 'token=' + Journal2Config.token));
             },
-
             setSetting: function(key, store_id, value) {
                 return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/settings/set', 'key=' + key, 'store_id=' + store_id, 'token=' + Journal2Config.token), {value : value});
             },
-
             getFilters: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/catalog/filters', 'token=' + Journal2Config.token));
             },
-
             clearCache: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/cache/clear_all', 'token=' + Journal2Config.token));
             },
-
             checkVersion: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/check_version', 'token=' + Journal2Config.token));
             },
-
             getImageOptimisationStatus: function() {
                 return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/image_optimisation/status', 'token=' + Journal2Config.token));
             },
-
+            getTableIndexesStatus: function() {
+                return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/optimisations/indexes', 'token=' + Journal2Config.token));
+            },
+            addTableIndexes: function() {
+                return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/optimisations/add_indexes', 'token=' + Journal2Config.token));
+            },
+            getSubscribers: function (data) {
+                return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/newsletter/subscribers', 'token=' + Journal2Config.token), data)
+            },
+            unsubscribe: function (data) {
+                return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/newsletter/unsubscribe', 'token=' + Journal2Config.token), data)
+            },
+            verifyCode: function(data) {
+                return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/data/verify_code', 'token=' + Journal2Config.token), data);
+            },
+            getBlog: function (url, data) {
+                return Ajax.get(Url.generateLink('index.php?route=module/journal2/rest/blog/' + url, 'token=' + Journal2Config.token), data);
+            },
+            postBlog: function (url, data) {
+                return Ajax.post(Url.generateLink('index.php?route=module/journal2/rest/blog/' + url, 'token=' + Journal2Config.token), data);
+            },
             all: function(obj, success, error) {
                 var promises = [];
                 var response = {};

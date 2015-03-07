@@ -3,10 +3,24 @@ class ModelJournal2Product extends Model {
 
     private static $cache = array();
     private static $latest = null;
+    private static $category_products = null;
 
     public function __construct($registry) {
         parent::__construct($registry);
         $this->load->model('catalog/product');
+        if (Front::$IS_OC2) {
+            $this->load->model('extension/module');
+        }
+//        if (isset($this->request->get['path'])) {
+//            $parts = explode('_', $this->request->get['path']);
+//            $category_id = end($parts);
+//            if ($category_id) {
+//                self::$category_products = array();
+//                foreach ($this->getProductsByCategory($category_id, PHP_INT_MAX) as $value) {
+//                    self::$category_products[] = $value['product_id'];
+//                }
+//            }
+//        }
     }
 
     private function addLabel($product_id, $label, $name) {
@@ -64,7 +78,7 @@ class ModelJournal2Product extends Model {
         }
 
         /* get stock label */
-        if ($product['quantity'] <= 0 && $this->journal2->settings->get('out_of_stock_status', 'always') !== 'never' && Journal2Utils::canGenerateImages()) {
+        if ($product['quantity'] <= 0 && Journal2Utils::canGenerateImages()) {
             $this->addLabel($product_id, 'outofstock', $product['stock_status']);
         }
 
@@ -77,18 +91,26 @@ class ModelJournal2Product extends Model {
 
     public function getSpecialCountdown($product_id) {
         if ($this->customer->isLogged()) {
-            $customer_group_id = $this->customer->getCustomerGroupId();
+            $customer_group_id = Front::$IS_OC2 ? $this->customer->getGroupId() : $this->customer->getCustomerGroupId();
         } else {
             $customer_group_id = $this->config->get('config_customer_group_id');
         }
         $query = $this->db->query("SELECT date_end FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = '" . (int)$product_id . "' AND ps.customer_group_id = '" . (int)$customer_group_id . "' AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1");
-        return $query->row['date_end'];
+        if (!isset($query->row['date_end']) || $query->row['date_end'] === '0000-00-00') {
+            return false;
+        }
+        return date('D M d Y H:i:s O', strtotime($query->row['date_end']));
     }
 
 
     public function getProductViews($product_id) {
         $query = $this->db->query("SELECT viewed FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
-        return $query->row['viewed'];
+        return $query->num_rows ? $query->row['viewed'] : null;
+    }
+
+    public function getProductSoldCount($product_id) {
+        $query = $this->db->query("SELECT sum(quantity) as quantity FROM " . DB_PREFIX . "order_product WHERE product_id = '" . (int)$product_id . "'");
+        return (int)$query->row['quantity'];
     }
 
     public function getRandomProducts ($limit = 5, $category_id = -1) {
@@ -110,22 +132,85 @@ class ModelJournal2Product extends Model {
         return $query->rows;
     }
 
-    public function getFeatured($limit = 5) {
+    public function getFeatured($limit = 5, $featured_module_id, $filter_category = false) {
+        if (false && $filter_category) {
+            if (self::$category_products) {
+                $results = array();
+                $i = 0;
+                foreach ($this->getFeaturedProducts($featured_module_id) as $product_id) {
+                    if ($filter_category && self::$category_products !== null && !in_array($product_id, self::$category_products)) continue;
+                    $result = $this->model_catalog_product->getProduct($product_id);
+                    if (!$result) continue;
+                    $results[] = $result;
+                    $i++;
+                    if ($limit && $i == $limit) {
+                        break;
+                    }
+                }
+                return $results;
+            }
+        }
         $results = array();
-        $index = 0;
-        foreach (explode(',', $this->config->get('featured_product')) as $product_id) {
-            $results[] = $this->model_catalog_product->getProduct($product_id);
-            $index++;
-            if ($index >= $limit) break;
+        $i = 0;
+        foreach ($this->getFeaturedProducts($featured_module_id) as $product_id) {
+            $result = $this->model_catalog_product->getProduct($product_id);
+            if (!$result) continue;
+            $results[] = $result;
+            $i++;
+            if ($limit && $i == $limit) {
+                break;
+            }
         }
         return $results;
     }
 
-    public function getBestsellers($limit = 5) {
+    private function getFeaturedProducts($featured_module_id) {
+        if (!Front::$IS_OC2) {
+            return explode(',', $this->config->get('featured_product'));
+        }
+        return Journal2Utils::getProperty($this->model_extension_module->getModule($featured_module_id), 'product', array());
+    }
+
+    public function getBestsellers($limit = 5, $filter_category = false) {
+        if (false && $filter_category) {
+            if (self::$category_products) {
+                $results = array();
+                $i = 0;
+                foreach ($this->model_catalog_product->getBestSellerProducts(PHP_INT_MAX) as $product) {
+                    $i++;
+                    if ($filter_category && self::$category_products !== null && !in_array($product['product_id'], self::$category_products)) continue;
+                    $results[] = $product;
+                    if ($limit && $i == $limit) {
+                        break;
+                    }
+                }
+                return $results;
+            }
+        }
         return $this->model_catalog_product->getBestSellerProducts($limit);
     }
 
-    public function getSpecials($limit = 5) {
+    public function getSpecials($limit = 5, $filter_category = false) {
+        if (false && $filter_category) {
+            if (self::$category_products) {
+                $data = array(
+                    'sort'  => 'pd.name',
+                    'order' => 'ASC',
+                    'start' => 0
+                );
+                $results = array();
+                $i = 0;
+                foreach ($this->model_catalog_product->getProductSpecials($data) as $product) {
+                    $i++;
+                    if ($filter_category && self::$category_products !== null && !in_array($product['product_id'], self::$category_products)) continue;
+                    $results[] = $product;
+                    if ($limit && $i == $limit) {
+                        break;
+                    }
+                }
+                return $results;
+            }
+        }
         $data = array(
             'sort'  => 'pd.name',
             'order' => 'ASC',
@@ -135,7 +220,28 @@ class ModelJournal2Product extends Model {
         return $this->model_catalog_product->getProductSpecials($data);
     }
 
-    public function getLatest($limit = 5) {
+    public function getLatest($limit = 5, $filter_category = false) {
+        if (false && $filter_category) {
+            if (self::$category_products) {
+                $data = array(
+                    'sort'  => 'p.date_added',
+                    'order' => 'DESC',
+                    'start' => 0,
+                    'limit' => PHP_INT_MAX
+                );
+                $results = array();
+                $i = 0;
+                foreach ($this->model_catalog_product->getProducts($data) as $product) {
+                    $i++;
+                    if ($filter_category && self::$category_products !== null && !in_array($product['product_id'], self::$category_products)) continue;
+                    $results[] = $product;
+                    if ($limit && $i == $limit) {
+                        break;
+                    }
+                }
+                return $results;
+            }
+        }
         $data = array(
             'sort'  => 'p.date_added',
             'order' => 'DESC',
@@ -161,6 +267,60 @@ class ModelJournal2Product extends Model {
         ));
     }
 
+    public function getPeopleAlsoBought($product_id, $limit = 5) {
+        $sql = '
+            SELECT distinct product_id FROM ' . DB_PREFIX . 'order_product WHERE order_id IN (
+                SELECT order_id FROM ' . DB_PREFIX . 'order_product WHERE product_id = ' . (int)$product_id . '
+            ) LIMIT ' . (int) $limit . '
+        ';
+        $query = $this->db->query($sql);
+        $results = array();
+        foreach ($query->rows as $row) {
+            $result = $this->model_catalog_product->getProduct($row['product_id']);
+            if ($result) {
+                $results[] = $result;
+            }
+        }
+        return $results;
+    }
+
+    public function getProductRelated($product_id, $limit = 5) {
+        return array_slice($this->model_catalog_product->getProductRelated($product_id), 0, $limit);
+    }
+
+    public function getMostViewed($limit = 5) {
+        $sql = '
+            SELECT p.product_id
+            FROM ' . DB_PREFIX . 'product p
+            LEFT JOIN ' . DB_PREFIX . 'product_to_store p2s ON (p.product_id = p2s.product_id)
+            WHERE p.status = "1"
+                AND p.date_available <= NOW()
+                AND p2s.store_id = "' . (int)$this->config->get('config_store_id') . '"
+            ORDER BY viewed DESC
+            LIMIT ' . (int)$limit;
+        $query = $this->db->query($sql);
+        $results = array();
+        foreach ($query->rows as $row) {
+            $result = $this->model_catalog_product->getProduct($row['product_id']);
+            if ($result) {
+                $results[] = $result;
+            }
+        }
+        return $results;
+    }
+
+    public function getRecentlyViewed($limit = 5) {
+        $products = isset($this->request->cookie['jrv']) && $this->request->cookie['jrv'] ? explode(',', $this->request->cookie['jrv']) : array();
+        $products = array_slice($products, 0, $limit);
+        $results = array();
+        foreach ($products as $pid) {
+            $result = $this->model_catalog_product->getProduct($pid);
+            if ($result) {
+                $results[] = $result;
+            }
+        }
+        return $results;
+    }
 
 }
 ?>

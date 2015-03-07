@@ -12,7 +12,7 @@ define(['./module', 'underscore'], function (module, _) {
                 templateUrl: 'view/journal2/tpl/directives/j-opt-background.html?ver=' + Journal2Config.version,
                 controller: ['$scope', '$attrs', '$modal', function ($scope, $attrs, $modal) {
                     $scope.ngModel = $scope.ngModel || {};
-                    $scope.ngModel.value = {};
+                    $scope.ngModel.value = $scope.ngModel.value || {};
                     $scope.edit = function () {
                         $modal.open({
                             templateUrl: 'view/journal2/tpl/directives/j-opt-background-editor.html?ver=' + Journal2Config.version,
@@ -35,7 +35,9 @@ define(['./module', 'underscore'], function (module, _) {
                         if (Object.prototype.toString.call(val.value) === '[object Array]') {
                             val.value = {};
                         }
-                        val.value.bgimage_attach = 'scroll';
+                        if (!val.value.bgimage_attach) {
+                            val.value.bgimage_attach = 'scroll';
+                        }
                         $scope.ngModel = val;
                     });
                 }]

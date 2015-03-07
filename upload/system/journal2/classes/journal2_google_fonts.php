@@ -23,6 +23,9 @@ class Journal2GoogleFonts {
     }
 
     public function getFonts() {
+        if (!$this->fonts) {
+            return array();
+        }
         $fonts = array();
         $subsets = array();
         foreach ($this->fonts as $font) {
@@ -35,7 +38,7 @@ class Journal2GoogleFonts {
             $subsets = '&amp;subset=' . implode(',', $subsets);
         }
         return array(
-            "//fonts.googleapis.com/css?family=" . implode('|', $fonts) . $subsets
+            "//fonts.googleapis.com/css?family=" . implode('%7C', $fonts) . $subsets
         );
     }
 
@@ -44,9 +47,6 @@ class Journal2GoogleFonts {
     }
 
     public function setAllFonts($fonts) {
-        if ($this->fonts) {
-            die('eeerrrooorr');
-        }
-        $this->fonts = $fonts;
+        $this->fonts = array_merge($this->fonts, $fonts);
     }
 }

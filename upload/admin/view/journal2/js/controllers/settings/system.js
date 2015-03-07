@@ -1,4 +1,4 @@
-define(['./../module', 'underscore'], function (module, _) {
+define(['./../module', 'underscore', 'underscore.string'], function (module, _, _S) {
 
     module.controller('SystemSettingsController', function ($scope, $routeParams, $location, $timeout, localStorageService, Rest, Spinner) {
 
@@ -20,8 +20,12 @@ define(['./../module', 'underscore'], function (module, _) {
             photo_gallery_cache: 0,
             side_blocks_cache: 0,
             fullscreen_slider_cache: 0,
-            multi_modules_cache: 0
+            advanced_grid_cache: 0,
+            carousel_grid_cache: 0,
+            side_products_cache: 0
         };
+
+        $scope.table_columns = null;
 
         $scope.imageOptimisationInProgress = false;
         $scope.cachingStatus = {
@@ -48,7 +52,7 @@ define(['./../module', 'underscore'], function (module, _) {
         }, 500);
 
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.setSetting('system_settings', -1, $scope.settings).then(function (response) {
                 Spinner.hide($src);
@@ -59,7 +63,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.clearCache = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.clearCache().then(function (response) {
                 Spinner.hide($src);
@@ -113,6 +117,30 @@ define(['./../module', 'underscore'], function (module, _) {
             }, false);
         };
 
+        $scope.getDatabaseIndexStatus = function ($event) {
+            var $src = $($event.target || $event.srcElement);
+            Spinner.show($src);
+            Rest.getTableIndexesStatus().then(function (response) {
+                $scope.table_columns = response;
+                Spinner.hide($src);
+            }, function (error) {
+                Spinner.hide($src);
+                alert(error);
+            });
+        };
+
+        $scope.addDatabaseIndexes = function ($event) {
+            var $src = $($event.target || $event.srcElement);
+            Spinner.show($src);
+            Rest.addTableIndexes().then(function (response) {
+                $scope.table_columns = response;
+                Spinner.hide($src);
+            }, function (error) {
+                Spinner.hide($src);
+                alert(error);
+            });
+        };
+
         $scope.stopImageOptimisation = function () {
             if (!$scope.imageOptimisationInProgress) {
                 return;
@@ -123,6 +151,15 @@ define(['./../module', 'underscore'], function (module, _) {
             $timeout(function () {
                 $scope.imageOptimisationInProgress = false;
             }, 1);
+        };
+
+        $scope.toggle_modules = function ($event, modules_cache) {
+            $event.stopPropagation();
+            _.each($scope.settings, function (v, k) {
+                if (_S.endsWith(k, '_cache')) {
+                    $scope.settings[k] = modules_cache;
+                }
+            });
         };
 
     });

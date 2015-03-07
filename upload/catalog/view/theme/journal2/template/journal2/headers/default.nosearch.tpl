@@ -8,7 +8,7 @@
             <?php if ($logo) { ?>
             <div id="logo">
                 <a href="<?php echo str_replace($home, 'index.php?route=common/home', ''); ?>">
-                    <img src="<?php echo $logo;?>" title="<?php echo $name; ?>" alt="<?php echo $name; ?>" />
+                    <?php echo Journal2Utils::getLogo($this->config); ?>
                 </a>
             </div>
             <?php } ?>

@@ -6,8 +6,10 @@ define(['./../module', 'underscore'], function (module, _) {
         /* module */
         $scope.rows = [];
         $scope.close_others = false;
+        $scope.newsletter_modules = [];
 
         $scope.default_language = Journal2Config.languages.default;
+        $scope.featured_modules = [];
 
         var Row = function () {
             return {
@@ -16,7 +18,13 @@ define(['./../module', 'underscore'], function (module, _) {
                 columns: [],
                 contacts: [],
                 social_icons: [],
+                status: 1,
                 sort_order: '',
+                bottom_spacing: '',
+                padding_top: '',
+                padding_right: '',
+                padding_bottom: '',
+                padding_left: '',
                 items_per_row: {
                     "hide_columns": true,
                     "range": "1,10",
@@ -79,7 +87,9 @@ define(['./../module', 'underscore'], function (module, _) {
                         }
                     }
                 },
-                is_open: true
+                is_open: true,
+                background: {},
+                disable_mobile: '0'
             };
         };
 
@@ -89,7 +99,24 @@ define(['./../module', 'underscore'], function (module, _) {
                 items: [],
                 text: {},
                 title: {},
-                is_open: true
+                icon_status: '0',
+                icon: {},
+                icon_position: 'top',
+                icon_border: {},
+                icon_bg_color: '',
+                icon_width: '',
+                icon_height: '',
+                is_open: true,
+                newsletter_id: '',
+                section_type: 'module',
+                products: [],
+                category: '',
+                items_limit: 4,
+                module_type: 'featured',
+                posts_type: 'newest',
+                posts: [],
+                status: '1',
+                disable_mobile: '0'
             };
         };
 
@@ -122,22 +149,31 @@ define(['./../module', 'underscore'], function (module, _) {
             };
         };
 
-        $scope.isLoading = true;
-        $timeout(function () {
-            Rest.getSetting('footer_menu', $scope.store_id).then(function (response) {
-                if (response) {
-                    $scope.rows = response.rows || [];
-                    $scope.close_others = response.close_others;
-                }
-                $timeout(function () {
-                    $scope.isLoading = false;
-                    Spinner.hide();
-                }, 1);
-
-            }, function (error) {
-                alert(error);
-            });
-        }, 500);
+        Rest.all({
+            footer_menu: Rest.getSetting('footer_menu', $scope.store_id),
+            featured_modules: Rest.getFeaturedModules(),
+            newsletter_modules: Rest.getModules('newsletter')
+        }, function (response) {
+            if (response.footer_menu) {
+                $scope.rows = response.footer_menu.rows || [];
+                $scope.rows = _.map($scope.rows, function (row) {
+                    row = _.extend(new Row(), row);
+                    if (row.type === 'columns') {
+                        row.columns = _.map(row.columns, function (column) {
+                            return _.extend(new Column(), column);
+                        });
+                    }
+                    return row;
+                });
+                $scope.close_others = response.footer_menu.close_others;
+            }
+            $scope.featured_modules = response.featured_modules;
+            $scope.newsletter_modules = response.newsletter_modules;
+            Spinner.hide();
+        }, function (error) {
+            Spinner.hide();
+            alert(error);
+        });
 
         $scope.addRow = function () {
             $scope.rows.push(new Row());
@@ -172,7 +208,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.setSetting('footer_menu', $scope.store_id, { rows: $scope.rows, close_others: $scope.close_others }).then(function (response) {
                 Spinner.hide($src);
@@ -442,6 +478,7 @@ define(['./../module', 'underscore'], function (module, _) {
                         }
                     }
                 },
+                background: {},
                 sort_order: ''
             }];
         };
@@ -457,6 +494,26 @@ define(['./../module', 'underscore'], function (module, _) {
                     item.close_others = false;
                 }
             }
+        };
+
+        /* add product */
+        $scope.addProduct = function (section) {
+            section.products.push({ });
+        };
+
+        /* remove product */
+        $scope.removeProduct = function (section, $index) {
+            section.products.splice($index, 1);
+        };
+
+        /* add post */
+        $scope.addPost = function (column) {
+            column.posts.push({ });
+        };
+
+        /* remove product */
+        $scope.removeProduct = function (column, $index) {
+            column.posts.splice($index, 1);
         };
     });
 

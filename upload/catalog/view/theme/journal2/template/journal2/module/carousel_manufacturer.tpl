@@ -1,28 +1,27 @@
-<div class="box journal-carousel carousel-brand <?php echo $hide_on_mobile_class; ?> <?php echo $show_title_class; ?>" id="carousel-<?php echo $module; ?>" style="<?php echo isset($css) ? $css : ''; ?>">
+<div class="box journal-carousel carousel-brand <?php echo $hide_on_mobile_class; ?> <?php echo $show_title_class; ?> <?php echo isset($gutter_on_class) ? $gutter_on_class : ''; ?>" id="carousel-<?php echo $module; ?>" style="<?php echo isset($css) ? $css : ''; ?>">
+   <div>
     <?php if ($show_title): ?>
     <div class="htabs box-heading <?php echo $single_class; ?>">
         <?php $index=0; foreach ($sections as $section): ?>
         <?php if ($section['is_link']): ?>
         <a href="<?php echo $section['url']; ?>" <?php echo $section['target']; ?>><?php echo $section['section_name']; ?></a>
         <?php else: ?>
+        <?php if (!count($section['items'])) continue; ?>
         <a href="#carousel-<?php echo $module; ?>-<?php echo $index; ?>" class="atab"><?php echo $section['section_name']; ?></a>
         <?php endif; ?>
         <?php $index++; endforeach; ?>
     </div>
     <?php endif; ?>
     <?php $index=0; foreach ($sections as $section): ?>
+    <?php if (!count($section['items'])) continue; ?>
     <div id="carousel-<?php echo $module; ?>-<?php echo $index; ?>" class="owl-carousel tab-content box-content">
         <?php foreach ($section['items'] as $item) { ?>
         <div class="product-grid-item isotope-element <?php echo implode(' ', $item['section_class']); ?>">
-            <div class="product-wrapper" data-respond="start: 150px; end: 300px; interval: 20px;">
+            <div class="product-wrapper" data-respond="start: 150px; end: 300px; interval: 20px;" style="<?php echo $image_bgcolor; ?>">
                 <?php if (isset($item['thumb'])) { ?>
                 <div class="image">
-                    <a href="<?php echo $item['href']; ?>">
-                        <?php if ($this->journal2->html_classes->hasClass('mobile')): ?>
+                    <a href="<?php echo $item['href']; ?>" style="<?php echo $image_border_css; ?>">
                         <img class="lazyOwl first-image" width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" src="<?php echo $dummy_image; ?>" data-src="<?php echo $item['thumb']; ?>" title="<?php echo $item['name']; ?>" alt="<?php echo $item['name']; ?>" />
-                        <?php else: ?>
-                        <img class="first-image" width="<?php echo $image_width; ?>" height="<?php echo $image_height; ?>" src="<?php echo $item['thumb']; ?>" title="<?php echo $item['name']; ?>" alt="<?php echo $item['name']; ?>" />
-                        <?php endif; ?>
                     </a>
                 </div>
                 <?php } ?>
@@ -41,10 +40,8 @@
         (function(){
             var opts = $.parseJSON('<?php echo json_encode($grid); ?>');
 
-            jQuery110("#carousel-<?php echo $module; ?> .owl-carousel").owlCarousel({
-                <?php if ($this->journal2->html_classes->hasClass('mobile')): ?>
+            jQuery("#carousel-<?php echo $module; ?> .owl-carousel").owlCarousel({
                 lazyLoad: true,
-                <?php endif; ?>
                 itemsCustom: opts,
                 autoPlay: <?php echo $autoplay ? $autoplay : 'false'; ?>,
                 touchDrag: <?php echo $touch_drag ? 'true' : 'false'; ?>,
@@ -53,7 +50,7 @@
                 navigation: true,
                 scrollPerPage: true,
                 navigationText: false,
-                slideSpeed: <?php echo $slide_speed; ?>,
+                paginationSpeed: <?php echo $slide_speed; ?>,
                 margin: 20
             });
 
@@ -77,15 +74,15 @@
                 $('#carousel-<?php echo $module; ?> .htabs a.atab').each(function () {
                     var href = $(this).attr('href');
                     if (current === href) {
-                        jQuery110(href).data('owlCarousel').play();
+                        jQuery(href).data('owlCarousel').play();
                     } else {
-                        jQuery110(href).data('owlCarousel').stop();
+                        jQuery(href).data('owlCarousel').stop();
                     }
                 });
             });
             <?php endif; ?>
 
-            <?php if (!$this->journal2->html_classes->hasClass('mobile') && $brand_name): ?>
+            <?php if (!$this->journal2->html_classes->hasClass('mobile') && $brand_name && !$this->journal2->html_classes->hasClass('tablet')): ?>
             Journal.equalHeight($('#carousel-<?php echo $module; ?> .product-grid-item'), '.name');
             <?php endif; ?>
 
@@ -97,4 +94,5 @@
             }
         })();
     </script>
+  </div>
 </div>

@@ -4,6 +4,13 @@ require_once DIR_SYSTEM . 'journal2/classes/journal2_newsletter.php';
 class ControllerModuleJournal2Newsletter extends Controller {
 
     private static $CACHEABLE = null;
+    private $google_fonts = array();
+
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
 
     public function __construct($registry) {
         parent::__construct($registry);
@@ -30,7 +37,7 @@ class ControllerModuleJournal2Newsletter extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && ($this->journal2->mobile_detect->isMobile() && !$this->journal2->mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
@@ -57,6 +64,12 @@ class ControllerModuleJournal2Newsletter extends Controller {
             $this->data['css'] = implode('; ', $css);
         }
 
+        /* border */
+        if (Journal2Utils::getProperty($module_data, 'module_border')) {
+            $border = implode('; ', Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($module_data, 'module_border')));
+            $this->data['css'] = $this->data['css'] ? '; ' . $border : $border;
+        }
+
         $cache_property = "module_journal_carousel_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}";
 
         $cache = $this->journal2->cache->get($cache_property);
@@ -64,7 +77,7 @@ class ControllerModuleJournal2Newsletter extends Controller {
         if ($cache === null || self::$CACHEABLE !== true) {
             $this->data['module'] = mt_rand();
 
-            $module_split = explode(':', Journal2Utils::getProperty($module_data, 'module_split', '100:100'));
+            $this->data['text_class'] = Journal2Utils::getProperty($module_data, 'text_position', 'left');
 
             /* hide on mobile */
             $this->data['hide_on_mobile_class'] = Journal2Utils::getProperty($module_data, 'disable_mobile') ? 'hide-on-mobile' : '';
@@ -74,7 +87,15 @@ class ControllerModuleJournal2Newsletter extends Controller {
             $this->data['module_text'] = Journal2Utils::getProperty($module_data, 'module_text.value.' . $this->config->get('config_language_id'));
             $font_css = array();
             if (Journal2Utils::getProperty($module_data, 'module_text_font.value.font_type') === 'google') {
-                $this->journal2->google_fonts->add(Journal2Utils::getProperty($module_data, 'module_text_font.value.font_name'), Journal2Utils::getProperty($module_data, 'module_text_font.value.font_subset'), Journal2Utils::getProperty($module_data, 'module_text_font.value.font_weight'));
+                $font_name = Journal2Utils::getProperty($module_data, 'module_text_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'module_text_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'module_text_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
                 $weight = filter_var(Journal2Utils::getProperty($module_data, 'module_text_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
                 $font_css[] = 'font-weight: ' . ($weight ? $weight : 400);
                 $font_css[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'module_text_font.value.font_name') . "'";
@@ -91,8 +112,6 @@ class ControllerModuleJournal2Newsletter extends Controller {
             if (Journal2Utils::getProperty($module_data, 'module_text_font.value.color.value.color')) {
                 $font_css[] = 'color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'module_text_font.value.color.value.color'));
             }
-            $font_css[] = 'width: '. $module_split[0] . '%';
-
             $this->data['font_css'] = implode('; ', $font_css);
 
             /* input */
@@ -101,24 +120,88 @@ class ControllerModuleJournal2Newsletter extends Controller {
             if (Journal2Utils::getProperty($module_data, 'input_height')) {
                 $input_style[] = 'height: ' . Journal2Utils::getProperty($module_data, 'input_height') . 'px';
             }
-            if ($this->data['module_text']) {
-                $input_style[] = 'width: ' . $module_split[1] . '%';
-            } else {
-                $input_style[] = 'width: 100%';
+            $input_field_style = array();
+            if (Journal2Utils::getProperty($module_data, 'input_bg_color.value.color')) {
+                $input_field_style[] = 'background-color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'input_bg_color.value.color'));
+            }
+            if (Journal2Utils::getProperty($module_data, 'input_border')) {
+                $input_field_style = array_merge($input_field_style, Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($module_data, 'input_border')));
+            }
+            if (Journal2Utils::getProperty($module_data, 'input_font.value.font_type') === 'google') {
+                $font_name = Journal2Utils::getProperty($module_data, 'input_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'input_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'input_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
+                $weight = filter_var(Journal2Utils::getProperty($module_data, 'input_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
+                $input_field_style[] = 'font-weight: ' . ($weight ? $weight : 400);
+                $input_field_style[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'input_font.value.font_name') . "'";
+            }
+            if (Journal2Utils::getProperty($module_data, 'input_font.value.font_type') === 'system') {
+                $input_field_style[] = 'font-weight: ' . Journal2Utils::getProperty($module_data, 'input_font.value.font_weight');
+                $input_field_style[] = 'font-family: ' . Journal2Utils::getProperty($module_data, 'input_font.value.font_family');
+            }
+            if (Journal2Utils::getProperty($module_data, 'input_font.value.font_type') !== 'none') {
+                $input_field_style[] = 'font-size: ' . Journal2Utils::getProperty($module_data, 'input_font.value.font_size');
+                $input_field_style[] = 'font-style: ' . Journal2Utils::getProperty($module_data, 'input_font.value.font_style');
+                $input_field_style[] = 'text-transform: ' . Journal2Utils::getProperty($module_data, 'input_font.value.text_transform');
+            }
+            if (Journal2Utils::getProperty($module_data, 'input_font.value.color.value.color')) {
+                $input_field_style[] = 'color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'input_font.value.color.value.color'));
             }
             $this->data['input_style'] = implode('; ', $input_style);
+            $this->data['input_field_style'] = implode('; ', $input_field_style);
 
             /* submit */
-            $this->data['button_text'] = Journal2Utils::getProperty($module_data, 'button_text.value.' . $this->config->get('config_language_id'), $this->language->get('button_continue'));
+            $this->data['button_text'] = Journal2Utils::getProperty($module_data, 'button_text.value.' . $this->config->get('config_language_id'), '');
             $this->data['button_icon'] = Journal2Utils::getIconOptions2(Journal2Utils::getProperty($module_data, 'button_icon'));
-            $offset_style = array();
+            $button_style = array();
             if (Journal2Utils::getProperty($module_data, 'button_offset_top')) {
-                $offset_style[] = 'margin-top: ' . Journal2Utils::getProperty($module_data, 'button_offset_top') . 'px';
+                $button_style[] = 'margin-top: ' . Journal2Utils::getProperty($module_data, 'button_offset_top') . 'px';
             }
             if (Journal2Utils::getProperty($module_data, 'button_offset_left')) {
-                $offset_style[] = 'right: ' . Journal2Utils::getProperty($module_data, 'button_offset_left') . 'px';
+                $button_style[] = 'right: ' . Journal2Utils::getProperty($module_data, 'button_offset_left') . 'px';
             }
-            $this->data['button_style'] = implode('; ', $offset_style);
+            if (Journal2Utils::getProperty($module_data, 'button_border')) {
+                $button_style = array_merge($button_style, Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($module_data, 'button_border')));
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_font')) {
+                $button_style = array_merge($button_style, Journal2Utils::getBorderCssProperties(Journal2Utils::getProperty($module_data, 'button_border')));
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_font.value.font_type') === 'google') {
+                $font_name = Journal2Utils::getProperty($module_data, 'button_font.value.font_name');
+                $font_subset = Journal2Utils::getProperty($module_data, 'button_font.value.font_subset');
+                $font_weight = Journal2Utils::getProperty($module_data, 'button_font.value.font_weight');
+                $this->journal2->google_fonts->add($font_name, $font_subset, $font_weight);
+                $this->google_fonts[] = array(
+                    'name'  => $font_name,
+                    'subset'=> $font_subset,
+                    'weight'=> $font_weight
+                );
+                $weight = filter_var(Journal2Utils::getProperty($module_data, 'button_font.value.font_weight'), FILTER_SANITIZE_NUMBER_INT);
+                $button_style[] = 'font-weight: ' . ($weight ? $weight : 400);
+                $button_style[] = "font-family: '" . Journal2Utils::getProperty($module_data, 'button_font.value.font_name') . "'";
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_font.value.font_type') === 'system') {
+                $button_style[] = 'font-weight: ' . Journal2Utils::getProperty($module_data, 'button_font.value.font_weight');
+                $button_style[] = 'font-family: ' . Journal2Utils::getProperty($module_data, 'button_font.value.font_family');
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_font.value.font_type') !== 'none') {
+                $button_style[] = 'font-size: ' . Journal2Utils::getProperty($module_data, 'button_font.value.font_size');
+                $button_style[] = 'font-style: ' . Journal2Utils::getProperty($module_data, 'button_font.value.font_style');
+                $button_style[] = 'text-transform: ' . Journal2Utils::getProperty($module_data, 'button_font.value.text_transform');
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_font.value.color.value.color')) {
+                $button_style[] = 'color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'button_font.value.color.value.color'));
+            }
+            if (Journal2Utils::getProperty($module_data, 'button_background.value.color')) {
+                $button_style[] = 'background-color: ' . Journal2Utils::getColor(Journal2Utils::getProperty($module_data, 'button_background.value.color'));
+            }
+            $this->data['button_style'] = implode('; ', $button_style);
 
             /* background */
             $module_css = Journal2Utils::getBackgroundCssProperties(Journal2Utils::getProperty($module_data, 'module_background'));
@@ -127,49 +210,76 @@ class ControllerModuleJournal2Newsletter extends Controller {
             }
             $this->data['module_css'] = implode('; ', $module_css);
 
-            /* ajax url */
-            $this->data['subscribe_url'] = $this->url->link('module/journal2_newsletter/subscribe', '', 'SSL');
+            $this->template = $this->config->get('config_template') . '/template/journal2/module/newsletter.tpl';
 
-            $this->template = 'journal2/template/journal2/module/newsletter.tpl';
             if (self::$CACHEABLE === true) {
                 $html = Minify_HTML::minify($this->render(), array(
                     'xhtml' => false,
                     'jsMinifier' => 'j2_js_minify'
                 ));
                 $this->journal2->cache->set($cache_property, $html);
-            } else {
-                $this->render();
+                $this->journal2->cache->set($cache_property . '_fonts', json_encode($this->google_fonts));
             }
         } else {
-            $this->template = 'journal2/template/journal2/cache/cache.tpl';
+            if ($fonts = $this->journal2->cache->get($cache_property . '_fonts')) {
+                $fonts = json_decode($fonts, true);
+                if (is_array($fonts)) {
+                    foreach ($fonts as $font) {
+                        $this->journal2->google_fonts->add($font['name'], $font['subset'], $font['weight']);
+                    }
+                }
+            }
+            $this->template = $this->config->get('config_template') . '/template/journal2/cache/cache.tpl';
             $this->data['cache'] = $cache;
-            $this->render();
         }
 
+        $output = $this->render();
+
         Journal2::stopTimer(get_class($this));
+
+        return $output;
     }
 
     public function subscribe() {
         $response = array();
-        if (isset($this->request->post['email']) && preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $this->request->post['email'])) {
+        if ($this->validateEmail()) {
             $newsletter = new Journal2Newsletter($this->registry, $this->request->post['email']);
             if ($newsletter->isSubscribed()) {
                 $response['status'] = 'error';
-                $response['message'] = 'Already subscribed.';
+                $response['unsubscribe'] = 1;
+                $response['message'] = $this->journal2->settings->get('newsletter_confirm_unsubscribe_message', 'Already subscribed. Unsubscribe?');
             } else {
                 $newsletter->subscribe();
                 $response['status'] = 'success';
-                $response['message'] = 'Subscribed.';
+                $response['message'] = $this->journal2->settings->get('newsletter_subscribed_message', 'Thank you for subscribing on our newsletter.');
             }
         } else {
             $response['status'] = 'error';
-            $response['message'] = 'Invalid E-Mail.';
+            $response['message'] = $this->journal2->settings->get('newsletter_invalid_email_message', 'Invalid E-Mail.');
         }
         $this->response->setOutput(json_encode($response));
     }
 
     public function unsubscribe() {
-
+        $response = array();
+        if ($this->validateEmail()) {
+            $newsletter = new Journal2Newsletter($this->registry, $this->request->post['email']);
+            if ($newsletter->isSubscribed()) {
+                $newsletter->unsubscribe();
+                $response['status'] = 'success';
+                $response['message'] = $this->journal2->settings->get('newsletter_unsubscribed_message', 'You have been unsubscribed from our newsletter.');
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = 'Your E-Mail was not found.';
+            }
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = $this->journal2->settings->get('newsletter_invalid_email_message', 'Invalid E-Mail.');
+        }
+        $this->response->setOutput(json_encode($response));
     }
 
+    private function validateEmail() {
+        return isset($this->request->post['email']) && preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $this->request->post['email']);
+    }
 }

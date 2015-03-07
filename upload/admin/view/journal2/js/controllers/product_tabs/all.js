@@ -1,6 +1,14 @@
 define(['./../module', 'underscore'], function (module, _) {
 
     module.controller('ProductTabsAllController', ['$scope', '$location', '$routeParams', 'Rest', 'Spinner', function($scope, $location, $routeParams, Rest, Spinner){
+
+        $scope.paginationTotalItems = 0;
+        $scope.paginationCurrentPage = 1;
+
+        $scope.filterModules = function (modules, page) {
+            return modules.slice((page - 1) * 10, page * 10);
+        };
+
         /* opened modules */
         $scope.module_id = $routeParams.module_id || null;
         $scope.opened_modules = [];
@@ -14,6 +22,7 @@ define(['./../module', 'underscore'], function (module, _) {
         Rest.all({
             modules         : Rest.getModules($scope.module_type)
         }, function (response) {
+            $scope.paginationTotalItems = response.modules.length;
             $scope.modules = response.modules;
             Spinner.hide();
         }, function (error) {

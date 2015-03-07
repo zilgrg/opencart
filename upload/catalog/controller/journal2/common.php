@@ -1,6 +1,12 @@
 <?php
 class ControllerJournal2Common extends Controller {
 
+    protected $data = array();
+
+    protected function render() {
+        return Front::$IS_OC2 ? $this->load->view($this->template, $this->data) : parent::render();
+    }
+
     public function index() {
         $this->load->language('journal2/common');
         $this->helpers();

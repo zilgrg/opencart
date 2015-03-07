@@ -74,7 +74,16 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>
-
+                <li data-ng-show="settings.header_type == 'mega'">
+                    <span class="module-create-title">Logo Align</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.mega_header_align">
+                            <switch-option key="left">Left</switch-option>
+                            <switch-option key="center">Center&nbsp;&nbsp;</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
 
                 <li>
                     <span class="module-create-title">Sticky Header</span>
@@ -246,6 +255,13 @@
                     <span class="module-create-title">Cart Icon</span>
                     <span class="module-create-option">
                         <j-opt-icon data-ng-model="settings.cart_heading_icon"></j-opt-icon>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Cart Icon Hover</span>
+                    <span class="module-create-option">
+                        <j-opt-color data-ng-model="settings.cart_icon_hover"></j-opt-color>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
@@ -528,6 +544,7 @@
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
+
                 <li>
                     <span class="module-create-title">Divider Type</span>
                     <span class="module-create-option">
@@ -540,11 +557,8 @@
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
 
-
-
-
             <accordion>
-                <accordion-group is-open="false">
+                <accordion-group is-open="true">
                     <accordion-heading>
                         <div class="accordion-bar bar-level-1">Auto-Suggest</div>
                     </accordion-heading>
@@ -558,6 +572,37 @@
                                 </switch>
                             </span>
                             <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Search in Description</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="settings.search_autocomplete_include_description">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Show Product Image</span>
+                                <span class="module-create-option">
+                                    <switch data-ng-model="settings.autosuggest_product_image">
+                                        <switch-option key="block">ON</switch-option>
+                                        <switch-option key="none">OFF</switch-option>
+                                    </switch>
+                                </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li data-ng-show="settings.autosuggest_product_image === 'block'">
+                            <span class="module-create-title">Product Image Size</span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.autosuggest_product_image_width" class="journal-number-field"></j-opt-text> x
+                                <j-opt-text data-ng-model="settings.autosuggest_product_image_height" class="journal-number-field"></j-opt-text>
+                                <switch data-ng-model="settings.autosuggest_product_image_type">
+                                    <switch-option key="fit">Fit</switch-option>
+                                    <switch-option key="crop">Crop&nbsp;&nbsp;&nbsp;</switch-option>
+                                </switch>
+                            </span>
                         </li>
                         <li>
                             <span class="module-create-title">Background Color</span>
@@ -588,6 +633,17 @@
                             <a href="#" target="_blank" class="journal-tip"> </a>
                         </li>
                         <li>
+                            <span class="module-create-title">Product Price Status</span>
+                            <span class="module-create-option">
+                                 <switch data-ng-model="settings.autosuggest_price_status">
+                                     <switch-option key="block">ON</switch-option>
+                                     <switch-option key="none">OFF</switch-option>
+                                 </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
                             <span class="module-create-title">Image Border Settings</span>
                             <span class="module-create-option">
                                 <j-opt-border data-ng-model="settings.autosuggest_image_border"></j-opt-border>
@@ -603,13 +659,7 @@
                             <a href="#" target="_blank" class="journal-tip"> </a>
                         </li>
 
-                        <li>
-                            <span class="module-create-title">Max Height</span>
-                            <span class="module-create-option">
-                                <j-opt-text data-ng-model="settings.autosuggest_height" class="journal-number-field"></j-opt-text>
-                            </span>
-                            <a href="#" target="_blank" class="journal-tip"> </a>
-                        </li>
+
                         <li>
                             <span class="module-create-title">Shadow</span>
                             <span class="module-create-option">
@@ -635,6 +685,44 @@
                                     <switch-option key="dashed">Dashed</switch-option>
                                     <switch-option key="dotted">Dotted</switch-option>
                                 </switch>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Container Max Height <small>Generates Scrollbar</small></span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.autosuggest_height" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">Suggestions Limit</span>
+                            <span class="module-create-option">
+                                <j-opt-text data-ng-model="settings.autosuggest_limit" class="journal-number-field"></j-opt-text>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+
+                        <li>
+                            <span class="module-create-title">View More Text</span>
+                            <span class="module-create-option">
+                                <j-opt-text-lang data-ng-model="settings.autosuggest_view_more_text"></j-opt-text-lang>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">View More Font</span>
+                            <span class="module-create-option">
+                                <j-opt-font data-ng-model="settings.autosuggest_view_more_font"></j-opt-font>
+                            </span>
+                            <a href="#" target="_blank" class="journal-tip"> </a>
+                        </li>
+                        <li>
+                            <span class="module-create-title">View More Font Hover</span>
+                            <span class="module-create-option">
+                                <j-opt-color data-ng-model="settings.autosuggest_view_more_font_hover"></j-opt-color>
                             </span>
                             <a href="#" target="_blank" class="journal-tip"> </a>
                         </li>
@@ -757,6 +845,17 @@
                             <switch-option key="solid">Solid</switch-option>
                             <switch-option key="dashed">Dashed</switch-option>
                             <switch-option key="dotted">Dotted</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+
+                <li>
+                    <span class="module-create-title">Dropdown Shadow</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.lang_shadow">
+                            <switch-option key="0 2px 2px rgba(0, 0, 0, 0.15)">ON</switch-option>
+                            <switch-option key="none">OFF</switch-option>
                         </switch>
                     </span>
                     <a href="#" target="_blank" class="journal-tip"> </a>

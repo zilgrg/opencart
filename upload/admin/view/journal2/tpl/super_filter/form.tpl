@@ -37,12 +37,22 @@
                     </span>
                 </li>
                 <li>
-                    <span class="module-create-title">Price Filter</span>
+                    <span class="module-create-title">Show Product Count</span>
                     <span class="module-create-option">
+                        <switch data-ng-model="module_data.product_count">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Price Filter</span>
+                    <span class="module-create-option filter-multi">
                         <switch data-ng-model="module_data.price">
                             <switch-option key="1">ON</switch-option>
                             <switch-option key="0">OFF</switch-option>
                         </switch>
+                        <input type="text" class="journal-input journal-sort" data-ng-model="module_data.sort_orders['p']" placeholder="Sort" />
                     </span>
                 </li>
                 <li data-ng-show="module_data.price == '1'">
@@ -87,11 +97,22 @@
                 </li>
                 <li>
                     <span class="module-create-title">Tags</span>
-                    <span class="module-create-option">
+                    <span class="module-create-option filter-multi">
                         <switch data-ng-model="module_data.tags">
                             <switch-option key="1">ON</switch-option>
                             <switch-option key="0">OFF</switch-option>
                         </switch>
+                        <input type="text" class="journal-input journal-sort" data-ng-model="module_data.sort_orders['t']" placeholder="Sort" />
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Availability</span>
+                    <span class="module-create-option filter-multi">
+                        <switch data-ng-model="module_data.availability">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                        <input type="text" class="journal-input journal-sort" data-ng-model="module_data.sort_orders['a']" placeholder="Sort" />
                     </span>
                 </li>
             </ul>

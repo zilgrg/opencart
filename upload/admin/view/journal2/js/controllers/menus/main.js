@@ -9,6 +9,7 @@ define(['./../module', 'underscore'], function (module, _) {
                         type: 'existing',
                         show: 'both',
                         image_position: 'right',
+                        links_type: 'categories',
                         items: [],
                         render_as: 'megamenu'
                     },
@@ -19,7 +20,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     },
                     manufacturers: {
                         type: 'all',
-                        show: 'both',
+                        show: 'image',
                         items: []
                     },
                     custom: {
@@ -27,8 +28,10 @@ define(['./../module', 'underscore'], function (module, _) {
                             menu_type: 'custom',
                             menu_item: null
                         },
+                        target: 0,
                         items: []
                     },
+                    mixed_columns: [],
                     icon: { },
                     hide_text: '0',
                     is_open: 1,
@@ -112,15 +115,117 @@ define(['./../module', 'underscore'], function (module, _) {
             HtmlMenuItem: function () {
                 return {
                     title: {},
-                    link: {
-                        menu_type: 'custom',
-                        menu_item: null
-                    },
                     status: 1,
                     sort_order: '',
                     text: {},
                     is_open: 1
                 };
+            },
+            MenuColumn: function () {
+               return {
+                   is_open:1,
+                   hide_on_mobile: 0,
+                   type: 'categories',
+                   categories: {
+                       type: 'existing',
+                       show: 'both',
+                       image_position: 'right',
+                       links_type: 'categories',
+                       items: []
+                   },
+                   products: {
+                       source: 'category',
+                       module_type: 'featured',
+                       items: []
+                   },
+                   manufacturers: {
+                       type: 'all',
+                       show: 'image',
+                       items: []
+                   },
+                   custom: {
+                       top: {
+                           menu_type: 'custom',
+                           menu_item: null
+                       },
+                       items: []
+                   },
+                   link: {
+                       menu_type: 'custom',
+                       menu_item: null
+                   },
+                   html_text: {},
+                   cms_blocks: [],
+                   width: '',
+                   image_width: '',
+                   image_height: '',
+                   image_type: 'fit',
+                   items_per_row: {
+                       "range": "1,10",
+                       "step": "1",
+                       "hide_columns": true,
+                       "value": {
+                           "mobile": {
+                               "value": "2",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "mobile1": {
+                               "value": "3",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "tablet": {
+                               "value": "4",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "tablet1": {
+                               "value": "2",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "tablet2": {
+                               "value": "1",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "desktop": {
+                               "value": "6",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "desktop1": {
+                               "value": "3",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "desktop2": {
+                               "value": "2",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "large_desktop": {
+                               "value": "6",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "large_desktop1": {
+                               "value": "3",
+                               "range": "1,10",
+                               "step": "1"
+                           },
+                           "large_desktop2": {
+                               "value": "2",
+                               "range": "1,10",
+                               "step": "1"
+                           }
+                       }
+                   },
+                   items_limit: 5,
+                   status: '1',
+                   sort_order: ''
+               }
             },
             MenuItem: function () {
                 return {
@@ -130,6 +235,15 @@ define(['./../module', 'underscore'], function (module, _) {
                     },
                     target: 0,
                     is_open: 1
+                };
+            },
+            MenuCMSBlock: function () {
+                return {
+                    is_open: 1,
+                    content: { },
+                    position: 'top',
+                    status: 1,
+                    sort_order: ''
                 };
             },
             Options: function () {
@@ -148,33 +262,32 @@ define(['./../module', 'underscore'], function (module, _) {
         $scope.items = [];
         $scope.close_others = false;
         $scope.options = new MainMenuFactory.Options();
+        $scope.featured_modules = [];
 
-        $scope.isLoading = true;
-        $timeout(function () {
-            Rest.getSetting('mega_menu', $scope.store_id).then(function (response) {
-                if (response) {
-                    $scope.items = response.items || [];
-                    $scope.close_others = response.close_others;
-                    $scope.options = _.extend($scope.options, response.options);
+        Rest.all({
+            settings: Rest.getSetting('mega_menu', $scope.store_id),
+            featured_modules: Rest.getFeaturedModules()
+        }, function (response) {
+            if (response.settings) {
+                $scope.items = response.settings.items || [];
+                $scope.close_others = response.settings.close_others;
+                $scope.options = _.extend($scope.options, response.settings.options);
+            }
+            $scope.items = _.map($scope.items, function (item) {
+                item = _.extend(new MainMenuFactory.Menu(), item);
+                if (item.type === 'html') {
+                    item.html_blocks = _.map(item.html_blocks, function (block) {
+                        return _.extend(new MainMenuFactory.HtmlMenuItem(), block);
+                    });
                 }
-                $scope.items = _.map($scope.items, function (item) {
-                    item = _.extend(new MainMenuFactory.Menu(), item);
-                    if (item.type === 'html') {
-                        item.html_blocks = _.map(item.html_blocks, function (block) {
-                            return _.extend(new MainMenuFactory.HtmlMenuItem(), block);
-                        });
-                    }
-                    return item;
-                });
-                $timeout(function () {
-                    $scope.isLoading = false;
-                    Spinner.hide();
-                }, 1);
-
-            }, function (error) {
-                alert(error);
+                return item;
             });
-        }, 500);
+            $scope.featured_modules = response.featured_modules;
+            Spinner.hide();
+        }, function (error) {
+            Spinner.hide();
+            alert(error);
+        });
 
         $scope.addMenu = function () {
             $scope.items.push(new MainMenuFactory.Menu());
@@ -182,6 +295,14 @@ define(['./../module', 'underscore'], function (module, _) {
 
         $scope.removeMenu = function ($index) {
             $scope.items.splice($index, 1);
+        };
+
+        $scope.addColumn = function (menu) {
+            menu.mixed_columns.push(new MainMenuFactory.MenuColumn());
+        };
+
+        $scope.removeColumn = function (menu, $index) {
+            menu.mixed_columns.splice($index, 1);
         };
 
         $scope.addSubMenu = function (menu) {
@@ -211,8 +332,17 @@ define(['./../module', 'underscore'], function (module, _) {
             menu.html_blocks.splice($index, 1);
         };
 
+        $scope.addCMSBlock = function (column) {
+            column.cms_blocks = column.cms_blocks || {};
+            column.cms_blocks.push(new MainMenuFactory.MenuCMSBlock());
+        };
+
+        $scope.removeCMSBlock = function (column, $index) {
+            column.cms_blocks.splice($index, 1);
+        };
+
         $scope.save = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.setSetting('mega_menu', $scope.store_id, { items: $scope.items, close_others: $scope.close_others, options: $scope.options }).then(function (response) {
                 Spinner.hide($src);
@@ -223,7 +353,7 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.reset = function ($event) {
-            var $src = $($event.srcElement);
+            var $src = $($event.target || $event.srcElement);
             Spinner.show($src);
             Rest.getTopCategories().then(function (response) {
                 Spinner.hide($src);

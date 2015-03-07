@@ -4,7 +4,7 @@
     <version>1.3.4</version>
     <vqmver>2.1.0</vqmver>
     <author>EchoThemes.com</author>
-    <file path="catalog/view/theme/*/template/blog/" name="article.tpl,category.tpl">
+    <file error="skip" path="catalog/view/theme/default/template/blog/" name="article.tpl,category.tpl">
         <operation>
             <search trim="true" position="replace" offset="4"><![CDATA[<div class="breadcrumb">]]></search>
             <add><![CDATA[ ]]></add>
@@ -23,7 +23,7 @@
         </operation>
     </file>
 
-    <file path="catalog/view/theme/*/template/blog/" name="category.tpl">
+    <file error="skip" path="catalog/view/theme/default/template/blog/" name="category.tpl">
         <operation>
             <search trim="true" position="replace"><![CDATA[<h1><?php echo $heading_title; ?></h1><span class="livemarks"><a href="<?php echo $feedLink; ?>/category&category_id=<?php echo $this->request->get['category_id']; ?>" target="_blank" title="<?php echo $heading_title; ?> Feed"></a></span>]]></search>
             <add><![CDATA[<h1 class="heading-title"><?php echo $heading_title; ?></h1><span class="livemarks"><a href="<?php echo $feedLink; ?>/category&category_id=<?php echo $this->request->get['category_id']; ?>" target="_blank" title="<?php echo $heading_title; ?> Feed"></a></span>]]></add>
@@ -34,21 +34,21 @@
         </operation>
     </file>
 
-    <file path="catalog/view/theme/*/template/module/" name="blogarchive.tpl,blogarticle.tpl,blogcategory.tpl,blogcomment.tpl,blogpopular.tpl">
+    <file error="skip" path="catalog/view/theme/default/template/module/" name="blogarchive.tpl,blogarticle.tpl,blogcategory.tpl,blogcomment.tpl,blogpopular.tpl">
         <operation>
             <search trim="true" position="replace"><![CDATA[<div class="box blogModule <?php echo $classSuffix; ?>">]]></search>
             <add><![CDATA[<div class="box <?php echo implode(' ', array_diff(explode(' ', $classSuffix), array('blogModule', 'boxPlain'))); ?>">]]></add>
         </operation>
     </file>
 
-    <file path="catalog/view/theme/*/template/module/" name="blogtags.tpl">
+    <file error="skip" path="catalog/view/theme/default/template/module/" name="blogtags.tpl">
         <operation>
             <search trim="true" position="replace"><![CDATA[<div class="box blogModule blogTags <?php echo $classSuffix; ?>">]]></search>
             <add><![CDATA[<div class="box blogTags <?php echo implode(' ', array_diff(explode(' ', $classSuffix), array('blogModule', 'boxPlain'))); ?>">]]></add>
         </operation>
     </file>
 
-    <file path="catalog/controller/blog/" name="article.php">
+    <file error="skip" path="catalog/controller/blog/" name="article.php">
         <operation>
             <search position="before"><![CDATA[$this->data['prodRelateds'][] = array(]]></search>
             <add><![CDATA[
@@ -69,7 +69,7 @@
         </operation>
     </file>
 
-    <file path="catalog/controller/blog/" name="article.php">
+    <file error="skip" path="catalog/controller/blog/" name="article.php">
         <operation>
             <search position="before"><![CDATA[foreach ($prodRelateds as $result) {]]></search>
             <add><![CDATA[
@@ -84,7 +84,7 @@
         </operation>
     </file>
 
-    <file path="catalog/view/theme/*/template/blog/" name="article.tpl">
+    <file error="skip" path="catalog/view/theme/default/template/blog/" name="article.tpl">
         <operation>
             <search trim="true" position="replace" offset="27"><![CDATA[<div id="productRelated">]]></search>
             <add><![CDATA[
@@ -127,9 +127,15 @@
                                       <div class="rating"><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $prodRelated['rating']; ?>.png" alt="<?php echo $prodRelated['reviews']; ?>" /></div>
                                       <?php } ?>
                                       <hr>
-                                      <div class="cart">
+                                      <?php if (Journal2Utils::isEnquiryProduct($this, $prodRelated['product_id'])): ?>
+                                      <div class="cart enquiry-button">
+                                        <a href="<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>" data-clk="addToCart('<?php echo $prodRelated['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>
+                                      </div>
+                                      <?php else: ?>
+                                      <div class="cart <?php echo isset($prodRelated['labels']) && is_array($prodRelated['labels']) && isset($prodRelated['labels']['outofstock']) ? 'outofstock' : ''; ?>">
                                           <a onclick="addToCart('<?php echo $prodRelated['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>
                                       </div>
+                                      <?php endif; ?>
                                   </div>
                               </div>
                             </div>

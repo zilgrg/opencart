@@ -434,9 +434,26 @@
             </ul>
         </accordion-group>
 
-
-
         <accordion-group is-open="accordion.accordions[3]">
+            <accordion-heading>
+                <div class="accordion-bar bar-level-0">Side Products / Footer Products</div>
+            </accordion-heading>
+            <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Price</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="settings.side_list_price">
+                            <switch-option key="inline-block">ON</switch-option>
+                            <switch-option key="none">OFF</switch-option>
+                        </switch>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+            </ul>
+            </accordion-group>
+
+
+        <accordion-group is-open="accordion.accordions[4]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Product Page</div>
             </accordion-heading>

@@ -14,6 +14,10 @@
             <search position="before"><![CDATA[$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));]]></search>
             <add><![CDATA[$this->data['thumb_fixed'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'));]]></add>
         </operation>
+        <operation error="log">
+            <search position="replace"><![CDATA[$this->model_tool_image->resize($option_value['image'], 50, 50),]]></search>
+            <add><![CDATA[strpos($this->config->get('config_template'), 'journal2') === 0 ? Journal2Utils::resizeImage($this->model_tool_image, $option_value['image'], $this->journal2->settings->get('product_page_options_push_image_width', 30), $this->journal2->settings->get('product_page_options_push_image_height', 30), 'crop') : $this->model_tool_image->resize($option_value['image'], 50, 50),]]></add>
+        </operation>
 	</file>
 </modification>
 

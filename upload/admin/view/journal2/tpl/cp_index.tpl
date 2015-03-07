@@ -1,4 +1,7 @@
 <?php echo $header; ?>
+<?php if (isset($column_left)): ?>
+<?php echo $column_left; ?>
+<?php endif; ?>
 <?php if ($success) { ?>
     <div class="success" style="margin-bottom: 0px;"><?php echo $success; ?></div>
     <script>
@@ -15,7 +18,7 @@
     }, 2000);
 </script>
 <?php } ?>
-<div id="content" class="journal-content" data-ng-controller="MainController">
+<div id="content" class="journal-content <?php echo Front::$IS_OC2 ? 'oc2' : ''; ?>" data-ng-controller="MainController">
 <div class="dummy-bg"> </div>
 <nav>
     <div class="sticky">
@@ -32,6 +35,7 @@
                         <li><a href="<?php echo $base_href;?>#/settings/general/{{getActiveSkin()}}">General</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/pages/{{getActiveSkin()}}">Pages</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/productlabels/{{getActiveSkin()}}">Product Labels</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/countdown/{{getActiveSkin()}}">Countdown</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/notification/{{getActiveSkin()}}">Notification</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/quickview/{{getActiveSkin()}}">Quickview</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/welcome/{{getActiveSkin()}}">Welcome Module</a></li>
@@ -46,6 +50,16 @@
                 </li>
                 <li><a href="<?php echo $base_href;?>#/settings/footer/{{getActiveSkin()}}">Footer</a></li>
                 <li>
+                    <a href="<?php echo $base_href;?>#/settings/blog/{{getActiveSkin()}}" data-icon='&#xe094;'>Blog</a>
+                    <ul data-icon='&#xe61f;'>
+                        <li><a href="<?php echo $base_href;?>#/settings/blog/{{getActiveSkin()}}">General</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/blogpostpage/{{getActiveSkin()}}">Post Page</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/blogmodules/{{getActiveSkin()}}">Blog Modules</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/bloglanguage/{{getActiveSkin()}}">Blog Language</a></li>
+                    </ul>
+                </li>
+
+                <li>
                     <a href="<?php echo $base_href;?>#/settings/moduleslider/{{getActiveSkin()}}" data-icon='&#xe094;'>Modules</a>
                     <ul data-icon='&#xe61f;'>
                         <li><a href="<?php echo $base_href;?>#/settings/moduleslider/{{getActiveSkin()}}">Slider</a></li>
@@ -55,7 +69,9 @@
                         <li><a href="<?php echo $base_href;?>#/settings/modulecmsblocks/{{getActiveSkin()}}">CMS Blocks</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/moduletextrotator/{{getActiveSkin()}}">Text Rotator</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/moduleheadlinerotator/{{getActiveSkin()}}">Headline Rotator</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/modulenewsletter/{{getActiveSkin()}}">Newsletter</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/modulephotogallery/{{getActiveSkin()}}">Photo Gallery</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/modulepopup/{{getActiveSkin()}}">Popup</a></li>
                     </ul>
                 </li>
                 <li><a href="<?php echo $base_href;?>#/settings/productgrid/{{getActiveSkin()}}">Product Grid</a></li>
@@ -66,6 +82,7 @@
                 <li><a href="<?php echo $base_href;?>#/settings/catalog/{{getActiveSkin()}}">Catalog Mode</a></li>
                 <li><a href="<?php echo $base_href;?>#/settings/custom_code/{{getActiveSkin()}}">Custom Code</a></li>
                 <li><a href="<?php echo $base_href;?>#/settings/system">System & Performance</a></li>
+                <li><a href="<?php echo $base_href;?>#/settings/import_export">Import / Export</a></li>
             </ul>
         </li>
         <li class="cp">
@@ -84,7 +101,28 @@
                 <li><a href="<?php echo $base_href;?>#/footer/payments">Payments</a></li>
             </ul>
         </li>
+        <li class="cp">
+            <a class="bs-menu" href="<?php echo $base_href;?>#/blog/settings" data-icon='&#xe094;' >Blog</a>
+            <ul data-icon='&#xe61f;'>
+                <li><a href="<?php echo $base_href;?>#/blog/settings">General</a></li>
+                <!--<li><a href="<?php echo $base_href;?>#/blog/authors">Authors</a></li>-->
+                <li><a href="<?php echo $base_href;?>#/blog/posts">Blog Posts</a></li>
+                <li><a href="<?php echo $base_href;?>#/blog/categories">Blog Categories</a></li>
+                <li><a href="<?php echo $base_href;?>#/blog/comments">Blog Comments</a></li>
+            </ul>
+        </li>
         <li class="divider">Modules</li>
+        <li>
+            <a class="blog-menu" href="<?php echo $base_href;?>#/module/blog_categories/all" data-icon='&#xe094;'>Blog Modules</a>
+            <ul data-icon='&#xe61f;'>
+                <li><a href="<?php echo $base_href;?>#/module/blog_posts/all">Posts Module</a></li>
+                <li><a href="<?php echo $base_href;?>#/module/blog_side_posts/all">Side Posts</a></li>
+                <li><a href="<?php echo $base_href;?>#/module/blog_categories/all">Category</a></li>
+                <li><a href="<?php echo $base_href;?>#/module/blog_comments/all">Comments</a></li>
+                <li><a href="<?php echo $base_href;?>#/module/blog_search/all">Search</a></li>
+                <li><a href="<?php echo $base_href;?>#/module/blog_tags/all">Tags</a></li>
+            </ul>
+        </li>
         <li>
             <a class="slide-menu" href="<?php echo $base_href;?>#/module/simple_slider/all" data-icon='&#xe094;'>Slider</a>
             <ul data-icon='&#xe61f;'>
@@ -111,6 +149,9 @@
             <a class="sc-menu" href="<?php echo $base_href;?>#/module/side_category/all">Side Category</a>
         </li>
         <li>
+            <a class="sp-menu" href="<?php echo $base_href;?>#/module/side_products/all">Side Products</a>
+        </li>
+        <li>
             <a class="tr-menu" href="<?php echo $base_href;?>#/module/text_rotator/all">Text Rotator</a>
         </li>
         <li>
@@ -125,17 +166,20 @@
         <li>
             <a class="fs-menu" href="<?php echo $base_href;?>#/module/fullscreen_slider/all">Fullscreen Slider</a>
         </li>
-        <li>
-            <a class="pt-menu" href="<?php echo $base_href;?>#/module/product_tabs/all">Product Tabs</a>
-        </li>
-        <?php if (defined('J2ENV')): ?>
-        <li>
-            <a class="cs-menu" href="<?php echo $base_href;?>#/module/multi_modules/all">Multi Modules</a>
+        <li><a class="pt-menu" href="<?php echo $base_href;?>#/module/product_tabs/all">Product Tabs / Blocks</a>
         </li>
         <li>
-            <a class="cs-menu" href="<?php echo $base_href;?>#/module/newsletter/all">Newsletter</a>
+            <a class="multimod" href="<?php echo $base_href;?>#/module/advanced_grid/all">Advanced Grid</a>
         </li>
-        <?php endif; ?>
+        <!--<li>-->
+            <!--<a class="multimod" href="<?php echo $base_href;?>#/module/carousel_grid/all">Carousel Grid</a>-->
+        <!--</li>-->
+        <li>
+            <a class="newslet" href="<?php echo $base_href;?>#/module/newsletter/all">Newsletter</a>
+        </li>
+        <li>
+            <a class="pop" href="<?php echo $base_href;?>#/module/popup/all">Popup</a>
+        </li>
     </ul>
 </nav>
 
@@ -143,7 +187,7 @@
 
 <div class="journal-loading"><span>Loading...</span></div>
 <div class="border-top"> </div>
-<div class="journal-body" data-ng-view>
+<div class="journal-body" id="journal-body" data-ng-view>
 <div></div>
 </div>
 
@@ -155,7 +199,16 @@
     var Journal2Config = $.parseJSON('<?php echo addslashes(json_encode($journal2_config)); ?>');
 </script>
 
-<script src="view/journal2/lib/require/require.js" data-main="view/journal2/js/main.js"></script>
+<?php if(defined('J2ENV') && J2ENV === 'development'): ?>
+<script src="view/journal2/lib/require/require.js?<?php echo JOURNAL_VERSION; ?>" data-main="view/journal2/js/main.js?<?php echo JOURNAL_VERSION; ?>"></script>
+<?php else: ?>
+<script src="view/journal2/lib/require/require.js?<?php echo JOURNAL_VERSION; ?>"></script>
+<script src="view/journal2/journal.js?<?php echo JOURNAL_VERSION; ?>"></script>
+<?php endif; ?>
+
+<?php if (Front::$IS_OC2): ?>
+<script>$('html').addClass('oc2');</script>
+<?php endif; ?>
 
 <?php echo $footer; ?>
 

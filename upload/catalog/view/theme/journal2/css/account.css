@@ -1,7 +1,7 @@
 /*
-  Journal - The Ultimate Opencart Theme
-  Version 2.0.5
-  Copyright (c) 2013 Digital Atelier
+  Journal - Advanced Opencart Theme Framework
+  Version 2.4.5
+  Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
 /******************************
@@ -29,7 +29,6 @@
 
 .login-content .left p:first-child {
   font-size: 15px;
-  font-weight: bold;
   margin-top: 7px; }
 
 .login-content .left p:nth-child(2) {
@@ -43,11 +42,9 @@
 
 .login-content .right p:first-child {
   font-size: 15px;
-  font-weight: bold;
   margin-top: 7px; }
 
 .login-content .right b {
-  font-weight: normal;
   display: block;
   margin-top: 18px; }
 
@@ -69,7 +66,7 @@
   margin-top: 4px; }
 
 .address-entry .content {
-  border-bottom: 1px solid #e4e4e4; }
+  border-bottom: 1px solid #E4E4E4; }
 .address-entry tr:last-child td {
   border-bottom: none; }
 .address-entry td:first-of-type {
@@ -96,12 +93,12 @@ table td a + a {
 
 table.list {
   margin-bottom: 20px;
-  border-bottom: 1px solid #cccccc;
-  border-left: 1px solid #cccccc;
+  border-bottom: 1px solid #CCCCCC;
+  border-left: 1px solid #CCCCCC;
   overflow: hidden; }
   table.list td {
-    border-right: 1px solid #cccccc;
-    border-top: 1px solid #cccccc;
+    border-right: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
     padding: 8px; }
   table.list thead td {
     text-align: left; }
@@ -158,7 +155,7 @@ table.form {
 .wishlist-info tbody td {
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #e4e4e4;
+  border-bottom-color: #E4E4E4;
   padding: 5px 5px 5px 0;
   text-align: center; }
 .wishlist-info tbody .image {
@@ -209,7 +206,7 @@ COMPARE
 
 .compare-info .price-old {
   font-weight: bold;
-  color: #ea2e49;
+  color: #EA2E49;
   text-decoration: line-through; }
 
 .compare-info .price-new {
@@ -286,8 +283,8 @@ RETURNS
   display: inline-block;
   width: 100%;
   margin-bottom: 20px;
-  border-top: 1px solid #e4e4e4;
-  border-bottom: 1px solid #e4e4e4; }
+  border-top: 1px solid #E4E4E4;
+  border-bottom: 1px solid #E4E4E4; }
 
 .return-list .return-content div {
   float: left;
@@ -360,8 +357,8 @@ RETURNS
   display: inline-block;
   width: 100%;
   margin-bottom: 20px;
-  border-top: 1px solid #e4e4e4;
-  border-bottom: 1px solid #e4e4e4; }
+  border-top: 1px solid #E4E4E4;
+  border-bottom: 1px solid #E4E4E4; }
 
 .download-list .download-content div {
   float: left;
@@ -369,3 +366,8 @@ RETURNS
 
 .download-list .download-info {
   text-align: right; }
+
+.oc2 .account-text {
+  margin-bottom: 15px; }
+.oc2 .login-wrap .form-group {
+  margin-top: 15px; }
