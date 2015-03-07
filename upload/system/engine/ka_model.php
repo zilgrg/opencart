@@ -3,7 +3,7 @@
 	Project: Ka-Extensions
 	Author : karapuz <support@ka-station.com>
 
-	Version: 2 ($Revision: 35 $)
+	Version: 2 ($Revision: 42 $)
 */
 
 abstract class KaModel extends Model {
@@ -11,7 +11,7 @@ abstract class KaModel extends Model {
 	protected $params;
 	protected $lastError;
 
-	function __construct(&$registry) {
+	function __construct($registry) {
 		parent::__construct($registry);
 
 		$class = get_class($this);

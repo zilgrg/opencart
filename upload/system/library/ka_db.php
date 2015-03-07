@@ -3,13 +3,13 @@
   Project: Ka Extensions
   Author : karapuz <support@ka-station.com>
 
-  Version: 2.0 ($Revision: 43 $)
+  Version: 2.0 ($Revision: 103 $)
 
 */
 class KaDb {
-	private $db;
+	protected $db;
 	
-	public function __construct(&$db) {
+	public function __construct($db) {
 		$this->db = &$db;
 	}
 		
@@ -93,6 +93,29 @@ class KaDb {
 	public function queryFirst($qry) {
 		$res = $this->db->query($qry);
 		return $res->row;
+	}
+
+		
+	public function queryHash($qry_string, $key) {
+	
+		$qry = $this->db->query($qry_string);
+		if (empty($qry->rows)) {
+			return false;
+		}
+		
+		$res = array();
+		if (!isset($qry->row[$key])) {
+			trigger_error("queryWithKey: key not found ($key)");
+			return false;
+		}
+		
+		foreach ($qry->rows as $row) {
+			if (isset($row[$key])) {
+				$res[$row[$key]] = $row;
+			}
+		}
+		
+		return $res;
 	}
 }
 ?>

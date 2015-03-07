@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 71 $)
+  Version: 3 ($Revision: 107 $)
 
 */
 
@@ -103,7 +103,7 @@ span.note {
                <?php } ?>
             </td>
             <td width="50%"><span class="help">Profiles may store import parameters to simlify management of different import configurations. 
-            You can save import parameters to a profile on the next step</td>
+            You can save import parameters to a profile on the next step</span></td>
           </tr>
         </table>
         
@@ -614,6 +614,7 @@ function clearTplProduct() {
             <tr>
               <td class="left" width="25%">Option Name</td>
               <td>Column in File</td>
+              <td width="5%">Required</td>
               <td width="5%">Type</td>
             </tr>
           </thead>
@@ -625,6 +626,7 @@ function clearTplProduct() {
               <td>
                 <?php echo $this->showSelector("options[$ov[option_id]]", $columns, $ov['column']); ?>
               </td>
+              <td width="5%"><input type="checkbox" name="required_options[<?php echo $ov['option_id'];?>]" value="Y" <?php if (!empty($params['matches']['required_options'][$ov['option_id']])) { ?> checked="checked" <?php } ?> /></td>
               <td width="45%"><?php echo $ov['type']; ?></td>
             </tr>
           <?php } ?>

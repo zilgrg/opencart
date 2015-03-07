@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 71 $)
+  Version: 3 ($Revision: 93 $)
 
 */
 
@@ -358,6 +358,8 @@ class ControllerToolKaImport extends KaController {
 			}
 		}
 
+		$matches['required_options'] = (isset($this->request->post['required_options'])) ? $this->request->post['required_options'] : array();
+		
 		$this->params['matches'] = $matches;
 
 		return true;

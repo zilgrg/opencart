@@ -3,7 +3,7 @@
   Project: CSV Product Import
   Author : karapuz <support@ka-station.com>
 
-  Version: 3 ($Revision: 82 $)
+  Version: 3 ($Revision: 106 $)
 
 */
 
@@ -30,6 +30,12 @@ if (!function_exists('mb_strtolower')) {
 	}
 }
 
+if (!function_exists('mb_strpos')) {
+	function mb_strpos($string, $needle, $offset = NULL) {
+		return utf8_strrpos($string, $needle, $offset);
+	}
+}
+
 if (!function_exists('utf8_strlen')) {
 	function utf8_strlen($string) {
 		return strlen(utf8_decode($string));
@@ -42,7 +48,7 @@ if (constant('KA_ENABLE_MACFIX')) {
 			while ($bucket = stream_bucket_make_writeable($in)) {
 
 				if (mb_strpos($bucket->data, "\r\n") === false) {
-					$bucket->data = mb_ereg_replace("\r", "\n", $bucket->data, 'mp');
+					$bucket->data = preg_replace("/\r/mu", "\n", $bucket->data);
 				}
 				
 				$consumed += $bucket->datalen;
@@ -97,7 +103,7 @@ class ModelToolKaImport extends Model {
 	protected $key_fields = null;
 	protected $org_error_handler = null;
 
-	function __construct(&$registry) {
+	function __construct($registry) {
 		parent::__construct($registry);
 
  		$this->kalog = new Log('ka_product_import.log');
@@ -425,7 +431,7 @@ class ModelToolKaImport extends Model {
 			return false;
 		}
 		
-    	if ($this->fseek_utf8($handle, 1024*1024*1024) == -1) {
+    	if ($this->fseek_utf8($handle, PHP_INT_MAX) == -1) {
     		return false;
     	}
 		$size = ftell($handle);
@@ -550,7 +556,37 @@ class ModelToolKaImport extends Model {
 		return true;
 	}
 
+	
+	protected function removeFromStores($entity, $entity_id, $stores) {
 
+		$table = $entity . "_to_store";
+		$field = $entity . "_id";
+
+		if (!is_array($stores)) {
+			$stores = array($stores);
+		}
+		
+		if (empty($stores)) {
+			return false;
+		}
+
+		foreach($stores as $sv) {
+			$this->db->query("DELETE FROM " . DB_PREFIX . $table . " WHERE 
+				$field = '" . intval($entity_id) . "' AND store_id = '" . intval($sv) . "'"
+			);
+		}
+
+		return true;
+	}
+	
+
+	/*
+		PARAMETERS:
+			..
+			$category_chain - pure string without encoded html characters.
+			..
+			
+	*/
 	protected function saveCategory($product_id, $category_chain, $clear_cache = false) {
 
 		if (empty($category_chain)) {
@@ -570,7 +606,7 @@ class ModelToolKaImport extends Model {
 		$category_id = 0;
 		foreach ($category_names as $ck => $cv) {
 
-			$cv = trim($cv);
+			$cv = $this->request->clean(trim($cv));
 
 			$new_category = false;
 			
@@ -602,15 +638,15 @@ class ModelToolKaImport extends Model {
 				$this->stat['categories_created']++;
 
 				if (version_compare(VERSION, '1.5.5', '>=')) {
-					$level = 0;					
+					$level = 0;
 					$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "category_path` WHERE category_id = '" . (int)$parent_id . "' ORDER BY `level` ASC");
 					
 					foreach ($query->rows as $result) {
-						$this->db->query("INSERT INTO `" . DB_PREFIX . "category_path` SET `category_id` = '" . (int)$category_id . "', `path_id` = '" . (int)$result['path_id'] . "', `level` = '" . (int)$level . "'");
+						$this->db->query("REPLACE INTO `" . DB_PREFIX . "category_path` SET `category_id` = '" . (int)$category_id . "', `path_id` = '" . (int)$result['path_id'] . "', `level` = '" . (int)$level . "'");
 						$level++;
 					}
 										
-					$this->db->query("INSERT INTO `" . DB_PREFIX . "category_path` SET `category_id` = '" . (int)$category_id . "', `path_id` = '" . (int)$category_id . "', `level` = '" . (int)$level . "'");
+					$this->db->query("REPLACE INTO `" . DB_PREFIX . "category_path` SET `category_id` = '" . (int)$category_id . "', `path_id` = '" . (int)$category_id . "', `level` = '" . (int)$level . "'");
 				}
 				
 			} else {
@@ -1556,10 +1592,11 @@ class ModelToolKaImport extends Model {
 			//
 			if (!empty($data['category'])) {
 				if (!empty($multicat_sep)) {
-					$cats_list = explode($multicat_sep, $data['category']);	
+					$cats_list = explode($multicat_sep, htmlspecialchars_decode($data['category'], ENT_COMPAT));
 				} else {
-					$cats_list = array($data['category']);
+					$cats_list = array(htmlspecialchars_decode($data['category'], ENT_COMPAT));
 				}
+				
 				foreach ($cats_list as $cat) {
 					if ($this->saveCategory($product_id, $cat)) {
 						$category_assigned = true;
@@ -1585,7 +1622,7 @@ class ModelToolKaImport extends Model {
 	}
 
 
-	protected function saveAdditionalImages($product_id, $data, $delete_old) {
+	protected function saveAdditionalImages($product_id, $data, $delete_old, $is_new) {
 
 		if (empty($data['additional_image'])) {
 			return true;
@@ -1604,6 +1641,16 @@ class ModelToolKaImport extends Model {
 		} else {
 			$images = array($data['additional_image']);
 		}
+
+		$sort_order = 0;
+		if (!$delete_old && !$is_new) {
+			$qry = $this->db->query("SELECT sort_order FROM " . DB_PREFIX . "product_image 
+				WHERE product_id = '" . (int)$product_id . "'"
+			);
+			if (!empty($qry->row['sort_order'])) {
+				$sort_order = $qry->row['sort_order'];
+			}
+		}
 		
 		foreach ($images as $image) {
 		
@@ -1620,8 +1667,12 @@ class ModelToolKaImport extends Model {
 					WHERE image = '" . $this->db->escape($file) . "' AND product_id = '$product_id'");
 
 				if (empty($qry->row)) {
+				
+					$sort_order += 5;
+				
 					$this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET 
 						product_id = '" . $product_id . "', 
+						sort_order = " . $sort_order . ",
 						image = '" . $this->db->escape($file) . "'"
 					);
 				}
@@ -1630,7 +1681,7 @@ class ModelToolKaImport extends Model {
 	}
 
 
-	protected function saveAttributes($row, $product, $delete_old) {
+	protected function saveAttributes($row, $product, $delete_old, $is_first_product) {
 
 		if (empty($this->params['matches']['attributes'])) {
 			return true;
@@ -1650,18 +1701,28 @@ class ModelToolKaImport extends Model {
 				continue;
 
 			$val = $row[$av['column']];
-			if (empty($val)) {
+			if (empty($val) && !$is_first_product) {
 				continue;
 			}
+			
+			if (strcasecmp($val, '[DELETE]') == 0)  {
+			
+				$this->db->query("DELETE FROM " . DB_PREFIX . "product_attribute
+					WHERE
+						product_id = '$product[product_id]' 
+						AND	attribute_id = '" .$av['attribute_id'] . "'"
+				);
+				
+			} else {
+				$rec = array(
+					'product_id'   => $product['product_id'],
+					'attribute_id' => $av['attribute_id'],
+					'language_id'  => $this->params['language_id'],
+					'text'         => $val
+				);
 
-			$rec = array(
-				'product_id'   => $product['product_id'],
-				'attribute_id' => $av['attribute_id'],
-				'language_id'  => $this->params['language_id'],
-				'text'         => $val
-			);
-
-			$this->kadb->queryInsert('product_attribute', $rec, true);
+				$this->kadb->queryInsert('product_attribute', $rec, true);
+			}
 		}
 
 		return true;
@@ -1804,6 +1865,10 @@ class ModelToolKaImport extends Model {
 			$rec = array(
 				'type'   => $option['type'],
 			);
+			
+			if (!empty($option['group_sort_order'])) {
+				$rec['sort_order'] = $option['group_sort_order'];
+			};
 
 			$option_id = $this->kadb->queryInsert('option', $rec);
 			if (empty($option_id)) {
@@ -1831,6 +1896,17 @@ class ModelToolKaImport extends Model {
 					AND	o.type='$option[type]' 
 					AND od.name='" . $this->db->escape($option['name']) . "'"
 			);
+			
+		} else {
+		
+			// update group sort order for existing option group
+			//
+			if (!empty($option['group_sort_order'])) {
+				$rec = array(
+					'sort_order' => $option['group_sort_order'],
+				);
+				$this->kadb->queryUpdate('option', $rec, "option_id = '" . $qry->row['option_id'] . "'");
+			}		
 		}
 
 		//
@@ -1841,8 +1917,8 @@ class ModelToolKaImport extends Model {
 		// find product option id or insert a new one
 		//
 	   	$qry = $this->db->query("SELECT product_option_id FROM " . DB_PREFIX . "product_option WHERE
-	 		product_id='$product[product_id]'
-   			AND option_id='$option[option_id]'");
+	 		product_id='$product[product_id]' AND option_id='$option[option_id]'"
+	 	);
    			
 		$rec = array(
 			'required' => $option['required'],
@@ -1920,10 +1996,6 @@ class ModelToolKaImport extends Model {
 			
 	    	// assign option value for product
     		//
-     		$this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE
-     		product_option_id='$product_option_id'
-     		AND option_value_id='$option_value_id'");
-
 			$rec = array(
 				'product_option_id' => $product_option_id,
 				'product_id'        => $product['product_id'],
@@ -1953,8 +2025,26 @@ class ModelToolKaImport extends Model {
 				$rec['weight']        = abs($option['weight']);
 				$rec['weight_prefix'] = ($option['weight'] < 0 ? '-':'+');
 			}
-			
-			$product_option_value_id = $this->kadb->queryInsert('product_option_value', $rec);		
+
+    		$qry = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE
+    	 		product_option_id='$product_option_id'
+	     		AND option_value_id='$option_value_id' 
+	     	");
+	     	
+	     	if (!empty($qry->rows)) {
+	     	
+	     		if ($qry->num_rows > 1) {
+					$this->db->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE
+						product_option_id = '$product_option_id'
+						AND option_value_id = '$option_value_id'
+						AND product_option_value_id <> '" . (int) $qry->row['product_option_value_id'] . "'
+					");
+				}
+	     	
+	     		$this->kadb->queryUpdate('product_option_value', $rec, "product_option_value_id = '" . (int) $qry->row['product_option_value_id'] . "'");
+			} else {
+				$this->kadb->queryInsert('product_option_value', $rec);
+			}
 		}
 
 		return true;
@@ -1977,6 +2067,7 @@ class ModelToolKaImport extends Model {
 		// STAGE 1: process simple options from the selected columns
 		//
 		if (!empty($this->params['matches']['options'])) {
+		
 			foreach ($this->params['matches']['options'] as $ok => $ov) {
 				if (empty($ov['column']))
 					continue;
@@ -1999,7 +2090,7 @@ class ModelToolKaImport extends Model {
 						'name'     => $ov['name'],
 						'type'     => $ov['type'],
 						'value'    => $ovalue,
-						'required' => $ov['required']
+						'required' => (!empty($ov['required']))
 					);
 					
 					$this->saveOption($product, $option);
@@ -2511,7 +2602,7 @@ class ModelToolKaImport extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "ka_product_import
 				WHERE 
 					token = '" . $this->session->data['token'] . "'
-					OR UNIX_TIMESTAMP(NOW() - added_at)"
+					OR TIMESTAMPDIFF(HOUR, added_at, NOW()) > 168"
 		);
 
 
@@ -2536,10 +2627,12 @@ class ModelToolKaImport extends Model {
 		//
 		$sets = $this->getFieldSets();
 		$this->copyMatches($sets, $params['matches'], $this->columns);
+		
 		foreach ($sets as $sk => $sv) {
+		
 			$has_column = false;
 			foreach ($sv as $msk => $msv) {
-				if (!empty($msv['column'])) {
+				if (isset($msv['column'])) {
 					$has_column = true;
 				}
 			}
@@ -2548,14 +2641,19 @@ class ModelToolKaImport extends Model {
 				unset($sets[$sk]);
 			}
 		}
+		
 		$this->params['matches'] = $sets;
-				
+
 		$this->params['status_for_new_products']      = $this->config->get('ka_pi_status_for_new_products');
 		$this->params['status_for_existing_products'] = $this->config->get('ka_pi_status_for_existing_products');
 		$this->params['ka_pi_options_separator']      = $this->config->get('ka_pi_options_separator');
 		$this->params['skip_img_download']            = $this->config->get('ka_pi_skip_img_download');
 		$this->params['ka_pi_image_separator']        = str_replace(array('\r','\n'), array("\r", "\n"), $this->config->get('ka_pi_image_separator'));
 
+		if (!empty($this->params['cat_separator'])) {
+			$this->params['cat_separator'] = htmlspecialchars_decode($this->params['cat_separator'], ENT_COMPAT);
+		}
+		
 		$download_source_dir = '';
 		if (!empty($this->params['download_source_dir'])) {
 			$this->params['download_source_dir'] = $this->strip($this->params['download_source_dir'], array("\\", "/"));
@@ -2649,7 +2747,7 @@ class ModelToolKaImport extends Model {
 
 		$started_at = time();
 		if (($handle = $this->fopen_utf8($this->params['file'], $this->params['charset'])) == FALSE) {
-			$this->addImportMessage("Cannot open file: $this->params[file]", 'E');
+			$this->addImportMessage("Cannot open file: " . $this->params['file'], 'E');
 			$this->stat['status']  = 'error';
 			return;
 		}
@@ -2752,9 +2850,17 @@ class ModelToolKaImport extends Model {
 			// 2) go through insert/update procedure
 			//
 			if (!empty($data['delete_product_flag'])) {
+			
 				if (!empty($product_id)) {
 					$this->model_catalog_product->deleteProduct($product_id);
 					$this->stat['products_deleted']++;
+				}
+			
+			} elseif (!empty($data['remove_from_store'])) {
+			
+				if (!empty($product_id)) {
+					$this->removeFromStores('product', $product_id, $this->params['store_ids']);
+					$this->stat['products_updated']++;
 				}
 				
 			} else {
@@ -2765,13 +2871,6 @@ class ModelToolKaImport extends Model {
 						continue;
 					}
 										
-					// insert a new product if required
-					//
-					if (empty($data['name'])) {
-						$this->addImportMessage("Product name is not specified for a new product. Line is skipped: " . $this->stat['lines_processed']);
-						continue;
-					}
-
 					if (!empty($this->params['tpl_product_id'])) {
 						$last_product_id = $this->model_catalog_product->getLastProductId();
 						$this->model_catalog_product->copyProduct($this->params['tpl_product_id']);
@@ -2784,6 +2883,14 @@ class ModelToolKaImport extends Model {
 							if (!empty($data['product_id'])) {
 								$this->db->query("UPDATE INTO " . DB_PREFIX . "product SET product_id = '" . $this->db->escape($data['product_id']) . "' WHERE product_id = '$product_id'");
 							}
+						}
+						
+					} else {
+						// insert a new product if required
+						//
+						if (empty($data['name'])) {
+							$this->addImportMessage("Product name is not specified for a new product. Line is skipped: " . $this->stat['lines_processed']);
+							continue;
 						}
 					}
 					
@@ -2842,9 +2949,9 @@ class ModelToolKaImport extends Model {
 
 				$this->saveCategories($product_id, $data, $delete_old, $is_new);
 
-				$this->saveAdditionalImages($product_id, $data, $delete_old);
+				$this->saveAdditionalImages($product_id, $data, $delete_old, $is_new);
 
-				$this->saveAttributes($row, $product, $delete_old);
+				$this->saveAttributes($row, $product, $delete_old, $is_first_product);
 				
 				if (version_compare(VERSION, '1.5.5', '>=')) {
 					$this->saveFilters($row, $product, $delete_old);
@@ -2899,6 +3006,12 @@ class ModelToolKaImport extends Model {
 			if (!empty($this->params['disable_not_imported_products'])) {
 				$this->disableNotImportedProducts();
 			}
+			
+			// clean up the temporary table
+			//
+			$this->db->query("DELETE FROM " . DB_PREFIX . "ka_product_import
+					WHERE token = '" . $this->session->data['token'] . "'"
+			);
 
 	    } else if ($status == 'error') {
 	    	fclose($handle);
@@ -3235,8 +3348,14 @@ class ModelToolKaImport extends Model {
 			$fields2[] = array(
 				'field' => 'delete_product_flag',
 				'name'  => '"Delete Product" Flag',
-				'descr' => 'Any non-empty value will be treated as positive confirmation, be careful',
+				'descr' => 'Any non-empty value will be treated as positive confirmation, be careful',				
 			);
+			
+			$fields2[] = array(
+				'field' => 'remove_from_store',
+				'name'  => 'Remove from Store',
+				'descr' => "Set this flag to a non empty value in order to remove the product from the stores selected on the prevous step (without real deletion from the database). It might be useful for multi-store solutions.",
+			);				
 		}
 		
 		if (version_compare(VERSION, '1.5.4', '>=')) {
@@ -3389,8 +3508,13 @@ class ModelToolKaImport extends Model {
 			),
 			'sort_order' => array(
 				'field' => 'sort_order',
-				'name'  => 'Option Sort Order',
-				'descr' => ''
+				'name'  => 'Value Sort Order',
+				'descr' => 'Sort order for option values'
+			),
+			'group_sort_order' => array(
+				'field' => 'group_sort_order',
+				'name'  => 'Group Sort Order',
+				'descr' => 'Sort order for option groups. Empty cells are skipped.'
 			),
 			'quantity' => array(
 				'field' => 'quantity',
@@ -3505,6 +3629,10 @@ class ModelToolKaImport extends Model {
 					
 				} elseif ($sk == 'options') {
 					$f_key = $f_data['option_id'];
+					
+					if (isset($matches['required_options'][$f_key])) {
+						$sets[$sk][$f_idx]['required'] = true;
+					}
 					
 				} else {
 					$f_key = (isset($f_data['field']) ? $f_data['field']:$f_idx);
