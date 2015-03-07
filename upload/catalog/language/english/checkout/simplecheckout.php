@@ -43,7 +43,7 @@ $_['text_please_confirm']            = 'An order is not confirmed and could be l
 // Column
 $_['column_image']                   = 'Image';
 $_['column_name']                    = 'Product Name';
-$_['column_model']                   = 'Model';
+$_['column_model']                   = 'Item No.';
 $_['column_quantity']                = 'Quantity';
 $_['column_price']                   = 'Unit Price';
 $_['column_total']                   = 'Total';
@@ -57,7 +57,7 @@ $_['entry_coupon']                   = 'Enter your coupon here:';
 $_['entry_voucher']                  = 'Enter your gift voucher code here:';
 $_['entry_reward']                   = 'Points to use (Max %s):';
 $_['entry_newsletter']               = 'Subscribe';
-$_['entry_address_same'] 	         = 'My delivery and billing addresses are the same.';
+$_['entry_address_same'] 	         = 'My delivery and billing addresses are the same. Unselect to enter different delivery address.';
 $_['entry_customer_type'] 	         = 'Business type';
 
 // Error

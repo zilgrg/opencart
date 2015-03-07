@@ -3,7 +3,7 @@
 $_['heading_title']    = 'Svetainės medis';
  
 // Text
-$_['text_special']     = 'Specialūs pasiūlymai';
+$_['text_special']     = 'Specialūs pasiūlymai ir Akcijos';
 $_['text_account']     = 'Mano paskyra';
 $_['text_edit']        = 'Mano duomenys';
 $_['text_password']    = 'Keisti slaptažodį';

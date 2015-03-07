@@ -1,5 +1,5 @@
 <?php
 // Text
 $_['text_title']       = 'Atsiėmimas';
-$_['text_description'] = 'Nemokamas atsiėmimas Yamaha salone Vilniuje adresu Molėtų pl. 47F';
+$_['text_description'] = 'Nemokamas atsiėmimas Yamaha salone: Molėtų pl. 47, Vilnius';
 ?>

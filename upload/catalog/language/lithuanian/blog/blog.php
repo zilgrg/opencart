@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_home']            = 'Home';
+$_['text_home']            = 'Pradžia';
 $_['text_blog']            = 'Blog';
 $_['text_error_art']       = 'Blog article is empty!';
 $_['text_error_cat']       = 'Blog category not found!';
@@ -57,8 +57,8 @@ $_['text_mail_footer']     = '<br /><br />You can see all comments on this post 
 $_['text_mail_footer1']    = '<a href="%s" target="_blank" title="%s">%s</a><br /><br />';
 
 // Search
-$_['text_search_blog']     = 'Blog Search Result';
-$_['text_search_result']   = 'There is no article that matches the search criteria.';
+$_['text_search_blog']     = 'Blog\'o paieškos rezultatai';
+$_['text_search_result']   = 'Dar neieškojote arba nepavyko nieko rasti pagal jūsų paieškos kriterijų.';
 $_['text_search_more']     = 'more..';
 
 

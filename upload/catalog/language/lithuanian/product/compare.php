@@ -1,23 +1,23 @@
 <?php
 // Heading
-$_['heading_title']     = 'Product Comparison';
+$_['heading_title']     = 'Produktų palyginimas';
  
 // Text
-$_['text_product']      = 'Product Details';
-$_['text_name']         = 'Product';
-$_['text_image']        = 'Image';
-$_['text_price']        = 'Price';
-$_['text_model']        = 'Model';
-$_['text_manufacturer'] = 'Brand';
-$_['text_availability'] = 'Availability';
-$_['text_instock']      = 'In Stock';
-$_['text_rating']       = 'Rating';
-$_['text_reviews']      = 'Based on %s reviews.';
-$_['text_summary']      = 'Summary';
-$_['text_weight']       = 'Weight';
-$_['text_dimension']    = 'Dimensions (L x W x H)';
-$_['text_compare']      = 'Product Compare (%s)';
+$_['text_product']      = 'Produkto detalės';
+$_['text_name']         = 'Produktas';
+$_['text_image']        = 'Paveikslėlis';
+$_['text_price']        = 'Kaina';
+$_['text_model']        = 'Kodas';
+$_['text_manufacturer'] = 'Prekinis ženklas';
+$_['text_availability'] = 'Pristatymas';
+$_['text_instock']      = '2-3 darbo dienos';
+$_['text_rating']       = 'Įvertinimas';
+$_['text_reviews']      = 'Remiantis %s atsiliepimais.';
+$_['text_summary']      = 'Santrauka';
+$_['text_weight']       = 'Svoris';
+$_['text_dimension']    = 'Matmenys (I x P x A)';
+$_['text_compare']      = 'Palyginimas (%s)';
 $_['text_success']      = 'Success: You have added <a href="%s">%s</a> to your <a href="%s">product comparison</a>!';
-$_['text_remove']       = 'Success: You have modified your product comparison!';
-$_['text_empty']        = 'You have not chosen any products to compare.';
+$_['text_remove']       = 'Sėkmingai pakeitėte produktų palyginimą!';
+$_['text_empty']        = 'Nėra ką lyginti, įtraukite produktus į palyginimą.';
 ?>

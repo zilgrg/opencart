@@ -1,9 +1,9 @@
 <?php
 // Heading 
-$_['heading_title']      = 'Mano Paskyra';
+$_['heading_title']      = 'Mano Yamaha paskyra';
 
 // Text
-$_['text_account']       = 'Mano paskyra';
+$_['text_account']       = 'Paskyra';
 $_['text_my_account']    = 'Nustatymai';
 $_['text_my_orders']     = 'Mano užsakymai';
 $_['text_my_newsletter'] = 'Naujienlaiškis';

@@ -1,13 +1,13 @@
 <?php
 // Heading 
-$_['heading_title']          = 'Greita registracija';
+$_['heading_title']          = 'Registruotis';
 
 // Text
 $_['text_account']           = 'Paskyra';
-$_['text_register']          = 'Greita registracija';
-$_['text_account_already']   = 'Esate prsiregistravęs, prašome <a href="%s">prisijungti čia</a>.';
+$_['text_register']          = 'Registruotis';
+$_['text_account_already']   = '<a href="%s">noriu prisijungti</a>';
 $_['text_your_details']      = 'Asmens duomenys';
-$_['text_agree']             = 'Susipažinau ir sutinku su <a class="colorbox fancybox" href="%s" alt="%s"><b>%s</b></a>';
+$_['text_agree']             = 'Susipažinau ir sutinku su <a class="colorbox fancybox" href="%s" alt="%s"><b>Sutarties sąlygomis</b></a>';
 $_['text_agree_shoppica']    = 'Susipažinau ir sutinku su <a class="s_main_color" rel="prettyPhoto[ajax]" href="%s&iframe=true" alt="%s"><b>%s</b></a>';
 $_['text_private']           = 'Privatus asmuo';
 $_['text_company']           = 'Įmonė';

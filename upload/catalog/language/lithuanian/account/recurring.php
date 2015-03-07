@@ -1,13 +1,13 @@
 <?php
-$_['heading_title'] = 'Recurring payments';
-$_['button_continue'] = 'Continue';
+$_['heading_title'] = 'Pasikartojantys mokėjimai';
+$_['button_continue'] = 'OK';
 $_['button_view'] = 'View';
 $_['button_cancel_profile'] = 'Cancel payments';
-$_['text_empty'] = 'No recurring payment profiles found';
+$_['text_empty'] = 'Nėra priskirta pastovių mokėjimų';
 $_['text_product'] = 'Product: ';
 $_['text_order'] = 'Order: ';
 $_['text_quantity'] = 'Quantity: ';
-$_['text_account'] = 'Account';
+$_['text_account'] = 'Paskyra';
 $_['text_action'] = 'Action';
 $_['text_recurring'] = 'Recurring payment';
 $_['text_transactions'] = 'Transactions';

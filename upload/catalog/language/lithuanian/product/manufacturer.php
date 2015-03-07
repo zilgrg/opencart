@@ -1,32 +1,32 @@
 <?php
 // Heading
-$_['heading_title']     = 'Find Your Favorite Brand';
+$_['heading_title']     = 'Pasirinkite prekinį ženklą';
 
 // Text
-$_['text_brand']        = 'Brand';
-$_['text_index']        = 'Brand Index:';
-$_['text_error']        = 'Brand not found!';
-$_['text_empty']        = 'There are no products to list.';
-$_['text_quantity']     = 'Qty:';
-$_['text_manufacturer'] = 'Brand:';
-$_['text_model']        = 'Product Code:'; 
-$_['text_points']       = 'Reward Points:'; 
-$_['text_price']        = 'Price:'; 
-$_['text_tax']          = 'Ex Tax:'; 
-$_['text_reviews']      = 'Based on %s reviews.'; 
-$_['text_compare']      = 'Product Compare (%s)'; 
-$_['text_display']      = 'Display:';
-$_['text_list']         = 'List';
-$_['text_grid']         = 'Grid';
-$_['text_sort']         = 'Sort By:';
-$_['text_default']      = 'Default';
-$_['text_name_asc']     = 'Name (A - Z)';
-$_['text_name_desc']    = 'Name (Z - A)';
-$_['text_price_asc']    = 'Price (Low &gt; High)';
-$_['text_price_desc']   = 'Price (High &gt; Low)';
-$_['text_rating_asc']   = 'Rating (Lowest)';
-$_['text_rating_desc']  = 'Rating (Highest)';
-$_['text_model_asc']    = 'Model (A - Z)';
-$_['text_model_desc']   = 'Model (Z - A)';
-$_['text_limit']        = 'Show:';
+$_['text_brand']        = 'Prekiniai ženklai';
+$_['text_index']        = 'Prekinių ženklų sąrašas:';
+$_['text_error']        = 'Prekinis ženklas nerastas!';
+$_['text_empty']        = 'Nėra prekių.';
+$_['text_quantity']     = 'Kiekis:';
+$_['text_manufacturer'] = 'Prekinis ženklas:';
+$_['text_model']        = 'Kodas:'; 
+$_['text_points']       = 'Lojalumo taškai:'; 
+$_['text_price']        = 'Kaina:'; 
+$_['text_tax']          = 'Be PVM:'; 
+$_['text_reviews']      = 'Remiantis %s atsiliepimais.'; 
+$_['text_compare']      = 'Palyginimas (%s)'; 
+$_['text_display']      = 'Rodyti:';
+$_['text_list']         = 'Sąrašu';
+$_['text_grid']         = 'Lentele';
+$_['text_sort']         = 'Rūšiuoti:';
+$_['text_default']      = 'Standartiškai';
+$_['text_name_asc']     = 'Pavadinimas (A - Z)';
+$_['text_name_desc']    = 'Pavadinimas (Z - A)';
+$_['text_price_asc']    = 'Kaina (Min > Max)';
+$_['text_price_desc']   = 'Kaina (Max > Min)';
+$_['text_rating_asc']   = 'Įvertinimas (Min)';
+$_['text_rating_desc']  = 'Įvertinimas (Max)';
+$_['text_model_asc']    = 'Kodas (A - Z)';
+$_['text_model_desc']   = 'Kodas (Z - A)';
+$_['text_limit']        = 'Rodyti:';
 ?>

@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']      = 'Mokėjimai';
-$_['text_title']         = 'Mokėjimai.lt';
+$_['text_title']         = 'Mokėjimai.lt - kitame žingsnyje pasirinkite patogų mokėjimo būdą';
 
 // Text 
 $_['text_payment']       = 'Payment';
@@ -32,7 +32,7 @@ $_['help_callback']      = '';
 
 // Pay Method Select
 $_['text_paycountry']    = 'Mokėjimo šalis';
-$_['text_chosen']		 = 'Pasirinkote atsiskaitymą per mokėjimai.lt sistemą';
+$_['text_chosen']		 = 'Pasirinkite Jums patogų mokėjimo būdą';
 
 
 // Error

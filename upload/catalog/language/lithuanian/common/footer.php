@@ -12,7 +12,7 @@ $_['text_affiliate']    = 'Affiliates';
 $_['text_special']      = 'Specialūs pasiūlymai';
 $_['text_account']      = 'Paskyra';
 $_['text_order']        = 'Užsakymų istorija';
-$_['text_wishlist']     = 'Detalių sąrašas';
+$_['text_wishlist']     = 'Prekių sąrašas';
 $_['text_newsletter']   = 'Naujienlaiškis';
 $_['text_powered']      = 'Powered By <a href="http://www.yamaha-vilnius.lt">UAB "Yamaha atstovas"</a><br /> %s © %s';
 ?>

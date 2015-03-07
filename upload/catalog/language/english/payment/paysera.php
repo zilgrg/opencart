@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']      = 'Paysera';
-$_['text_title'] 		 = 'Paysera.com';
+$_['text_title'] 		 = 'Paysera.com - choose payment country & payment method in next step';
 
 // Text 
 $_['text_payment']       = 'Payment';

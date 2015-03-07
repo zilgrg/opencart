@@ -1,63 +1,63 @@
 <?php
 // Heading 
-$_['heading_title']      = 'Product Returns';
+$_['heading_title']      = 'Prekių grąžinimas';
 
 // Text
-$_['text_account']       = 'Account';
-$_['text_return']        = 'Return Information';
-$_['text_return_detail'] = 'Return Details';
-$_['text_description']   = '<p>Please complete the form below to request an RMA number.</p>';
-$_['text_order']         = 'Order Information';
-$_['text_product']       = 'Product Information &amp; Reason for Return';
-$_['text_message']       = '<p>Thank you for submitting your return request. Your request has been sent to the relevant department for processing.</p><p> You will be notified via e-mail as to the status of your request.</p>';
-$_['text_return_id']     = 'Return ID:';
-$_['text_order_id']      = 'Order ID:';
-$_['text_date_ordered']  = 'Order Date:';
-$_['text_status']        = 'Status:';
-$_['text_date_added']    = 'Date Added:';
-$_['text_customer']      = 'Customer:';
-$_['text_comment']       = 'Return Comments';
-$_['text_history']       = 'Return History';
-$_['text_empty']         = 'You have not made any previous returns!';
-$_['text_agree']         = 'I have read and agree to the <a class="colorbox" href="%s" alt="%s"><b>%s</b></a>';
+$_['text_account']       = 'Paskyra';
+$_['text_return']        = 'Grąžinimo informacija';
+$_['text_return_detail'] = 'Grąžinimo detalės';
+$_['text_description']   = '<p>Prašome užpildyti prekių grąžinimo formą.</p>';
+$_['text_order']         = 'Užsakymo informacija';
+$_['text_product']       = 'Informacija apie grąžinamą prekę ir grąžinimo priežastis';
+$_['text_message']       = '<p>Prekių grąžinimo prašymas gautas ir apdorojamas.</p><p> Jūs būsite informuoti el. paštu apie šio grąžinimo statuso patvirtinimą/pasikeitimą.</p>';
+$_['text_return_id']     = 'Grąžinimo Nr.:';
+$_['text_order_id']      = 'Užsakymo Nr.:';
+$_['text_date_ordered']  = 'Užsakymo data:';
+$_['text_status']        = 'Statusas:';
+$_['text_date_added']    = 'Įrašo data:';
+$_['text_customer']      = 'Klientas:';
+$_['text_comment']       = 'Grąžinimo komentarai';
+$_['text_history']       = 'Grąžinimų istorija';
+$_['text_empty']         = 'Šaunu, jūs nesate grąžinęs prekių!';
+$_['text_agree']         = '<a class="colorbox" href="%s" alt="%s"><b>%s</b></a> man yra žinomos ir suprantamos';
 
 // Column
-$_['column_product']     = 'Product Name';
-$_['column_model']       = 'Model';
-$_['column_quantity']    = 'Quantity';
-$_['column_price']       = 'Price';
-$_['column_opened']      = 'Opened';
-$_['column_comment']     = 'Comment';
-$_['column_reason']      = 'Reason';
-$_['column_action']      = 'Action';
-$_['column_date_added']  = 'Date Added';
-$_['column_status']      = 'Status';
+$_['column_product']     = 'Pavadinimas';
+$_['column_model']       = 'Kodas';
+$_['column_quantity']    = 'Kiekis';
+$_['column_price']       = 'Kaina';
+$_['column_opened']      = 'Išpakuota';
+$_['column_comment']     = 'Komentaras';
+$_['column_reason']      = 'Priežastis';
+$_['column_action']      = 'Veiksmas';
+$_['column_date_added']  = 'Irašo data';
+$_['column_status']      = 'Statusas';
 
 // Entry
-$_['entry_order_id']     = 'Order ID:';
-$_['entry_date_ordered'] = 'Order Date:';
-$_['entry_firstname']    = 'First Name:';
-$_['entry_lastname']     = 'Last Name:';
-$_['entry_email']        = 'E-Mail:';
-$_['entry_telephone']    = 'Telephone:';
-$_['entry_product']      = 'Product Name:';
-$_['entry_model']        = 'Product Code:';
-$_['entry_quantity']     = 'Quantity:';
-$_['entry_reason']       = 'Reason for Return:';
-$_['entry_opened']       = 'Product is opened:';
-$_['entry_fault_detail'] = 'Faulty or other details:';
-$_['entry_captcha']      = 'Enter the code in the box below:';
+$_['entry_order_id']     = 'Užsakymo numeris:';
+$_['entry_date_ordered'] = 'Užsakymo data:';
+$_['entry_firstname']    = 'Vardas:';
+$_['entry_lastname']     = 'Pavardė:';
+$_['entry_email']        = 'El. paštas:';
+$_['entry_telephone']    = 'Kontaktinis telefonas:';
+$_['entry_product']      = 'Prekės pavadinimas:';
+$_['entry_model']        = 'Prekės kodas:';
+$_['entry_quantity']     = 'Kiekis:';
+$_['entry_reason']       = 'Grąžinimo priežastis:';
+$_['entry_opened']       = 'Pakuotė pažeista:';
+$_['entry_fault_detail'] = 'Kita priežastis, aprašymas:';
+$_['entry_captcha']      = 'Įveskite patikros kodą iš paveikslėlio:';
 
 // Error
-$_['text_error']         = 'The returns you requested could not be found!';
-$_['error_order_id']     = 'Order ID required!';
-$_['error_firstname']    = 'First Name must be between 1 and 32 characters!';
-$_['error_lastname']     = 'Last Name must be between 1 and 32 characters!';
-$_['error_email']        = 'E-Mail Address does not appear to be valid!';
-$_['error_telephone']    = 'Telephone must be between 3 and 32 characters!';
-$_['error_product']      = 'Product Name must be greater than 3 and less than 255 characters!';
-$_['error_model']        = 'Product Model must be greater than 3 and less than 64 characters!';
-$_['error_reason']       = 'You must select at a return product reason!';
-$_['error_captcha']      = 'Verification code does not match the image!';
-$_['error_agree']        = 'Warning: You must agree to the %s!';
+$_['text_error']         = 'Toks grąžinimo numeris nerastas!';
+$_['error_order_id']     = 'Užsakymo numeris privalomas!';
+$_['error_firstname']    = 'Vardas turi būti nuo 1 iki 32 simbolių!';
+$_['error_lastname']     = 'Pavardė turi būti nuo 1 iki 32 simbolių!';
+$_['error_email']        = 'El. pašto adresas neteisingas!';
+$_['error_telephone']    = 'Telefonas turi būti nuo 5 iki 32 simbolių!';
+$_['error_product']      = 'Prekės pavadinimas turi būti nuo 3 iki 255 simbolių!';
+$_['error_model']        = 'Prekės kodas turi būti nuo 3 iki 64 simbolių!';
+$_['error_reason']       = 'Privalote nurodyti grąžinimo priežastį!';
+$_['error_captcha']      = 'Patikros kodas neatitinka nurodytą paveikslėlyje, pabandykite dar kartą!';
+$_['error_agree']        = 'Dėmesio: %s! turi būti perskaitytos ir su jomis sutinkama. Jei nesutinkate, prašome <a href="kontaktai.html">susiekti su mumis tiesiogiai</a>';
 ?>
