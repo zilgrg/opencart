@@ -46,6 +46,7 @@
 				   $this->blogVirtualDir = 'blog';
 				}
 				}
+				$this->blogVirtualDir_ = isset($parts[0]) ? $parts[0] : '';
 			}
 			/**blog_manager END**/
 			]]>
@@ -58,14 +59,14 @@
 			<add>
 			<![CDATA[
 			/**blog_manager START (3)**/
-			} elseif ($this->blogVirtualEnb && ($this->request->get['_route_'] == $this->blogVirtualDir || $this->request->get['_route_'] == $this->blogVirtualDir . '/')) {
-				$this->request->get['route'] = 'blog/category/home';
 			} elseif ($this->request->get['_route_'] == 'blog-comments' || $this->request->get['_route_'] == 'blog-comments/') {
 				$this->request->get['route'] = 'blog/article/comment';
 			} elseif (isset($this->request->get['article_id'])) {
 				$this->request->get['route'] = 'blog/article';
 			} elseif (isset($this->request->get['category_id'])) {
 				$this->request->get['route'] = 'blog/category';
+			} elseif ($this->blogVirtualEnb && ($this->request->get['_route_'] == $this->blogVirtualDir || $this->blogVirtualDir == $this->blogVirtualDir_)) {
+				$this->request->get['route'] = 'blog/category/home';	
 			/**blog_manager END**/
 			]]>
 			</add>
@@ -180,8 +181,9 @@
 			if($this->ssb_table->isTable("blog_article")){
 				$data = array(
 					'article_order'	=> 'dateDesc',
-					'start'				=> 0,
-					'limit'				=> 100
+					'date'          => date('Y-m-d H:i:s'),
+					'start'			=> 0,
+					'limit'			=> 100
 				);
 				$this->load->model('blog/article');
 				$results = $this->model_blog_article->getArticles($data);
