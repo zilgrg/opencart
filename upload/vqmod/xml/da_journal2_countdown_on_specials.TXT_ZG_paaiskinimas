@@ -1,0 +1,56 @@
+da_journal2_countdown_on_specials.xml esanti si dalis:
+
+    <file path="catalog/controller/product/" name="product.php">
+        <operation error="log">
+            <search position="after"><![CDATA[if ((float)$product_info['special']) {]]></search>
+            <add><![CDATA[
+                if ($this->config->get('config_template') === 'journal2' && $this->journal2->settings->get('show_countdown_product_page', 'on') == 'on') {
+                    $this->load->model('journal2/product');
+                    $date_end = $this->model_journal2_product->getSpecialCountdown($this->request->get['product_id']);
+                    if ($date_end === '0000-00-00') {
+                        $date_end = false;
+                    }
+                    $this->data['date_end'] = $date_end;
+                }
+            ]]></add>
+        </operation>
+
+
+
+
+kertasi su multi_tiered_discount.xml faile esancia sia dalimi:
+(kai uzkomentuoja ja klaida product page dingsta)
+
+
+
+<!--	<operation>
+			<search position="replace" offset="2"><![CDATA[
+				if ((float)$product_info['special']) {
+			]]></search>
+			<add><![CDATA[
+				if ((float)$product_info['special'] || $product_price) {
+					if ($product_price) {
+						$this->data['special'] = $this->currency->format($this->tax->calculate($product_price, $product_info['tax_class_id'], $this->config->get('config_tax')));
+						$this->data['ex_tax_special'] = $this->currency->format($product_price);
+						$this->log->write('Special = ' . $this->data['special']);
+						$this->log->write('Special (exc. tax) = ' . $this->data['ex_tax_special']);
+					} else {
+						$this->data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+						$this->data['ex_tax_special'] = $this->currency->format($product_info['special']);
+					}
+				} else {
+			]]></add>
+		</operation>-->
+
+		
+Multi-Tiered Discounts modulyje yra toks nustatymas, gal jis padetu, reikia isbandyti?!
+				Override Specials:
+Check to use this discount over any specials setup for products using this code. Leave unchecked to use the special pricing
+
+
+
+
+		
+		
+		
+		
