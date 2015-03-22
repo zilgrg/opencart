@@ -1,6 +1,6 @@
 <modification>
 <id><![CDATA[Paladin SEO Manager]]></id>
-<version>2.9.0</version>
+<version>3.0.0</version>
 <vqmver>1.0.0</vqmver>
 <author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
 
@@ -298,6 +298,7 @@
 
 
 
+
 	<file name="catalog/controller/common/seo_url.php">
 		<operation>
 			<search position="after"><![CDATA[index()]]></search>
@@ -322,6 +323,26 @@
 
 
 
+	<file name="system/library/session.php">
+		<operation>
+			<search position="before"><![CDATA[$this->data =& $_SESSION;]]></search>
+			<add><![CDATA[
+			
+			$_SESSION["ssb_page_type"]  = '';
+			$lang_dir_link_mode = isset($_SESSION['lang_dir_link_mode']) ? $_SESSION['lang_dir_link_mode'] : false;
+			unset($_SESSION['lang_dir_link_mode']);
+			
+			if($lang_dir_link_mode == 'natural'){
+				require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
+				$ssb_helper = ssb_helper::getInstance();
+				$lang_inURL 	= $ssb_helper->getLangFromUrl();
+				$this->session->data['language'] = $_SESSION['language'] = $lang_inURL['code'];
+
+			}
+			
+			]]></add>
+		</operation>		
+	</file>
 	<file name="catalog/controller/module/language.php">
 		<operation>
 			<search position="after"><![CDATA[ControllerModuleLanguage extends Controller]]></search>
@@ -342,6 +363,25 @@
 			]]></add>
 		</operation>
 		<operation>
+			<search position="before"><![CDATA[if (isset($this->request->post['redirect'])) {]]></search>
+			<add><![CDATA[
+			
+			if(strpos($this->request->post['redirect'], 'index.php?') === false){
+				if(!isset($_SESSION['last_request'])){
+					require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
+					$ssb_helper = ssb_helper::getInstance();
+					$url = isset($this->request->post['redirect']) ? $this->request->post['redirect'] : $this->url->link('common/home');
+					$url = $ssb_helper->setLangForUrl($url, $this->session->data['language']);
+					
+					$this->redirect($url);
+				}else{
+					unset($_SESSION['last_request']);
+				}
+			}
+			
+			]]></add>
+		</operation>
+		<operation>
 			<search position="before"><![CDATA[$this->render();]]></search>
 			<add><![CDATA[
 			
@@ -349,19 +389,35 @@
 			$this->ssb_data = ssb_data::getInstance();
 			$tools = $this->ssb_data->getSetting('tools');
 			if($tools['lang_dir_link']['status'] AND $this->ssb_data->getEntityStatus('urls')){
+
 				$l_code_session = $this->session->data['language'];
-				$_SESSION['last_request'] = $this->data['redirect'];
 				
-				foreach($this->data['languages'] as &$language){
-					$this->session->data['language'] = $language['code'];
-					if (!isset($this->request->get['route'])) {
-						$_SESSION['last_request_' . $language['code']] = $this->url->link('common/home');
-					} else {
-						$_SESSION['last_request_' . $language['code']] = $this->url->link($route, $url, $connection);
+				if($tools['lang_dir_link']['data']['mode'] == 'natural'){
+				
+					$_SESSION['lang_dir_link_mode'] = 'natural';
+					foreach($this->data['languages'] as &$language){
+						$this->session->data['language'] = $language['code'];
+						if (!isset($this->request->get['route'])) {
+							$language['href'] = $this->url->link('common/home');
+						}else{
+							$language['href'] = $this->url->link($route, $url, $connection);
+						}
 					}
-					$language['href'] = $this->addLangSuffix($language['code']);
-				}
+				}elseif($tools['lang_dir_link']['data']['mode'] == 'special'){
 				
+					$_SESSION['lang_dir_link_mode'] = 'special';
+					$_SESSION['last_request'] = $this->data['redirect'];
+					foreach($this->data['languages'] as &$language){
+						$this->session->data['language'] = $language['code'];
+						if (!isset($this->request->get['route'])) {
+							$_SESSION['last_request_' . $language['code']] = $this->url->link('common/home');
+						} else {
+							$_SESSION['last_request_' . $language['code']] = $this->url->link($route, $url, $connection);
+						}
+						$language['href'] = $this->addLangSuffix($language['code']);
+					}
+				}
+
 				$this->session->data['language'] = $l_code_session;
 				$this->template = 'default/template/module/ssb_language.tpl';
 			}
@@ -384,7 +440,8 @@
 					if($canonical['status']){
 						$this->document->addLink($this->config->get('config_url'), 'canonical');
 					}
-				}]]></add>
+				}
+				]]></add>
 		</operation>		
 	</file>
 	<file name="catalog/controller/product/category.php">
@@ -478,6 +535,101 @@
 
 
 
+	<file name="system/library/document.php">
+		<operation>
+			<search position="before"><![CDATA[public function getLinks() {]]></search>
+			<add><![CDATA[
+				
+				public function addCustomLink($href, $rel, $addAttr = array()) {
+					$linkAttr = array();
+					
+					foreach($addAttr as $attr){
+						foreach($attr as $key => $val){
+							$linkAttr[$key] = $val;
+						}
+					}
+					
+					$linkAttr['href'] = $href;
+					$linkAttr['rel'] = $rel;
+					$this->links[md5($href)] = $linkAttr;			
+				}
+				
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/common/header.tpl">
+		<operation>
+			<search position="replace"><![CDATA[<link href="<?php echo $link['href']; ?>" rel="<?php echo $link['rel']; ?>" />]]></search>
+			<add><![CDATA[
+		<?php 
+			$linkTags = '';
+			foreach($link as $key => $val){
+				$linkTags .= $key . '="' . $val . '" ';
+			}
+		?>
+		<link <?php echo $linkTags; ?>/>
+			]]></add>
+		</operation>
+	</file>
+
+
+
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="before"><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add><![CDATA[
+			
+			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+			$this->ssb_data = ssb_data::getInstance();
+			$tools = $this->ssb_data->getSetting('tools');
+			if($tools){
+				$set_bread = $tools['seo_breadcrumbs']['data']['product'];
+				$set_add = $tools['seo_breadcrumbs']['data']['additional'];
+
+				require_once DIR_CONFIG .'ssb_library/catalog/tools/bread_and_path.php';
+				$breadAndPath = breadAndPath::getInstance($this);
+				$this->data['breadcrumbs'] = $breadAndPath->getProductBreadcrumb(
+																$this->data['breadcrumbs'], 
+																$set_bread['mode'], 
+																$set_bread['reverse'], 
+																$set_add['title'], 
+																$set_add['home_to_store']);
+			}
+			
+			]]></add>
+		</operation>	
+	</file>
+	<file name="catalog/controller/product/category.php">
+		<operation>
+			<search position="before"><![CDATA[if ($category_info['image']) {]]></search>
+			<add><![CDATA[
+			
+			require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+			$this->ssb_data = ssb_data::getInstance();
+			$tools = $this->ssb_data->getSetting('tools');
+			if($tools){
+				$set_bread = $tools['seo_breadcrumbs']['data']['category'];
+				$set_add = $tools['seo_breadcrumbs']['data']['additional'];
+
+				if($set_bread['mode'] != 'default'){
+					require_once DIR_CONFIG .'ssb_library/catalog/tools/bread_and_path.php';
+					$breadAndPath = breadAndPath::getInstance($this);
+					$this->data['breadcrumbs'] = $breadAndPath->getCategoryBreadcrumb(
+																	$category_id,
+																	$this->data['breadcrumbs'], 
+																	$set_bread['mode'], 
+																	$set_bread['reverse'], 
+																	$set_add['title'], 
+																	$set_add['home_to_store']);
+				}
+			}
+			
+			]]></add>
+		</operation>	
+	</file>	
+
+
+
 	<file name="catalog/view/theme/*/template/common/footer.tpl">
 		<operation>
 			<search position="before"><![CDATA[</body>]]></search>
@@ -504,7 +656,7 @@
 	</file>
 	<file name="system/library/response.php">
 		<operation>
-			<search position="replace"><![CDATA[$this->output = $output;]]></search>
+			<search position="after"><![CDATA[public function setOutput($output) {]]></search>
 			<add><![CDATA[
 				
 				$page_type = isset($_SESSION["ssb_page_type"]) ? $_SESSION["ssb_page_type"] : false;
@@ -512,10 +664,7 @@
 				if($page_type AND in_array($page_type, $page_types) AND $output){
 					require_once DIR_CONFIG .'ssb_library/catalog/tools/snipet.php';
 					$snipet = snipet::getInstance();
-					$page = $snipet->insertSnipet($output, $_SESSION["ssb_page_data"], $page_type);
-					$this->output = $page;
-				}else{
-					$this->output = $output;
+					$output = $snipet->insertSnipet($output, $_SESSION["ssb_page_data"], $page_type);
 				}
 				
 			]]></add>
