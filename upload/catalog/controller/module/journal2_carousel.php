@@ -46,6 +46,11 @@ class ControllerModuleJournal2Carousel extends Controller {
             return;
         }
 
+        /* hide on desktop */
+        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+            return;
+        }
+
         $this->data['css'] = '';
 
         /* css for top / bottom positions */
@@ -257,7 +262,7 @@ class ControllerModuleJournal2Carousel extends Controller {
                     $products = $this->model_journal2_product->getProductsByManufacturer($manufacturer['manufacturer_id'], $limit);
                     break;
                 case 'custom':
-                    foreach (Journal2Utils::getProperty($section, 'products', array()) as $product) {
+                    foreach (Journal2Utils::sortArray(Journal2Utils::getProperty($section, 'products', array())) as $product) {
                         $result = $this->model_catalog_product->getProduct(Journal2Utils::getProperty($product, 'data.id'));
                         if (!$result) continue;
                         $products[] = $result;

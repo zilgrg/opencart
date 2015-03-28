@@ -65,7 +65,7 @@
         <div class="mega-menu">
             <div>
             <?php $index = 0; foreach($menu_item['items'] as $submenu_item): if ($menu_item['limit'] && $menu_item['limit'] <= $index) continue; $index++; ?>
-            <div class="mega-menu-item product-grid-item <?php echo $menu_item['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
+            <div class="mega-menu-item product-grid-item <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>  <?php echo $menu_item['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
                 <div class="product-wrapper">
                     <div class="image">
                         <a href="<?php echo $submenu_item['href']; ?>">
@@ -222,7 +222,7 @@
                     <h3><?php echo $menu_column['name']; ?></h3>
                     <?php endif; ?>
                     <?php $index = 0; foreach($menu_column['items'] as $submenu_item): if ($menu_column['limit'] && $menu_column['limit'] <= $index) continue; $index++; ?>
-                    <div class="mega-menu-item product-grid-item <?php echo $menu_column['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
+                    <div class="mega-menu-item product-grid-item <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>  <?php echo $menu_column['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
                         <div class="product-wrapper">
                             <div class="image">
                                 <a href="<?php echo $submenu_item['href']; ?>">

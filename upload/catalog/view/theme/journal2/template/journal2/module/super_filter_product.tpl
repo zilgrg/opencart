@@ -26,7 +26,7 @@
 </div>
 <div class="product-list">
     <?php foreach ($products as $product) { ?>
-    <div>
+    <div class=" <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
         <?php if ($product['thumb']) { ?>
         <div class="image">
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>

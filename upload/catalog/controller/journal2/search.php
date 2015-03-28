@@ -59,7 +59,11 @@ class ControllerJournal2Search extends Controller {
             }
 
             $json['view_more_text'] = $this->journal2->settings->get('autosuggest_view_more_text', 'View More');
-            $json['view_more_url'] = $this->url->link('product/search', '&search=' . urlencode(html_entity_decode($this->request->get['search'], ENT_QUOTES, 'UTF-8')));
+            if (VERSION === '1.5.4' || VERSION === '1.5.4.1') {
+                $json['view_more_url'] = $this->url->link('product/search', '&filter_name=' . urlencode(html_entity_decode($this->request->get['search'], ENT_QUOTES, 'UTF-8')));
+            } else {
+                $json['view_more_url'] = $this->url->link('product/search', '&search=' . urlencode(html_entity_decode($this->request->get['search'], ENT_QUOTES, 'UTF-8')));
+            }
         }
 
         $this->response->setOutput(json_encode($json));

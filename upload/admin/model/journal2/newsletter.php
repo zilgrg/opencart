@@ -13,7 +13,7 @@ class ModelJournal2Newsletter extends Model{
         $this->post_data = json_decode(file_get_contents('php://input'), true);
         $this->get_data = $this->request->get;
 
-        if ($this->db->query('show tables like "' . DB_PREFIX . 'journal2_newsletter"')->num_rows === 0) {
+        if ($this->db->query(str_replace('_', '\_', 'show tables like "' . DB_PREFIX . 'journal2_newsletter"'))->num_rows === 0) {
             $this->db->query('CREATE TABLE IF NOT EXISTS `' . DB_PREFIX . 'journal2_newsletter` (
                 `email` varchar(128) NOT NULL,
                 `token` varchar(64) NOT NULL,

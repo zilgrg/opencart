@@ -13,9 +13,9 @@
     <p>
       <?php if (VERSION === '1.5.4' || VERSION === '1.5.4.1'): /* v1541 compatibility */ ?>
         <?php if ($filter_name) { ?>
-        <input type="text" name="filter_name" />
+        <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" />
         <?php } else { ?>
-        <input type="text" name="filter_name" value="<?php echo $filter_name; ?>" onclick="this.value = '';" onkeydown="this.style.color = '000000'" />
+        <input type="text" name="filter_name" />
         <?php } ?>
         <select name="filter_category_id">
             <option value="0"><?php echo $text_category; ?></option>
@@ -138,7 +138,7 @@
   </div>
   <div class="main-products product-list">
     <?php foreach ($products as $product) { ?>
-    <div>
+    <div class="<?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
       <?php if ($product['thumb']) { ?>
         <div class="image">
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
@@ -219,6 +219,43 @@
   <?php }?>
   <?php echo $content_bottom; ?></div>
 <script type="text/javascript"><!--
+<?php if (VERSION === '1.5.4' || VERSION === '1.5.4.1'): /* v1541 compatibility */ ?>
+$('#content input[name=\'filter_name\']').keydown(function(e) {
+  if (e.keyCode == 13) {
+    $('#button-search').trigger('click');
+  }
+});
+
+$('#button-search').bind('click', function() {
+  url = 'index.php?route=product/search';
+  
+  var filter_name = $('#content input[name=\'filter_name\']').attr('value');
+  
+  if (filter_name) {
+    url += '&filter_name=' + encodeURIComponent(filter_name);
+  }
+
+  var filter_category_id = $('#content select[name=\'filter_category_id\']').attr('value');
+  
+  if (filter_category_id > 0) {
+    url += '&filter_category_id=' + encodeURIComponent(filter_category_id);
+  }
+  
+  var filter_sub_category = $('#content input[name=\'filter_sub_category\']:checked').attr('value');
+  
+  if (filter_sub_category) {
+    url += '&filter_sub_category=true';
+  }
+    
+  var filter_description = $('#content input[name=\'filter_description\']:checked').attr('value');
+  
+  if (filter_description) {
+    url += '&filter_description=true';
+  }
+
+  location = url;
+});
+<?php else: ?>
 $('#content input[name=\'search\']').keydown(function(e) {
 	if (e.keyCode == 13) {
 		$('#button-search').trigger('click');
@@ -265,6 +302,7 @@ $('#button-search').bind('click', function() {
 
 	location = url;
 });
+<?php endif; ?>
 
 function display(view) {
 	if (view == 'list') {
@@ -273,7 +311,7 @@ function display(view) {
         $('.display a.list-view').addClass('selected');
 
         $('.main-products.product-list > div').each(function(index, element) {
-            $(this).attr('class','product-list-item xs-100 sm-100 md-100 lg-100 xl-100');
+            $(this).attr('class','product-list-item xs-100 sm-100 md-100 lg-100 xl-100' + ($(this).hasClass('outofstock') ? ' outofstock' : '')).attr('data-respond','start: 150px; end: 300px; interval: 10px;');
 
             var html = '';
 
@@ -318,7 +356,7 @@ function display(view) {
         $('.display a.list-view').removeClass('selected');
 
         $('.main-products.product-grid > div').each(function(index, element) {
-            $(this).attr('class',"product-grid-item <?php echo $this->journal2->settings->get('product_grid_classes'); ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>");
+            $(this).attr('class',"product-grid-item <?php echo $this->journal2->settings->get('product_grid_classes'); ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>"  + ($(this).hasClass('outofstock') ? ' outofstock' : ''));
 
             var html = '';
 			

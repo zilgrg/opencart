@@ -16,14 +16,11 @@ REFINE CATEGORIES + DESCRIPTION
   .category-info p {
     margin-bottom: 15px; }
 
-.category-info .image {
+.category-info .image img {
   margin-right: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  display: block;
   float: left; }
-  .category-info .image img {
-    width: 100%;
-    height: auto;
-    float: left; }
 
 /******************************
  REFINE SUBCATEGORIES
@@ -263,6 +260,8 @@ PRODUCT LIST
   padding: 10px; }
   .product-list-item .product-details {
     margin-left: 215px; }
+    .product-list-item .product-details:before {
+      display: none; }
   .product-list-item .left {
     position: relative; }
   .product-list-item .image {

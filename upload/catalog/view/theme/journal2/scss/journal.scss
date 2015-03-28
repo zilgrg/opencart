@@ -351,6 +351,13 @@ ul.breadcrumb{
 
 .maintenance-message{
   padding-bottom: 20px;
+  padding-top: 20px;
+  h1{
+    line-height: 30px;
+    br{
+      display: none;
+    }
+  }
 }
 
 /******************************

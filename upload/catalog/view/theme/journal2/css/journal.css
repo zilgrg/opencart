@@ -379,7 +379,12 @@ ul.breadcrumb {
   top: 0; }
 
 .maintenance-message {
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  padding-top: 20px; }
+  .maintenance-message h1 {
+    line-height: 30px; }
+    .maintenance-message h1 br {
+      display: none; }
 
 /******************************
  NOTIFICATION

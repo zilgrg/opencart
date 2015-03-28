@@ -423,6 +423,28 @@ CUSTOM SECTIONS
   transition-duration: 0s;
 }
 
+.oc-filter {
+  .panel-heading{
+    padding: 0;
+    height: 40px;
+    margin-bottom: 5px;
+    background-color: transparent;
+  }
+  a.list-group-item{
+    border-bottom: 1px solid #f4f4f4;
+    margin-bottom: 0;
+    display: block;
+    font-size: 15px;
+    color: inherit;
+  }
+  .list-group-item {
+    padding: 10px 0;
+    label {
+      display: block;
+    }
+  }
+}
+
 /******************************
 DEFAULT OC2 CAROUSEL
 *******************************/
@@ -1748,6 +1770,8 @@ NEWSLETTER
     white-space: normal;
     line-height: 1.4;
     padding: 9px 0;
+    line-height: 100%;
+    white-space: normal;
   }
   .button-icon-right i{
     float: right;
@@ -2224,7 +2248,7 @@ BLOG
       &.p-category:before{
         margin-right: 6px;
       }
-    
+
     }
     &.comment-date{
       border-width: 0;
@@ -2254,7 +2278,9 @@ BLOG
       padding: 4px 7px 5px 7px;
       margin-right: 4px;
     }
-    
+    a{
+      display: inline-block;
+    }
   }
 }
 

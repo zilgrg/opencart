@@ -57,6 +57,15 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Disable on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.disable_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Disable on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="module_data.disable_mobile">
@@ -120,6 +129,12 @@
                     <span class="module-create-title">Image</span>
                     <span class="module-create-option">
                         <image-select-lang image="section.image"></image-select-lang>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Image Title</span>
+                    <span class="module-create-option">
+                        <j-opt-text-lang data-ng-model="section.image_title"></j-opt-text-lang>
                     </span>
                 </li>
                 <li>

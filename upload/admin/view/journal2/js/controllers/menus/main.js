@@ -37,6 +37,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     is_open: 1,
                     status: 1,
                     hide_on_mobile: 0,
+                    hide_on_desktop: '0',
                     items_per_row: {
                         "range": "1,10",
                         "step": "1",
@@ -125,6 +126,7 @@ define(['./../module', 'underscore'], function (module, _) {
                return {
                    is_open:1,
                    hide_on_mobile: 0,
+                   hide_on_desktop: '0',
                    type: 'categories',
                    categories: {
                        type: 'existing',

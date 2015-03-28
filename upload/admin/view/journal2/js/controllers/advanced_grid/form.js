@@ -17,6 +17,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     height: '',
                     module_id: '',
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     status: 1,
                     sort_order: ''
                 };
@@ -43,6 +44,7 @@ define(['./../module', 'underscore'], function (module, _) {
             margin_top: '',
             margin_bottom: '',
             disable_mobile: '0',
+            disable_desktop: '0',
             grid_dimensions: '1',
             module_spacing: '',
             columns: []

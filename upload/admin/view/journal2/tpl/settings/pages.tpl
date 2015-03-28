@@ -690,10 +690,61 @@
             </ul>
         </accordion-group>
 
-        <!--BLOG MANAGER-->
+        <!--MAINTENANCE-->
         <accordion-group is-open="accordion.accordions[8]">
             <accordion-heading>
-                <div class="accordion-bar bar-level-0">Blog Manager Extension</div>
+                <div class="accordion-bar bar-level-0">Maintenance Page</div>
+            </accordion-heading>
+            <ul class="module-create-options">
+                <li>
+                    <span class="module-create-title">Text Font</span>
+                        <span class="module-create-option">
+                            <j-opt-font data-ng-model="settings.maintenance_title"></j-opt-font>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"> </a>
+                </li>
+                <li>
+                    <span class="module-create-title">Text Line Height</span>
+                        <span class="module-create-option">
+                            <j-opt-text data-ng-model="settings.maintenance_line_height" class="journal-number-field"></j-opt-text>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Text Top Margin</span>
+                        <span class="module-create-option">
+                            <j-opt-text data-ng-model="settings.maintenance_padding" class="journal-number-field"></j-opt-text>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Content Background Color</span>
+                        <span class="module-create-option">
+                            <j-opt-color data-ng-model="settings.maintenance_bg_color" class="journal-number-field"></j-opt-color>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Content Background Image</span>
+                        <span class="module-create-option">
+                            <j-opt-background data-ng-model="settings.maintenance_bg" class="journal-number-field"></j-opt-background>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+                <li>
+                    <span class="module-create-title">Content Min Height</span>
+                        <span class="module-create-option">
+                            <j-opt-text data-ng-model="settings.maintenance_min_height" class="journal-number-field"></j-opt-text>
+                        </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+            </ul>
+        </accordion-group>
+
+        <!--BLOG MANAGER-->
+        <accordion-group is-open="accordion.accordions[9]">
+            <accordion-heading>
+                <div class="accordion-bar bar-level-0">Blog Manager Extension <span>Opencart 1.5.6</span></div>
             </accordion-heading>
             <ul class="module-create-options">
                 <li>

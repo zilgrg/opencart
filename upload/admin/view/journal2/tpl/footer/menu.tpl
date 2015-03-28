@@ -69,6 +69,15 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Disable on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="row.disable_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Disable on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="row.disable_mobile">
@@ -243,6 +252,7 @@
                             <span class="module-create-option">
                                  <ul class="simple-list">
                                      <li data-ng-repeat="item in column.products">
+                                         <input type="text" ng-model="item.sort_order" class="journal-sort" placeholder="Sort" />
                                          <product-search model="item.data"></product-search>
                                          <a class="btn red delete" href="javascript:;" data-ng-click="removeProduct(column, $index)">X</a>
                                      </li>
@@ -275,6 +285,15 @@
                             <span class="module-create-title">Status</span>
                             <span class="module-create-option">
                                 <switch data-ng-model="column.status">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Disable on Desktop</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.disable_desktop">
                                     <switch-option key="1">ON</switch-option>
                                     <switch-option key="0">OFF</switch-option>
                                 </switch>

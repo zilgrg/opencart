@@ -101,7 +101,7 @@ class ControllerModuleJournal2SideProducts extends Controller {
                     $products = $this->model_journal2_product->getProductsByManufacturer($manufacturer['manufacturer_id'], $limit);
                     break;
                 case 'custom':
-                    foreach (Journal2Utils::getProperty($module_data, 'products', array()) as $product) {
+                    foreach (Journal2Utils::sortArray(Journal2Utils::getProperty($module_data, 'products', array())) as $product) {
                         $result = $this->model_catalog_product->getProduct((int)Journal2Utils::getProperty($product, 'data.id'));
                         if (!$result) continue;
                         $products[] = $result;

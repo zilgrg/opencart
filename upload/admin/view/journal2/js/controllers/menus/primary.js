@@ -7,6 +7,7 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                     icon: {
                     },
                     hide_on_mobile: '0',
+                    hide_on_desktop: '0',
                     mobile_view: 'icon',
                     menu: {
                         menu_type: 'opencart',
@@ -14,8 +15,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                             page: 'common/home'
                         }
                     },
-                    name_overwrite: 0,
-                    target: 0
+                    name_overwrite: '0',
+                    target: '0'
                 };
             },
             default_data: function () {
@@ -28,8 +29,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                                 page: 'common/home'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -39,8 +40,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                                 page: 'account/wishlist'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -50,8 +51,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                                 page: 'account/account'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -61,8 +62,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                                 page: 'checkout/cart'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -72,8 +73,8 @@ define(['./../module', 'underscore', 'underscore.string'], function (module, _, 
                                 page: 'checkout/checkout'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     }
                 ];
             }

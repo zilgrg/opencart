@@ -41,6 +41,11 @@ class ControllerModuleJournal2TextRotator extends Controller {
             return;
         }
 
+        /* hide on desktop */
+        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+            return;
+        }
+
         $this->data['css'] = '';
 
         /* css for top / bottom positions */

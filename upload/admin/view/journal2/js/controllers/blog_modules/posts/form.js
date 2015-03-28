@@ -99,7 +99,8 @@ define(['./../../module', 'underscore'], function (module, _) {
             transition_speed: '400',
             transition_delay: '3000',
             touch_drag: '0',
-            disable_mobile: '0'
+            disable_mobile: '0',
+            disable_desktop: '0'
         };
 
         Rest.getBlog('posts').then(function (response) {

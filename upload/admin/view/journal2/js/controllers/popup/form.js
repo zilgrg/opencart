@@ -30,6 +30,7 @@ define(['./../module', 'underscore'], function (module, _) {
             image: 'no_image.jpg',
             content_overflow: '1',
             disable_mobile: '1',
+            disable_desktop: '0',
             status: '1',
             width: 600,
             height: 300,

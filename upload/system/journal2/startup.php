@@ -1,6 +1,6 @@
 <?php
 /* version */
-define('JOURNAL_VERSION', '2.4.8');
+define('JOURNAL_VERSION', '2.4.9');
 
 
 /* check if journal should be loaded */
@@ -93,7 +93,7 @@ define(\'DIR_MODIFICATION\'   , DIR_ROOT . \'system/modification/\');
 }
 
 /* Check if Modules are enabled */
-if ($load_theme && $this->registry->get('db')->query('show tables like "' . DB_PREFIX . 'journal2_config"')->num_rows === 0) {
+if ($load_theme && $this->registry->get('db')->query(str_replace('_', '\_', 'show tables like "' . DB_PREFIX . 'journal2_config"'))->num_rows === 0) {
     echo '
         <h3>Journal Installation Error</h3>
         <p>Journal2 module is not installed.</p>

@@ -180,6 +180,11 @@ class ControllerJournal2Settings extends Controller {
         // category image width/height
         $this->journal2->settings->set('config_image_width', $this->config->get('config_image_product_width'), 250);
         $this->journal2->settings->set('config_image_height', $this->config->get('config_image_product_height'), 250);
+
+        // checkout
+        if (defined('J2ENV')) {
+            $this->journal2->settings->set('journal_checkout', true);
+        }
     }
 
     public function columns() {

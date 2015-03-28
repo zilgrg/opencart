@@ -47,6 +47,11 @@ class ControllerModuleJournal2Popup extends Controller {
             return;
         }
 
+        /* hide on desktop */
+        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+            return;
+        }
+
         $cache_property = "module_journal_popup_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}";
 
         $cache = $this->journal2->cache->get($cache_property);

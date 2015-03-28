@@ -797,6 +797,10 @@ input.journal-sort, .journal-sort input{
   color: #777;
 }
 
+input.journal-sort + .select2-container {
+  margin-left: 10px;
+}
+
 .oc2{
   input.journal-sort, .journal-sort input{
     max-width: 33px;

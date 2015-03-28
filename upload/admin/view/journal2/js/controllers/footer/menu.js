@@ -89,7 +89,8 @@ define(['./../module', 'underscore'], function (module, _) {
                 },
                 is_open: true,
                 background: {},
-                disable_mobile: '0'
+                disable_mobile: '0',
+                disable_desktop: '0'
             };
         };
 
@@ -116,7 +117,8 @@ define(['./../module', 'underscore'], function (module, _) {
                 posts_type: 'newest',
                 posts: [],
                 status: '1',
-                disable_mobile: '0'
+                disable_mobile: '0',
+                disable_desktop: '0'
             };
         };
 

@@ -40,7 +40,7 @@ define(['./module', 'underscore.string'], function (module, _S) {
             if (type === 'opencart') {
                 name = PAGES[item.menu.menu_item.page];
             }
-            if (item.name_overwrite) {
+            if (item.name_overwrite == 1 && item.name && item.name.value) {
                 name = item.name.value[Journal2Config.languages.default];
             }
             name = name || '';

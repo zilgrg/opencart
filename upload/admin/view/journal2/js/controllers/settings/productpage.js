@@ -139,35 +139,35 @@ define(['./../module', 'underscore'], function (module, _) {
         };
 
         $scope.shareThisButtons = {
-            "st_li_sharethis": {
-                "id": "st_li_sharethis",
-                "name": "ShareThis",
-                "img": "https://ws.sharethis.com/images/sharethis_32.png"
-            },
-            "st_li_facebook": {
-                "id": "st_li_facebook",
-                "name": "Facebook",
-                "img": "https://ws.sharethis.com/images/facebook_32.png"
-            },
-            "st_li_twitter": {
-                "id": "st_li_twitter",
-                "name": "Tweet",
-                "img": "https://ws.sharethis.com/images/twitter_32.png"
-            },
-            "st_li_linkedin": {
-                "id": "st_li_linkedin",
-                "name": "LinkedIn",
-                "img": "https://ws.sharethis.com/images/linkedin_32.png"
+            "st_li_email": {
+                "id": "st_li_email",
+                "name": "Email",
+                "img": "https://ws.sharethis.com/images/email_32.png"
             },
             "st_li_pinterest": {
                 "id": "st_li_pinterest",
                 "name": "Pinterest",
                 "img": "https://ws.sharethis.com/images/pinterest_32.png"
             },
-            "st_li_email": {
-                "id": "st_li_email",
-                "name": "Email",
-                "img": "https://ws.sharethis.com/images/email_32.png"
+            "st_li_linkedin": {
+                "id": "st_li_linkedin",
+                "name": "LinkedIn",
+                "img": "https://ws.sharethis.com/images/linkedin_32.png"
+            },
+            "st_li_twitter": {
+                "id": "st_li_twitter",
+                "name": "Twitter",
+                "img": "https://ws.sharethis.com/images/twitter_32.png"
+            },
+            "st_li_facebook": {
+                "id": "st_li_facebook",
+                "name": "Facebook",
+                "img": "https://ws.sharethis.com/images/facebook_32.png"
+            },
+            "st_li_sharethis": {
+                "id": "st_li_sharethis",
+                "name": "ShareThis",
+                "img": "https://ws.sharethis.com/images/sharethis_32.png"
             },
             "st_li_googleplus": {
                 "id": "st_li_googleplus",
@@ -194,15 +194,15 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Arto",
                 "img": "https://ws.sharethis.com/images/arto_32.png"
             },
+            "st_li_att": {
+                "id": "st_li_att",
+                "name": "AT&amp;T",
+                "img": "https://ws.sharethis.com/images/att_32.png"
+            },
             "st_li_baidu": {
                 "id": "st_li_baidu",
                 "name": "Baidu",
                 "img": "https://ws.sharethis.com/images/baidu_32.png"
-            },
-            "st_li_bebo": {
-                "id": "st_li_bebo",
-                "name": "Bebo",
-                "img": "https://ws.sharethis.com/images/bebo_32.png"
             },
             "st_li_blinklist": {
                 "id": "st_li_blinklist",
@@ -224,11 +224,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Blogger",
                 "img": "https://ws.sharethis.com/images/blogger_32.png"
             },
-            "st_li_brainify": {
-                "id": "st_li_brainify",
-                "name": "Brainify",
-                "img": "https://ws.sharethis.com/images/brainify_32.png"
-            },
             "st_li_buddymarks": {
                 "id": "st_li_buddymarks",
                 "name": "BuddyMarks",
@@ -238,11 +233,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "id": "st_li_buffer",
                 "name": "Buffer",
                 "img": "https://ws.sharethis.com/images/buffer_32.png"
-            },
-            "st_li_bus_exchange": {
-                "id": "st_li_bus_exchange",
-                "name": "Add to BX",
-                "img": "https://ws.sharethis.com/images/bus_exchange_32.png"
             },
             "st_li_care2": {
                 "id": "st_li_care2",
@@ -259,25 +249,10 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "CiteULike",
                 "img": "https://ws.sharethis.com/images/citeulike_32.png"
             },
-            "st_li_connotea": {
-                "id": "st_li_connotea",
-                "name": "Connotea",
-                "img": "https://ws.sharethis.com/images/connotea_32.png"
-            },
-            "st_li_corank": {
-                "id": "st_li_corank",
-                "name": "coRank",
-                "img": "https://ws.sharethis.com/images/corank_32.png"
-            },
             "st_li_corkboard": {
                 "id": "st_li_corkboard",
                 "name": "Corkboard",
                 "img": "https://ws.sharethis.com/images/corkboard_32.png"
-            },
-            "st_li_current": {
-                "id": "st_li_current",
-                "name": "Current",
-                "img": "https://ws.sharethis.com/images/current_32.png"
             },
             "st_li_dealsplus": {
                 "id": "st_li_dealsplus",
@@ -299,11 +274,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Diigo",
                 "img": "https://ws.sharethis.com/images/diigo_32.png"
             },
-            "st_li_dotnetshoutout": {
-                "id": "st_li_dotnetshoutout",
-                "name": ".net Shoutout",
-                "img": "https://ws.sharethis.com/images/dotnetshoutout_32.png"
-            },
             "st_li_dzone": {
                 "id": "st_li_dzone",
                 "name": "DZone",
@@ -313,6 +283,11 @@ define(['./../module', 'underscore'], function (module, _) {
                 "id": "st_li_edmodo",
                 "name": "Edmodo",
                 "img": "https://ws.sharethis.com/images/edmodo_32.png"
+            },
+            "st_li_embed_ly": {
+                "id": "st_li_embed_ly",
+                "name": "Embed.ly",
+                "img": "https://ws.sharethis.com/images/embed_ly_32.png"
             },
             "st_li_evernote": {
                 "id": "st_li_evernote",
@@ -329,15 +304,20 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Fashiolista",
                 "img": "https://ws.sharethis.com/images/fashiolista_32.png"
             },
+            "st_li_flipboard": {
+                "id": "st_li_flipboard",
+                "name": "Flipboard",
+                "img": "https://ws.sharethis.com/images/flipboard_32.png"
+            },
             "st_li_folkd": {
                 "id": "st_li_folkd",
                 "name": "folkd.com",
                 "img": "https://ws.sharethis.com/images/folkd_32.png"
             },
-            "st_li_formspring": {
-                "id": "st_li_formspring",
-                "name": "Formspring",
-                "img": "https://ws.sharethis.com/images/formspring_32.png"
+            "st_li_foodlve": {
+                "id": "st_li_foodlve",
+                "name": "FoodLve",
+                "img": "https://ws.sharethis.com/images/foodlve_32.png"
             },
             "st_li_fresqui": {
                 "id": "st_li_fresqui",
@@ -384,16 +364,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Hatena",
                 "img": "https://ws.sharethis.com/images/hatena_32.png"
             },
-            "st_li_hyves": {
-                "id": "st_li_hyves",
-                "name": "Hyves",
-                "img": "https://ws.sharethis.com/images/hyves_32.png"
-            },
-            "st_li_identi": {
-                "id": "st_li_identi",
-                "name": "identi.ca",
-                "img": "https://ws.sharethis.com/images/identi_32.png"
-            },
             "st_li_instapaper": {
                 "id": "st_li_instapaper",
                 "name": "Instapaper",
@@ -438,11 +408,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "id": "st_li_mister_wong",
                 "name": "Mr Wong",
                 "img": "https://ws.sharethis.com/images/mister_wong_32.png"
-            },
-            "st_li_mixx": {
-                "id": "st_li_mixx",
-                "name": "Mixx",
-                "img": "https://ws.sharethis.com/images/mixx_32.png"
             },
             "st_li_moshare": {
                 "id": "st_li_moshare",
@@ -489,10 +454,15 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Oknotizie",
                 "img": "https://ws.sharethis.com/images/oknotizie_32.png"
             },
-            "st_li_orkut": {
-                "id": "st_li_orkut",
-                "name": "Orkut",
-                "img": "https://ws.sharethis.com/images/orkut_32.png"
+            "st_li_pocket": {
+                "id": "st_li_pocket",
+                "name": "Pocket",
+                "img": "https://ws.sharethis.com/images/pocket_32.png"
+            },
+            "st_li_print": {
+                "id": "st_li_print",
+                "name": "Print",
+                "img": "https://ws.sharethis.com/images/print_32.png"
             },
             "st_li_raise_your_voice": {
                 "id": "st_li_raise_your_voice",
@@ -514,20 +484,10 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Sina",
                 "img": "https://ws.sharethis.com/images/sina_32.png"
             },
-            "st_li_slashdot": {
-                "id": "st_li_slashdot",
-                "name": "Slashdot",
-                "img": "https://ws.sharethis.com/images/slashdot_32.png"
-            },
             "st_li_sonico": {
                 "id": "st_li_sonico",
                 "name": "Sonico",
                 "img": "https://ws.sharethis.com/images/sonico_32.png"
-            },
-            "st_li_speedtile": {
-                "id": "st_li_speedtile",
-                "name": "Speedtile",
-                "img": "https://ws.sharethis.com/images/speedtile_32.png"
             },
             "st_li_startaid": {
                 "id": "st_li_startaid",
@@ -548,11 +508,6 @@ define(['./../module', 'underscore'], function (module, _) {
                 "id": "st_li_stumpedia",
                 "name": "Stumpedia",
                 "img": "https://ws.sharethis.com/images/stumpedia_32.png"
-            },
-            "st_li_technorati": {
-                "id": "st_li_technorati",
-                "name": "Technorati",
-                "img": "https://ws.sharethis.com/images/technorati_32.png"
             },
             "st_li_typepad": {
                 "id": "st_li_typepad",
@@ -584,15 +539,20 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "VOXopolis",
                 "img": "https://ws.sharethis.com/images/voxopolis_32.png"
             },
+            "st_li_whatsapp": {
+                "id": "st_li_whatsapp",
+                "name": "WhatsApp",
+                "img": "https://ws.sharethis.com/images/whatsapp_32.png"
+            },
+            "st_li_weheartit": {
+                "id": "st_li_weheartit",
+                "name": "We Heart It",
+                "img": "https://ws.sharethis.com/images/weheartit_32.png"
+            },
             "st_li_wordpress": {
                 "id": "st_li_wordpress",
                 "name": "WordPress",
                 "img": "https://ws.sharethis.com/images/wordpress_32.png"
-            },
-            "st_li_xanga": {
-                "id": "st_li_xanga",
-                "name": "Xanga",
-                "img": "https://ws.sharethis.com/images/xanga_32.png"
             },
             "st_li_xerpi": {
                 "id": "st_li_xerpi",
@@ -609,65 +569,60 @@ define(['./../module', 'underscore'], function (module, _) {
                 "name": "Yammer",
                 "img": "https://ws.sharethis.com/images/yammer_32.png"
             },
-            "st_li_yigg": {
-                "id": "st_li_yigg",
-                "name": "Yigg",
-                "img": "https://ws.sharethis.com/images/yigg_32.png"
-            },
-            "st_li_fblike": {
-                "id": "st_li_fblike",
-                "name": "Facebook Like",
-                "img": "https://ws.sharethis.com/images/fblike_32.png"
-            },
-            "st_li_fbrec": {
-                "id": "st_li_fbrec",
-                "name": "Facebook Recommend",
-                "img": "https://ws.sharethis.com/images/fbrec_32.png"
-            },
-            "st_li_fbsend": {
-                "id": "st_li_fbsend",
-                "name": "Facebook Send",
-                "img": "https://ws.sharethis.com/images/fbsend_32.png"
-            },
-            "st_li_fbsub": {
-                "id": "st_li_fbsub",
-                "name": "Facebook Subscribe",
-                "img": "https://ws.sharethis.com/images/fbsub_32.png"
+            "st_li_foursquarefollow": {
+                "id": "st_li_foursquarefollow",
+                "name": "Foursquare Follow",
+                "img": "http://w.sharethis.com/images/foursquarefollow_32.png"
             },
             "st_li_foursquaresave": {
                 "id": "st_li_foursquaresave",
                 "name": "Foursquare Save",
-                "img": "https://ws.sharethis.com/images/foursquaresave_32.png"
+                "img": "http://w.sharethis.com/images/foursquaresave_32.png"
             },
-            "st_li_foursquarefollow": {
-                "id": "st_li_foursquarefollow",
-                "name": "Foursquare Follow",
-                "img": "https://ws.sharethis.com/images/foursquarefollow_32.png"
+            "st_li_fbsub": {
+                "id": "st_li_fbsub",
+                "name": "Facebook Subscribe",
+                "img": "http://w.sharethis.com/images/fbsub_32.png"
+            },
+            "st_li_fbsend": {
+                "id": "st_li_fbsend",
+                "name": "Facebook Send",
+                "img": "http://w.sharethis.com/images/fbsend_32.png"
+            },
+            "st_li_fbrec": {
+                "id": "st_li_fbrec",
+                "name": "Facebook Recommend",
+                "img": "http://w.sharethis.com/images/fbrec_32.png"
+            },
+            "st_li_fblike": {
+                "id": "st_li_fblike",
+                "name": "Facebook Like",
+                "img": "http://w.sharethis.com/images/fblike_32.png"
             },
             "st_li_instagram": {
                 "id": "st_li_instagram",
                 "name": "Instagram Badge",
-                "img": "https://ws.sharethis.com/images/instagram_32.png"
+                "img": "http://w.sharethis.com/images/instagram_32.png"
             },
             "st_li_plusone": {
                 "id": "st_li_plusone",
                 "name": "Google +1",
-                "img": "https://ws.sharethis.com/images/plusone_32.png"
+                "img": "http://w.sharethis.com/images/plusone_32.png"
             },
             "st_li_pinterestfollow": {
                 "id": "st_li_pinterestfollow",
                 "name": "Pinterest Follow",
-                "img": "https://ws.sharethis.com/images/pinterestfollow_32.png"
+                "img": "http://w.sharethis.com/images/pinterestfollow_32.png"
             },
             "st_li_twitterfollow": {
                 "id": "st_li_twitterfollow",
                 "name": "Twitter Follow",
-                "img": "https://ws.sharethis.com/images/twitterfollow_32.png"
+                "img": "http://w.sharethis.com/images/twitterfollow_32.png"
             },
             "st_li_youtube": {
                 "id": "st_li_youtube",
                 "name": "Youtube Subscribe",
-                "img": "https://ws.sharethis.com/images/youtube_32.png"
+                "img": "http://w.sharethis.com/images/youtube_32.png"
             }
         };
 

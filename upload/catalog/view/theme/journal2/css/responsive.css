@@ -386,6 +386,9 @@ HEADER
   .journal-header-center .journal-links .links {
     width: 100%; }
 
+  body header {
+    box-shadow: none; }
+
   header .links > a {
     border-bottom-color: #E4E4E4;
     border-top-style: solid;
@@ -738,9 +741,7 @@ Android/Firefox
   .firefox .sticky-wrapper, .firefox header {
     display: table; }
   .firefox #top-modules {
-    clear: both; }
-  .firefox #container > .row {
-    display: table; } }
+    clear: both; } }
 /******************************
  PRODUCT PAGE
 *******************************/
@@ -859,7 +860,15 @@ Android/Firefox
   .product-list-item .name {
     margin-left: 0; }
   .product-list-item .product-details {
-    margin-left: 0; } }
+    margin-left: 0; }
+
+  .product-filter .sort {
+    position: absolute;
+    max-width: 125px;
+    right: 100px; }
+
+  .product-filter .sort select {
+    margin: 0; } }
 .mobile .product-wrapper, .tablet .product-wrapper {
   box-shadow: none !important;
   border-radius: none;
@@ -960,7 +969,20 @@ SHOPPING CART
       left: 10px;
       margin-bottom: 5px; }
   .cart-info .image img {
-    max-width: 50px; } }
+    max-width: 50px; }
+
+  .sc-page .buttons > div,
+  .sc-page .buttons > div a {
+    width: 100%; }
+
+  .sc-page .buttons .right {
+    margin-bottom: 10px; }
+
+  #total .right {
+    width: 74%; }
+
+  .checkout-content table {
+    table-layout: auto; } }
 /******************************
 CHECKOUT
 *******************************/

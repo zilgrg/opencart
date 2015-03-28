@@ -386,7 +386,8 @@ BRANDS
   margin: 0; }
 .oc2 .contact-page .panel-body {
   margin-bottom: 20px;
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: transparent; }
 .oc2 .img-thumbnail {
   max-width: 100%;
   height: auto; }

@@ -67,6 +67,14 @@ class ControllerJournal2Menu extends Controller {
 
             foreach ($rows as $row) {
                 if (isset($row['status']) && !$row['status']) continue;
+                if ($class = Journal2Utils::getProperty($row, 'disable_mobile') ? 'hide-on-mobile' : '') {
+                    if ((Journal2Cache::$mobile_detect->isMobile() || Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+                        continue;
+                    }
+                }
+                if (Journal2Utils::getProperty($row, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+                    continue;
+                }
                 $row_css = Journal2Utils::getBackgroundCssProperties(Journal2Utils::getProperty($row, 'background'));
                 if (Journal2Utils::getProperty($row, 'bottom_spacing') !== null) {
                     $row_css[] = 'margin-bottom: ' . Journal2Utils::getProperty($row, 'bottom_spacing') . 'px';
@@ -86,6 +94,7 @@ class ControllerJournal2Menu extends Controller {
                 $temp = array(
                     'type' => '',
                     'css' => implode('; ', $row_css),
+                    'class' => $class,
                     'columns' => array(),
                     'contacts' => array(
                         'left' => array(),
@@ -104,6 +113,9 @@ class ControllerJournal2Menu extends Controller {
                                 if ((Journal2Cache::$mobile_detect->isMobile() || Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
                                     continue;
                                 }
+                            }
+                            if (Journal2Utils::getProperty($column, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+                                continue;
                             }
                             switch (Journal2Utils::getProperty($column, 'type')) {
                                 case 'text':
@@ -195,7 +207,7 @@ class ControllerJournal2Menu extends Controller {
                                             $products = $this->model_journal2_product->getProductsByManufacturer($manufacturer['manufacturer_id'], $limit);
                                             break;
                                         case 'custom':
-                                            foreach (Journal2Utils::getProperty($column, 'products', array()) as $product) {
+                                            foreach (Journal2Utils::sortArray(Journal2Utils::getProperty($column, 'products', array())) as $product) {
                                                 $result = $this->model_catalog_product->getProduct(Journal2Utils::getProperty($product, 'data.id'));
                                                 if (!$result) continue;
                                                 $products[] = $result;
@@ -401,6 +413,10 @@ class ControllerJournal2Menu extends Controller {
                     unset($menu_item[$key]);
                     continue;
                 }
+                if (Journal2Utils::getProperty($menu_item, 'hide_on_desktop', '0') === '1' && !Journal2Cache::$mobile_detect->isMobile()) {
+                    unset($menu_item[$key]);
+                    continue;
+                }
 
                 if ($display === 'floated') {
                     $class .= ' float-' . $float;
@@ -474,6 +490,10 @@ class ControllerJournal2Menu extends Controller {
             $target = $item['target'] ? ' target="_blank"' : '';
             $class = Journal2Utils::getProperty($item, 'hide_on_mobile') ? 'hide-on-mobile' : '';
             if ($class === 'hide-on-mobile' && (Journal2Cache::$mobile_detect->isMobile() || Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+                unset($items[$key]);
+                continue;
+            }
+            if (Journal2Utils::getProperty($item, 'hide_on_desktop', '0') === '1' && !Journal2Cache::$mobile_detect->isMobile()) {
                 unset($items[$key]);
                 continue;
             }
@@ -557,6 +577,10 @@ class ControllerJournal2Menu extends Controller {
             if (Journal2Utils::getProperty($item, 'mobile_view') === 'text') {
                 $class .= ' text-only';
             }
+            if (!$href) {
+                $class .= ' no-link';
+            }
+            $class = trim($class);
             $item = array(
                 'icon_left' => $icon['left'],
                 'icon_right'=> $icon['right'],
@@ -854,7 +878,7 @@ class ControllerJournal2Menu extends Controller {
 
                     /* custom products */
                     case 'custom':
-                        $products = Journal2Utils::getProperty($menu_item, 'products.items', array());
+                        $products = Journal2Utils::sortArray(Journal2Utils::getProperty($menu_item, 'products.items', array()));
                         foreach ($products as $product) {
                             $result = $this->model_catalog_product->getProduct(Journal2Utils::getProperty($product, 'data.id'));
                             if (!$result) continue;
@@ -1046,15 +1070,17 @@ class ControllerJournal2Menu extends Controller {
                 $columns = Journal2Utils::getProperty($menu_item, 'mixed_columns', array());
                 $columns = Journal2Utils::sortArray($columns);
 
-                $image_resize_type = Journal2Utils::getProperty($menu_item, 'image_type', 'fit');
-
                 foreach ($columns as $column) {
                     $image_width = Journal2Utils::getProperty($column, 'image_width', 250);
                     $image_height = Journal2Utils::getProperty($column, 'image_height', 250);
+                    $image_resize_type = Journal2Utils::getProperty($column, 'image_type', 'fit');
 
                     if (!Journal2Utils::getProperty($column, 'status', 1)) continue;
                     $class = Journal2Utils::getProperty($column, 'hide_on_mobile') ? 'hide-on-mobile' : '';
                     if ($class === 'hide-on-mobile' && (Journal2Cache::$mobile_detect->isMobile() || Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+                        continue;
+                    }
+                    if (Journal2Utils::getProperty($column, 'hide_on_desktop', '0') === '1' && !Journal2Cache::$mobile_detect->isMobile()) {
                         continue;
                     }
                     $cms_blocks = array(

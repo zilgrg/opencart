@@ -15,7 +15,6 @@ require.config({
         'select2'           : '../lib/select2/select2.min',
         'angular-select2'   : '../lib/select2/select2-directive',
         'angular-bootstrap' : '../lib/ui.bootstrap/ui-bootstrap-tpls-0.6.0.min',
-        'angular-file'      : '../lib/angular-file-upload/angular-file-upload.min',
         'spin'              : '../lib/spin.js/spin.min',
         'simple-slider'     : '../lib/simple-slider/js/simple-slider'
     },
@@ -48,9 +47,6 @@ require.config({
             deps: ['angular', 'select2']
         },
         'angular-bootstrap': {
-            deps: ['angular']
-        },
-        'angular-file': {
             deps: ['angular']
         }
     },

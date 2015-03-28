@@ -20,7 +20,7 @@ class ModelJournal2Blog extends Model {
 
     public function isEnabled() {
         if (self::$is_installed === null) {
-            $query = $this->db->query('show tables like "' . DB_PREFIX . 'journal2_blog%"');
+            $query = $this->db->query(str_replace('_', '\_', 'show tables like "' . DB_PREFIX . 'journal2_blog%"'));
             self::$is_installed = $query->num_rows >= 9;
             if ($query->num_rows >= 9 && $query->num_rows < 11) {
                 /* create table */

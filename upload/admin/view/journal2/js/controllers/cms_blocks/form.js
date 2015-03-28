@@ -75,6 +75,7 @@ define(['./../module', 'underscore'], function (module, _) {
             module_background:{},
             module_padding:'0',
             disable_mobile: '0',
+            disable_desktop: '0',
             background: {},
             fullwidth: '0',
             margin_top: '',

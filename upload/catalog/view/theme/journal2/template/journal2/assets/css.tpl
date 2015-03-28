@@ -1091,6 +1091,20 @@ header .journal-login{
   padding-bottom:0;
 }
 
+<?php if($this->journal2->settings->get('mobile_menu_cart_display', 'on') === 'off' ): ?>
+@media only screen and (max-width: 470px) {
+.journal-menu .mobile-trigger {
+width: 50%;
+margin-top: -40px;
+z-index: 999;
+background-color:transparent;
+}
+.journal-header-center .journal-menu{
+  z-index:2;
+}
+}
+<?php endif; ?>
+
 <?php if($this->journal2->settings->get('product_grid_button_block_button', 'block-button') === 'inline-button' && $this->journal2->settings->get('catalog_grid_cart', 'block') === 'block' ): ?>
   .product-grid-item .cart{
   display:inline-block !important;
@@ -1111,13 +1125,11 @@ header .journal-login{
 
 <?php if($this->journal2->settings->get('catalog_product_page_cart', 'block') === 'none'): ?>
   .quickview .product-info .right .cart{
-    display:none;
+    display:table;
   }
-<?php endif; ?>
-
-<?php if($this->journal2->settings->get('catalog_product_page_cart', 'block') === 'none'): ?>
-  .quickview .product-info .right .cart{
-    display:none;
+  .product-info .right .cart div .qty,
+  .product-info .right .cart div #button-cart{
+  display:none;
   }
 <?php endif; ?>
 

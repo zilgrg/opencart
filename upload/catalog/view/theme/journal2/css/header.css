@@ -694,9 +694,16 @@ HEADER CENTER
     width: 100%; }
   .journal-header-center .button-search {
     transition: color 0.2s, background-color 0.2s; }
+    .journal-header-center .button-search button {
+      width: 38px;
+      height: 38px;
+      cursor: pointer; }
     .journal-header-center .button-search i {
-      margin-top: 9px;
-      margin-left: 11px; }
+      margin-top: 2px;
+      margin-left: 6px; }
+      .journal-header-center .button-search i:before {
+        margin-top: 6px;
+        margin-left: 4px; }
   .journal-header-center #search input {
     background-color: transparent; }
   .journal-header-center .journal-search:hover #search input {
@@ -885,7 +892,8 @@ header {
   display: none;
   padding: 20px;
   overflow: hidden;
-  width: 100%; }
+  width: 100%;
+  z-index: 9999; }
   .mega-menu > div {
     display: block;
     overflow: hidden;
@@ -912,6 +920,7 @@ MEGA-MENU DROPDOWN
   .drop-down > ul {
     display: none; }
   .drop-down ul {
+    z-index: 999;
     position: absolute;
     list-style: none;
     margin: 0;

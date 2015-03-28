@@ -848,7 +848,7 @@
             <add position="before"><![CDATA[
             <?php $is_ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'; ?>
             <?php $ckeditor = isset($this->request->get['CKEditorFuncNum']) ? $this->request->get['CKEditorFuncNum'] : null; ?>
-            <?php $imgpath = HTTP_CATALOG . 'image';  ?>
+            <?php $imgpath = HTTP_CATALOG . 'image/';  ?>
             <?php $base = $this->request->server['HTTPS'] ? HTTPS_SERVER : HTTP_SERVER; ?>
             <?php if (!$is_ajax): ?>
             <!DOCTYPE html>

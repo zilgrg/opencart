@@ -42,6 +42,11 @@ class ControllerModuleJournal2StaticBanners extends Controller {
             return;
         }
 
+        /* hide on desktop */
+        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+            return;
+        }
+
         /* css for top / bottom positions */
         if (in_array($setting['position'], array('top', 'bottom'))) {
             $padding = $this->journal2->settings->get('module_margins', 20) . 'px';
@@ -111,6 +116,7 @@ class ControllerModuleJournal2StaticBanners extends Controller {
                     'link'          => $this->model_journal2_menu->getLink(Journal2Utils::getProperty($section, 'link')),
                     'target'        => Journal2Utils::getProperty($section, 'link_new_window') ? 'target="_blank"' : '',
                     'image'         => Journal2Utils::resizeImage($this->model_tool_image, $image),
+                    'image_title'   => Journal2Utils::getProperty($section, 'image_title.value.' . $this->config->get('config_language_id'), ''),
                     'image_width'   => $width,
                     'image_height'  => $height
                 );

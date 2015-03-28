@@ -2723,35 +2723,35 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
         };
 
         $scope.shareThisButtons = {
-            "st_li_sharethis": {
-                "id": "st_li_sharethis",
-                "name": "ShareThis",
-                "img": "https://ws.sharethis.com/images/sharethis_32.png"
-            },
-            "st_li_facebook": {
-                "id": "st_li_facebook",
-                "name": "Facebook",
-                "img": "https://ws.sharethis.com/images/facebook_32.png"
-            },
-            "st_li_twitter": {
-                "id": "st_li_twitter",
-                "name": "Tweet",
-                "img": "https://ws.sharethis.com/images/twitter_32.png"
-            },
-            "st_li_linkedin": {
-                "id": "st_li_linkedin",
-                "name": "LinkedIn",
-                "img": "https://ws.sharethis.com/images/linkedin_32.png"
+            "st_li_email": {
+                "id": "st_li_email",
+                "name": "Email",
+                "img": "https://ws.sharethis.com/images/email_32.png"
             },
             "st_li_pinterest": {
                 "id": "st_li_pinterest",
                 "name": "Pinterest",
                 "img": "https://ws.sharethis.com/images/pinterest_32.png"
             },
-            "st_li_email": {
-                "id": "st_li_email",
-                "name": "Email",
-                "img": "https://ws.sharethis.com/images/email_32.png"
+            "st_li_linkedin": {
+                "id": "st_li_linkedin",
+                "name": "LinkedIn",
+                "img": "https://ws.sharethis.com/images/linkedin_32.png"
+            },
+            "st_li_twitter": {
+                "id": "st_li_twitter",
+                "name": "Twitter",
+                "img": "https://ws.sharethis.com/images/twitter_32.png"
+            },
+            "st_li_facebook": {
+                "id": "st_li_facebook",
+                "name": "Facebook",
+                "img": "https://ws.sharethis.com/images/facebook_32.png"
+            },
+            "st_li_sharethis": {
+                "id": "st_li_sharethis",
+                "name": "ShareThis",
+                "img": "https://ws.sharethis.com/images/sharethis_32.png"
             },
             "st_li_googleplus": {
                 "id": "st_li_googleplus",
@@ -2778,15 +2778,15 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Arto",
                 "img": "https://ws.sharethis.com/images/arto_32.png"
             },
+            "st_li_att": {
+                "id": "st_li_att",
+                "name": "AT&amp;T",
+                "img": "https://ws.sharethis.com/images/att_32.png"
+            },
             "st_li_baidu": {
                 "id": "st_li_baidu",
                 "name": "Baidu",
                 "img": "https://ws.sharethis.com/images/baidu_32.png"
-            },
-            "st_li_bebo": {
-                "id": "st_li_bebo",
-                "name": "Bebo",
-                "img": "https://ws.sharethis.com/images/bebo_32.png"
             },
             "st_li_blinklist": {
                 "id": "st_li_blinklist",
@@ -2808,11 +2808,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Blogger",
                 "img": "https://ws.sharethis.com/images/blogger_32.png"
             },
-            "st_li_brainify": {
-                "id": "st_li_brainify",
-                "name": "Brainify",
-                "img": "https://ws.sharethis.com/images/brainify_32.png"
-            },
             "st_li_buddymarks": {
                 "id": "st_li_buddymarks",
                 "name": "BuddyMarks",
@@ -2822,11 +2817,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "id": "st_li_buffer",
                 "name": "Buffer",
                 "img": "https://ws.sharethis.com/images/buffer_32.png"
-            },
-            "st_li_bus_exchange": {
-                "id": "st_li_bus_exchange",
-                "name": "Add to BX",
-                "img": "https://ws.sharethis.com/images/bus_exchange_32.png"
             },
             "st_li_care2": {
                 "id": "st_li_care2",
@@ -2843,25 +2833,10 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "CiteULike",
                 "img": "https://ws.sharethis.com/images/citeulike_32.png"
             },
-            "st_li_connotea": {
-                "id": "st_li_connotea",
-                "name": "Connotea",
-                "img": "https://ws.sharethis.com/images/connotea_32.png"
-            },
-            "st_li_corank": {
-                "id": "st_li_corank",
-                "name": "coRank",
-                "img": "https://ws.sharethis.com/images/corank_32.png"
-            },
             "st_li_corkboard": {
                 "id": "st_li_corkboard",
                 "name": "Corkboard",
                 "img": "https://ws.sharethis.com/images/corkboard_32.png"
-            },
-            "st_li_current": {
-                "id": "st_li_current",
-                "name": "Current",
-                "img": "https://ws.sharethis.com/images/current_32.png"
             },
             "st_li_dealsplus": {
                 "id": "st_li_dealsplus",
@@ -2883,11 +2858,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Diigo",
                 "img": "https://ws.sharethis.com/images/diigo_32.png"
             },
-            "st_li_dotnetshoutout": {
-                "id": "st_li_dotnetshoutout",
-                "name": ".net Shoutout",
-                "img": "https://ws.sharethis.com/images/dotnetshoutout_32.png"
-            },
             "st_li_dzone": {
                 "id": "st_li_dzone",
                 "name": "DZone",
@@ -2897,6 +2867,11 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "id": "st_li_edmodo",
                 "name": "Edmodo",
                 "img": "https://ws.sharethis.com/images/edmodo_32.png"
+            },
+            "st_li_embed_ly": {
+                "id": "st_li_embed_ly",
+                "name": "Embed.ly",
+                "img": "https://ws.sharethis.com/images/embed_ly_32.png"
             },
             "st_li_evernote": {
                 "id": "st_li_evernote",
@@ -2913,15 +2888,20 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Fashiolista",
                 "img": "https://ws.sharethis.com/images/fashiolista_32.png"
             },
+            "st_li_flipboard": {
+                "id": "st_li_flipboard",
+                "name": "Flipboard",
+                "img": "https://ws.sharethis.com/images/flipboard_32.png"
+            },
             "st_li_folkd": {
                 "id": "st_li_folkd",
                 "name": "folkd.com",
                 "img": "https://ws.sharethis.com/images/folkd_32.png"
             },
-            "st_li_formspring": {
-                "id": "st_li_formspring",
-                "name": "Formspring",
-                "img": "https://ws.sharethis.com/images/formspring_32.png"
+            "st_li_foodlve": {
+                "id": "st_li_foodlve",
+                "name": "FoodLve",
+                "img": "https://ws.sharethis.com/images/foodlve_32.png"
             },
             "st_li_fresqui": {
                 "id": "st_li_fresqui",
@@ -2968,16 +2948,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Hatena",
                 "img": "https://ws.sharethis.com/images/hatena_32.png"
             },
-            "st_li_hyves": {
-                "id": "st_li_hyves",
-                "name": "Hyves",
-                "img": "https://ws.sharethis.com/images/hyves_32.png"
-            },
-            "st_li_identi": {
-                "id": "st_li_identi",
-                "name": "identi.ca",
-                "img": "https://ws.sharethis.com/images/identi_32.png"
-            },
             "st_li_instapaper": {
                 "id": "st_li_instapaper",
                 "name": "Instapaper",
@@ -3022,11 +2992,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "id": "st_li_mister_wong",
                 "name": "Mr Wong",
                 "img": "https://ws.sharethis.com/images/mister_wong_32.png"
-            },
-            "st_li_mixx": {
-                "id": "st_li_mixx",
-                "name": "Mixx",
-                "img": "https://ws.sharethis.com/images/mixx_32.png"
             },
             "st_li_moshare": {
                 "id": "st_li_moshare",
@@ -3073,10 +3038,15 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Oknotizie",
                 "img": "https://ws.sharethis.com/images/oknotizie_32.png"
             },
-            "st_li_orkut": {
-                "id": "st_li_orkut",
-                "name": "Orkut",
-                "img": "https://ws.sharethis.com/images/orkut_32.png"
+            "st_li_pocket": {
+                "id": "st_li_pocket",
+                "name": "Pocket",
+                "img": "https://ws.sharethis.com/images/pocket_32.png"
+            },
+            "st_li_print": {
+                "id": "st_li_print",
+                "name": "Print",
+                "img": "https://ws.sharethis.com/images/print_32.png"
             },
             "st_li_raise_your_voice": {
                 "id": "st_li_raise_your_voice",
@@ -3098,20 +3068,10 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Sina",
                 "img": "https://ws.sharethis.com/images/sina_32.png"
             },
-            "st_li_slashdot": {
-                "id": "st_li_slashdot",
-                "name": "Slashdot",
-                "img": "https://ws.sharethis.com/images/slashdot_32.png"
-            },
             "st_li_sonico": {
                 "id": "st_li_sonico",
                 "name": "Sonico",
                 "img": "https://ws.sharethis.com/images/sonico_32.png"
-            },
-            "st_li_speedtile": {
-                "id": "st_li_speedtile",
-                "name": "Speedtile",
-                "img": "https://ws.sharethis.com/images/speedtile_32.png"
             },
             "st_li_startaid": {
                 "id": "st_li_startaid",
@@ -3132,11 +3092,6 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "id": "st_li_stumpedia",
                 "name": "Stumpedia",
                 "img": "https://ws.sharethis.com/images/stumpedia_32.png"
-            },
-            "st_li_technorati": {
-                "id": "st_li_technorati",
-                "name": "Technorati",
-                "img": "https://ws.sharethis.com/images/technorati_32.png"
             },
             "st_li_typepad": {
                 "id": "st_li_typepad",
@@ -3168,15 +3123,20 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "VOXopolis",
                 "img": "https://ws.sharethis.com/images/voxopolis_32.png"
             },
+            "st_li_whatsapp": {
+                "id": "st_li_whatsapp",
+                "name": "WhatsApp",
+                "img": "https://ws.sharethis.com/images/whatsapp_32.png"
+            },
+            "st_li_weheartit": {
+                "id": "st_li_weheartit",
+                "name": "We Heart It",
+                "img": "https://ws.sharethis.com/images/weheartit_32.png"
+            },
             "st_li_wordpress": {
                 "id": "st_li_wordpress",
                 "name": "WordPress",
                 "img": "https://ws.sharethis.com/images/wordpress_32.png"
-            },
-            "st_li_xanga": {
-                "id": "st_li_xanga",
-                "name": "Xanga",
-                "img": "https://ws.sharethis.com/images/xanga_32.png"
             },
             "st_li_xerpi": {
                 "id": "st_li_xerpi",
@@ -3193,65 +3153,60 @@ define('controllers/settings/productpage',['./../module', 'underscore'], functio
                 "name": "Yammer",
                 "img": "https://ws.sharethis.com/images/yammer_32.png"
             },
-            "st_li_yigg": {
-                "id": "st_li_yigg",
-                "name": "Yigg",
-                "img": "https://ws.sharethis.com/images/yigg_32.png"
-            },
-            "st_li_fblike": {
-                "id": "st_li_fblike",
-                "name": "Facebook Like",
-                "img": "https://ws.sharethis.com/images/fblike_32.png"
-            },
-            "st_li_fbrec": {
-                "id": "st_li_fbrec",
-                "name": "Facebook Recommend",
-                "img": "https://ws.sharethis.com/images/fbrec_32.png"
-            },
-            "st_li_fbsend": {
-                "id": "st_li_fbsend",
-                "name": "Facebook Send",
-                "img": "https://ws.sharethis.com/images/fbsend_32.png"
-            },
-            "st_li_fbsub": {
-                "id": "st_li_fbsub",
-                "name": "Facebook Subscribe",
-                "img": "https://ws.sharethis.com/images/fbsub_32.png"
+            "st_li_foursquarefollow": {
+                "id": "st_li_foursquarefollow",
+                "name": "Foursquare Follow",
+                "img": "http://w.sharethis.com/images/foursquarefollow_32.png"
             },
             "st_li_foursquaresave": {
                 "id": "st_li_foursquaresave",
                 "name": "Foursquare Save",
-                "img": "https://ws.sharethis.com/images/foursquaresave_32.png"
+                "img": "http://w.sharethis.com/images/foursquaresave_32.png"
             },
-            "st_li_foursquarefollow": {
-                "id": "st_li_foursquarefollow",
-                "name": "Foursquare Follow",
-                "img": "https://ws.sharethis.com/images/foursquarefollow_32.png"
+            "st_li_fbsub": {
+                "id": "st_li_fbsub",
+                "name": "Facebook Subscribe",
+                "img": "http://w.sharethis.com/images/fbsub_32.png"
+            },
+            "st_li_fbsend": {
+                "id": "st_li_fbsend",
+                "name": "Facebook Send",
+                "img": "http://w.sharethis.com/images/fbsend_32.png"
+            },
+            "st_li_fbrec": {
+                "id": "st_li_fbrec",
+                "name": "Facebook Recommend",
+                "img": "http://w.sharethis.com/images/fbrec_32.png"
+            },
+            "st_li_fblike": {
+                "id": "st_li_fblike",
+                "name": "Facebook Like",
+                "img": "http://w.sharethis.com/images/fblike_32.png"
             },
             "st_li_instagram": {
                 "id": "st_li_instagram",
                 "name": "Instagram Badge",
-                "img": "https://ws.sharethis.com/images/instagram_32.png"
+                "img": "http://w.sharethis.com/images/instagram_32.png"
             },
             "st_li_plusone": {
                 "id": "st_li_plusone",
                 "name": "Google +1",
-                "img": "https://ws.sharethis.com/images/plusone_32.png"
+                "img": "http://w.sharethis.com/images/plusone_32.png"
             },
             "st_li_pinterestfollow": {
                 "id": "st_li_pinterestfollow",
                 "name": "Pinterest Follow",
-                "img": "https://ws.sharethis.com/images/pinterestfollow_32.png"
+                "img": "http://w.sharethis.com/images/pinterestfollow_32.png"
             },
             "st_li_twitterfollow": {
                 "id": "st_li_twitterfollow",
                 "name": "Twitter Follow",
-                "img": "https://ws.sharethis.com/images/twitterfollow_32.png"
+                "img": "http://w.sharethis.com/images/twitterfollow_32.png"
             },
             "st_li_youtube": {
                 "id": "st_li_youtube",
                 "name": "Youtube Subscribe",
-                "img": "https://ws.sharethis.com/images/youtube_32.png"
+                "img": "http://w.sharethis.com/images/youtube_32.png"
             }
         };
 
@@ -6048,6 +6003,7 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                     icon: {
                     },
                     hide_on_mobile: '0',
+                    hide_on_desktop: '0',
                     mobile_view: 'icon',
                     menu: {
                         menu_type: 'opencart',
@@ -6055,8 +6011,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                             page: 'common/home'
                         }
                     },
-                    name_overwrite: 0,
-                    target: 0
+                    name_overwrite: '0',
+                    target: '0'
                 };
             },
             default_data: function () {
@@ -6069,8 +6025,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                                 page: 'common/home'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -6080,8 +6036,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                                 page: 'account/wishlist'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -6091,8 +6047,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                                 page: 'account/account'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -6102,8 +6058,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                                 page: 'checkout/cart'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -6113,8 +6069,8 @@ define('controllers/menus/primary',['./../module', 'underscore', 'underscore.str
                                 page: 'checkout/checkout'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     }
                 ];
             }
@@ -6197,6 +6153,7 @@ define('controllers/menus/secondary',['./../module', 'underscore'], function (mo
                     icon: {
                     },
                     hide_on_mobile: '0',
+                    hide_on_desktop: '0',
                     mobile_view: 'icon',
                     menu: {
                         menu_type: 'opencart',
@@ -6204,8 +6161,8 @@ define('controllers/menus/secondary',['./../module', 'underscore'], function (mo
                             page: 'common/home'
                         }
                     },
-                    name_overwrite: 0,
-                    target: 0
+                    name_overwrite: '0',
+                    target: '0'
                 };
             },
             default_data: function () {
@@ -6218,8 +6175,8 @@ define('controllers/menus/secondary',['./../module', 'underscore'], function (mo
                                 page: 'login'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -6229,8 +6186,8 @@ define('controllers/menus/secondary',['./../module', 'underscore'], function (mo
                                 page: 'register'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     }
                 ];
             }
@@ -6343,6 +6300,7 @@ define('controllers/menus/main',['./../module', 'underscore'], function (module,
                     is_open: 1,
                     status: 1,
                     hide_on_mobile: 0,
+                    hide_on_desktop: '0',
                     items_per_row: {
                         "range": "1,10",
                         "step": "1",
@@ -6431,6 +6389,7 @@ define('controllers/menus/main',['./../module', 'underscore'], function (module,
                return {
                    is_open:1,
                    hide_on_mobile: 0,
+                   hide_on_desktop: '0',
                    type: 'categories',
                    categories: {
                        type: 'existing',
@@ -6793,7 +6752,8 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
                 },
                 is_open: true,
                 background: {},
-                disable_mobile: '0'
+                disable_mobile: '0',
+                disable_desktop: '0'
             };
         };
 
@@ -6820,7 +6780,8 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
                 posts_type: 'newest',
                 posts: [],
                 status: '1',
-                disable_mobile: '0'
+                disable_mobile: '0',
+                disable_desktop: '0'
             };
         };
 
@@ -8922,7 +8883,8 @@ define('controllers/blog_modules/posts/form',['./../../module', 'underscore'], f
             transition_speed: '400',
             transition_delay: '3000',
             touch_drag: '0',
-            disable_mobile: '0'
+            disable_mobile: '0',
+            disable_desktop: '0'
         };
 
         Rest.getBlog('posts').then(function (response) {
@@ -10084,6 +10046,7 @@ define('controllers/cms_blocks/form',['./../module', 'underscore'], function (mo
             module_background:{},
             module_padding:'0',
             disable_mobile: '0',
+            disable_desktop: '0',
             background: {},
             fullwidth: '0',
             margin_top: '',
@@ -10513,6 +10476,7 @@ define('controllers/advanced_grid/form',['./../module', 'underscore'], function 
                     height: '',
                     module_id: '',
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     status: 1,
                     sort_order: ''
                 };
@@ -10539,6 +10503,7 @@ define('controllers/advanced_grid/form',['./../module', 'underscore'], function 
             margin_top: '',
             margin_bottom: '',
             disable_mobile: '0',
+            disable_desktop: '0',
             grid_dimensions: '1',
             module_spacing: '',
             columns: []
@@ -10773,6 +10738,7 @@ define('controllers/carousel_grid/form',['./../module', 'underscore'], function 
                     width: '',
                     module_id: '',
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     status: 1,
                     sort_order: ''
                 };
@@ -10796,6 +10762,7 @@ define('controllers/carousel_grid/form',['./../module', 'underscore'], function 
             margin_top: '',
             margin_bottom: '',
             disable_mobile: '0',
+            disable_desktop: '0',
             module_spacing: '',
             columns: []
         };
@@ -11041,6 +11008,7 @@ define('controllers/fullscreen_slider/form',['./../module', 'underscore'], funct
             transition_delay: 3000,
             transparent_overlay: '',
             disable_mobile: '0',
+            disable_desktop: '0',
             images: []
         };
 
@@ -11324,6 +11292,7 @@ define('controllers/photo_gallery/form',['./../module', 'underscore'], function 
             transition_delay: '3000',
             touch_drag: '0',
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: '',
@@ -11545,6 +11514,7 @@ define('controllers/text_rotator/form',['./../module', 'underscore'], function (
             top_bottom_placement: 0,
             background: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: '',
@@ -11776,6 +11746,7 @@ define('controllers/headline_rotator/form',['./../module', 'underscore'], functi
             top_bottom_placement: 0,
             background: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: '',
@@ -11956,6 +11927,7 @@ define('controllers/product_tabs/form',['./../module', 'underscore'], function (
             icon_width: '',
             icon_height: '',
             content_type: 'custom',
+            out_of_stock_only: '0',
             content: {},
             popup: '',
             global: 1,
@@ -12444,6 +12416,7 @@ define('controllers/custom_sections/form',['./../module', 'underscore'], functio
                     module_padding:'0',
                     background: {},
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     fullwidth: '0',
                     margin_top: '',
                     margin_bottom: '',
@@ -12869,6 +12842,7 @@ define('controllers/carousel/form',['./../module', 'underscore'], function (modu
                     transition_delay: '3000',
                     touch_drag: '0',
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     image_border: {},
                     image_bgcolor: '',
                     image_width: '',
@@ -13283,6 +13257,7 @@ define('controllers/static_banners/form',['./../module', 'underscore'], function
             bgcolor: '',
             icon: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: '',
@@ -13294,6 +13269,7 @@ define('controllers/static_banners/form',['./../module', 'underscore'], function
             return {
                 is_open: true,
                 image: '',
+                image_title: {},
                 link: {
                     menu_type: 'custom'
                 },
@@ -13971,6 +13947,7 @@ define('controllers/newsletter/form',['./../module', 'underscore'], function (mo
             button_offset_left: '',
             background: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: ''
@@ -14189,6 +14166,7 @@ define('controllers/popup/form',['./../module', 'underscore'], function (module,
             image: 'no_image.jpg',
             content_overflow: '1',
             disable_mobile: '1',
+            disable_desktop: '0',
             status: '1',
             width: 600,
             height: 300,
@@ -14931,7 +14909,7 @@ define('directives/menu-item',['./module', 'underscore.string'], function (modul
             if (type === 'opencart') {
                 name = PAGES[item.menu.menu_item.page];
             }
-            if (item.name_overwrite) {
+            if (item.name_overwrite == 1 && item.name && item.name.value) {
                 name = item.name.value[Journal2Config.languages.default];
             }
             name = name || '';
@@ -16720,7 +16698,6 @@ require.config({
         'select2'           : '../lib/select2/select2.min',
         'angular-select2'   : '../lib/select2/select2-directive',
         'angular-bootstrap' : '../lib/ui.bootstrap/ui-bootstrap-tpls-0.6.0.min',
-        'angular-file'      : '../lib/angular-file-upload/angular-file-upload.min',
         'spin'              : '../lib/spin.js/spin.min',
         'simple-slider'     : '../lib/simple-slider/js/simple-slider'
     },
@@ -16753,9 +16730,6 @@ require.config({
             deps: ['angular', 'select2']
         },
         'angular-bootstrap': {
-            deps: ['angular']
-        },
-        'angular-file': {
             deps: ['angular']
         }
     },

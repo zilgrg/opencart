@@ -85,6 +85,7 @@
                     <span class="module-create-option">
                          <ul class="simple-list">
                              <li data-ng-repeat="item in module_data.products">
+                                 <input type="text" ng-model="item.sort_order" class="journal-sort" placeholder="Sort" />
                                  <product-search model="item.data"></product-search>
                                  <a class="btn red delete" href="javascript:;" data-ng-click="removeProduct($index)">X</a>
                              </li>

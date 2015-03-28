@@ -14,7 +14,7 @@ class Journal2Newsletter {
         $this->email = $this->db->escape($email);
 
         /* create table if not exists */
-        if ($this->db->query('show tables like "' . DB_PREFIX . 'journal2_newsletter"')->num_rows === 0) {
+        if ($this->db->query(str_replace('_', '\_', 'show tables like "' . DB_PREFIX . 'journal2_newsletter"'))->num_rows === 0) {
             $this->db->query('CREATE TABLE IF NOT EXISTS `' . DB_PREFIX . 'journal2_newsletter` (
                 `email` varchar(128) NOT NULL,
                 `token` varchar(64) NOT NULL,

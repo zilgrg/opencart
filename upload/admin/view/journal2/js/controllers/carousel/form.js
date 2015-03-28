@@ -84,6 +84,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     transition_delay: '3000',
                     touch_drag: '0',
                     disable_mobile: '0',
+                    disable_desktop: '0',
                     image_border: {},
                     image_bgcolor: '',
                     image_width: '',

@@ -1424,6 +1424,94 @@ Journal.applyView = function (default_view) {
     Journal.equalHeight($(".main-products .product-wrapper"), '.name');
 };
 
+Journal.updatePaymentMethods = function () {
+    var data = { };
+
+    if ($('input[name="payment_address"]:checked').val() === 'existing') {
+        data.address_id = $('#payment-existing select[name="address_id"]').val();
+    } else {
+        data.country_id = $('#collapse-payment-address select[name="country_id"]').val();
+        data.zone_id = $('#collapse-payment-address select[name="zone_id"]').val();
+    }
+
+    return $.ajax({
+        url: 'index.php?route=journal2/checkout/save_payment',
+        type: 'post',
+        data: data,
+        beforeSend: function() {
+            $('#collapse-payment-method .panel-body').css('opacity', 0.5);
+        },
+        complete: function() {
+            $('#collapse-payment-method .panel-body').css('opacity', 1);
+        },
+        success: function(html) {
+            $('#collapse-payment-method .panel-body').html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+
+    if ($('input[name=\'shipping_address\']').is(':checked')) {
+        Journal.updateShippingMethods(data);
+    }
+};
+
+Journal.updateShippingMethods = function (data) {
+    if (typeof data === 'undefined') {
+        data = { };
+
+        if ($('input[name="shipping_address"]:checked').val() === 'existing') {
+            data.address_id = $('#shipping-existing select[name="address_id"]').val();
+        } else {
+            data.country_id = $('#collapse-shipping-address select[name="country_id"]').val();
+            data.zone_id = $('#collapse-shipping-address select[name="zone_id"]').val();
+        }
+    }
+
+    return $.ajax({
+        url: 'index.php?route=journal2/checkout/save_shipping',
+        type: 'post',
+        data: data,
+        beforeSend: function() {
+            $('#collapse-shipping-method .panel-body').css('opacity', 0.5);
+        },
+        complete: function() {
+            $('#collapse-shipping-method .panel-body').css('opacity', 1);
+        },
+        success: function(html) {
+            $('#collapse-shipping-method .panel-body').html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+};
+
+Journal.getCartTotals = function () {
+    var data = { };
+    data.shipping_method = $('[name=\'shipping_method\']:checked').val();
+    data.payment_method = $('[name=\'payment_method\']:checked').val();
+    $.ajax({
+        url: 'index.php?route=journal2/checkout/cart',
+        type: 'post',
+        data: data,
+        dataType: 'html',
+        beforeSend: function() {
+            $('#collapse-checkout-confirm .panel-body').css('opacity', 0.5);
+        },
+        complete: function() {
+            $('#collapse-checkout-confirm .panel-body').css('opacity', 1);
+        },
+        success: function(html) {
+            $('#collapse-checkout-confirm .panel-body').html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+};
+
 //Add sequential classes to menu items
 
 $(document).ready(function(){

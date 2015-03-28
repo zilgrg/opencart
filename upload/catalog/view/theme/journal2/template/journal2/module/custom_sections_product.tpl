@@ -16,7 +16,7 @@
     <div class="box-content">
         <div class="product-grid">
             <?php foreach ($items as $product) { ?>
-            <div class="product-grid-item isotope-element <?php echo implode(' ', $product['section_class']); ?> <?php echo $grid_classes; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?> <?php echo $product['classes']; ?>">
+            <div class="product-grid-item <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>  isotope-element <?php echo implode(' ', $product['section_class']); ?> <?php echo $grid_classes; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?> <?php echo $product['classes']; ?>">
                 <div class="product-wrapper" style="<?php echo $image_bgcolor; ?>">
                     <?php if (isset($product['thumb'])) { ?>
                     <div class="image">

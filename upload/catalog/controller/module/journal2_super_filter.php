@@ -698,6 +698,10 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         $this->data['pagination'] = $pagination->render();
 
         if (Front::$IS_OC2) {
+            $l = (int)Journal2Utils::getProperty($data, 'limit');
+            if (!$l) {
+                $data['limit'] = 15;
+            }
             $this->data['results'] = sprintf($this->language->get('text_pagination'), ($product_total) ? (($data['page'] - 1) * $data['limit']) + 1 : 0, ((($data['page'] - 1) * $data['limit']) > ($product_total - $data['limit'])) ? $product_total : ((($data['page'] - 1) * $data['limit']) + $data['limit']), $product_total, ceil($product_total / $data['limit']));
         }
 

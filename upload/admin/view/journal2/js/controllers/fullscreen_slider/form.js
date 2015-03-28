@@ -33,6 +33,7 @@ define(['./../module', 'underscore'], function (module, _) {
             transition_delay: 3000,
             transparent_overlay: '',
             disable_mobile: '0',
+            disable_desktop: '0',
             images: []
         };
 

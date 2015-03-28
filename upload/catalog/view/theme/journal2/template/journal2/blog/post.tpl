@@ -101,7 +101,7 @@
             <div class="box-heading"><?php echo $tab_related; ?></div>
             <div class="box-product">
                 <?php foreach ($related_products as $product) { ?>
-                <div class="product-grid-item <?php echo $carousel ? '' : $grid_classes; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>">
+                <div class="product-grid-item <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?> <?php echo $carousel ? '' : $grid_classes; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>">
                     <div class="product-wrapper">
                         <?php if ($product['thumb']) { ?>
                         <div class="image">

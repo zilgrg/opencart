@@ -7,6 +7,7 @@ define(['./../module', 'underscore'], function (module, _) {
                     icon: {
                     },
                     hide_on_mobile: '0',
+                    hide_on_desktop: '0',
                     mobile_view: 'icon',
                     menu: {
                         menu_type: 'opencart',
@@ -14,8 +15,8 @@ define(['./../module', 'underscore'], function (module, _) {
                             page: 'common/home'
                         }
                     },
-                    name_overwrite: 0,
-                    target: 0
+                    name_overwrite: '0',
+                    target: '0'
                 };
             },
             default_data: function () {
@@ -28,8 +29,8 @@ define(['./../module', 'underscore'], function (module, _) {
                                 page: 'login'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     },
                     {
                         icon: {},
@@ -39,8 +40,8 @@ define(['./../module', 'underscore'], function (module, _) {
                                 page: 'register'
                             }
                         },
-                        name_overwrite: 0,
-                        target: 0
+                        name_overwrite: '0',
+                        target: '0'
                     }
                 ];
             }

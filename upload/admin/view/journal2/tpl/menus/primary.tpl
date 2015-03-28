@@ -38,6 +38,15 @@
                     </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Hide on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="item.hide_on_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Hide on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="item.hide_on_mobile">

@@ -16,15 +16,11 @@ REFINE CATEGORIES + DESCRIPTION
   }
 }
 
-.category-info .image {
+.category-info .image img{
   margin-right: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  display: block;
   float: left;
-  img{
-    width: 100%;
-    height: auto;
-    float: left;
-  }
 }
 
 /******************************
@@ -344,6 +340,9 @@ PRODUCT LIST
   padding: 10px;
   .product-details{
     margin-left: 215px;
+    &:before{
+      display: none;
+    }
   }
   .left{
     position: relative;

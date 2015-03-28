@@ -514,6 +514,13 @@ input[name='captcha'] {
   position: relative;
   padding: 20px;
   padding-bottom: 0; }
+  #tab-review .buttons {
+    margin: 0;
+    padding: 0 0 20px 0; }
+    #tab-review .buttons .right, #tab-review .buttons .pull-right {
+      float: left; }
+    #tab-review .buttons .pull-right {
+      margin: 10px 0 0 10px; }
 
 .oc2 #tab-review .form-group label {
   width: auto;
@@ -818,5 +825,25 @@ OC2
 .oc2 #tab-review form table td:first-of-type {
   width: 50px !important;
   padding-right: 10px; }
+.oc2 #tab-review .fa-stack-1x, .oc2 #tab-review .fa-stack-2x {
+  width: auto; }
+.oc2 #tab-review .fa-stack {
+  width: auto;
+  height: auto;
+  line-height: 100%;
+  padding: 0 8px;
+  display: inline-block;
+  margin-bottom: 20px; }
+.oc2 #tab-review .fa-star {
+  color: #f1c40f; }
+.oc2 #tab-review .fa-star + .fa-star-o {
+  color: #f1c40f; }
+.oc2 #tab-review .fa-star-o {
+  color: #5F6874; }
+.oc2 #tab-review a {
+  position: relative;
+  top: -1px; }
+  .oc2 #tab-review a:first-of-type {
+    margin-left: 10px; }
 .oc2 .attribute strong {
   font-weight: inherit; }

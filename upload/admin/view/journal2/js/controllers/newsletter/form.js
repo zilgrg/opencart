@@ -31,6 +31,7 @@ define(['./../module', 'underscore'], function (module, _) {
             button_offset_left: '',
             background: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: ''

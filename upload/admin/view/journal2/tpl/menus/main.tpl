@@ -232,6 +232,7 @@
                     <span class="module-create-option">
                         <ul class="simple-list">
                             <li data-ng-repeat="item in menu.products.items">
+                                <input type="text" ng-model="item.sort_order" class="journal-sort" placeholder="Sort" />
                                 <product-search model="item.data"></product-search>
                                 <a class="btn red delete" data-ng-click="removeItem(menu.products, $index)">X</a>
                             </li>
@@ -293,7 +294,15 @@
                         <input type="text" data-ng-model="menu.items_limit" class="journal-input journal-sort" />
                     </span>
                 </li>
-
+                <li>
+                    <span class="module-create-title">Hide on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="menu.hide_on_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
                 <li>
                     <span class="module-create-title">Hide on Mobile</span>
                     <span class="module-create-option">
@@ -550,6 +559,7 @@
                             <span class="module-create-option">
                                 <ul class="simple-list">
                                     <li data-ng-repeat="item in column.products.items">
+                                        <input type="text" ng-model="item.sort_order" class="journal-sort" placeholder="Sort" />
                                         <product-search model="item.data"></product-search>
                                         <a class="btn red delete" data-ng-click="removeItem(column.products, $index)">X</a>
                                     </li>
@@ -635,7 +645,16 @@
                             </span>
                         </li>
                         <li>
-                            <span class="module-create-title">Disable on Mobile</span>
+                            <span class="module-create-title">Hide on Desktop</span>
+                            <span class="module-create-option">
+                                <switch data-ng-model="column.hide_on_desktop">
+                                    <switch-option key="1">ON</switch-option>
+                                    <switch-option key="0">OFF</switch-option>
+                                </switch>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="module-create-title">Hide on Mobile</span>
                                 <span class="module-create-option">
                                     <switch data-ng-model="column.hide_on_mobile">
                                         <switch-option key="1">ON</switch-option>

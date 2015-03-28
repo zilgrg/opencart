@@ -46,6 +46,11 @@ class ControllerModuleJournal2CarouselGrid extends Controller {
             return;
         }
 
+        /* hide on desktop */
+        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+            return;
+        }
+
         $this->data['disable_mobile'] = $disable_mobile ? 'hide-on-mobile' : '';
         $this->data['height'] = Journal2Utils::getProperty($module_data, 'height');
 
@@ -97,6 +102,11 @@ class ControllerModuleJournal2CarouselGrid extends Controller {
 
                 if ($module_disable_mobile && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet())) {
                     continue;
+                }
+
+                /* hide on desktop */
+                if (Journal2Utils::getProperty($column, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+                    return;
                 }
 
                 $size = floor($column['width']);

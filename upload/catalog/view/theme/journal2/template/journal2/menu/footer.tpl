@@ -1,6 +1,6 @@
 <?php foreach ($rows as $row): ?>
 <?php if ($row['type'] === 'columns'): ?>
-<div class="row columns" style="<?php echo $row['css']; ?>">
+<div class="row columns <?php echo $row['class']; ?>" style="<?php echo $row['css']; ?>">
     <?php foreach ($row['columns'] as $column): ?>
     <div class="column <?php echo $column['class']; ?> <?php echo $column['type']; ?> <?php echo $row['classes']; ?> <?php echo $column['title'] ? '' : 'no-title'; ?>">
         <?php if ($column['title']): ?>

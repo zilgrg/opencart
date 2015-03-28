@@ -20,6 +20,7 @@ define(['./../module', 'underscore'], function (module, _) {
             icon_width: '',
             icon_height: '',
             content_type: 'custom',
+            out_of_stock_only: '0',
             content: {},
             popup: '',
             global: 1,

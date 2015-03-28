@@ -1139,8 +1139,6 @@
         "type": "j-opt-select"
     },
 
-
-
     "posts_module_title_font": {
         "type": "j-opt-font",
         "selector": ".post-module .box-heading",
@@ -1681,8 +1679,6 @@
         "selector": ".product-list-item .name",
         "property": "display:%s"
     },
-
-
 
 
     "catalog_product_page_cart": {
@@ -2995,7 +2991,7 @@
     },
     "product_page_options_item_border": {
         "type": "j-opt-border",
-        "selector": ".product-info .product-options > div, .product-info .product-options > ul, #content .product-info .options h3",
+        "selector": ".product-info .product-options > div, .product-info .product-options > ul, #content .product-info .options h3, .ms-sellerprofile.description h3",
         "property": ""
     },
     "product_page_options_margin": {
@@ -3142,7 +3138,7 @@
 
     "product_page_options_title": {
         "type": "j-opt-font",
-        "selector": "#content .product-info .options h3",
+        "selector": "#content .product-info .options h3, .ms-sellerprofile.description h3",
         "property": ""
     },
     "product_page_option_font": {
@@ -3152,7 +3148,7 @@
     },
     "product_page_options_title_bg": {
         "type": "j-opt-color",
-        "selector": "#content .product-info .options h3",
+        "selector": "#content .product-info .options h3, .ms-sellerprofile.description h3",
         "property": "background-color"
     },
     "product_page_options_divider": {
@@ -3401,7 +3397,7 @@
     },
     "product_page_tabs_content_h_font": {
         "type": "j-opt-font",
-        "selector": ".tab-content h1, .tab-content h2, .tab-content h3, .tab-content h4, .tab-content h5",
+        "selector": ".tab-content > h1, .tab-content > h2, .tab-content > h3, .tab-content > h4, .tab-content > h5",
         "property": " !important"
     },
     "product_page_tabs_content_ul_font": {
@@ -3923,7 +3919,7 @@
     /*Pagination*/
     "pagination_text_font": {
         "type": "j-opt-font",
-        "selector": ".pagination .results",
+        "selector": ".pagination .results, .dataTables_info",
         "property": ""
     },
     "pagination_link_font_new": {
@@ -4154,32 +4150,32 @@
    /* Headings*/
    "main_title_font": {
         "type": "j-opt-font",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, #swipebox-caption, .journal-carousel .htabs.single-tab a:hover, .journal-carousel .htabs.single-tab a.selected",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, #swipebox-caption, .journal-carousel .htabs.single-tab a:hover, .journal-carousel .htabs.single-tab a.selected, .oc-filter .panel-heading",
         "property": ""
     },
     "main_title_bg": {
         "type": "j-opt-color",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "background-color"
     },
     "main_title_border": {
         "type": "j-opt-border",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": ""
     },
     "main_title_line_height": {
         "type": "j-opt-text",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "line-height:%spx"
     },
     "main_title_padding_right": {
         "type": "j-opt-text",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "padding-right:%spx"
     },
     "main_title_padding_left": {
         "type": "j-opt-text",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .journal-carousel .htabs.single-tab a",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .journal-carousel .htabs.single-tab a, .oc-filter .panel-heading",
         "property": "padding-left:%spx"
     },
 
@@ -4188,7 +4184,7 @@
 
     "main_title_align": {
         "type": "j-opt-select",
-        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1",
+        "selector": ".heading-title, .box-heading, #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "text-align:%s"
     },
     "secondary_title_align": {
@@ -4292,8 +4288,8 @@
 
     "info_page_p_font": {
         "type": "j-opt-font",
-        "selector": ".information-page #content, .information-page #content p",
-        "property": ""
+        "selector": ".information-page #content, .information-page #content p, .information-page #content span",
+        "property": " !important"
     },
     "info_page_line_height": {
         "type": "j-opt-text",
@@ -4303,17 +4299,17 @@
     "info_page_h1_font": {
         "type": "j-opt-font",
         "selector": ".information-page #content h1",
-        "property": ""
+        "property": " !important"
     },
     "info_page_h2_font": {
         "type": "j-opt-font",
         "selector": ".information-page #content h2",
-        "property": ""
+        "property": " !important"
     },
     "info_page_h3_font": {
         "type": "j-opt-font",
         "selector": ".information-page #content h3",
-        "property": ""
+        "property": " !important"
     },
 
     "info_page_title_font": {
@@ -4620,51 +4616,84 @@
         "property": "background-color"
     },
 
+ /* Maintenance*/
+
+    "maintenance_title": {
+        "type": "j-opt-font",
+        "selector": ".maintenance-message h1",
+        "property": ""
+    },
+    "maintenance_line_height": {
+        "type": "j-opt-text",
+        "selector": ".maintenance-message h1",
+        "property": "line-height:%spx"
+    },
+    "maintenance_bg": {
+        "type": "j-opt-background",
+        "selector": "#container.maintenance-message",
+        "property": ""
+    },
+    "maintenance_bg_color": {
+        "type": "j-opt-color",
+        "selector": "#container.maintenance-message",
+        "property": "background-color"
+    },
+    "maintenance_min_height": {
+        "type": "j-opt-text",
+        "selector": "#container.maintenance-message",
+        "property": "min-height:%spx"
+    },
+    "maintenance_padding": {
+        "type": "j-opt-text",
+        "selector": "#container.maintenance-message",
+        "property": "padding-top:%spx"
+    },
+
 
     /* Global Buttons*/
     "general_button_font": {
         "type": "j-opt-font",
-        "selector": ".button, .side-column .box-content a.button",
+        "selector": ".button, .side-column .box-content a.button, #quickcheckout .button",
         "property": ""
     },
     "general_button_font_hover": {
         "type": "j-opt-color",
-        "selector": ".button:hover, .side-column .box-content a.button:hover",
+        "selector": ".button:hover, .side-column .box-content a.button:hover, #quickcheckout .button:hover",
         "property": "color"
     },
     "general_button_bg": {
         "type": "j-opt-color",
-        "selector": ".button",
+        "selector": ".button, #quickcheckout .button",
         "property": "background-color"
     },
     "general_button_bg_hover": {
         "type": "j-opt-color",
-        "selector": ".button:hover",
+        "selector": ".button:hover, #quickcheckout .button:hover",
         "property": "background-color"
     },
     "general_button_border": {
         "type": "j-opt-border",
-        "selector": ".button",
+        "selector": ".button, #quickcheckout .button",
         "property": ""
     },
     "general_button_border_hover": {
         "type": "j-opt-color",
-        "selector": ".button:hover",
+        "selector": ".button:hover, #quickcheckout .button:hover",
         "property": "border-color"
     },
     "general_button_width": {
         "type": "j-opt-text",
-        "selector": ".button",
+        "selector": ".button, #quickcheckout .button",
         "property": "padding:0 %spx"
     },
     "general_button_height": {
         "type": "j-opt-text",
-        "selector": ".button",
+        "selector": ".button, #quickcheckout .button",
         "property": "line-height:%spx"
     },
     "general_button_active_shadow": {
         "type": "j-opt-select",
-        "selector": ".button:active",
+        "selector": ".button:active, #quickcheckout .button:active",
         "property": "box-shadow:%s"
     },
     "welcome_heading_font": {
@@ -5210,12 +5239,12 @@
 
     "secondary_menu_link_font": {
         "type": "j-opt-font",
-        "selector": ".journal-login .journal-secondary a, .journal-secondary .links > a",
+        "selector": ".journal-login .journal-secondary a, .journal-secondary .links > a, .mm-header-link a",
         "property": ""
     },
     "secondary_menu_link_hover_color": {
         "type": "j-opt-color",
-        "selector": ".journal-login .journal-secondary a:hover, .journal-secondary .links > a:hover",
+        "selector": ".journal-login .journal-secondary a:hover, .journal-secondary .links > a:hover, .mm-header-link a:hover",
         "property": "color"
     },
 
@@ -5780,6 +5809,9 @@
         "type": "j-opt-font",
         "selector": ".mobile-trigger",
         "property": ""
+    },
+    "mobile_menu_cart_display": {
+        "type": "j-opt-select"
     },
     "dropdown_divider": {
         "type": "j-opt-color",
@@ -7427,31 +7459,29 @@
     },
 
 
-
-
     "side_title_font": {
         "type": "j-opt-font",
-        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .side-column .journal-carousel .htabs.single-tab a.selected",
+        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .side-column .journal-carousel .htabs.single-tab a.selected, .oc-filter .panel-heading, .oc-filter a.list-group-item",
         "property": ""
     },
     "side_title_bg": {
         "type": "j-opt-color",
-        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1",
+        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "background-color"
     },
     "side_title_border": {
         "type": "j-opt-border",
-        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1",
+        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": ""
     },
     "side_title_padding_left": {
         "type": "j-opt-text",
-        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1",
+        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "padding-left:%spx"
     },
     "side_title_padding_right": {
         "type": "j-opt-text",
-        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1",
+        "selector": ".side-column .heading-title, .side-column .box-heading, .side-column #blogArticle .articleHeader h1, .oc-filter .panel-heading",
         "property": "padding-right:%spx"
     },
 
@@ -7611,7 +7641,7 @@
     },
     "filter_heading_font": {
         "type": "j-opt-font",
-        "selector": ".journal-sf .box-heading",
+        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": ""
     },
     "filter_heading_bg": {
@@ -7621,12 +7651,12 @@
     },
     "filter_heading_border": {
         "type": "j-opt-border",
-        "selector": ".journal-sf .box-heading",
+        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": ""
     },
     "filter_heading_height": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box-heading",
+        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": "line-height:%spx"
     },
     "filter_section_padding_top": {

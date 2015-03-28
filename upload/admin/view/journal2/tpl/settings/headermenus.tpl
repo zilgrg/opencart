@@ -306,6 +306,16 @@
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"> </a>
                             </li>
+                            <li>
+                                <span class="module-create-title">Display Below Cart <small>If OFF will move the mobile menu trigger on the same line with the cart</small></span>
+                                <span class="module-create-option">
+                                    <switch data-ng-model="settings.mobile_menu_cart_display">
+                                        <switch-option key="on">ON</switch-option>
+                                        <switch-option key="off">OFF</switch-option>
+                                    </switch>
+                                </span>
+                                <a href="#" target="_blank" class="journal-tip"> </a>
+                            </li>
                         </ul>
                     </accordion-group>
                 </accordion>

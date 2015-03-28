@@ -716,6 +716,16 @@ input[name='captcha'] {
   position: relative;
   padding: 20px;
   padding-bottom: 0;
+  .buttons{
+    margin: 0;
+    padding: 0 0 20px 0;
+    .right, .pull-right{
+      float: left;
+    }
+    .pull-right{
+      margin: 10px 0 0 10px;
+    }
+  }
 }
 
 .oc2{
@@ -1142,6 +1152,33 @@ OC2
           width: 50px !important;
           padding-right: 10px;
         }
+      }
+    }
+    .fa-stack-1x, .fa-stack-2x{
+      width: auto;
+    }
+    .fa-stack{
+      width:auto;
+      height: auto;
+      line-height: 100%;
+      padding: 0 8px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .fa-star{
+      color: $yel;
+    }
+    .fa-star + .fa-star-o{
+      color: $yel;
+    }
+    .fa-star-o{
+      color: $gray;
+    }
+    a{
+      position: relative;
+      top: -1px;
+      &:first-of-type{
+        margin-left: 10px;
       }
     }
   }

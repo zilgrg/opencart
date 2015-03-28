@@ -78,6 +78,7 @@ define(['./../module', 'underscore'], function (module, _) {
             bgcolor: '',
             icon: {},
             disable_mobile: '0',
+            disable_desktop: '0',
             fullwidth: '0',
             margin_top: '',
             margin_bottom: '',
@@ -89,6 +90,7 @@ define(['./../module', 'underscore'], function (module, _) {
             return {
                 is_open: true,
                 image: '',
+                image_title: {},
                 link: {
                     menu_type: 'custom'
                 },

@@ -66,8 +66,6 @@ class ControllerModuleJournal2 extends Controller {
         $this->document->addScript('view/journal2/lib/spectrum/spectrum.js');
         $this->document->addStyle('view/journal2/lib/spectrum/spectrum.css');
 
-        $this->document->addScript('view/journal2/lib/angular-file-upload/angular-file-upload-shim.min.js');
-
         $this->document->addScript('view/journal2/js/colors.js');
 
         $this->document->addStyle('../catalog/view/theme/journal2/css/icons/style.css');
@@ -94,7 +92,7 @@ class ControllerModuleJournal2 extends Controller {
         }
 
         /* tables does not exist*/
-        if (!$this->db->query('show tables like "' . DB_PREFIX . 'journal2_config"')->num_rows) {
+        if (!$this->db->query(str_replace('_', '\_', 'show tables like "' . DB_PREFIX . 'journal2_config"'))->num_rows) {
             $this->template = '../journal2/tpl/error' . (Front::$IS_OC2 ? '_oc2' : '') . '.tpl';
             $this->data['journal_error_title']      = 'Database Error';
             $this->data['journal_error_message']    = 'Uninstalling and reinstalling this module may solve this issue.';

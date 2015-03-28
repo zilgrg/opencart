@@ -33,6 +33,15 @@
                         </span>
                 </li>
                 <li>
+                    <span class="module-create-title">Disable on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="module_data.disable_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
+                    </span>
+                </li>
+                <li>
                     <span class="module-create-title">Disable on Mobile</span>
                     <span class="module-create-option">
                         <switch data-ng-model="module_data.disable_mobile">
@@ -97,6 +106,15 @@
                             <option value=""></option>
                             <option data-ng-repeat="module in modules" value="{{module.module_id}}">{{module.module_data.module_name}}</option>
                         </select>
+                    </span>
+                </li>
+                <li>
+                    <span class="module-create-title">Disable on Desktop</span>
+                    <span class="module-create-option">
+                        <switch data-ng-model="column.disable_desktop">
+                            <switch-option key="1">ON</switch-option>
+                            <switch-option key="0">OFF</switch-option>
+                        </switch>
                     </span>
                 </li>
                 <li>

@@ -38,7 +38,7 @@
   </div>
   <div class="main-products product-list">
     <?php foreach ($products as $product) { ?>
-    <div>
+    <div class="<?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
       <?php if ($product['thumb']) { ?>
         <div class="image">
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
@@ -130,7 +130,7 @@ function display(view) {
         $('.display a.list-view').addClass('selected');
 
         $('.main-products.product-list > div').each(function(index, element) {
-            $(this).attr('class','product-list-item xs-100 sm-100 md-100 lg-100 xl-100');
+            $(this).attr('class','product-list-item xs-100 sm-100 md-100 lg-100 xl-100' + ($(this).hasClass('outofstock') ? ' outofstock' : '')).attr('data-respond','start: 150px; end: 300px; interval: 10px;');
 
             var html = '';
 
@@ -175,7 +175,7 @@ function display(view) {
         $('.display a.list-view').removeClass('selected');
 
         $('.main-products.product-grid > div').each(function(index, element) {
-            $(this).attr('class',"product-grid-item <?php echo $this->journal2->settings->get('product_grid_classes'); ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>");
+            $(this).attr('class',"product-grid-item <?php echo $this->journal2->settings->get('product_grid_classes'); ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>"  + ($(this).hasClass('outofstock') ? ' outofstock' : ''));
 
             var html = '';
 
