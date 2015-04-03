@@ -259,7 +259,8 @@ PRODUCT LIST
   margin-bottom: 20px;
   padding: 10px; }
   .product-list-item .product-details {
-    margin-left: 215px; }
+    margin-left: 215px;
+    background-color: transparent; }
     .product-list-item .product-details:before {
       display: none; }
   .product-list-item .left {

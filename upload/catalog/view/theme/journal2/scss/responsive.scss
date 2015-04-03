@@ -1617,6 +1617,12 @@ NEWSLETTER
 
 @media only screen and (max-width: 760px) {
   .oc2{
+    #column-right + .row #content{
+      margin-right: 0;
+    }
+    #column-left + .row #content{
+      margin-left: 0;
+    }
     fieldset{
       label, label + div, label + input.form-control{
         width: 100%;

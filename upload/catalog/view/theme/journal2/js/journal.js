@@ -673,7 +673,11 @@ Journal.contact = function ($module) {
             $form.find('img').attr('src', Journal.isOC2 ? 'index.php?route=tool/captcha' : 'index.php?route=information/contact/captcha').css('opacity', '1');
             $form.find('.has-error').removeClass('has-error');
             $.each(response.error, function (key) {
-                $form.find('[name="' + key +'"]').addClass('has-error');
+                if (key === 'g-recaptcha') {
+                    $form.find('.g-recaptcha').addClass('has-error');
+                } else {
+                    $form.find('[name="' + key +'"]').addClass('has-error');
+                }
             });
         }
         if (response.status === 'success') {

@@ -542,6 +542,7 @@ table.option-image {
 .social-loaded{
   background-color: inherit;
   display: table;
+  min-height: 22px;
 }
 
 .attribute {
@@ -581,6 +582,13 @@ PRODUCT TABS
 input[name='captcha'] {
   width: 150px;
   margin: 10px 0;
+}
+
+.tab-content{
+  img{
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 #tab-description div,
@@ -719,6 +727,7 @@ input[name='captcha'] {
   .buttons{
     margin: 0;
     padding: 0 0 20px 0;
+    border-width: 0;
     .right, .pull-right{
       float: left;
     }
@@ -740,8 +749,17 @@ input[name='captcha'] {
       margin-left: 10px;
       margin-bottom: 0;
     }
+    .buttons .pull-right{
+      margin: 10px 0 0 0;
+    }
   }
 }
+
+.g-capthca {
+  background-image: url('../../../../../image/data/journal2/loader.gif');
+  background-repeat: no-repeat;
+}
+
 
 /******************************
  TAGS

@@ -616,6 +616,15 @@ STORE PICKER
   #content .store-picker p, .side-column .store-picker p {
     text-align: left !important;
     padding: 0 0 5px 0; }
+#content .oc-store .box-heading, .side-column .oc-store .box-heading {
+  margin-bottom: 10px; }
+#content .store-module, .side-column .store-module {
+  padding: 0 10px; }
+  #content .store-module p, .side-column .store-module p {
+    margin-bottom: 5px; }
+  #content .store-module a, .side-column .store-module a {
+    display: inline-block;
+    margin-top: 5px; }
 
 /******************************
 CMS BLOCKS
@@ -1243,6 +1252,9 @@ NEWSLETTER
   opacity: 0;
   transition: all 0.2s ease-in-out; }
 
+@media only screen and (min-width: 1024px) {
+  .has-popup body {
+    overflow-y: scroll; } }
 .mfp-close {
   opacity: 1;
   transition: all 0.2s; }
@@ -1329,6 +1341,9 @@ NEWSLETTER
 
 .journal-popup {
   display: none; }
+  .journal-popup input.has-error,
+  .journal-popup textarea.has-error {
+    border: 1px solid red; }
 
 .has-popup .journal-popup {
   display: block; }
@@ -1424,9 +1439,6 @@ POPUP FORM
   float: none; }
 .oc2 .journal-popup-contact .pull-right {
   float: none; }
-.oc2 .journal-popup-contact .form-group:last-of-type {
-  margin-top: -40px;
-  margin-left: 160px; }
 
 /*****************************
 BLOG
@@ -1637,7 +1649,8 @@ BLOG
     border-radius: 0;
     transition: all 0.2s;
     padding: 4px 7px 5px 7px;
-    margin-right: 4px; }
+    margin-right: 4px;
+    line-height: 100%; }
   .blog-post .tags a {
     display: inline-block; }
 

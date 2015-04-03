@@ -4630,12 +4630,12 @@
     },
     "maintenance_bg": {
         "type": "j-opt-background",
-        "selector": "#container.maintenance-message",
+        "selector": "#container.maintenance-message, .extended-container #container.maintenance-message",
         "property": ""
     },
     "maintenance_bg_color": {
         "type": "j-opt-color",
-        "selector": "#container.maintenance-message",
+        "selector": "#container.maintenance-message, .extended-container #container.maintenance-message",
         "property": "background-color"
     },
     "maintenance_min_height": {
@@ -5228,12 +5228,12 @@
     },
     "top_menu_link_font": {
         "type": "j-opt-font",
-        "selector": "header .links > a",
+        "selector": "header .links > a, .mm-header-link a",
         "property": ""
     },
     "top_menu_link_hover_color": {
         "type": "j-opt-color",
-        "selector": "header .links > a:hover",
+        "selector": "header .links > a:hover, .mm-header-link a:hover",
         "property": "color"
     },
 
@@ -7492,7 +7492,7 @@
     },
     "side_module_bg": {
         "type": "j-opt-color",
-        "selector": ".side-column .box-content li a, .side-column .store-picker, .side-column .box, .side-column .box-category li a, .side-column .oc-module .product-grid-item, #column-right .recentComments li, #column-left .recentComments li, #column-right .recentArticles li, #column-right .popularArticles li, #column-left .recentArticles li, #column-left .popularArticles li",
+        "selector": ".side-column .box-content li a, .side-column .store-picker, .side-column .box, .side-column .box-category li a, .side-column .oc-module .product-grid-item, #column-right .recentComments li, #column-left .recentComments li, #column-right .recentArticles li, #column-right .popularArticles li, #column-left .recentArticles li, #column-left .popularArticles li, .side-column .oc-store",
         "property": "background-color"
     },
     "side_module_font_color": {

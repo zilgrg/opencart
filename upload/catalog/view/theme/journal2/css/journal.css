@@ -658,6 +658,9 @@ OC 2
   right: 10px;
   cursor: pointer; }
 
+.oc2.firefox .input-group-btn {
+  display: inline-block; }
+
 .oc2.route-account-register .form-horizontal .radio {
   padding-top: 0; }
   .oc2.route-account-register .form-horizontal .radio label {

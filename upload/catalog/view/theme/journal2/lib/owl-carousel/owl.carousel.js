@@ -805,6 +805,10 @@ if (typeof Object.create !== "function") {
             asSupport = tempElem.style.cssText.match(regex);
             support3d = (asSupport !== null && asSupport.length > 0);
 
+            if ($('html').hasClass('ie8') || $('html').hasClass('ie9')) {
+                support3d = false;
+            }
+
             isTouch = "ontouchstart" in window || window.navigator.msMaxTouchPoints;
 
             base.browser = {

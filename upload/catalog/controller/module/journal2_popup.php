@@ -52,6 +52,12 @@ class ControllerModuleJournal2Popup extends Controller {
             return;
         }
 
+        if (!version_compare(VERSION, '2.0.2', '<') && $this->config->get('config_google_captcha_status')) {
+            $this->data['site_key'] = $this->config->get('config_google_captcha_public');
+        } else {
+            $this->data['site_key'] = '';
+        }
+
         $cache_property = "module_journal_popup_{$setting['module_id']}_{$setting['layout_id']}_{$setting['position']}";
 
         $cache = $this->journal2->cache->get($cache_property);
@@ -246,7 +252,18 @@ class ControllerModuleJournal2Popup extends Controller {
                 $from = PHP_EOL . PHP_EOL . 'Sent from <a href="' . $from . '">' . $from . '</a>';
             }
             if (Front::$IS_OC2) {
-                $mail = new Mail($this->config->get('config_mail'));
+                if (false) {
+                    $mail = new Mail($this->config->get('config_mail'));
+                } else {
+                    $mail = new Mail();
+                    $mail->protocol = $this->config->get('config_mail_protocol');
+                    $mail->parameter = $this->config->get('config_mail_parameter');
+                    $mail->smtp_hostname = $this->config->get('config_mail_smtp_host');
+                    $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+                    $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+                    $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+                    $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+                }
                 $mail->setTo($this->config->get('config_email'));
                 $mail->setFrom($this->request->post['email']);
                 $mail->setSender($this->request->post['name']);
@@ -292,8 +309,20 @@ class ControllerModuleJournal2Popup extends Controller {
             $this->contact_error['enquiry'] = $this->language->get('error_enquiry');
         }
 
-        if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
-            $this->contact_error['captcha'] = $this->language->get('error_captcha');
+        if (version_compare(VERSION, '2.0.2', '<')) {
+            if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
+                $this->contact_error['captcha'] = $this->language->get('error_captcha');
+            }
+        } else {
+            if ($this->config->get('config_google_captcha_status')) {
+                $recaptcha = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($this->config->get('config_google_captcha_secret')) . '&response=' . $this->request->post['g-recaptcha-response'] . '&remoteip=' . $this->request->server['REMOTE_ADDR']);
+
+                $recaptcha = json_decode($recaptcha, true);
+
+                if (!$recaptcha['success']) {
+                    $this->contact_error['g-recaptcha'] = $this->language->get('error_captcha');
+                }
+            }
         }
 
         return !$this->contact_error;

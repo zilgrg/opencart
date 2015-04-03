@@ -35,6 +35,15 @@ class ControllerModuleJournal2 extends Controller {
 
         $this->data['journal2_config']['items_per_page'] = 20;
 
+        if (!property_exists('Front', 'IS_OC2')) {
+            echo '
+                <h3>Journal Installation Error</h3>
+                <p>Make sure you have uploaded all Journal files to your server and successfully replaced <b>system/engine/front.php</b> file.</p>
+                <p>You can find more information <a href="http://docs.digital-atelier.com/opencart/journal/#/settings/install" target="_blank">here</a>.</p>
+            ';
+            exit();
+        }
+
         $this->data['journal2_config']['oc2'] = Front::$IS_OC2;
     }
 

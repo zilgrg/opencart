@@ -1265,6 +1265,10 @@ NEWSLETTER
   .comments .reply, .reply-form, .comments .reply + .success {
     margin-left: 0; } }
 @media only screen and (max-width: 760px) {
+  .oc2 #column-right + .row #content {
+    margin-right: 0; }
+  .oc2 #column-left + .row #content {
+    margin-left: 0; }
   .oc2 fieldset label, .oc2 fieldset label + div, .oc2 fieldset label + input.form-control {
     width: 100%; }
   .oc2 fieldset label, .oc2 fieldset label + div {

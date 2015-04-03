@@ -6814,6 +6814,18 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
             };
         };
 
+        function extendRows (rows) {
+            return _.map(rows, function (row) {
+                row = _.extend(new Row(), row);
+                if (row.type === 'columns') {
+                    row.columns = _.map(row.columns, function (column) {
+                        return _.extend(new Column(), column);
+                    });
+                }
+                return row;
+            });
+        }
+
         Rest.all({
             footer_menu: Rest.getSetting('footer_menu', $scope.store_id),
             featured_modules: Rest.getFeaturedModules(),
@@ -6821,15 +6833,7 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
         }, function (response) {
             if (response.footer_menu) {
                 $scope.rows = response.footer_menu.rows || [];
-                $scope.rows = _.map($scope.rows, function (row) {
-                    row = _.extend(new Row(), row);
-                    if (row.type === 'columns') {
-                        row.columns = _.map(row.columns, function (column) {
-                            return _.extend(new Column(), column);
-                        });
-                    }
-                    return row;
-                });
+                $scope.rows = extendRows($scope.rows);
                 $scope.close_others = response.footer_menu.close_others;
             }
             $scope.featured_modules = response.featured_modules;
@@ -6884,7 +6888,7 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
         };
 
         $scope.reset = function () {
-            $scope.rows = [{
+            var rows = [{
                 type: 'columns',
                 columns: [{
                     "type": "menu",
@@ -7146,6 +7150,7 @@ define('controllers/footer/menu',['./../module', 'underscore'], function (module
                 background: {},
                 sort_order: ''
             }];
+            $scope.rows = extendRows(rows);
         };
 
         $scope.toggleAccordion = function (items, type, item, value) {
