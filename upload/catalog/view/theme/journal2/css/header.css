@@ -698,6 +698,9 @@ HEADER CENTER
       width: 38px;
       height: 38px;
       cursor: pointer; }
+      .journal-header-center .button-search button i {
+        margin-top: -3px;
+        margin-left: 0; }
     .journal-header-center .button-search i {
       margin-top: 2px;
       margin-left: 6px; }

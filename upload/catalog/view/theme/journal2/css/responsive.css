@@ -777,8 +777,7 @@ Android/Firefox
   #column-right + #content .product-info > div,
   #column-right + .row #content .product-info > div {
     display: block;
-    width: 100%;
-    float: none; }
+    width: 100%; }
   #column-left + #content .product-info .right,
   #column-left + .row #content .product-info .right,
   #column-right + #content .product-info .right,

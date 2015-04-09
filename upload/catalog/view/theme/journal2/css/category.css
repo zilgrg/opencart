@@ -20,7 +20,10 @@ REFINE CATEGORIES + DESCRIPTION
   margin-right: 15px;
   margin-bottom: 10px;
   display: block;
-  float: left; }
+  float: left;
+  max-width: 100%;
+  width: auto;
+  height: auto; }
 
 /******************************
  REFINE SUBCATEGORIES

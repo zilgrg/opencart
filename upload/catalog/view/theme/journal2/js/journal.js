@@ -703,9 +703,10 @@ if (Journal.isOC2) {
             beforeSend: function() {
                 $('#cart > button > a > span').button('loading');
             },
+            complete: function() {
+                $('#cart > button > a > span').button('reset');
+            },
             success: function(json) {
-                $('#cart > button').button('reset');
-
                 if (json['redirect']) {
                     location = json['redirect'];
                 }
@@ -717,7 +718,9 @@ if (Journal.isOC2) {
                         $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
                     }
 
-                    $('#cart-total').html(json['total']);
+                    setTimeout(function () {
+                        $('#cart-total').html(json['total']);
+                    }, 100);
 
                     if (Journal.scrollToTop) {
                         $('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -736,12 +739,15 @@ if (Journal.isOC2) {
             data: 'key=' + key + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
             dataType: 'json',
             beforeSend: function() {
-                $('#cart > button').button('loading');
+                $('#cart > button > a > span').button('loading');
+            },
+            complete: function() {
+                $('#cart > button > a > span').button('reset');
             },
             success: function(json) {
-                $('#cart > button').button('reset');
-
-                $('#cart-total').html(json['total']);
+                setTimeout(function () {
+                    $('#cart-total').html(json['total']);
+                }, 100);
 
                 if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
                     location = 'index.php?route=checkout/cart';
@@ -759,12 +765,15 @@ if (Journal.isOC2) {
             data: 'key=' + key,
             dataType: 'json',
             beforeSend: function() {
-                $('#cart > button').button('loading');
+                $('#cart > button > a > span').button('loading');
+            },
+            complete: function() {
+                $('#cart > button > a > span').button('reset');
             },
             success: function(json) {
-                $('#cart > button').button('reset');
-
-                $('#cart-total').html(json['total']);
+                setTimeout(function () {
+                    $('#cart-total').html(json['total']);
+                }, 100);
 
                 if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
                     location = 'index.php?route=checkout/cart';
@@ -1144,8 +1153,8 @@ Journal.SuperFilter.doFilter = function ($parent, url) {
 };
 
 Journal.SuperFilter.setFilters = function ($parent, url) {
-    var categoryPattern = /-c(((\d+)(,*))+)/;
-    var manufacturerPattern = /-m(((\d+)(,*))+)/;
+    var categoryPattern = /-c(((\d+)(,*))+)$/;
+    var manufacturerPattern = /-m(((\d+)(,*))+)$/;
     var attributePattern = /-a(\d*)-v/;
     var optionPattern = /-o(\d*)-v/;
     var tagsPattern = /(.+)-tags/;

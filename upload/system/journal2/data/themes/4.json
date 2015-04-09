@@ -3043,7 +3043,7 @@
         "product_page_options_sold": "0",
         "product_page_options_push_checkbox": "1",
         "product_page_options_push_image": "1",
-        "product_page_title_align": "left",
+        "product_page_title_align": "center",
         "product_page_options_push_radio": "1",
         "product_page_title_border": {
             "value": {
@@ -3051,7 +3051,10 @@
             }
         },
         "product_page_title_overflow": "on",
-        "product_page_tabs_position": "off"
+        "product_page_tabs_position": "off",
+        "product_page_title_position": "top",
+        "product_page_qty_status": "on",
+        "product_page_spec_title_align": "left"
     },
     "general": {
         "body_font": {
@@ -3540,7 +3543,8 @@
                 }
             }
         },
-        "breadcrumb_status": "block"
+        "breadcrumb_status": "block",
+        "scroll_to_top": "1"
     },
     "modulecustomsections": {
         "cs_title_divider_type": "solid",
@@ -4070,7 +4074,7 @@
                 "text_transform": "none",
                 "color": {
                     "value": {
-                        "color": ""
+                        "color": "rgb(55, 41, 30)"
                     }
                 },
                 "font_subset": [
@@ -4841,7 +4845,10 @@
             "value": {
                 "text": "5"
             }
-        }
+        },
+        "search_autocomplete_include_description": "1",
+        "autosuggest_product_image_type": "fit",
+        "autosuggest_price_status": "block"
     },
     "productgrid": {
         "product_grid_shadow": "never",
@@ -7965,6 +7972,38 @@
         "site_map_border": {
             "value": {
                 "border_rounded": "px"
+            }
+        },
+        "info_page_title_align": "left",
+        "checkout_heading_divider_type": "solid",
+        "info_page_title_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "maintenance_bg": {
+            "value": {
+                "bgimage_attach": "scroll"
+            }
+        },
+        "shopping_option_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": null,
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "font_subset": [
+
+                ],
+                "color": {
+                    "value": {
+                        "color": "rgb(80, 80, 80)"
+                    }
+                }
             }
         }
     },

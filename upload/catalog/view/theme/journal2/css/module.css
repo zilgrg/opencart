@@ -283,7 +283,7 @@ CUSTOM SECTIONS
 
 .isotope-hidden.isotope-item {
   pointer-events: none;
-  z-index: 1; }
+  z-index: 0; }
 
 .isotope,
 .isotope .isotope-item {
@@ -1217,6 +1217,7 @@ NEWSLETTER
   display: none; }
 .journal-sf .sf-image .box-content {
   overflow: hidden;
+  overflow-y: auto;
   max-height: 310px; }
   .journal-sf .sf-image .box-content ul {
     display: block; }
@@ -1253,8 +1254,11 @@ NEWSLETTER
   transition: all 0.2s ease-in-out; }
 
 @media only screen and (min-width: 1024px) {
-  .has-popup body {
-    overflow-y: scroll; } }
+  .has-popup {
+    margin: 0 !important;
+    overflow-y: scroll !important;
+    position: fixed;
+    width: 100%; } }
 .mfp-close {
   opacity: 1;
   transition: all 0.2s; }

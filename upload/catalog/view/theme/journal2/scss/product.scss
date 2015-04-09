@@ -1092,6 +1092,10 @@ OC2
       .price-old{
         float: left;
       }
+      .price-new{
+        position: relative;
+        top:-9px;
+      }
       .options .option {
         div label:before {
           display: none;

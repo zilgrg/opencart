@@ -917,11 +917,11 @@ a.accordion-remove [data-icon]:before {
   color: #48a0d0; }
 
 .bar-level-0 {
-  background-color: #51617a;
+  background-color: #51617A;
   border-top: 1px solid #657999;
   border-bottom: 1px solid #3d495b; }
   .bar-level-0 .accordion-icon {
-    background-color: #51617a;
+    background-color: #51617A;
     border-right: #323c4c !important; }
 
 .bar-level-0:hover {
@@ -1479,7 +1479,7 @@ label.close-others {
   label.close-others input {
     position: relative;
     top: -2px;
-    background-color: #51617a;
+    background-color: #51617A;
     padding: 3px; }
   label.close-others.hint--top:before {
     padding: 0;
@@ -1521,7 +1521,7 @@ label.close-others {
   left: -0px; }
 
 .expand-icon {
-  background-color: #51617a;
+  background-color: #51617A;
   text-align: center;
   border-radius: 1px;
   margin-right: 2px;
@@ -1540,7 +1540,7 @@ label.close-others {
     background-color: #48a0d0; }
 
 .collapse-icon {
-  background-color: #51617a;
+  background-color: #51617A;
   text-align: center;
   border-radius: 1px;
   margin-right: 1px; }
@@ -1564,7 +1564,7 @@ label.close-others {
   margin-left: -20px; }
 
 .bar-pt, .bar-pt:hover {
-  background-color: #51617a;
+  background-color: #51617A;
   cursor: default; }
 
 .p-tabs .bar-level-0 {
@@ -1918,6 +1918,10 @@ a.news-export:before {
   .toggle-modules.accordion-remove:before {
     content: ''; }
 
+.modal-backdrop {
+  height: 100%;
+  position: fixed; }
+
 .oc2 .collapse {
   transition: height 0.35s ease; }
 .oc2 .accordion-group {
@@ -1928,7 +1932,8 @@ a.news-export:before {
 .oc2 label.close-others input {
   top: 1px; }
 .oc2 #journal-body .collapse {
-  display: block; }
+  display: block;
+  visibility: visible; }
 .oc2 .accordion-inner ul {
   margin-bottom: 0; }
 .oc2 .post-editor .cke_contents {
@@ -2097,3 +2102,10 @@ html:not(.oc2) #header {
   display: inline-block;
   width: 100%;
   max-height: 85px; }
+
+@media only screen and (max-width: 1060px) {
+  .oc2 #content {
+    min-width: 800px; }
+
+  .oc2 .store-picker {
+    margin-left: -280px; } }

@@ -3811,7 +3811,8 @@
                 "color": "rgb(244, 244, 244)"
             }
         },
-        "breadcrumb_status": "block"
+        "breadcrumb_status": "block",
+        "scroll_to_top": "1"
     },
     "modulecustomsections": {
         "cs_title_divider_type": "dotted",

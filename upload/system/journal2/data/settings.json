@@ -5022,7 +5022,7 @@
     "quickview_title_align": {
         "type": "j-opt-select",
         "selector": ".quickview .heading-title",
-        "property": "text-align:%s"
+        "property": "text-align:%s !important"
     },
 
 

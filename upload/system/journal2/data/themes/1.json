@@ -1377,7 +1377,8 @@
                 "text_transform": "none"
             }
         },
-        "mobile_menu_on": "phone"
+        "mobile_menu_on": "phone",
+        "mobile_menu_cart_display": "off"
     },
     "moduleheadlinerotator": {
         "cta_button_active_shadow": "inset 0 1px 10px rgba(0, 0, 0, 0.8)",
@@ -2767,7 +2768,20 @@
             }
         },
         "product_page_title_overflow": "on",
-        "product_page_tabs_position": "off"
+        "product_page_tabs_position": "off",
+        "product_page_options_push_image_height": {
+            "value": {
+                "text": ""
+            }
+        },
+        "product_page_options_push_image_width": {
+            "value": {
+                "text": ""
+            }
+        },
+        "product_page_title_position": "top",
+        "product_page_qty_status": "on",
+        "product_page_spec_title_align": "left"
     },
     "general": {
         "body_font": {
@@ -3092,7 +3106,8 @@
                 "color": "rgb(255, 255, 255)"
             }
         },
-        "breadcrumb_status": "block"
+        "breadcrumb_status": "block",
+        "scroll_to_top": "1"
     },
     "modulecustomsections": {
         "cs_title_divider_type": "solid",
@@ -3545,7 +3560,7 @@
                 "text": "4"
             }
         },
-        "footer_product_name_overflow": "nowrap",
+        "footer_product_name_overflow": "normal",
         "footer_product_divider_type": "solid",
         "footer_product_image_width": {
             "value": {
@@ -3696,10 +3711,13 @@
                 "font_type": "none",
                 "font_size": "13px",
                 "font_family": "Helvetica, Arial, sans-serif",
-                "font_name": "",
-                "font_weight": "normal",
+                "font_name": "ABeeZee",
+                "font_weight": "regular",
                 "font_style": "normal",
-                "text_transform": "none"
+                "text_transform": "none",
+                "font_subset": [
+
+                ]
             }
         },
         "search_radius": {
@@ -3953,7 +3971,7 @@
         },
         "search_placeholder_color": {
             "value": {
-                "color": "rgb(189, 195, 199)"
+                "color": "rgb(153, 153, 153)"
             }
         },
         "autosuggest_divider_type": "solid",
@@ -4036,7 +4054,7 @@
         "cart_header_shadow": "0 1px 5px -2px rgba(0, 0, 0, 0.6)",
         "search_placeholder_text": {
             "value": {
-                "1": "Search",
+                "1": "Search entire store",
                 "2": "Search"
             }
         },
@@ -4075,7 +4093,30 @@
         },
         "language_display": "flag",
         "currency_display": "symbol",
-        "search_autocomplete_include_description": "1"
+        "search_autocomplete_include_description": "1",
+        "autosuggest_view_more_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none"
+            }
+        },
+        "autosuggest_limit": {
+            "value": ""
+        },
+        "autosuggest_price_status": "block",
+        "autosuggest_product_image_type": "fit",
+        "autosuggest_product_image_width": {
+            "value": ""
+        },
+        "autosuggest_product_image_height": {
+            "value": ""
+        }
     },
     "productgrid": {
         "product_grid_shadow": "never",
@@ -4176,7 +4217,7 @@
         "product_grid_latest_label_status": "block",
         "product_grid_special_label_status": "block",
         "product_grid_outofstock_label_status": "block",
-        "product_grid_name_overflow": "nowrap",
+        "product_grid_name_overflow": "normal",
         "product_grid_price_full": "inline-block",
         "product_grid_details_tip": "always",
         "product_grid_details_border": {
@@ -6188,6 +6229,32 @@
                 "letter_spacing": "",
                 "text_transform": "none"
             }
+        },
+        "info_page_title_align": "left",
+        "info_page_title_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "shopping_option_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "ABeeZee",
+                "font_weight": "regular",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "font_subset": [
+
+                ],
+                "color": {
+                    "value": {
+                        "color": "rgb(63, 87, 101)"
+                    }
+                }
+            }
         }
     },
     "notification": {
@@ -7937,7 +8004,9 @@
             }
         },
         "custom_js": {
-            "value": ""
+            "value": {
+                "text": ""
+            }
         }
     },
     "welcome": {
@@ -8463,7 +8532,7 @@
         },
         "post_grid_details_padding_top": {
             "value": {
-                "text": "15"
+                "text": ""
             }
         },
         "post_grid_details_padding_right": {
@@ -8489,6 +8558,65 @@
         "post_list_image_width": {
             "value": {
                 "text": "30"
+            }
+        },
+        "feed_text": {
+            "value": {
+                "1": "RSS Feed"
+            }
+        },
+        "feed_text_font_hover": {
+            "value": {
+                "color": "rgb(0, 0, 0)"
+            }
+        },
+        "feed_text_offset_top": {
+            "value": {
+                "text": ""
+            }
+        },
+        "post_list_title_divider_type": "solid",
+        "feed_text_offset_right": {
+            "value": {
+                "text": "15"
+            }
+        },
+        "feed_icon": {
+            "value": {
+                "options": {
+                    "font_size": "16px",
+                    "color": {
+                        "value": {
+                            "color": "rgb(255, 255, 255)"
+                        }
+                    },
+                    "top": "2"
+                },
+                "icon_type": "icon",
+                "icon": {
+                    "icon": "&#xe6b4;",
+                    "class": "feed"
+                }
+            }
+        },
+        "feed_text_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "ABeeZee",
+                "font_weight": "regular",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "font_subset": [
+
+                ],
+                "color": {
+                    "value": {
+                        "color": "rgb(255, 255, 255)"
+                    }
+                }
             }
         }
     },
@@ -8745,7 +8873,9 @@
             }
         },
         "post_form_padding": {
-            "value": ""
+            "value": {
+                "text": "15"
+            }
         },
         "post_comment_button_font": {
             "value": {

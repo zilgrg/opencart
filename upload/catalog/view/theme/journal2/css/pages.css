@@ -119,6 +119,11 @@ label {
   .action-area h3 {
     padding: 10px 12px; }
 
+.oc2 .action-area .panel-heading {
+  padding: 0; }
+  .oc2 .action-area .panel-heading .panel-title > a {
+    padding: 10px;
+    display: block; }
 .oc2 .action-area .panel-group {
   margin-bottom: 0; }
 .oc2 .action-area .panel-body label {
@@ -419,6 +424,9 @@ BRANDS
 
 .oc2 #content.search-page {
   padding-bottom: 20px; }
+
+.oc2.firefox #content.search-page .content select {
+  margin-top: 3px; }
 
 /******************************
  COMPARE

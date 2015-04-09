@@ -788,6 +788,9 @@ OC2
   border: 0; }
 .oc2 .product-info .right .price-old {
   float: left; }
+.oc2 .product-info .right .price-new {
+  position: relative;
+  top: -9px; }
 .oc2 .product-info .right .options .option div label:before {
   display: none; }
 .oc2 .product-info .right .options .option .input-group-btn {

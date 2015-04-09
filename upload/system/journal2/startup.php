@@ -1,6 +1,6 @@
 <?php
 /* version */
-define('JOURNAL_VERSION', '2.4.10');
+define('JOURNAL_VERSION', '2.4.11');
 
 
 /* check if journal should be loaded */

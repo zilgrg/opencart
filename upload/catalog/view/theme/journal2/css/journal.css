@@ -353,8 +353,7 @@ ul.breadcrumb {
     ul.breadcrumb li a {
       margin: 0 4px; }
     ul.breadcrumb li:before {
-      content: "»";
-      float: left; }
+      content: "»"; }
     ul.breadcrumb li:first-of-type a {
       margin-left: 0; }
     ul.breadcrumb li:first-of-type:before {

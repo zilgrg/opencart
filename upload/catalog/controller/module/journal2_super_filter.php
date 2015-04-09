@@ -372,7 +372,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
         foreach (explode("/", $this->request->post['filters']) as $fragment) {
             // $fragment = rawurldecode($fragment);
 
-            $pattern = '/-c(((\d+)(,*))+)/';
+            $pattern = '/-c(((\d+)(,*))+)$/';
             if (preg_match($pattern, $fragment)) {
                 preg_match($pattern, $fragment, $values);
                 foreach (explode(",", $values[1]) as $value) {
@@ -381,7 +381,7 @@ class ControllerModuleJournal2SuperFilter extends Controller {
                 continue;
             }
 
-            $pattern = '/-m(((\d+)(,*))+)/';
+            $pattern = '/-m(((\d+)(,*))+)$/';
             if (preg_match($pattern, $fragment)) {
                 preg_match($pattern, $fragment, $values);
                 foreach (explode(",", $values[1]) as $value) {

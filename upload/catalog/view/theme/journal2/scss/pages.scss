@@ -173,6 +173,13 @@ label {
 
 .oc2{
   .action-area{
+    .panel-heading{
+      padding: 0;
+      .panel-title > a{
+        padding: 10px;
+        display: block;
+      }
+    }
     .panel-group{
       margin-bottom: 0;
     }
@@ -621,6 +628,14 @@ BRANDS
 .oc2{
   #content.search-page{
     padding-bottom: 20px;
+  }
+}
+
+.oc2.firefox{
+  #content.search-page{
+    .content select{
+      margin-top: 3px;
+    }
   }
 }
 
