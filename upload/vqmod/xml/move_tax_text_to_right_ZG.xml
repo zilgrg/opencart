@@ -1,0 +1,12 @@
+<modification>
+    <id>Move tax text to the right in product page for Journal2 template</id>
+    <version>1</version>
+    <vqmver>2.4.1</vqmver>
+    <author>ZG</author>
+    <file name="catalog/view/theme/journal2/template/product/product.tpl">
+        <operation>
+            <search position="replace"><![CDATA[<?php echo $text_tax; ?> <?php echo $tax; ?>]]></search>
+            <add><![CDATA[<?php echo $tax; ?> <?php echo $text_tax; ?>]]></add>
+        </operation>
+    </file>
+</modification>
