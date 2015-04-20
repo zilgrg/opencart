@@ -70,10 +70,15 @@ class ControllerModuleJournal2SimpleSlider extends Controller {
                     break;
                 case 'content_top':
                 case 'content_bottom':
-                    if ($this->journal2->settings->get('extended_layout')) {
-                        $width = $this->journal2->settings->get('site_width', 1024) - 240 * $this->journal2->settings->get('config_columns_count');
+                    if (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet() && $this->journal2->settings->get('responsive_design')) {
+                        $width = $this->journal2->settings->get('site_width', 1024);
                     } else {
-                        $width = $this->journal2->settings->get('site_width', 1024) - 40 - 240 * $this->journal2->settings->get('config_columns_count');
+                        if ($this->journal2->settings->get('extended_layout')) {
+                            $width = $this->journal2->settings->get('site_width', 1024) - 240 * $this->journal2->settings->get('config_columns_count');
+                        } else {
+                            $width = $this->journal2->settings->get('site_width', 1024) - 40 - 240 * $this->journal2->settings->get('config_columns_count');
+                        }
+                        $height *= $width / $this->journal2->settings->get('site_width', 1024);
                     }
                     $this->data['width'] = "max-width: {$width}px";
                     break;

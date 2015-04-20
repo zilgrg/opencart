@@ -292,7 +292,7 @@ class Journal2Export {
                 $values .= '\'' . $value . '\', ';
             }
 
-            $output .= 'INSERT INTO `' . $table_name . '` (' . preg_replace('/, $/', '', $fields) . ') VALUES (' . preg_replace('/, $/', '', $values) . ');' . "\n";
+            $output .= str_replace("'NULL'", 'NULL', 'INSERT INTO `' . $table_name . '` (' . preg_replace('/, $/', '', $fields) . ') VALUES (' . preg_replace('/, $/', '', $values) . ');') . "\n";
         }
 
         return $output;

@@ -495,7 +495,8 @@ header .links {
       .mini-cart-info table tr td.name {
         padding-left: 5px; }
         .mini-cart-info table tr td.name div {
-          line-height: 1; }
+          line-height: 1;
+          padding-top: 5px; }
       .mini-cart-info table tr td.quantity {
         text-align: right;
         white-space: nowrap; }

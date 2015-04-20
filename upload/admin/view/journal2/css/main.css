@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.3.0
+  Version 2.5
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 
@@ -1942,42 +1942,44 @@ a.news-export:before {
   width: 51px; }
 .oc2 #column-left.active {
   width: 235px; }
-.oc2 #modal-image *:before {
-  font-family: inherit; }
-.oc2 #modal-image .modal-header {
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  color: white; }
-  .oc2 #modal-image .modal-header .close {
-    color: white;
-    opacity: 1;
-    position: relative;
-    top: 3px;
-    right: 5px; }
-.oc2 #modal-image .modal-body {
-  padding: 15px;
-  max-height: 100%; }
-  .oc2 #modal-image .modal-body .form-control {
-    height: 32px;
-    border: 1px solid #ccc;
-    border-top-left-radius: 4px !important;
-    border-bottom-left-radius: 4px !important; }
-  .oc2 #modal-image .modal-body .btn {
-    border-radius: 4px; }
-  .oc2 #modal-image .modal-body .btn-primary {
-    color: #ffffff;
-    background-color: #428bca;
-    border: 1px solid #357ebd; }
-    .oc2 #modal-image .modal-body .btn-primary:hover {
-      background-color: #3071a9;
-      border-color: #285e8e; }
-  .oc2 #modal-image .modal-body .btn-danger {
-    color: white;
-    background-color: #d9534f;
-    border-color: #d43f3a; }
-    .oc2 #modal-image .modal-body .btn-danger:hover {
-      background-color: #c9302c;
-      border-color: #ac2925; }
+.oc2 #modal-image {
+  z-index: 2000; }
+  .oc2 #modal-image *:before {
+    font-family: inherit; }
+  .oc2 #modal-image .modal-header {
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    color: white; }
+    .oc2 #modal-image .modal-header .close {
+      color: white;
+      opacity: 1;
+      position: relative;
+      top: 3px;
+      right: 5px; }
+  .oc2 #modal-image .modal-body {
+    padding: 15px;
+    max-height: 100%; }
+    .oc2 #modal-image .modal-body .form-control {
+      height: 32px;
+      border: 1px solid #ccc;
+      border-top-left-radius: 4px !important;
+      border-bottom-left-radius: 4px !important; }
+    .oc2 #modal-image .modal-body .btn {
+      border-radius: 4px; }
+    .oc2 #modal-image .modal-body .btn-primary {
+      color: #ffffff;
+      background-color: #428bca;
+      border: 1px solid #357ebd; }
+      .oc2 #modal-image .modal-body .btn-primary:hover {
+        background-color: #3071a9;
+        border-color: #285e8e; }
+    .oc2 #modal-image .modal-body .btn-danger {
+      color: white;
+      background-color: #d9534f;
+      border-color: #d43f3a; }
+      .oc2 #modal-image .modal-body .btn-danger:hover {
+        background-color: #c9302c;
+        border-color: #ac2925; }
 
 .oc2 .pagination {
   margin: 20px 0;
@@ -2106,6 +2108,10 @@ html:not(.oc2) #header {
 @media only screen and (max-width: 1060px) {
   .oc2 #content {
     min-width: 800px; }
-
+  .oc2 .fixed .module-buttons {
+    padding-right: 270px;
+    right: 45px; }
   .oc2 .store-picker {
-    margin-left: -280px; } }
+    margin-left: -170px; }
+  .oc2 .fixed .store-picker {
+    margin-left: -295px; } }

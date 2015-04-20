@@ -96,7 +96,7 @@
   background-color: #428bca; }
 
 .btn-danger {
-  background-color: #EA2E49; }
+  background-color: #ea2e49; }
   .btn-danger:hover {
     color: white; }
 
@@ -269,7 +269,7 @@
 
 .panel-heading {
   padding: 10px;
-  background-color: #5F6874;
+  background-color: #5f6874;
   transition: all 0.2s; }
   .panel-heading a:hover {
     color: #6fb9f9; }
@@ -353,7 +353,8 @@ button.close {
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: 10px; }
+  margin: 10px;
+  z-index: 104000; }
 
 .modal-content {
   position: relative;
@@ -509,6 +510,7 @@ button.close {
   font-family: 'Glyphicons Halflings';
   src: url("../../../javascript/bootstrap/fonts/glyphicons-halflings-regular.eot");
   src: url("../../../javascript/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../../../javascript/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../../../javascript/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../../../javascript/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+
 .glyphicon, .glyphicon:before {
   position: relative;
   top: 1px;

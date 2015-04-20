@@ -88,5 +88,7 @@
     $('.mobile-menu a:not([href])').live('click', function () {
         $(this).parent().find('> .mobile-plus').trigger('click');
     });
+
+    $('.modal').appendTo($('body'));
 }());
 

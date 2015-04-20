@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.3.0
+  Version 2.5
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 
@@ -2575,6 +2575,7 @@ a.news-export:before{
 
   // Image Popup
   #modal-image{
+    z-index: 2000;
     *:before{
       font-family: inherit;
     }
@@ -2790,10 +2791,20 @@ html:not(.oc2) #header{
 }
 
 @media only screen and (max-width: 1060px) {
-  .oc2 #content{
-    min-width: 800px;
-  }
-  .oc2 .store-picker{
-    margin-left: -280px;
+  .oc2 {
+    #content{
+      min-width: 800px;
+    }
+    .fixed .module-buttons{
+      padding-right: 270px;
+      right: 45px;
+    }
+    .store-picker{
+      margin-left: -170px;
+    }
+    .fixed .store-picker{
+      margin-left: -295px;
+    }
   }
 }
+
