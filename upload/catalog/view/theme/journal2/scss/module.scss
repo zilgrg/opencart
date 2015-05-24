@@ -888,6 +888,10 @@ CMS BLOCKS
   width: 100%;
 }
 
+.firefox .block-content{
+  display: block;
+}
+
 p{
   img{
     max-width: 100% !important;
@@ -1703,6 +1707,8 @@ NEWSLETTER
           float: left;
           width: 25%;
           padding: 0;
+          padding-left: 0 !important;
+          padding-top: 0 !important;
         }
         label {
           width: 100%;
@@ -1728,7 +1734,6 @@ NEWSLETTER
     }
   }
 }
-
 
 /******************************
  POPUP
@@ -1762,6 +1767,9 @@ NEWSLETTER
   opacity: 1;
   transition: all 0.2s;
 }
+.quickview .journal-popup-header .heading-title {
+  text-align: center;
+}
 
 .journal-popup {
   position: relative;
@@ -1785,14 +1793,12 @@ NEWSLETTER
     box-sizing: border-box;
   }
   div.journal-popup-header-content{
-    text-align: center;
+    text-align: center !important;
     border: 0;
     border-radius: 0;
     white-space: normal;
-    line-height: 1.4;
     padding: 9px 0;
     line-height: 100%;
-    white-space: normal;
   }
   .button-icon-right i{
     float: right;

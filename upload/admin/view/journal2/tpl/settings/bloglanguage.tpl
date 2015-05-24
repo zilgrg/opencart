@@ -2,7 +2,7 @@
     <div class="module-header">
         <div class='module-name'>Settings<span>Blog Language</span></div>
 
-        <skin-manager data-url="settings/general"></skin-manager>
+        <skin-manager data-url="settings/bloglanguage"></skin-manager>
 
         <div class="module-buttons">
             <?php if (defined('J2ENV')): ?>

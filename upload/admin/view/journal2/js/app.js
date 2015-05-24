@@ -209,6 +209,10 @@ define([
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/pages&token=' + Journal2Config.token,
                 controller: 'PagesSettingsController'
             })
+            .when('/settings/journalcheckout/:skin_id?', {
+                templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/journalcheckout&token=' + Journal2Config.token,
+                controller: 'JournalCheckoutSettingsController'
+            })
             .when('/settings/productpage/:skin_id?', {
                 templateUrl: 'index.php?route=module/journal2/tpl&tpl=settings/productpage&token=' + Journal2Config.token,
                 controller: 'ProductPageSettingsController'

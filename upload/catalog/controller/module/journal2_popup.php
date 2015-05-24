@@ -43,12 +43,12 @@ class ControllerModuleJournal2Popup extends Controller {
         $module_data = $module_data['module_data'];
 
         /* hide on mobile */
-        if (Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
+        if ($setting['position'] !== 'ajax' && Journal2Utils::getProperty($module_data, 'disable_mobile') && (Journal2Cache::$mobile_detect->isMobile() && !Journal2Cache::$mobile_detect->isTablet()) && $this->journal2->settings->get('responsive_design')) {
             return;
         }
 
         /* hide on desktop */
-        if (Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
+        if ($setting['position'] !== 'ajax' && Journal2Utils::getProperty($module_data, 'disable_desktop') && !Journal2Cache::$mobile_detect->isMobile()) {
             return;
         }
 
@@ -76,7 +76,7 @@ class ControllerModuleJournal2Popup extends Controller {
             /* set global module properties */
             $this->data['module'] = mt_rand();
 
-            $this->data['hide_on_mobile_class'] = Journal2Utils::getProperty($module_data, 'disable_mobile') ? 'hide-on-mobile' : '';
+            $this->data['hide_on_mobile_class'] = $setting['position'] !== 'ajax' && Journal2Utils::getProperty($module_data, 'disable_mobile') ? 'hide-on-mobile' : '';
 
             /* dimensions */
             $width = Journal2Utils::getProperty($module_data, 'width', 600);
@@ -252,7 +252,7 @@ class ControllerModuleJournal2Popup extends Controller {
                 $from = PHP_EOL . PHP_EOL . 'Sent from <a href="' . $from . '">' . $from . '</a>';
             }
             if (Front::$IS_OC2) {
-                if (false) {
+                if (version_compare(VERSION, '2.0.2', '<')) {
                     $mail = new Mail($this->config->get('config_mail'));
                 } else {
                     $mail = new Mail();

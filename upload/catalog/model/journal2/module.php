@@ -33,6 +33,7 @@ class ModelJournal2Module extends Model {
         foreach ($query->rows as $row) {
             if (isset($row['module_data'])) {
                 $tab = json_decode($row['module_data'], true);
+                if (!$tab['status']) continue;
                 $store_id = Journal2Utils::getProperty($tab, 'store_id', -1);
                 if ($store_id != -1 && $store_id != $this->config->get('config_store_id')) {
                     continue;
@@ -85,6 +86,7 @@ class ModelJournal2Module extends Model {
         foreach ($query->rows as $row) {
             if (isset($row['module_data'])) {
                 $tab = json_decode($row['module_data'], true);
+                if (!$tab['status']) continue;
                 $store_id = Journal2Utils::getProperty($tab, 'store_id', -1);
                 if ($store_id != -1 && $store_id != $this->config->get('config_store_id')) {
                     continue;

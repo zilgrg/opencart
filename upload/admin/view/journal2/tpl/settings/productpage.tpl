@@ -2,7 +2,7 @@
     <div class="module-header">
         <div class='module-name'>Settings<span>Product Page</span></div>
 
-        <skin-manager data-url="settings/general"></skin-manager>
+        <skin-manager data-url="settings/productpage"></skin-manager>
 
         <div class="module-buttons">
             <?php if (defined('J2ENV')): ?>
@@ -597,12 +597,12 @@
                                 <ul class="module-create-options">
                                     <li>
                                         <span class="module-create-title">Show Brand Image</span>
-                    <span class="module-create-option">
-                        <switch data-ng-model="settings.manufacturer_image">
-                            <switch-option key="1">ON</switch-option>
-                            <switch-option key="0">OFF</switch-option>
-                        </switch>
-                    </span>
+                                    <span class="module-create-option">
+                                        <switch data-ng-model="settings.manufacturer_image">
+                                            <switch-option key="1">ON</switch-option>
+                                            <switch-option key="0">OFF</switch-option>
+                                        </switch>
+                                    </span>
                                         <a href="#" target="_blank" class="journal-tip"> </a>
                                     </li>
                                     <li data-ng-show="settings.manufacturer_image == '1'">
@@ -820,6 +820,66 @@
                                     <!--</span>-->
                                 <!--<a href="#" target="_blank" class="journal-tip"></a>-->
                             <!--</li>-->
+                            <accordion>
+                                <accordion-group is-open="false">
+                                    <accordion-heading>
+                                        <div class="accordion-bar bar-level-2">Upload Button</div>
+                                    </accordion-heading>
+                                    <ul class="module-create-options">
+
+
+                                    <li>
+                                <span class="module-create-title">Button Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.upload_button_color"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Button Hover Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.upload_button_font_hover"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+
+                            <li>
+                                <span class="module-create-title">Background Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.upload_button_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+
+                            <li>
+                                <span class="module-create-title">Background Hover</span>
+                                <span class="module-create-option">
+                                    <j-opt-color data-ng-model="settings.upload_button_bg_hover"></j-opt-color>
+                                </span>
+                                                <a href="#" target="_blank" class="journal-tip"></a>
+                                            </li>
+
+                                            <li>
+                                                <span class="module-create-title">Border Settings</span>
+                                <span class="module-create-option">
+                                    <j-opt-border data-ng-model="settings.upload_button_border"></j-opt-border>
+                                </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Border Hover Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.upload_button_border_hover"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                                        </ul>
+                                    </accordion-group>
+                                </accordion>
+
 
                             <accordion>
                                 <accordion-group is-open="false">
@@ -1546,6 +1606,21 @@
                                 <span class="module-create-title">Note Text Background <small>Opencart 2.0</small></span>
                                     <span class="module-create-option">
                                         <j-opt-color data-ng-model="settings.review_text_danger_color_bg"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+                            <li>
+                                <span class="module-create-title">Input Fields Text Color</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.review_input_fields_color"></j-opt-color>
+                                    </span>
+                                <a href="#" target="_blank" class="journal-tip"></a>
+                            </li>
+
+                            <li>
+                                <span class="module-create-title">Input Fields Background</span>
+                                    <span class="module-create-option">
+                                        <j-opt-color data-ng-model="settings.review_input_fields_color_bg"></j-opt-color>
                                     </span>
                                 <a href="#" target="_blank" class="journal-tip"></a>
                             </li>

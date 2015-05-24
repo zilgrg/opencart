@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -165,7 +165,7 @@ PRODUCT PAGE
       .product-info .right .options .option b + br {
         display: none; }
       .product-info .right .options .option span {
-        padding: 8px 3px 3px 0; }
+        padding: 3px 3px 3px 0; }
       .product-info .right .options .option input[type='text'], .product-info .right .options .option textarea {
         min-width: 100%; }
     .product-info .right .options .option:last-of-type {
@@ -790,13 +790,11 @@ OC2
   float: left; }
 .oc2 .product-info .right .price-new {
   position: relative;
-  top: -9px; }
+  top: -5px; }
 .oc2 .product-info .right .options .option div label:before {
   display: none; }
 .oc2 .product-info .right .options .option .input-group-btn {
   padding: 0; }
-.oc2 .product-info .right .options .option > label {
-  margin-bottom: 5px; }
 .oc2 .product-info .right .options .option label {
   display: block; }
 .oc2 .rating .fa-stack {
@@ -858,7 +856,5 @@ OC2
 .oc2 #tab-review a {
   position: relative;
   top: -1px; }
-  .oc2 #tab-review a:first-of-type {
-    margin-left: 10px; }
 .oc2 .attribute strong {
   font-weight: inherit; }

@@ -312,7 +312,7 @@ class ControllerJournal2Quickview extends Controller {
 
             $this->load->model('journal2/product');
             $this->data['labels'] = $this->model_journal2_product->getLabels($product_info['product_id']);
-			
+
 			if ($product_info['quantity'] <= 0) {
 				$this->data['stock'] = $product_info['stock_status'];
                 $this->data['stock_status'] = 'outofstock';
@@ -632,6 +632,9 @@ class ControllerJournal2Quickview extends Controller {
 			$data['model'] = $product_info['model'];
 			$data['reward'] = $product_info['reward'];
 			$data['points'] = $product_info['points'];
+
+        $this->load->model('journal2/product');
+        $data['labels'] = $this->model_journal2_product->getLabels($product_info['product_id']);
 
 			if ($product_info['quantity'] <= 0) {
 				$data['stock'] = $product_info['stock_status'];

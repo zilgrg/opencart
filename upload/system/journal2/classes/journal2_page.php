@@ -105,6 +105,7 @@ class Journal2Page {
             $html_classes->addClass('home-page');
         }
 
+
         if (!$this->layout_id) {
             $this->layout_id = $registry->get('model_design_layout')->getLayout($route);
         }
@@ -196,6 +197,8 @@ class Journal2Page {
                 }
             }
         } else {
+            $html_classes->addClass('oc1');
+
             $registry->get('load')->model('setting/extension');
             $extensions = $registry->get('model_setting_extension')->getExtensions('module');
 

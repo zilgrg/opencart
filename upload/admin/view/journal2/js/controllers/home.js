@@ -17,6 +17,7 @@ define(['./module', 'underscore', 'underscore.string'], function (module, _, _S)
             'Modulecmsblocks'   : 'CMS Blocks',
             'Moduleheadlinerotator'   : 'Headline Rotator',
             'Modulephotogallery'   : 'Photo Gallery',
+            'Journalcheckout'   : 'Quick Checkout',
             'Productpage'   : 'Product Page',
             'Sidecolumn'   : 'Side Column',
             'Custom code'   : 'Custom Code',

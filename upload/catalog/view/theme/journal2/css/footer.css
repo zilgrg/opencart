@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -288,11 +288,12 @@ footer {
     float: right; }
     .bottom-footer .payments img {
       max-width: 100%;
+      max-height: 35px;
       height: auto;
+      width: auto;
       margin-left: 10px;
       position: relative;
       margin-top: 13px;
-      max-height: 35px;
       vertical-align: middle; }
   .bottom-footer .no-copyright {
     text-align: center; }

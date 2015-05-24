@@ -3,7 +3,7 @@ define(['./../module', 'underscore'], function (module, _) {
     module.controller('ImportExportSettingsController', function ($scope, $routeParams, $location, $timeout, localStorageService, Rest, Spinner) {
 
         $scope.settings = {
-            opencart_version: 1,
+            opencart_version: Journal2Config.oc2 ? 2 : 1,
             include_store_data: 0,
             add_dummy_images: 0,
             include_blog_data: 0,
@@ -26,7 +26,7 @@ define(['./../module', 'underscore'], function (module, _) {
         $scope.confirmation = function ($event, verify) {
             $event.preventDefault();
             var $src = $($event.target || $event.srcElement);
-            if ($scope.settings.include_store_data && !confirm('WARNING! This will include store data from this installation. Importing this file into your store will reset your data to the one in this file. ')) {
+            if ($scope.settings.include_store_data == 1 && !confirm('WARNING! This will include store data from this installation. Importing this file into your store will reset your data to the one in this file. ')) {
                 return false;
             }
             if (verify) {

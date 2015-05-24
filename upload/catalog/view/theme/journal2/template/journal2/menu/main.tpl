@@ -65,11 +65,11 @@
         <div class="mega-menu">
             <div>
             <?php $index = 0; foreach($menu_item['items'] as $submenu_item): if ($menu_item['limit'] && $menu_item['limit'] <= $index) continue; $index++; ?>
-            <div class="mega-menu-item product-grid-item <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>  <?php echo $menu_item['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
-                <div class="product-wrapper">
+            <div class="mega-menu-item product-grid-item <?php echo $menu_item['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
+                <div class="product-wrapper <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>">
                     <div class="image">
                         <a href="<?php echo $submenu_item['href']; ?>">
-                           <img class="lazy" src="<?php echo $submenu_item['dummy']; ?>" data-src="<?php echo $submenu_item['image']; ?>" alt="<?php echo $submenu_item['name']; ?>"/>
+                           <img class="lazy" src="<?php echo $submenu_item['dummy']; ?>" width="<?php echo $submenu_item['image_width']; ?>" height="<?php echo $submenu_item['image_height']; ?>" class="lazy" src="<?php echo $submenu_item['dummy']; ?>" data-src="<?php echo $submenu_item['image']; ?>" data-src="<?php echo $submenu_item['image']; ?>" alt="<?php echo $submenu_item['name']; ?>"/>
                         </a>
                         <?php foreach ($submenu_item['labels'] as $label => $name): ?>
                         <?php if ($label === 'outofstock'): ?>
@@ -97,7 +97,15 @@
                         </div>
                         <?php } ?>
                         <?php if ($submenu_item['rating']) { ?>
-                        <div class="rating"><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $submenu_item['rating']; ?>.png" alt="<?php echo $submenu_item['reviews']; ?>" /></div>
+                        <div class="rating">
+                            <?php for ($i = 1; $i <= 5; $i++) { ?>
+                            <?php if ($submenu_item['rating'] < $i) { ?>
+                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            <?php } else { ?>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            <?php } ?>
+                            <?php } ?>
+                        </div>
                         <?php } ?>
                         <hr>
                         <?php if (Journal2Utils::isEnquiryProduct($this, $submenu_item['product_id'])): ?>
@@ -222,8 +230,8 @@
                     <h3><?php echo $menu_column['name']; ?></h3>
                     <?php endif; ?>
                     <?php $index = 0; foreach($menu_column['items'] as $submenu_item): if ($menu_column['limit'] && $menu_column['limit'] <= $index) continue; $index++; ?>
-                    <div class="mega-menu-item product-grid-item <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>  <?php echo $menu_column['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
-                        <div class="product-wrapper">
+                    <div class="mega-menu-item product-grid-item <?php echo $menu_column['classes']; ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display');?> <?php echo $this->journal2->settings->get('product_grid_button_block_button');?>">
+                        <div class="product-wrapper <?php echo isset($submenu_item['labels']) && is_array($submenu_item['labels']) && isset($submenu_item['labels']['outofstock']) ? 'outofstock' : ''; ?>">
                             <div class="image">
                                 <a href="<?php echo $submenu_item['href']; ?>">
                                     <img width="<?php echo $submenu_item['image_width']; ?>" height="<?php echo $submenu_item['image_height']; ?>" class="lazy" src="<?php echo $submenu_item['dummy']; ?>" data-src="<?php echo $submenu_item['image']; ?>" alt="<?php echo $submenu_item['name']; ?>"/>
@@ -254,7 +262,15 @@
                                 </div>
                                 <?php } ?>
                                 <?php if ($submenu_item['rating']) { ?>
-                                <div class="rating"><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $submenu_item['rating']; ?>.png" alt="<?php echo $submenu_item['reviews']; ?>" /></div>
+                                <div class="rating">
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                    <?php if ($submenu_item['rating'] < $i) { ?>
+                                    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                    <?php } else { ?>
+                                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                    <?php } ?>
+                                    <?php } ?>
+                                </div>
                                 <?php } ?>
                                 <hr>
                                 <?php if (Journal2Utils::isEnquiryProduct($this, $submenu_item['product_id'])): ?>

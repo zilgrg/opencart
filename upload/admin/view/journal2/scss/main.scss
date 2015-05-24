@@ -565,7 +565,7 @@ a.set-menu{
     content: "";
     position: absolute;
     border-bottom: 1px solid $dark;
-    width: 108px;
+    width: 109px;
     height: 1px;
     top: 54px;
     left: 50%;
@@ -609,6 +609,14 @@ a.set-menu{
       &:before{
         color: $blue;
       }
+    }
+  }
+}
+
+.oc2{
+  .logo{
+    &:before{
+      width: 118px;
     }
   }
 }
@@ -2782,6 +2790,10 @@ a.news-export:before{
   .multi-lang > span textarea + img{
     right:-70px;
   }
+}
+
+.fit-side-column {
+  top: 14px !important;
 }
 
 html:not(.oc2) #header{

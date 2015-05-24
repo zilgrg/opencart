@@ -85,7 +85,8 @@ class ControllerJournal2Ajax extends Controller {
             'price'     => $this->currency->format($this->tax->calculate($price, $product_info['tax_class_id'], $this->config->get('config_tax'))),
             'special'   => $this->currency->format($this->tax->calculate($special, $product_info['tax_class_id'], $this->config->get('config_tax'))),
             'tax'       => $this->language->get('text_tax') . ' ' . $this->currency->format($tax),
-            'stock'     => $stock
+            'stock'     => $stock,
+            'cls'       => $quantity ? 'instock' : 'outofstock'
         )));
     }
 

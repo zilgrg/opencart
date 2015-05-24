@@ -2033,6 +2033,41 @@
     "product_page_title_position": {
       "type": "j-opt-select"
     },
+
+
+    "upload_button_color": {
+        "type": "j-opt-color",
+        "selector": "button.btn-upload, button.btn-upload i.fa",
+        "property": "color"
+    },
+    "upload_button_font_hover": {
+        "type": "j-opt-color",
+        "selector": "button.btn-upload:hover, button.btn-upload:hover i.fa",
+        "property": "color"
+    },
+    "upload_button_bg": {
+        "type": "j-opt-color",
+        "selector": "button.btn-upload",
+        "property": "background-color"
+    },
+    "upload_button_bg_hover": {
+        "type": "j-opt-color",
+        "selector": "button.btn-upload:hover",
+        "property": "background-color"
+    },
+    "upload_button_border": {
+        "type": "j-opt-border",
+        "selector": "button.btn-upload",
+        "property": ""
+    },
+    "upload_button_border_hover": {
+        "type": "j-opt-color",
+        "selector": "button.btn-upload:hover",
+        "property": "border-color"
+    },
+
+
+
     "countdown_product_page_title_align": {
         "type": "j-opt-select",
         "selector": ".expire-text",
@@ -3143,7 +3178,7 @@
     },
     "product_page_option_font": {
         "type": "j-opt-font",
-        "selector": ".product-info .right .options .option b",
+        "selector": ".product-info .right .options .option b, .product-info .right .options .option .control-label",
         "property": ""
     },
     "product_page_options_title_bg": {
@@ -3393,17 +3428,17 @@
     "product_page_tabs_content_font": {
         "type": "j-opt-font",
         "selector": ".tab-content p, .tab-content p span, .tab-content p font, #tab-description, .product-info .tab-content, #review, #tab-review b, #tab-review span, .attribute td",
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_h_font": {
         "type": "j-opt-font",
         "selector": ".tab-content > h1, .tab-content > h2, .tab-content > h3, .tab-content > h4, .tab-content > h5",
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_ul_font": {
         "type": "j-opt-font",
         "selector": ".tab-content ul, .tab-content ol",
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_bg": {
         "type": "j-opt-color",
@@ -3516,22 +3551,32 @@
         "selector": "#tab-review .text-danger",
         "property": "background-color"
     },
+    "review_input_fields_color": {
+        "type": "j-opt-color",
+        "selector": "#form-review input[type='text'], #form-review textarea",
+        "property": "color"
+    },
+    "review_input_fields_color_bg": {
+        "type": "j-opt-color",
+        "selector": "#form-review input[type='text'], #form-review textarea",
+        "property": "background-color"
+    },
 
 
     "product_page_tabs_content_image_font": {
         "type": "j-opt-font",
         "selector": ".product-info .left .journal-custom-tab, .product-info .left .journal-custom-tab p, .product-info .left .journal-custom-tab p span",
-        "property": " !important"
+        "property": " "
     },
     "product_page_tabs_content_image_title_font": {
         "type": "j-opt-font",
         "selector": ".product-info .left .journal-custom-tab h3",        
-        "property": " !important"
+        "property": " "
     },
     "product_page_tabs_content_ul_font": {
         "type": "j-opt-font",
         "selector": ".product-info .left .journal-custom-tab ul, .product-info .left .journal-custom-tab ol",
-        "property": " !important"
+        "property": " "
     },
     "product_page_tabs_content_image_bg": {
         "type": "j-opt-color",
@@ -3578,17 +3623,17 @@
     "product_page_tabs_content_option_font": {
         "type": "j-opt-font",
         "selector": ".product-info .right .journal-custom-tab, .product-info .right .journal-custom-tab p, .product-info .right .journal-custom-tab p span",
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_option_title_font": {
         "type": "j-opt-font",
         "selector": ".product-info .right .journal-custom-tab h3",        
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_ul_font": {
         "type": "j-opt-font",
         "selector": ".product-info .right .journal-custom-tab ul, .product-info .right .journal-custom-tab ol",
-        "property": " !important"
+        "property": ""
     },
     "product_page_tabs_content_option_bg": {
         "type": "j-opt-color",
@@ -3624,10 +3669,6 @@
         "property": "padding-left:%spx"
     },
 
-
-
-
-
     "product_page_tab_options_line_height": {
         "type": "j-opt-text",
         "selector": ".product-info .right .journal-custom-tab",
@@ -3651,9 +3692,6 @@
         "selector": ".product-info .image .outofstock",
         "property": "display"
     },
-
-
-
 
 
     "tags_title_font": {
@@ -4464,10 +4502,6 @@
         "property": ""
     },
 
-
-
-
-
     "update_button_icon_color": {
         "type": "j-opt-color",
         "selector": ".wishlist-info .action button.btn-primary i.fa, .cart-info .quantity .input-group .btn-primary i.fa",
@@ -4489,7 +4523,6 @@
         "property": "background-color"
     },
 
-
     "delete_button_icon_color": {
         "type": "j-opt-color",
         "selector": ".wishlist-info .action a.btn-danger i.fa, .cart-info .quantity .input-group .btn-danger i.fa",
@@ -4510,6 +4543,403 @@
         "selector": ".wishlist-info .action a.btn-danger:hover, .cart-info .quantity .input-group .btn-danger:hover",
         "property": "background-color"
     },
+
+
+    /*One Page Checkout*/
+
+    "one_page_status": {
+        "type": "j-opt-select"
+    },
+    "one_page_default_auth": {
+        "type": "j-opt-select"
+    },
+    "one_page_main_bg": {
+        "type": "j-opt-color",
+        "selector": ".quick-checkout-page #container",
+        "property": "background-color"
+    },
+    "one_page_main_padding_t": {
+        "type": "j-opt-text",
+        "selector": ".quick-checkout-page #content",
+        "property": "padding-top:%spx"
+    },
+    "one_page_main_padding_r": {
+        "type": "j-opt-text",
+        "selector": ".quick-checkout-page #content",
+        "property": "padding-right:%spx"
+    },
+    "one_page_main_padding_b": {
+        "type": "j-opt-text",
+        "selector": ".quick-checkout-page #content",
+        "property": "padding-bottom:%spx"
+    },
+    "one_page_main_padding_l": {
+        "type": "j-opt-text",
+        "selector": ".quick-checkout-page #content",
+        "property": "padding-left:%spx"
+    },
+
+
+
+    "one_page_title": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_title_font": {
+        "type": "j-opt-font",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": ""
+    },
+    "one_page_title_bg": {
+        "type": "j-opt-color",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": "background-color"
+    },
+    "one_page_title_border": {
+        "type": "j-opt-border",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": ""
+    },
+    "one_page_title_line_height": {
+        "type": "j-opt-text",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": "line-height:%spx"
+    },
+    "one_page_title_padding_left": {
+        "type": "j-opt-text",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": "padding-left:%spx"
+    },
+    "one_page_title_padding_right": {
+        "type": "j-opt-text",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": "padding-right:%spx"
+    },
+    "one_page_title_align": {
+        "type": "j-opt-select",
+        "selector": ".one-page-checkout h1.heading-title",
+        "property": "text-align:%s"
+    },
+
+
+    "one_page_section_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout, .journal-checkout label",
+        "property": ""
+    },
+    "one_page_section_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .checkout-content",
+        "property": "background-color"
+    },
+    "one_page_section_border_settings": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout .checkout-content",
+        "property": ""
+    },
+    "one_page_section_padding": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .checkout-content",
+        "property": "padding:%spx"
+    },
+    "one_page_text_input_color": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout input[type='text'], .journal-checkout input[type='email'], .journal-checkout input[type='password'], .journal-checkout input[type='tel'], .journal-checkout textarea",
+        "property": "color"
+    },
+    "one_page_text_input_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout input[type='text'], .journal-checkout input[type='email'], .journal-checkout input[type='password'], .journal-checkout input[type='tel'], .journal-checkout textarea",
+        "property": "background-color"
+    },
+    "one_page_text_input_border": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout input[type='text'], .journal-checkout input[type='email'], .journal-checkout input[type='password'], .journal-checkout input[type='tel'], .journal-checkout textarea",
+        "property": ""
+    },
+    "one_page_show_fax": {
+        "type": "j-opt-select",
+        "selector": ".form-group.fax-input",
+        "property": "display:%s !important"
+    },
+    "one_page_show_company": {
+        "type": "j-opt-select",
+        "selector": ".form-group.company-input",
+        "property": "display:%s !important"
+    },
+    "one_page_show_address_2": {
+        "type": "j-opt-select",
+        "selector": ".form-group.address-2-input",
+        "property": "display:%s !important"
+    },
+    "one_page_dividers_color": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .left .login-box .radio label, .journal-checkout .spw > div .radio label, .journal-checkout .confirm-order, .journal-checkout .checkout-login .form-group:last-of-type, .is-customer .journal-checkout .checkout-payment-form #payment-new, .is-customer .journal-checkout .checkout-shipping-form #shipping-new, .journal-checkout #payment-confirm-button fieldset legend, .journal-checkout .customer-group label.control-label, .journal-checkout .customer-group",
+        "property": "border-color"
+    },
+    "one_page_dividers_style": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .left .login-box .radio label, .journal-checkout .spw > div .radio label, .journal-checkout .confirm-order, .journal-checkout .checkout-login .form-group:last-of-type, .is-customer .journal-checkout .checkout-payment-form #payment-new, .is-customer .journal-checkout .checkout-shipping-form #shipping-new, .journal-checkout #payment-confirm-button fieldset legend, .journal-checkout .customer-group label.control-label, .journal-checkout .customer-group",
+        "property": "border-style:%s"
+    },
+    "one_page_hide_shipping_option_label": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .spw > div p",
+        "property": "display:%s"
+    },
+
+    "one_page_table_border": {
+        "type": "j-opt-color",
+        "selector": ".one-page-checkout .journal-checkout .checkout-product tbody td, .journal-checkout .checkout-cart tbody tr:first-of-type td, .journal-checkout .checkout-cart thead td, .journal-checkout .checkout-cart thead td:first-of-type, .journal-checkout .checkout-cart thead td:last-of-type, .journal-checkout .checkout-cart tfoot tr:last-of-type td, .journal-checkout .checkout-cart tfoot td:first-of-type, .journal-checkout .checkout-cart tfoot td:last-of-type",
+        "property": "border-color"
+    },
+    "one_page_table_style": {
+        "type": "j-opt-select",
+        "selector": ".one-page-checkout .journal-checkout .checkout-product tbody td, .journal-checkout .checkout-cart tbody tr:first-of-type td, .journal-checkout .checkout-cart thead td, .journal-checkout .checkout-cart thead td:first-of-type, .journal-checkout .checkout-cart thead td:last-of-type, .journal-checkout .checkout-cart tfoot tr:last-of-type td, .journal-checkout .checkout-cart tfoot td:first-of-type, .journal-checkout .checkout-cart tfoot td:last-of-type",
+        "property": "border-style:%s"
+    },
+    "one_page_table_header_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .checkout-product thead td, .journal-checkout .checkout-product tfoot td",
+        "property": "background-color"
+    },
+    "one_page_table_header_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .checkout-product thead td",
+        "property": ""
+    },
+    "one_page_table_height": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .table-responsive",
+        "property": "max-height:%spx"
+    },
+    "one_page_table_footer_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .checkout-product tfoot td",
+        "property": ""
+    },
+    "one_page_table_product_name_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .checkout-cart td.name a",
+        "property": ""
+    },
+    "one_page_table_product_name_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .checkout-cart td.name a:hover",
+        "property": "color"
+    },
+    "one_page_text_product_image_border": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout .checkout-cart td.image img",
+        "property": ""
+    },
+
+
+    "one_page_section_title_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .secondary-title",
+        "property": ""
+    },
+    "one_page_section_title_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "background-color"
+    },
+    "one_page_section_title_border": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout .secondary-title",
+        "property": ""
+    },
+
+    "one_page_section_padding_t": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "padding-top:%spx;"
+    },
+    "one_page_section_padding_r": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "padding-right:%spx;"
+    },
+    "one_page_section_padding_b": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "padding-bottom:%spx;"
+    },
+    "one_page_section_padding_l": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "padding-left:%spx;"
+    },
+    "one_page_section_title_align": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .secondary-title",
+        "property": "text-align:%s"
+    },
+
+
+
+    "one_page_lang_register_selector": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_pers_details": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_your_pass": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_your_address": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_bill_address": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_ship_address": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_returning": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_ship_method": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_payment_method": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_coupon_voucher": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_payment_details": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_shop_cart": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_comments": {
+        "type": "j-opt-text-lang"
+    },
+
+
+   
+    "one_page_coupon_status": {
+        "type": "j-opt-select"
+    },
+     "one_page_voucher_status": {
+        "type": "j-opt-select"
+    },
+    "one_page_reward_status": {
+        "type": "j-opt-select"
+    },
+
+    "one_page_lang_coupon_placeholder": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_coupon_button": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_voucher_placeholder": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_lang_voucher_button": {
+        "type": "j-opt-text-lang"
+    },
+
+
+    "one_page_coupon_voucher_button_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button",
+        "property": ""
+    },
+    "one_page_coupon_voucher_button_font_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button:hover",
+        "property": "color"
+    },
+    "one_page_coupon_voucher_button_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button",
+        "property": "background-color"
+    },
+    "one_page_coupon_voucher_button_bg_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button:hover",
+        "property": "background-color"
+    },
+    "one_page_coupon_voucher_button_border": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button",
+        "property": ""
+    },
+    "one_page_coupon_voucher_button_border_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button:hover",
+        "property": "border-color"
+    },
+    "one_page_coupon_voucher_button_active_shadow": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .coupon-voucher .input-group-btn input.button:active",
+        "property": "box-shadow:%s"
+    },
+
+
+
+    "one_page_lang_confirm_order": {
+        "type": "j-opt-text-lang"
+    },
+    "one_page_confirm_button_align": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .confirm-order",
+        "property": "text-align:%s"
+    },
+    "one_page_confirm_button_font": {
+        "type": "j-opt-font",
+        "selector": ".journal-checkout .confirm-button",
+        "property": ""
+    },
+    "one_page_confirm_button_font_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .confirm-button:hover",
+        "property": "color"
+    },
+    "one_page_confirm_button_bg": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .confirm-button",
+        "property": "background-color"
+    },
+    "one_page_confirm_button_bg_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .confirm-button:hover",
+        "property": "background-color"
+    },
+
+    "one_page_confirm_button_border": {
+        "type": "j-opt-border",
+        "selector": ".journal-checkout .confirm-button",
+        "property": ""
+    },
+    "one_page_confirm_button_border_hover": {
+        "type": "j-opt-color",
+        "selector": ".journal-checkout .confirm-button:hover",
+        "property": "border-color"
+    },
+    "one_page_confirm_button_width": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .confirm-button",
+        "property": "padding-left:%spx; padding-right:%spx"
+    },
+    "one_page_confirm_button_height": {
+        "type": "j-opt-text",
+        "selector": ".journal-checkout .confirm-button",
+        "property": "line-height:%spx"
+    },
+    "one_page_confirm_button_active_shadow": {
+        "type": "j-opt-select",
+        "selector": ".journal-checkout .confirm-button:active",
+        "property": "box-shadow:%s"
+    },
+
+
+
+
 
 
 
@@ -4896,6 +5326,18 @@
     "notification_shadow": {
         "type": "j-opt-select"
     },
+
+    "notification_offset_top": {
+        "type": "j-opt-text",
+        "selector": ".ui-pnotify-closer",
+        "property": "margin-top:%spx"
+    },
+    "notification_offset_right": {
+        "type": "j-opt-text",
+        "selector": ".ui-pnotify-closer",
+        "property": "margin-right:%spx"
+    },
+
     "notification_hide": {
         "type": "j-opt-text"
     },
@@ -5043,12 +5485,12 @@
     },
     "quickview_more_details_bg_color": {
         "type": "j-opt-color",
-        "selector": "#more-details",
+        "selector": ".quickview .product-info #more-details",
         "property": "background-color"
     },
     "quickview_more_details_bg_color_hover": {
         "type": "j-opt-color",
-        "selector": "#more-details:hover",
+        "selector": ".quickview .product-info #more-details:hover",
         "property": "background-color"
     },
 
@@ -5262,7 +5704,7 @@
     /*Cart*/
     "cart_heading_font": {
         "type": "j-opt-font",
-        "selector": "#cart .heading",
+        "selector": "#cart .heading, .ie9 #cart button.heading",
         "property": ""
     },
     "cart_heading_bg": {
@@ -5761,7 +6203,7 @@
     },
     "dropdown_bg_hover": {
         "type": "j-opt-color",
-        "selector": ".drop-down ul li:hover",
+        "selector": ".drop-down ul li:hover, .drop-down ul > li:hover > a",
         "property": "background-color"
     },
     "dropdown_link_icon": {
@@ -7271,6 +7713,7 @@
 
 
     /*Popup */
+
     "popup_close_color": {
         "type": "j-opt-color",
         "selector": ".journal-popup .mfp-close",
@@ -7502,12 +7945,12 @@
     },
     "side_module_link_font": {
         "type": "j-opt-font",
-        "selector": ".side-column .box-content li a, .side-column .box-category li a, .side-column .box-content a, #column-right .recentArticles li > a, #column-right .popularArticles li > a, #column-left .recentArticles li > a, #column-left .popularArticles li > a, .side-post-title",
+        "selector": ".side-column .box-content li a, .side-column .box-category li a, #column-right .recentArticles li > a, #column-right .popularArticles li > a, #column-left .recentArticles li > a, #column-left .popularArticles li > a, .side-post-title",
         "property": ""
     },
     "side_module_link_hover": {
         "type": "j-opt-color",
-        "selector": ".side-column .box-content li a:hover, .side-column .box-category li a:hover, .side-column .box-content a:hover, .side-column .box-content li a.active, .side-column .box-category li a.active, .side-column .oc-module .product-grid-item .name a:hover, #column-right .recentArticles li > a:hover, #column-right .popularArticles li > a:hover, #column-left .recentArticles li > a:hover, #column-left .popularArticles li > a:hover",
+        "selector": ".side-column .box-content li a:hover, .side-column .box-category li a:hover, .side-column .box-content li a.active, .side-column .box-category li a.active, .side-column .oc-module .product-grid-item .name a:hover, #column-right .recentArticles li > a:hover, #column-right .popularArticles li > a:hover, #column-left .recentArticles li > a:hover, #column-left .popularArticles li > a:hover",
         "property": "color"
     },
     "side_module_link_bg_hover": {
@@ -7536,6 +7979,9 @@
         "type": "j-opt-text",
         "selector": "",
         "property": ""
+    },
+    "side_product_image_type": {
+      "type": "j-opt-select"
     },
     "side_product_name_overflow": {
         "type": "j-opt-select",
@@ -7615,68 +8061,68 @@
     /*SUPER FILTER*/
     "filter_font": {
         "type": "j-opt-font",
-        "selector": ".journal-sf .box ul li label",
+        "selector": ".side-column .journal-sf .box ul li label",
         "property": ""
     },
     "filter_section_border": {
         "type": "j-opt-border",
-        "selector": ".side-column .journal-sf .box",
+        "selector": ".side-column .side-column .journal-sf .box",
         "property": ""
     },
 
     "filter_section_bg": {
         "type": "j-opt-color",
-        "selector": ".journal-sf .box",
+        "selector": ".side-column .journal-sf .box",
         "property": "background-color"
     },
     "filter_item_divider": {
         "type": "j-opt-color",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "border-color"
     },
     "filter_item_divider_type": {
         "type": "j-opt-select",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "border-bottom-style:%s"
     },
     "filter_heading_font": {
         "type": "j-opt-font",
-        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
+        "selector": ".side-column .journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": ""
     },
     "filter_heading_bg": {
         "type": "j-opt-color",
-        "selector": ".journal-sf .box-heading",
+        "selector": ".side-column .journal-sf .box-heading",
         "property": "background-color"
     },
     "filter_heading_border": {
         "type": "j-opt-border",
-        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
+        "selector": ".side-column .journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": ""
     },
     "filter_heading_height": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box-heading, .oc-filter a.list-group-item",
+        "selector": ".side-column .journal-sf .box-heading, .oc-filter a.list-group-item",
         "property": "line-height:%spx"
     },
     "filter_section_padding_top": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "padding-top:%spx"
     },
     "filter_section_padding_right": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "padding-right:%spx"
     },
     "filter_section_padding_bottom": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "padding-bottom:%spx"
     },
     "filter_section_padding_left": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul li",
+        "selector": ".side-column .journal-sf .box ul li",
         "property": "padding-left:%spx"
     },
     "filter_price_bar_height": {
@@ -7696,12 +8142,12 @@
     },
     "filter_section_padding_from_title": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul",
+        "selector": ".side-column .journal-sf .box ul",
         "property": "padding-top:%spx"
     },
     "filter_section_padding_from_bottom": {
         "type": "j-opt-text",
-        "selector": ".journal-sf .box ul",
+        "selector": ".side-column .journal-sf .box ul",
         "property": "padding-bottom:%spx"
     },
 

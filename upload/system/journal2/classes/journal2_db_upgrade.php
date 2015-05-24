@@ -12,7 +12,18 @@ class Journal2DBUpgrade {
     }
 
     private function checkColumn($table, $column) {
+        if ($this->config->get('journal_db_check_journal2_newsletter_store_id') == 1) {
+            return true;
+        }
+
         $query = $this->db->query('SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "' . $this->db->escape(DB_DATABASE) . '" AND TABLE_NAME = "' . $this->db->escape(DB_PREFIX . $table) . '" AND LCASE(DATA_TYPE) NOT IN ("blob", "text")');
+
+        if (Front::$IS_OC2) {
+            $this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `code` = 'config', `key` = '" . $this->db->escape('journal_db_check_' . $table . '_' . $column) . "', `value` = '1'");
+        } else {
+            $this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'config', `key` = '" . $this->db->escape('journal_db_check_' . $table . '_' . $column) . "', `value` = '1'");
+        }
+
 
         if (!$query->num_rows) {
             return true;

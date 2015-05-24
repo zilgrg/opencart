@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -373,3 +373,9 @@ RETURNS
   margin-bottom: 15px; }
 .oc2 .login-wrap .form-group {
   margin-top: 15px; }
+
+.route-affiliate-register fieldset .radio {
+  display: inline; }
+
+.route-affiliate-register .form-horizontal .form-group label {
+  width: auto; }

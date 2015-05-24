@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -870,7 +870,7 @@ Android/Firefox
     margin: 0; } }
 .mobile .product-wrapper, .tablet .product-wrapper {
   box-shadow: none !important;
-  border-radius: none;
+  border-radius: 0;
   border-width: 0; }
 .mobile #top-modules > div, .mobile #bottom-modules > div, .tablet #top-modules > div, .tablet #bottom-modules > div {
   background-attachment: scroll !important;
@@ -1076,7 +1076,7 @@ SEARCH PAGE
         display: inline-block; }
 
   .footer-post-title {
-    white-space: normal; } }
+    white-space: normal !important; } }
 @media only screen and (max-width: 470px) {
   footer .contacts > div {
     text-align: left; }
@@ -1215,7 +1215,6 @@ NEWSLETTER
     border: 0; } }
 @media only screen and (max-width: 500px) {
   .posts.blog-list-view .post-image {
-    padding-right: 0;
     float: none;
     display: block;
     margin-bottom: 12px;
@@ -1283,7 +1282,8 @@ NEWSLETTER
     width: 100%; }
   .oc2 .form-horizontal .form-group label {
     width: 100%;
-    float: none; }
+    float: none;
+    margin-bottom: 4px; }
   .oc2 .form-horizontal .form-group label + div {
     width: 100%; }
   .oc2 .action-area .panel-body label {
@@ -1307,3 +1307,133 @@ NEWSLETTER
     width: 100%; }
   .oc2 .action-area .sc-shipping .button {
     margin-top: 5px; } }
+/******************************
+ONE PAGE CHECKOUT
+*******************************/
+@media only screen and (max-width: 980px) {
+  .journal-checkout .left select {
+    width: 100%;
+    margin-left: 0; }
+  .journal-checkout .left input[type='radio'] {
+    margin-left: 0; }
+  .journal-checkout .left .button {
+    width: 100%; }
+  .journal-checkout .right select {
+    margin-left: 0; }
+  .journal-checkout .section-left .coupon-voucher input[type='text'],
+  .journal-checkout .section-left .coupon-voucher .input-group-btn,
+  .journal-checkout .section-left .coupon-voucher input {
+    width: 100%; }
+  .journal-checkout .section-left .coupon-voucher input[type='text'] {
+    margin-bottom: 7px; }
+  .journal-checkout label {
+    padding-right: 0;
+    line-height: 1; }
+  .journal-checkout .coupon-voucher .panel-body {
+    display: block;
+    float: none; }
+  .journal-checkout .coupon-voucher .checkout-coupon {
+    padding-right: 0;
+    margin-bottom: 10px; }
+  .journal-checkout .spw {
+    margin-bottom: 0; }
+    .journal-checkout .spw > div {
+      display: block; }
+      .journal-checkout .spw > div:first-of-type {
+        padding-right: 12px; }
+  .journal-checkout .checkout-cart td.quantity {
+    padding: 5px; }
+    .journal-checkout .checkout-cart td.quantity input[type='text'] {
+      display: block;
+      float: none;
+      width: auto;
+      min-width: 42px;
+      margin: 0 auto; }
+    .journal-checkout .checkout-cart td.quantity .input-group {
+      display: inline-block; }
+      .journal-checkout .checkout-cart td.quantity .input-group input {
+        margin-top: 5px; }
+        .journal-checkout .checkout-cart td.quantity .input-group input:first-of-type {
+          margin-right: 5px; }
+  .journal-checkout .checkout-cart td.image {
+    padding-right: 5px; }
+  .journal-checkout .confirm-order .button {
+    width: 100%; }
+  .journal-checkout .checkout-cart td.name {
+    padding-left: 15px; }
+  .journal-checkout .coupon-voucher .input-group-btn {
+    padding-left: 0; }
+
+  .oc2 .journal-checkout .checkout-cart td.quantity {
+    padding: 5px; }
+    .oc2 .journal-checkout .checkout-cart td.quantity input[type='text'] {
+      width: 100%;
+      min-width: 76px;
+      margin-bottom: 5px; }
+
+  .oc1 .journal-checkout .form-horizontal .form-group label {
+    width: 100%;
+    float: none; }
+  .oc1 .journal-checkout .form-horizontal .form-group label + div {
+    width: 100%;
+    float: none; } }
+@media only screen and (max-width: 760px) {
+  .one-page-checkout {
+    margin-bottom: 20px; }
+
+  .journal-checkout {
+    display: block; }
+    .journal-checkout .left, .journal-checkout .right {
+      width: 100%;
+      padding-right: 0; }
+    .journal-checkout .left {
+      margin-bottom: 15px; }
+      .journal-checkout .left.login-mobile .checkout-content.checkout-register {
+        display: none; }
+      .journal-checkout .left.login-mobile .checkout-content.checkout-login {
+        margin-bottom: 0; }
+    .journal-checkout #shipping-address {
+      margin-top: 18px; }
+    .journal-checkout .spw > div:first-of-type {
+      padding-right: 0; }
+    .journal-checkout .coupon-voucher input[type='text'],
+    .journal-checkout .coupon-voucher .input-group-btn,
+    .journal-checkout .coupon-voucher input {
+      width: 100%; }
+    .journal-checkout #payment-confirm-button fieldset #card-new label {
+      display: block;
+      width: 100%;
+      margin-bottom: 3px; }
+    .journal-checkout #payment-confirm-button fieldset #card-new label + div {
+      display: block;
+      width: 100%; }
+    .journal-checkout #payment-confirm-button fieldset input[type='text'],
+    .journal-checkout #payment-confirm-button fieldset input[type='email'],
+    .journal-checkout #payment-confirm-button fieldset input[type='password'],
+    .journal-checkout #payment-confirm-button fieldset input[type='tel'],
+    .journal-checkout #payment-confirm-button fieldset textarea {
+      width: 100%;
+      max-width: 100%; }
+    .journal-checkout .checkout-content table {
+      min-width: 460px; }
+      .journal-checkout .checkout-content table td {
+        width: auto; }
+    .journal-checkout .checkout-cart td.name {
+      padding-left: 0; }
+    .journal-checkout .checkout-content thead .model,
+    .journal-checkout .checkout-content thead .quantity,
+    .journal-checkout .checkout-content thead .price,
+    .journal-checkout .checkout-content tbody .model,
+    .journal-checkout .checkout-content tbody .quantity,
+    .journal-checkout .checkout-content tbody .price {
+      display: table-cell; }
+    .journal-checkout .checkout-cart td.name a {
+      margin-left: 0; }
+    .journal-checkout .checkout-cart td.image img {
+      max-width: 80%; }
+
+  .is-customer .journal-checkout section.section-left, .is-customer .journal-checkout section.section-right {
+    width: 100%;
+    padding-left: 0; }
+  .is-customer .journal-checkout .section-left {
+    margin-bottom: 15px; } }

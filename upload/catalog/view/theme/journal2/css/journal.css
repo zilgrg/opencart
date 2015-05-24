@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -579,8 +579,8 @@ OC 2
       color: red;
       font-weight: bold;
       font-size: 16px;
-      float: left;
       position: relative;
+      top: 3px;
       margin-right: 3px; }
 .oc2 fieldset {
   border: none;
@@ -633,13 +633,11 @@ OC 2
   display: table-cell;
   vertical-align: middle; }
   .oc2 .input-group-btn button {
-    background-color: #a9b8c0;
     padding: 6px 12px 9px 12px;
     cursor: pointer;
     font-size: 12px;
     box-shadow: none; }
     .oc2 .input-group-btn button:hover {
-      background-color: #8ca0aa;
       transition: all 0.2s; }
 .oc2 .date .input-group-btn button, .oc2 .time .input-group-btn button, .oc2 .datetime .input-group-btn button {
   border-top-left-radius: 0;

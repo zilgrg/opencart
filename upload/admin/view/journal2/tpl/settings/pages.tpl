@@ -2,7 +2,7 @@
     <div class="module-header">
         <div class='module-name'>Settings<span>Pages</span></div>
 
-        <skin-manager data-url="settings/general"></skin-manager>
+        <skin-manager data-url="settings/pages"></skin-manager>
 
         <div class="module-buttons">
             <?php if (defined('J2ENV')): ?>
@@ -446,7 +446,7 @@
         <!--Checkout Page-->
         <accordion-group is-open="accordion.accordions[4]">
             <accordion-heading>
-                <div class="accordion-bar bar-level-0">Checkout Page</div>
+                <div class="accordion-bar bar-level-0">Checkout Page <span> - Default Opencart</span></div>
             </accordion-heading>
             <ul class="module-create-options">
                 <li>
@@ -576,7 +576,7 @@
         <!--</accordion-group>-->
 
         <!--Action Buttons-->
-        <accordion-group is-open="accordion.accordions[5]">
+        <accordion-group is-open="accordion.accordions[6]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Action Buttons</div>
             </accordion-heading>
@@ -607,7 +607,7 @@
         </accordion-group>
 
         <!--Site Map-->
-        <accordion-group is-open="accordion.accordions[6]">
+        <accordion-group is-open="accordion.accordions[7]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Site Map</div>
             </accordion-heading>
@@ -654,7 +654,7 @@
         </accordion-group>
 
         <!--ALERTS-->
-        <accordion-group is-open="accordion.accordions[7]">
+        <accordion-group is-open="accordion.accordions[8]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Alerts</div>
             </accordion-heading>
@@ -691,7 +691,7 @@
         </accordion-group>
 
         <!--MAINTENANCE-->
-        <accordion-group is-open="accordion.accordions[8]">
+        <accordion-group is-open="accordion.accordions[9]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Maintenance Page</div>
             </accordion-heading>
@@ -742,7 +742,7 @@
         </accordion-group>
 
         <!--BLOG MANAGER-->
-        <accordion-group is-open="accordion.accordions[9]">
+        <accordion-group is-open="accordion.accordions[10]">
             <accordion-heading>
                 <div class="accordion-bar bar-level-0">Blog Manager Extension <span>Opencart 1.5.6</span></div>
             </accordion-heading>

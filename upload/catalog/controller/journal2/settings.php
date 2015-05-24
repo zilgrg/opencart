@@ -52,9 +52,14 @@ class ControllerJournal2Settings extends Controller {
         if (!$this->journal2->html_classes->hasClass('ie9')) {
             $this->journal2->minifier->setMinifyCss((bool)$this->journal2->settings->get('config_system_settings.minify_css'));
         }
-        $this->journal2->minifier->setMinifyJs((bool)$this->journal2->settings->get('config_system_settings.minify_js'));
+
+        if (strpos(Journal2Utils::getProperty($this->request->get, 'route'), 'seller/') !== 0) {
+            $this->journal2->minifier->setMinifyJs((bool)$this->journal2->settings->get('config_system_settings.minify_js'));
+        }
 
         $this->journal2->cache->setSkinId($skin_id);
+
+        $this->journal2->html_classes->addClass('skin-' . $skin_id);
 
         $cache_property = 'settings';
 
@@ -121,9 +126,9 @@ class ControllerJournal2Settings extends Controller {
         $this->journal2->settings->set('product_no_image'   , Journal2Utils::resizeImage($this->model_tool_image, 'data/journal2/no_image_large.png', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')));
 
         // add jquery + jquery ui
+        $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/j-strap.css');
         if (Front::$IS_OC2) {
             //$this->journal2->minifier->addStyle('catalog/view/javascript/bootstrap/css/bootstrap.min.css');
-            $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/j-strap.css');
             $this->journal2->minifier->addStyle('catalog/view/javascript/font-awesome/css/font-awesome.min.css');
             $this->journal2->minifier->addScript('catalog/view/javascript/jquery/jquery-2.1.1.min.js', 'header');
             $this->journal2->minifier->addScript('catalog/view/javascript/bootstrap/js/bootstrap.min.js', 'header');
@@ -182,7 +187,7 @@ class ControllerJournal2Settings extends Controller {
         $this->journal2->settings->set('config_image_height', $this->config->get('config_image_category_height'), 250);
 
         // checkout
-        if (defined('J2ENV')) {
+        if ($this->journal2->settings->get('one_page_status', 'default') === 'one-page') {
             $this->journal2->settings->set('journal_checkout', true);
         }
     }

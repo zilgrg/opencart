@@ -8,6 +8,7 @@ define([
     './settings/sidecolumn',
     './settings/footer',
     './settings/pages',
+    './settings/journalcheckout',
     './settings/blog',
     './settings/blogmodules',
     './settings/bloglanguage',

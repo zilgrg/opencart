@@ -2,7 +2,7 @@
 <div class="module-header">
     <div class='module-name'>Settings<span>Side Column</span></div>
 
-    <skin-manager data-url="settings/general"></skin-manager>
+    <skin-manager data-url="settings/sidecolumn"></skin-manager>
 
     <div class="module-buttons">
             <?php if (defined('J2ENV')): ?>
@@ -255,6 +255,10 @@
                         <span class="module-create-option">
                             <j-opt-text data-ng-model="settings.side_product_image_width" class="journal-number-field"></j-opt-text> x
                             <j-opt-text data-ng-model="settings.side_product_image_height" class="journal-number-field"></j-opt-text>
+                            <switch data-ng-model="settings.side_product_image_type" class="fit-side-column">
+                                <switch-option key="fit">Fit</switch-option>
+                                <switch-option key="crop">Crop &nbsp;&nbsp;&nbsp;</switch-option>
+                            </switch>
                         </span>
                     <a href="#" target="_blank" class="journal-tip"></a>
                 </li>

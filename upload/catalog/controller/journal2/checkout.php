@@ -9,7 +9,7 @@ class ControllerJournal2Checkout extends Controller {
 
     protected $data = array();
 
-    protected function render($template) {
+    private function renderView($template) {
         if (Front::$IS_OC2) {
             return $this->load->view($template, $this->data);
         }
@@ -19,23 +19,33 @@ class ControllerJournal2Checkout extends Controller {
 
     public function __construct($registry) {
         parent::__construct($registry);
+        $this->load->language('checkout/cart');
         $this->load->language('checkout/checkout');
 
-        $this->load->model('account/activity');
+        if (Front::$IS_OC2) {
+            $this->load->language('checkout/coupon');
+            $this->load->language('checkout/voucher');
+
+            $this->load->model('account/activity');
+            $this->load->model('account/custom_field');
+            $this->load->model('tool/upload');
+        }
         $this->load->model('account/address');
         $this->load->model('account/customer');
         $this->load->model('account/customer_group');
-        $this->load->model('account/custom_field');
         $this->load->model('journal2/checkout');
         $this->load->model('localisation/country');
         $this->load->model('localisation/zone');
-        $this->load->model('tool/upload');
     }
 
     public function index() {
-        $this->checkCart();
+        if (!$this->checkCart()) {
+            $this->response->redirect($this->url->link('checkout/cart'));
+            exit;
+        }
+        $this->journal2->html_classes->addClass('quick-checkout-page');
 
-        $this->model_journal2_checkout->createOrder();
+        $this->load->language('checkout/checkout');
 
         $this->data['breadcrumbs'] = array();
 
@@ -58,20 +68,25 @@ class ControllerJournal2Checkout extends Controller {
 
         $this->document->setTitle($this->language->get('heading_title'));
 
-        $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
-        $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
-        $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+        if (Front::$IS_OC2) {
+            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment.js');
+            $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+            $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-        // Required by klarna
-        if ($this->config->get('klarna_account') || $this->config->get('klarna_invoice')) {
-            $this->document->addScript('http://cdn.klarna.com/public/kitt/toc/v1.0/js/klarna.terms.min.js');
+            // Required by klarna
+            if ($this->config->get('klarna_account') || $this->config->get('klarna_invoice')) {
+                $this->document->addScript('http://cdn.klarna.com/public/kitt/toc/v1.0/js/klarna.terms.min.js');
+            }
+        } else {
+            $this->document->addScript('catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js');
+            $this->document->addStyle('catalog/view/javascript/jquery/colorbox/colorbox.css');
         }
 
-        // journal checkout
+        $this->data['default_auth'] = Journal2Utils::getProperty($this->session->data, 'journal_checkout_account', $this->journal2->settings->get('one_page_default_auth', 'register'));
+
+        // address data
         if ($this->isLoggedIn()) {
             $this->data['is_logged_in'] = true;
-            $this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-            $this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
             $this->data['payment_address'] = $this->renderAddressForm('payment');
             $this->data['shipping_address'] = $this->renderAddressForm('shipping');
         } else {
@@ -91,8 +106,53 @@ class ControllerJournal2Checkout extends Controller {
         // payment
         $this->data['payment_methods'] = $this->payment(true);
 
+        // coupon + voucher
+        $this->data['coupon_voucher_reward'] = $this->renderCouponVoucherReward();
+
         // cart
         $this->data['cart'] = $this->cart(true);
+
+        // checkboxes
+        if (!$this->isLoggedIn() && $this->config->get('config_account_id')) {
+            $this->load->model('catalog/information');
+
+            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+            if ($information_info) {
+                $this->data['text_privacy'] = sprintf($this->language->get('text_agree'), $this->url->link(Front::$IS_OC2 ? 'information/information/agree' : 'information/information/info', 'information_id=' . $this->config->get('config_account_id'), 'SSL'), $information_info['title'], $information_info['title']);
+            } else {
+                $this->data['text_privacy'] = '';
+            }
+        } else {
+            $this->data['text_privacy'] = '';
+        }
+
+        if ($this->config->get('config_checkout_id')) {
+            $this->load->model('catalog/information');
+
+            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
+
+            if ($information_info) {
+                $this->data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link(Front::$IS_OC2 ? 'information/information/agree' : 'information/information/info', 'information_id=' . $this->config->get('config_checkout_id'), 'SSL'), $information_info['title'], $information_info['title']);
+            } else {
+                $this->data['text_agree'] = '';
+            }
+        } else {
+            $this->data['text_agree'] = '';
+        }
+
+        if ($this->data['text_privacy'] === $this->data['text_agree']) {
+            $this->data['text_privacy'] = '';
+        }
+
+        $this->data['text_comments'] = $this->language->get('text_comments');
+        if ($this->isLoggedIn()) {
+            $this->data['entry_newsletter'] = false;
+        } else {
+            $this->data['entry_newsletter'] = sprintf($this->language->get('entry_newsletter'), $this->config->get('config_name'));
+        }
+
+        $this->data['comment'] = $this->model_journal2_checkout->getComment();
 
         if (Front::$IS_OC2) {
             $this->data['column_left'] = $this->load->controller('common/column_left');
@@ -112,7 +172,7 @@ class ControllerJournal2Checkout extends Controller {
             );
         }
 
-        $this->response->setOutput($this->render($this->config->get('config_template') . '/template/journal2/checkout/checkout.tpl'));
+        $this->response->setOutput($this->renderView($this->config->get('config_template') . '/template/journal2/checkout/checkout.tpl'));
 
     }
 
@@ -122,10 +182,11 @@ class ControllerJournal2Checkout extends Controller {
         }
 
         if ($value = Journal2Utils::getProperty($this->request->post, 'shipping_country_id')) {
-            $this->session->data['shipping_address'] = array(
+            $this->model_journal2_checkout->setAddress('shipping', array(
                 'country_id'    => $value,
-                'zone_id'       => Journal2Utils::getProperty($this->request->post, 'shipping_zone_id')
-            );
+                'zone_id'       => Journal2Utils::getProperty($this->request->post, 'shipping_zone_id'),
+                'postcode'      => Journal2Utils::getProperty($this->request->post, 'shipping_postcode'),
+            ));
         }
 
         if ($value = Journal2Utils::getProperty($this->request->post, 'shipping_method')) {
@@ -138,10 +199,11 @@ class ControllerJournal2Checkout extends Controller {
         }
 
         if ($value = Journal2Utils::getProperty($this->request->post, 'payment_country_id')) {
-            $this->session->data['payment_address'] = array(
+            $this->model_journal2_checkout->setAddress('payment', array(
                 'country_id'    => $value,
-                'zone_id'       => Journal2Utils::getProperty($this->request->post, 'payment_zone_id')
-            );
+                'zone_id'       => Journal2Utils::getProperty($this->request->post, 'payment_zone_id'),
+                'postcode'      => Journal2Utils::getProperty($this->request->post, 'payment_postcode'),
+            ));
         }
 
         if ($value = Journal2Utils::getProperty($this->request->post, 'payment_method')) {
@@ -150,8 +212,7 @@ class ControllerJournal2Checkout extends Controller {
     }
 
     public function confirm() {
-        $order_id = $this->session->data['order_id'];
-        $order_data = $this->model_journal2_checkout->getOrder($order_id);
+        $order_data = $this->model_journal2_checkout->getOrder();
 
         $new_payment_address = null;
         $new_shipping_address = null;
@@ -194,7 +255,9 @@ class ControllerJournal2Checkout extends Controller {
                 $order_data['email'] = $customer_info['email'];
                 $order_data['telephone'] = $customer_info['telephone'];
                 $order_data['fax'] = $customer_info['fax'];
-                $order_data['custom_field'] = unserialize($customer_info['custom_field']);
+                if (Front::$IS_OC2) {
+                    $order_data['custom_field'] = unserialize($customer_info['custom_field']);
+                }
             }
         } else {
             // check firstname, lastname
@@ -264,11 +327,15 @@ class ControllerJournal2Checkout extends Controller {
         $total = 0;
         $taxes = $this->cart->getTaxes();
 
-        $this->load->model('extension/extension');
+        if (Front::$IS_OC2) {
+            $this->load->model('extension/extension');
+            $results = $this->model_extension_extension->getExtensions('total');
+        } else {
+            $this->load->model('setting/extension');
+            $results = $this->model_setting_extension->getExtensions('total');
+        }
 
         $sort_order = array();
-
-        $results = $this->model_extension_extension->getExtensions('total');
 
         foreach ($results as $key => $value) {
             $sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -307,7 +374,7 @@ class ControllerJournal2Checkout extends Controller {
                     'option_id'               => $option['option_id'],
                     'option_value_id'         => $option['option_value_id'],
                     'name'                    => $option['name'],
-                    'value'                   => $option['value'],
+                    'value'                   => Front::$IS_OC2 ? $option['value'] : $option['option_value'],
                     'type'                    => $option['type']
                 );
             }
@@ -346,8 +413,34 @@ class ControllerJournal2Checkout extends Controller {
             }
         }
 
+        // comment + checkboxes
+        $order_data['comment'] = Journal2Utils::getProperty($this->request->post, 'comment');
+
+        if (!$this->isLoggedIn() && $this->config->get('config_account_id')) {
+            $this->load->model('catalog/information');
+
+            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+            if ($information_info && !isset($this->request->post['privacy'])) {
+                $errors['privacy'] = sprintf($this->language->get('error_agree'), $information_info['title']);
+            }
+        }
+
+        if ($this->config->get('config_checkout_id')) {
+            $this->load->model('catalog/information');
+
+            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
+
+            if ($information_info && !isset($this->request->post['agree'])) {
+                $errors['agree'] = sprintf($this->language->get('error_agree'), $information_info['title']);
+            }
+        }
+
         // update order
-        $this->model_journal2_checkout->updateOrder($order_id, $order_data);
+        $this->model_journal2_checkout->setOrderData($order_data);
+        $this->model_journal2_checkout->save();
+
+        $redirect = '';
 
         if (!$errors) {
             if ($this->isLoggedIn()) {
@@ -358,18 +451,22 @@ class ControllerJournal2Checkout extends Controller {
 
                 // save new shipping address
                 if ($new_shipping_address && $new_shipping_address !== $new_payment_address) {
-                    $this->model_account_address->addAddress($this->getAddressData($new_payment_address, 'shipping_'));
+                    $this->model_account_address->addAddress($this->getAddressData($new_shipping_address, 'shipping_'));
                 }
             } else if ($register_account) {
-                $this->registerAccount();
+                $redirect = $this->registerAccount();
             } else {
                 $this->session->data['guest'] = $this->getAddressData($order_data, 'payment_');
             }
         }
 
+        $this->session->data['journal_checkout_account'] = Journal2Utils::getProperty($this->request->post, 'account');
+        $this->session->data['journal_checkout_shipping_address'] = Journal2Utils::getProperty($this->request->post, 'shipping_address', '0');
+
         // send response
         echo json_encode(array(
             'errors'    => $errors ? $errors : null,
+            'redirect'  => $redirect,
             'order_data'=> $order_data
         ));
         exit;
@@ -378,84 +475,38 @@ class ControllerJournal2Checkout extends Controller {
     public function shipping($return = false) {
         $this->data['text_shipping_method'] = $this->language->get('text_shipping_method');
 
-        $shipping_methods = $this->model_journal2_checkout->getShippingMethods(
-            Journal2Utils::getProperty($this->session->data, 'shipping_address.country_id'),
-            Journal2Utils::getProperty($this->session->data, 'shipping_address.zone_id')
-        );
+        $this->data['shipping_methods'] = $this->model_journal2_checkout->getShippingMethods();
+        $this->data['code'] = $this->model_journal2_checkout->getShippingMethodCode();
 
-        if (!$shipping_methods) {
+        if (!$this->data['shipping_methods']) {
             $this->data['error_warning'] = sprintf($this->language->get('error_no_shipping'), $this->url->link('information/contact'));
         } else {
             $this->data['error_warning'] = '';
         }
 
-        $this->session->data['shipping_methods'] = $shipping_methods;
-        $this->data['shipping_methods'] = $shipping_methods;
-        $this->data['code'] = '';
-
-        $shipping_method = explode('.', Journal2Utils::getProperty($this->session->data, 'shipping_method.code'));
-
-        if (count($shipping_method) > 1 && ($value = Journal2Utils::getProperty($shipping_methods, $shipping_method[0] . '.quote.' . $shipping_method[1]))) {
-            $this->session->data['shipping_method'] = $value;
-            $this->data['code'] = implode('.', $shipping_method);
-        } else {
-            $shipping_key = array_keys($shipping_methods);
-            $shipping_key = reset($shipping_key);
-
-            if ($shipping_key) {
-                $key = $this->getFirstKey($shipping_methods[$shipping_key]['quote']);
-                $this->session->data['shipping_method'] = $shipping_methods[$shipping_key]['quote'][$key];
-                $this->data['code'] = $shipping_key . '.' . $key;
-            } else {
-                unset($this->session->data['shipping_method']);
-            }
-        }
-
         if ($return) {
-            return $this->render($this->config->get('config_template') . '/template/journal2/checkout/shipping_methods.tpl');
+            return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/shipping_methods.tpl');
         } else {
-            $this->response->setOutput($this->render($this->config->get('config_template') . '/template/journal2/checkout/shipping_methods.tpl'));
+            $this->response->setOutput($this->renderView($this->config->get('config_template') . '/template/journal2/checkout/shipping_methods.tpl'));
         }
     }
 
     public function payment($return = false) {
         $this->data['text_payment_method'] = $this->language->get('text_payment_method');
 
-        $payment_methods = $this->model_journal2_checkout->getPaymentMethods(
-            Journal2Utils::getProperty($this->session->data, 'payment_address.country_id'),
-            Journal2Utils::getProperty($this->session->data, 'payment_address.zone_id')
-        );
+        $this->data['payment_methods'] = $this->model_journal2_checkout->getPaymentMethods();
+        $this->data['code'] = $this->model_journal2_checkout->getPaymentMethodCode();
 
-        if (!$payment_methods) {
+        if (!$this->data['payment_methods']) {
             $this->data['error_warning'] = sprintf($this->language->get('error_no_payment'), $this->url->link('information/contact'));
         } else {
             $this->data['error_warning'] = '';
         }
 
-        $this->session->data['payment_methods'] = $payment_methods;
-        $this->data['payment_methods'] = $payment_methods;
-        $this->data['code'] = '';
-
-        $payment_method = Journal2Utils::getProperty($this->session->data, 'payment_method.code');
-
-        if ($payment_method && isset($payment_methods[$payment_method])) {
-            $this->session->data['payment_method'] = $payment_methods[$payment_method];
-            $this->data['code'] = $payment_method;
-        } else {
-            $payment_key = $this->getFirstKey($payment_methods);
-
-            if ($payment_key) {
-                $this->session->data['payment_method'] = $payment_methods[$payment_key];
-                $this->data['code'] = $payment_key;
-            } else {
-                unset($this->session->data['payment_method']);
-            }
-        }
-
         if ($return) {
-            return $this->render($this->config->get('config_template') . '/template/journal2/checkout/payment_methods.tpl');
+            return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/payment_methods.tpl');
         } else {
-            $this->response->setOutput($this->render($this->config->get('config_template') . '/template/journal2/checkout/payment_methods.tpl'));
+            $this->response->setOutput($this->renderView($this->config->get('config_template') . '/template/journal2/checkout/payment_methods.tpl'));
         }
     }
 
@@ -463,145 +514,174 @@ class ControllerJournal2Checkout extends Controller {
         $data['text_recurring_item'] = $this->language->get('text_recurring_item');
         $data['text_payment_recurring'] = $this->language->get('text_payment_recurring');
 
+        $this->data['button_update'] = $this->language->get('button_update');
+        $this->data['button_remove'] = $this->language->get('button_remove');
+
+        $this->data['column_image'] = $this->language->get('column_image');
         $this->data['column_name'] = $this->language->get('column_name');
         $this->data['column_model'] = $this->language->get('column_model');
         $this->data['column_quantity'] = $this->language->get('column_quantity');
         $this->data['column_price'] = $this->language->get('column_price');
         $this->data['column_total'] = $this->language->get('column_total');
 
-
-        $this->data['products'] = array();
-
-        foreach ($this->cart->getProducts() as $product) {
-            $option_data = array();
-
-            foreach ($product['option'] as $option) {
-                if ($option['type'] != 'file') {
-                    $value = $option['value'];
-                } else {
-                    $upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
-
-                    if ($upload_info) {
-                        $value = $upload_info['name'];
-                    } else {
-                        $value = '';
-                    }
-                }
-
-                $option_data[] = array(
-                    'name'  => $option['name'],
-                    'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
-                );
-            }
-
-            $recurring = '';
-
-            if ($product['recurring']) {
-                $frequencies = array(
-                    'day'        => $this->language->get('text_day'),
-                    'week'       => $this->language->get('text_week'),
-                    'semi_month' => $this->language->get('text_semi_month'),
-                    'month'      => $this->language->get('text_month'),
-                    'year'       => $this->language->get('text_year'),
-                );
-
-                if ($product['recurring']['trial']) {
-                    $recurring = sprintf($this->language->get('text_trial_description'), $this->currency->format($this->tax->calculate($product['recurring']['trial_price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['trial_cycle'], $frequencies[$product['recurring']['trial_frequency']], $product['recurring']['trial_duration']) . ' ';
-                }
-
-                if ($product['recurring']['duration']) {
-                    $recurring .= sprintf($this->language->get('text_payment_description'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
-                } else {
-                    $recurring .= sprintf($this->language->get('text_payment_cancel'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax'))), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
-                }
-            }
-
-            $this->data['products'][] = array(
-                'key'        => $product['key'],
-                'product_id' => $product['product_id'],
-                'name'       => $product['name'],
-                'model'      => $product['model'],
-                'option'     => $option_data,
-                'recurring'  => $recurring,
-                'quantity'   => $product['quantity'],
-                'subtract'   => $product['subtract'],
-                'price'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'))),
-                'total'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity']),
-                'href'       => $this->url->link('product/product', 'product_id=' . $product['product_id']),
-            );
-        }
-
-        // Gift Voucher
-        $this->data['vouchers'] = array();
-
-        if (!empty($this->session->data['vouchers'])) {
-            foreach ($this->session->data['vouchers'] as $voucher) {
-                $this->data['vouchers'][] = array(
-                    'description' => $voucher['description'],
-                    'amount'      => $this->currency->format($voucher['amount'])
-                );
-            }
-        }
-
-        $this->data['totals'] = array();
-
-        $order_data['totals'] = array();
-        $total = 0;
-        $taxes = $this->cart->getTaxes();
-
-        $this->load->model('extension/extension');
-
-        $sort_order = array();
-
-        $results = $this->model_extension_extension->getExtensions('total');
-
-        foreach ($results as $key => $value) {
-            $sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-        }
-
-        array_multisort($sort_order, SORT_ASC, $results);
-
-        foreach ($results as $result) {
-            if ($this->config->get($result['code'] . '_status')) {
-                $this->load->model('total/' . $result['code']);
-
-                $this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
-            }
-        }
-
-        $sort_order = array();
-
-        foreach ($order_data['totals'] as $key => $value) {
-            $sort_order[$key] = $value['sort_order'];
-        }
-
-        array_multisort($sort_order, SORT_ASC, $order_data['totals']);
-
-        foreach ($order_data['totals'] as $total) {
-            $this->data['totals'][] = array(
-                'title' => $total['title'],
-                'text'  => $this->currency->format($total['value']),
-            );
-        }
+        $this->data['products'] = $this->model_journal2_checkout->getProducts();
+        $this->data['vouchers'] = $this->model_journal2_checkout->getVouchers();
+        $this->data['totals']   = $this->model_journal2_checkout->getTotals();
 
         if ($value = Journal2Utils::getProperty($this->session->data, 'payment_method.code')) {
-            $this->data['payment'] = $this->load->controller('payment/' . $value);
+            if (Front::$IS_OC2) {
+                $this->data['payment'] = $this->load->controller('payment/' . $value);
+            } else {
+                $this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);
+            }
         } else {
             $this->data['payment'] = '';
         }
 
         if ($return) {
-            return $this->render($this->config->get('config_template') . '/template/journal2/checkout/cart.tpl');
+            return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/cart.tpl');
         } else {
-            $this->response->setOutput($this->render($this->config->get('config_template') . '/template/journal2/checkout/cart.tpl'));
+            $this->response->setOutput($this->renderView($this->config->get('config_template') . '/template/journal2/checkout/cart.tpl'));
         }
+    }
+
+    public function cart_update() {
+        $key = Journal2Utils::getProperty($this->request->post, 'key');
+        $qty = Journal2Utils::getProperty($this->request->post, 'quantity');
+        $this->cart->update($key, $qty);
+
+        $json = array();
+
+        if (!$this->checkCart()) {
+            $json['redirect'] = $this->url->link('checkout/cart');
+        } else {
+            $json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($this->model_journal2_checkout->getTotal()));
+        }
+
+        echo json_encode($json);
+        exit;
+    }
+
+    public function cart_delete() {
+        $this->cart->remove(Journal2Utils::getProperty($this->request->post, 'key'));
+
+        $json = array();
+
+        if (!$this->checkCart()) {
+            $json['redirect'] = $this->url->link('checkout/cart');
+        } else {
+            $json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($this->model_journal2_checkout->getTotal()));
+        }
+
+        echo json_encode($json);
+        exit;
+    }
+
+    public function coupon() {
+        $json = array();
+
+        $this->load->model('checkout/coupon');
+
+        if (isset($this->request->post['coupon'])) {
+            $coupon = $this->request->post['coupon'];
+        } else {
+            $coupon = '';
+        }
+
+        $coupon_info = $this->model_checkout_coupon->getCoupon($coupon);
+
+        if (empty($this->request->post['coupon'])) {
+            $json['error'] = $this->language->get('error_coupon');
+        } elseif ($coupon_info) {
+            $this->session->data['coupon'] = $this->request->post['coupon'];
+
+            $this->session->data['success'] = $this->language->get('text_success');
+
+            $json['redirect'] = $this->url->link('checkout/cart');
+        } else {
+            $json['error'] = $this->language->get('error_coupon');
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function voucher() {
+        $json = array();
+
+        $this->load->model('checkout/voucher');
+
+        if (isset($this->request->post['voucher'])) {
+            $voucher = $this->request->post['voucher'];
+        } else {
+            $voucher = '';
+        }
+
+        $voucher_info = $this->model_checkout_voucher->getVoucher($voucher);
+
+        if (empty($this->request->post['voucher'])) {
+            $json['error'] = $this->language->get('error_voucher');
+        } elseif ($voucher_info) {
+            $this->session->data['voucher'] = $this->request->post['voucher'];
+
+            $this->session->data['success'] = $this->language->get('text_success');
+
+            $json['redirect'] = $this->url->link('checkout/cart');
+        } else {
+            $json['error'] = $this->language->get('error_voucher');
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    public function reward() {
+        $this->load->language('checkout/reward');
+
+        $json = array();
+
+        $points = $this->customer->getRewardPoints();
+
+        $points_total = 0;
+
+        foreach ($this->cart->getProducts() as $product) {
+            if ($product['points']) {
+                $points_total += $product['points'];
+            }
+        }
+
+        if (empty($this->request->post['reward'])) {
+            $json['error'] = $this->language->get('error_reward');
+        }
+
+        if ($this->request->post['reward'] > $points) {
+            $json['error'] = sprintf($this->language->get('error_points'), $this->request->post['reward']);
+        }
+
+        if ($this->request->post['reward'] > $points_total) {
+            $json['error'] = sprintf($this->language->get('error_maximum'), $points_total);
+        }
+
+        if (!$json) {
+            $this->session->data['reward'] = abs($this->request->post['reward']);
+
+            $this->session->data['success'] = $this->language->get('text_success');
+
+            if (isset($this->request->post['redirect'])) {
+                $json['redirect'] = $this->url->link($this->request->post['redirect']);
+            } else {
+                $json['redirect'] = $this->url->link('checkout/cart');
+            }
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
     }
 
     private function checkCart() {
         // Validate cart has products and has stock.
         if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-            $this->response->redirect($this->url->link('checkout/cart'));
-            exit;
+            return false;
         }
 
         // Validate minimum quantity requirements.
@@ -617,10 +697,11 @@ class ControllerJournal2Checkout extends Controller {
             }
 
             if ($product['minimum'] > $product_total) {
-                $this->response->redirect($this->url->link('checkout/cart'));
-                exit;
+                return false;
             }
         }
+
+        return true;
     }
 
     private function isShippingRequired() {
@@ -632,13 +713,7 @@ class ControllerJournal2Checkout extends Controller {
     }
 
     private function allowGuestCheckout() {
-        return $this->config->get('config_checkout_guest') && !$this->config->get('config_customer_price') && !$this->cart->hasDownload();
-    }
-
-    private function getFirstKey($array) {
-        $key = array_keys($array);
-        $key = reset($key);
-        return $key;
+        return $this->config->get(Front::$IS_OC2 ? 'config_checkout_guest' : 'config_guest_checkout') && !$this->config->get('config_customer_price') && !$this->cart->hasDownload();
     }
 
     private function renderAddressForm($type, $name = true) {
@@ -653,6 +728,7 @@ class ControllerJournal2Checkout extends Controller {
         $this->data['entry_firstname'] = $this->language->get('entry_firstname');
         $this->data['entry_lastname'] = $this->language->get('entry_lastname');
         $this->data['entry_company'] = $this->language->get('entry_company');
+        $this->data['entry_tax_id'] = $this->language->get('entry_tax_id');
         $this->data['entry_address_1'] = $this->language->get('entry_address_1');
         $this->data['entry_address_2'] = $this->language->get('entry_address_2');
         $this->data['entry_postcode'] = $this->language->get('entry_postcode');
@@ -660,15 +736,18 @@ class ControllerJournal2Checkout extends Controller {
         $this->data['entry_country'] = $this->language->get('entry_country');
         $this->data['entry_zone'] = $this->language->get('entry_zone');
 
-        $this->data['custom_fields'] = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
+        $this->data['custom_fields'] = $this->model_journal2_checkout->getCustomFields($type);
+        $this->data['order_data'] = $this->model_journal2_checkout->getOrder();
+
         $this->data['addresses'] = $this->model_account_address->getAddresses();
         $this->data['countries'] = $this->model_localisation_country->getCountries();
 
-        $this->data['address_id'] = Journal2Utils::getProperty($this->session->data, $type . '_address.address_id');
-        $this->data['country_id'] = Journal2Utils::getProperty($this->session->data, $type . '_address.country_id', $this->config->get('config_country_id'));
-        $this->data['zone_id'] = Journal2Utils::getProperty($this->session->data, $type . '_address.zone_id', $this->config->get('config_zone_id'));
+        $address = $this->model_journal2_checkout->getAddress($type);
+        foreach ($address as $key => $value) {
+            $this->data[$key] = $value;
+        }
 
-        return $this->render($this->config->get('config_template') . '/template/journal2/checkout/address_form.tpl');
+        return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/address_form.tpl');
     }
 
     private function renderRegisterForm() {
@@ -680,6 +759,7 @@ class ControllerJournal2Checkout extends Controller {
         $this->data['text_loading'] = $this->language->get('text_loading');
         $this->data['button_login'] = $this->language->get('button_login');
         $this->data['text_i_am_returning_customer'] = $this->language->get('text_i_am_returning_customer');
+        $this->data['text_returning_customer'] = $this->language->get('text_returning_customer');
 
         $this->data['text_your_details'] = $this->language->get('text_your_details');
         $this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
@@ -693,15 +773,61 @@ class ControllerJournal2Checkout extends Controller {
         $this->data['entry_shipping'] = $this->language->get('entry_shipping');
 
         $this->data['customer_groups'] = array();
-        $this->data['custom_fields'] = array();
+        $this->data['customer_group_id'] = $this->model_journal2_checkout->getCustomerGroupId();
+        if (is_array($this->config->get('config_customer_group_display'))) {
+            $this->load->model('account/customer_group');
 
-        $this->data['payment_address'] = $this->renderAddressForm('payment', false);
-        $this->data['shipping_address'] = $this->renderAddressForm('shipping');
+            $customer_groups = $this->model_account_customer_group->getCustomerGroups();
+
+            foreach ($customer_groups  as $customer_group) {
+                if (in_array($customer_group['customer_group_id'], $this->config->get('config_customer_group_display'))) {
+                    $this->data['customer_groups'][] = $customer_group;
+                }
+            }
+        }
+
+        $this->data['payment_address_form'] = $this->renderAddressForm('payment', false);
+        $this->data['shipping_address_form'] = $this->renderAddressForm('shipping');
+        $this->data['shipping_address'] = Journal2Utils::getProperty($this->session->data, 'journal_checkout_shipping_address', '1');
         $this->data['is_shipping_required'] = $this->isShippingRequired();
 
         $this->data['forgotten'] = $this->url->link('account/forgotten', '', 'SSL');
 
-        return $this->render($this->config->get('config_template') . '/template/journal2/checkout/register.tpl');
+        $this->data['custom_fields'] = $this->model_journal2_checkout->getCustomFields();
+        $this->data['order_data'] = $this->model_journal2_checkout->getOrder();
+
+        return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/register.tpl');
+    }
+
+    private function renderCouponVoucherReward() {
+        $this->data['text_loading'] = $this->language->get('text_loading');
+
+        $this->data['coupon_status'] = $this->config->get('coupon_status');
+        $this->data['entry_coupon'] = $this->language->get('entry_coupon');
+        $this->data['button_coupon'] = $this->language->get('button_coupon');
+        $this->data['coupon'] = Journal2Utils::getProperty($this->session->data, 'coupon');
+
+        $this->data['voucher_status'] = $this->config->get('voucher_status');
+        $this->data['entry_voucher'] = $this->language->get('entry_voucher');
+        $this->data['button_voucher'] = $this->language->get('button_voucher');
+        $this->data['voucher'] = Journal2Utils::getProperty($this->session->data, 'voucher');
+
+        $points = $this->customer->getRewardPoints();
+
+        $points_total = 0;
+
+        foreach ($this->cart->getProducts() as $product) {
+            if ($product['points']) {
+                $points_total += $product['points'];
+            }
+        }
+
+        $this->data['reward_status'] = $points && $points_total && $this->config->get('reward_status');
+        $this->data['entry_reward'] = $this->language->get('entry_reward');
+        $this->data['button_reward'] = $this->language->get('button_reward');
+        $this->data['reward'] = Journal2Utils::getProperty($this->session->data, 'reward');
+
+        return $this->renderView($this->config->get('config_template') . '/template/journal2/checkout/coupon_voucher_reward.tpl');
     }
 
     private function getAddressData($array, $key = '', $prefix = '') {
@@ -712,12 +838,14 @@ class ControllerJournal2Checkout extends Controller {
             'address_format',
             'city',
             'company',
+            'company_id',
             'country',
             'country_id',
             'firstname',
             'lastname',
             'method',
             'postcode',
+            'tax_id',
             'zone',
             'zone_id'
         );
@@ -740,6 +868,10 @@ class ControllerJournal2Checkout extends Controller {
             if ($zone_info) {
                 $result[$prefix . 'zone'] = $zone_info['name'];
             }
+        }
+
+        if (Front::$IS_OC2) {
+            $result[$prefix . 'custom_field'] = Journal2Utils::getProperty($array, $key . 'custom_field', array());
         }
 
         return $result;
@@ -771,11 +903,13 @@ class ControllerJournal2Checkout extends Controller {
         }
 
         // Custom field validation
-        $custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
+        if (Front::$IS_OC2) {
+            $custom_fields = $this->model_journal2_checkout->getCustomFields();
 
-        foreach ($custom_fields as $custom_field) {
-            if (($custom_field['location'] == 'address') && $custom_field['required'] && empty($data['custom_field'][$custom_field['custom_field_id']])) {
-                $errors['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
+            foreach ($custom_fields as $custom_field) {
+                if (($custom_field['location'] == 'account') && $custom_field['required'] && empty($data['custom_field'][$custom_field['custom_field_id']])) {
+                    $errors['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
+                }
             }
         }
 
@@ -809,15 +943,6 @@ class ControllerJournal2Checkout extends Controller {
             if ((utf8_strlen(trim($data[$key . 'lastname'])) < 1) || (utf8_strlen(trim($data[$key . 'lastname'])) > 32)) {
                 $errors[$key . 'lastname'] = $this->language->get('error_lastname');
             }
-
-            // Custom field validation
-            $custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
-
-            foreach ($custom_fields as $custom_field) {
-                if (($custom_field['location'] == 'address') && $custom_field['required'] && empty($data[$key . 'custom_field'][$custom_field['custom_field_id']])) {
-                    $errors[$key . 'custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
-                }
-            }
         }
 
         if ((utf8_strlen(trim($data[$key . 'address_1'])) < 3) || (utf8_strlen(trim($data[$key . 'address_1'])) > 128)) {
@@ -842,49 +967,71 @@ class ControllerJournal2Checkout extends Controller {
             $errors[$key . 'zone'] = $this->language->get('error_zone');
         }
 
+        // Custom field validation
+        if (Front::$IS_OC2) {
+            $custom_fields = $this->model_journal2_checkout->getCustomFields();
+            foreach ($custom_fields as $custom_field) {
+                if (($custom_field['location'] == 'address') && $custom_field['required'] && empty($data[$key . 'custom_field'][$custom_field['custom_field_id']])) {
+                    $errors[$key . 'custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
+                }
+            }
+        }
+
         return $errors;
     }
 
     private function registerAccount() {
-        $data = array(
+        $redirect = '';
+
+        $data = $this->getAddressData($this->request->post, 'payment_');
+
+        $data = array_merge($data, array(
             'firstname'     => Journal2Utils::getProperty($this->request->post, 'firstname'),
             'lastname'      => Journal2Utils::getProperty($this->request->post, 'lastname'),
-            'customer_group_id'=> Journal2Utils::getProperty($this->request->post, 'customer_group_id'),
+            'customer_group_id'=> Journal2Utils::getProperty($this->request->post, 'customer_group_id', $this->config->get('config_customer_group_id')),
+            'custom_field'  => array(
+                'account'   => Journal2Utils::getProperty($this->request->post, 'custom_field'),
+                'address'   => Journal2Utils::getProperty($this->request->post, 'payment_custom_field'),
+            ),
             'email'         => Journal2Utils::getProperty($this->request->post, 'email'),
             'telephone'     => Journal2Utils::getProperty($this->request->post, 'telephone'),
             'fax'           => Journal2Utils::getProperty($this->request->post, 'fax'),
             'password'      => Journal2Utils::getProperty($this->request->post, 'password'),
-            'confirm'       => Journal2Utils::getProperty($this->request->post, 'confirm'),
-
-            'company'       => Journal2Utils::getProperty($this->request->post, 'company'),
-            'address_1'     => Journal2Utils::getProperty($this->request->post, 'address_1'),
-            'address_2'     => Journal2Utils::getProperty($this->request->post, 'address_2'),
-            'city'          => Journal2Utils::getProperty($this->request->post, 'city'),
-            'postcode'      => Journal2Utils::getProperty($this->request->post, 'postcode'),
-            'country_id'    => Journal2Utils::getProperty($this->request->post, 'country_id'),
-            'country'       => Journal2Utils::getProperty($this->request->post, 'country'),
-            'zone_id'       => Journal2Utils::getProperty($this->request->post, 'zone_id'),
-            'zone'          => Journal2Utils::getProperty($this->request->post, 'zone'),
-        );
+            'newsletter'    => Journal2Utils::getProperty($this->request->post, 'newsletter')
+        ));
 
         $customer_id = $this->model_account_customer->addCustomer($data);
 
         // Clear any previous login attempts for unregistered accounts.
-        $this->model_account_customer->deleteLoginAttempts($data['email']);
+        if (Front::$IS_OC2) {
+            $this->model_account_customer->deleteLoginAttempts($data['email']);
+        }
 
-        $customer_group_info = $this->model_account_customer_group->getCustomerGroup($data['customer_group_id']);
+        $this->session->data['account'] = 'register';
+
+        $customer_group_info = $this->model_account_customer_group->getCustomerGroup(Journal2Utils::getProperty($this->request->post, 'customer_group_id', $this->config->get('config_customer_group_id')));
 
         if ($customer_group_info && !$customer_group_info['approval']) {
             $this->customer->login($data['email'], $data['password']);
+
+            if (Journal2Utils::getProperty($this->request->post, 'shipping_address') != '1') {
+                $this->model_account_address->addAddress($this->getAddressData($this->request->post, 'shipping_'));
+            }
+
+            // Add to activity log
+            $activity_data = array(
+                'customer_id' => $customer_id,
+                'name' => $data['firstname'] . ' ' . $data['lastname']
+            );
+
+            if (Front::$IS_OC2) {
+                $this->model_account_activity->addActivity('register', $activity_data);
+            }
+        } else {
+            $redirect = $this->url->link('account/success');
         }
 
-        // Add to activity log
-        $activity_data = array(
-            'customer_id' => $customer_id,
-            'name'        => $data['firstname'] . ' ' . $data['lastname']
-        );
-
-        $this->model_account_activity->addActivity('register', $activity_data);
+        return $redirect;
     }
 
 }

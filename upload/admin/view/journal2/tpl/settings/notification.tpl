@@ -2,7 +2,7 @@
 <div class="module-header">
     <div class='module-name'>Settings<span>Notification</span></div>
 
-    <skin-manager data-url="settings/general"></skin-manager>
+    <skin-manager data-url="settings/notification"></skin-manager>
 
     <div class="module-buttons">
         <?php if (defined('J2ENV')): ?>
@@ -81,8 +81,17 @@
                     <a href="#" target="_blank" class="journal-tip"> </a>
                 </li>
 
+                <li>
+                    <span class="module-create-title">Close Buton Offset <small>Top - Right</small></span>
+                    <span class="module-create-option">
+                        <j-opt-text data-ng-model="settings.notification_offset_top" class="journal-sort"></j-opt-text> -
+                        <j-opt-text data-ng-model="settings.notification_offset_right" class="journal-sort"></j-opt-text>
+                    </span>
+                    <a href="#" target="_blank" class="journal-tip"></a>
+                </li>
+
                 <li  data-ng-show="settings.notification_status == 'block'">
-                    <span class="module-create-title">Hide After</span>
+                    <span class="module-create-title">Hide Notification After</span>
                     <span class="module-create-option">
                         <j-opt-text data-ng-model="settings.notification_hide" class="journal-number-field"></j-opt-text>
                     </span>

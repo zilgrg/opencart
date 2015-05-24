@@ -34,6 +34,7 @@
                     <ul data-icon='&#xe61f;'>
                         <li><a href="<?php echo $base_href;?>#/settings/general/{{getActiveSkin()}}">General</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/pages/{{getActiveSkin()}}">Pages</a></li>
+                        <li><a href="<?php echo $base_href;?>#/settings/journalcheckout/{{getActiveSkin()}}">Quick Checkout</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/productlabels/{{getActiveSkin()}}">Product Labels</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/countdown/{{getActiveSkin()}}">Countdown</a></li>
                         <li><a href="<?php echo $base_href;?>#/settings/notification/{{getActiveSkin()}}">Notification</a></li>

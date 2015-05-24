@@ -1687,6 +1687,10 @@ max-height:100px;
   padding-left:20px;
   padding-right:20px;
 }
+.checkout-page #content {
+  padding-left: 20px;
+  padding-right: 20px;
+}
 }
 
 
@@ -1717,6 +1721,31 @@ max-height:100px;
 .zm-viewer{
   display:none;
   border-left:1px solid white;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('one_page_coupon_status', 'on') === 'off' && $this->journal2->settings->get('one_page_voucher_status', 'on') === 'off'): ?>
+.journal-checkout .coupon-voucher{
+  display:none;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('one_page_coupon_status', 'on') === 'off'): ?>
+.journal-checkout .coupon-voucher .checkout-coupon{
+  display:none;
+}
+.journal-checkout .coupon-voucher .checkout-voucher{
+  width:100%;
+}
+<?php endif; ?>
+
+<?php if($this->journal2->settings->get('one_page_voucher_status', 'on') === 'off'): ?>
+.journal-checkout .coupon-voucher .checkout-coupon{
+ width:100%;
+ padding-right:0;
+}
+.journal-checkout .coupon-voucher .checkout-voucher{
+  display:none;
 }
 <?php endif; ?>
 

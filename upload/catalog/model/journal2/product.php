@@ -269,7 +269,7 @@ class ModelJournal2Product extends Model {
 
     public function getPeopleAlsoBought($product_id, $limit = 5) {
         $sql = '
-            SELECT distinct product_id FROM ' . DB_PREFIX . 'order_product WHERE order_id IN (
+            SELECT distinct product_id FROM ' . DB_PREFIX . 'order_product WHERE product_id <> ' . (int)$product_id . ' AND order_id IN (
                 SELECT order_id FROM ' . DB_PREFIX . 'order_product WHERE product_id = ' . (int)$product_id . '
             ) LIMIT ' . (int) $limit . '
         ';

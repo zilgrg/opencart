@@ -170,7 +170,7 @@ class Journal2Export {
                     'module_id' => $id,
                     'layout_id' => $row['layout_id'],
                     'position'  => $row['position'],
-                    'status'    => $row['layout_module_id'],
+                    'status'    => isset($modules_status[$row['layout_module_id']]) ? $modules_status[$row['layout_module_id']] : 0,
                     'sort_order'=> $row['sort_order'],
                 );
             }

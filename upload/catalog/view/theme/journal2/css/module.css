@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -655,6 +655,9 @@ CMS BLOCKS
   display: table;
   width: 100%; }
 
+.firefox .block-content {
+  display: block; }
+
 p img {
   max-width: 100% !important;
   height: auto !important; }
@@ -1225,7 +1228,9 @@ NEWSLETTER
       border-bottom: none !important;
       float: left;
       width: 25%;
-      padding: 0; }
+      padding: 0;
+      padding-left: 0 !important;
+      padding-top: 0 !important; }
     .journal-sf .sf-image .box-content ul label {
       width: 100%;
       display: block; }
@@ -1263,6 +1268,9 @@ NEWSLETTER
   opacity: 1;
   transition: all 0.2s; }
 
+.quickview .journal-popup-header .heading-title {
+  text-align: center; }
+
 .journal-popup {
   position: relative;
   background: #FFF;
@@ -1280,14 +1288,12 @@ NEWSLETTER
   .journal-popup * {
     box-sizing: border-box; }
   .journal-popup div.journal-popup-header-content {
-    text-align: center;
+    text-align: center !important;
     border: 0;
     border-radius: 0;
     white-space: normal;
-    line-height: 1.4;
     padding: 9px 0;
-    line-height: 100%;
-    white-space: normal; }
+    line-height: 100%; }
   .journal-popup .button-icon-right i {
     float: right;
     margin-right: 0 !important;

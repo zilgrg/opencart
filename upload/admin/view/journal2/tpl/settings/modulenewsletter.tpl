@@ -2,7 +2,7 @@
 <div class="module-header">
     <div class='module-name'>Modules<span>Newsletter</span></div>
 
-    <skin-manager data-url="settings/general"></skin-manager>
+    <skin-manager data-url="settings/modulenewsletter"></skin-manager>
 
     <div class="module-buttons">
         <?php if (defined('J2ENV')): ?>

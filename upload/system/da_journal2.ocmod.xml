@@ -1042,21 +1042,20 @@
             <add position="before"><![CDATA[
             $this->load->model('journal2/blog');
 
+			foreach ($this->model_journal2_blog->getPosts() as $post) {
+                $output .= '<url>';
+                $output .= '<loc>' . $this->url->link('journal2/blog/post', 'journal_blog_post_id=' . $post['post_id']) . '</loc>';
+                $output .= '<changefreq>weekly</changefreq>';
+                $output .= '<priority>1</priority>';
+                $output .= '</url>';
+            }
+
 			foreach ($this->model_journal2_blog->getCategories() as $category) {
 				$output .= '<url>';
 				$output .= '<loc>' . $this->url->link('journal2/blog', 'journal_blog_category_id=' . $category['category_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>1</priority>';
 				$output .= '</url>';
-
-				foreach ($this->model_journal2_blog->getPosts(array('category_id' => $category['category_id'])) as $post) {
-					$output .= '<url>';
-					$output .= '<loc>' . $this->url->link('journal2/blog/post', 'journal_blog_category_id=' . $category['category_id'] . '&journal_blog_post_id=' . $post['post_id']) . '</loc>';
-					$output .= '<changefreq>weekly</changefreq>';
-					$output .= '<priority>1</priority>';
-					$output .= '</url>';
-				}
-
 			}
             ]]></add>
         </operation>
@@ -1138,10 +1137,7 @@
                     }
                 } elseif (isset($data['route']) && $data['route'] == 'journal2/blog') {
                     if (!isset($data['journal_blog_post_id']) && !isset($data['journal_blog_category_id'])) {
-                        if ($journal_blog_keyword = $this->model_journal2_blog->getBlogKeyword()) {
-                            $url .= '/' . $journal_blog_keyword;
-                            unset($data[$key]);
-                        }
+                        $is_journal2_blog = true;
                     }
             ]]></add>
         </operation>
@@ -1314,6 +1310,18 @@
             </body>
             </html>
             <?php endif; ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- journal checkout -->
+    <file path="catalog/controller/checkout/checkout.php">
+        <operation>
+            <search><![CDATA[if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/checkout.tpl')) {]]></search>
+            <add position="before"><![CDATA[
+                if (strpos($this->config->get('config_template'), 'journal2') === 0 && $this->journal2->settings->get('journal_checkout')) {
+                    return new Action('journal2/checkout');
+                }
             ]]></add>
         </operation>
     </file>

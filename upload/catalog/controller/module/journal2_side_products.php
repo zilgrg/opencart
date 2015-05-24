@@ -51,7 +51,7 @@ class ControllerModuleJournal2SideProducts extends Controller {
 
             $this->data['image_width'] = $this->journal2->settings->get('side_product_image_width', 50);
             $this->data['image_height'] = $this->journal2->settings->get('side_product_image_height', 50);
-            $this->data['image_resize_type'] = 'crop';
+            $this->data['image_resize_type'] = $this->journal2->settings->get('side_product_image_type', 'crop');
             $this->data['text_tax'] = $this->language->get('text_tax');
             $this->data['button_cart'] = $this->language->get('button_cart');
             $this->data['button_wishlist'] = $this->language->get('button_wishlist');

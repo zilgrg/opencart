@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -61,6 +61,9 @@
     font-size: 22px;
     position: relative; }
 
+.chrome .ui-pnotify-closer {
+  top: 10px; }
+
 .ui-pnotify-title {
   display: block;
   background-color: #5F6874;
@@ -75,6 +78,11 @@
     float: left;
     margin-right: 10px;
     max-width: 60px; }
+
+.tablet .ui-pnotify-closer, .mobile .ui-pnotify-closer {
+  display: block;
+  visibility: visible;
+  opacity: 1; }
 
 /******************************
 PHOTO GALLERY

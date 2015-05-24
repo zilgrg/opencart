@@ -1,6 +1,6 @@
 /*
   Journal - Advanced Opencart Theme Framework
-  Version 2.4.5
+  Version 2.5.1
   Copyright (c) 2014 Digital Atelier
   http://journal.digital-atelier.com/
 */
@@ -16,6 +16,7 @@ REFINE CATEGORIES + DESCRIPTION
   .category-info p {
     margin-bottom: 15px; }
 
+.category-info img,
 .category-info .image img {
   margin-right: 15px;
   margin-bottom: 10px;

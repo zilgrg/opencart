@@ -6326,7 +6326,38 @@
                 }
             }
         },
-        "checkout_heading_divider_type": "solid"
+        "checkout_heading_divider_type": "solid",
+        "info_page_title_align": "left",
+        "info_page_title_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "maintenance_bg": {
+            "value": {
+                "bgimage_attach": "scroll"
+            }
+        },
+        "shopping_option_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": null,
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "font_subset": [
+
+                ],
+                "color": {
+                    "value": {
+                        "color": ""
+                    }
+                }
+            }
+        }
     },
     "sidecolumn": {
         "category_plus_bg_hover": {
@@ -7200,7 +7231,12 @@
             }
         },
         "notification_status": "block",
-        "notification_position": "top-right"
+        "notification_position": "top-right",
+        "notification_offset_top": {
+            "value": {
+                "text": ""
+            }
+        }
     },
     "productlist": {
         "product_list_item_border": {
@@ -10539,5 +10575,275 @@
                 }
             }
         }
+    },
+    "journalcheckout": {
+        "one_page_table_header_bg": {
+            "value": {
+                "color": ""
+            }
+        },
+        "one_page_table_product_name_hover": {
+            "value": {
+                "color": ""
+            }
+        },
+        "one_page_table_border": {
+            "value": {
+                "color": "rgb(228, 228, 228)"
+            }
+        },
+        "one_page_confirm_button_width": {
+            "value": ""
+        },
+        "one_page_confirm_button_height": {
+            "value": ""
+        },
+        "one_page_confirm_button_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none"
+            }
+        },
+        "one_page_confirm_button_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_lang_confirm_order": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_confirm_button_active_shadow": "inset 0 1px 10px rgba(0, 0, 0, 0.8)",
+        "one_page_confirm_button_align": "left",
+        "one_page_status": "default",
+        "one_page_title_align": "left",
+        "one_page_title": {
+            "value": {
+                "1": "Quick Checkout"
+            }
+        },
+        "one_page_title_line_height": {
+            "value": ""
+        },
+        "one_page_title_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_title_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none"
+            }
+        },
+        "one_page_title_padding_left": {
+            "value": ""
+        },
+        "one_page_title_padding_right": {
+            "value": ""
+        },
+        "one_page_dividers_style": "solid",
+        "one_page_section_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none"
+            }
+        },
+        "one_page_section_padding": {
+            "value": ""
+        },
+        "one_page_text_input_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_lang_coupon_button": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_coupon_placeholder": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_voucher_button": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_table_height": {
+            "value": {
+                "text": "352"
+            }
+        },
+        "one_page_lang_voucher_placeholder": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_table_style": "solid",
+        "one_page_table_header_font": {
+            "value": {
+                "font_type": "system",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "bold",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "color": {
+                    "value": {
+                        "color": ""
+                    }
+                }
+            }
+        },
+        "one_page_text_product_image_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_table_product_name_font": {
+            "value": {
+                "font_type": "none",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "normal",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none"
+            }
+        },
+        "one_page_table_footer_font": {
+            "value": {
+                "font_type": "system",
+                "font_size": "13px",
+                "font_family": "Helvetica, Arial, sans-serif",
+                "font_name": "",
+                "font_weight": "bold",
+                "font_style": "normal",
+                "letter_spacing": "",
+                "text_transform": "none",
+                "color": {
+                    "value": {
+                        "color": ""
+                    }
+                }
+            }
+        },
+        "one_page_lang_your_address": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_register_selector": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_pers_details": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_your_pass": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_returning": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_ship_address": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_coupon_voucher": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_payment_method": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_ship_method": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_shop_cart": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_lang_comments": {
+            "value": {
+                "1": ""
+            }
+        },
+        "one_page_section_title_align": "left",
+        "one_page_section_border_settings": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_section_title_border": {
+            "value": {
+                "border_rounded": "px"
+            }
+        },
+        "one_page_lang_bill_address": {
+            "value": [
+
+            ]
+        },
+        "one_page_section_title_bg": {
+            "value": {
+                "color": ""
+            }
+        },
+        "one_page_dividers_color": {
+            "value": {
+                "color": "rgb(228, 228, 228)"
+            }
+        },
+        "one_page_lang_payment_details": {
+            "value": [
+
+            ]
+        },
+        "one_page_coupon_status": "on",
+        "one_page_voucher_status": "on",
+        "one_page_show_address_2": "block",
+        "one_page_show_company": "block",
+        "one_page_show_fax": "block",
+        "one_page_default_auth": "register"
     }
 }

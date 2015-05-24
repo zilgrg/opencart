@@ -74,6 +74,10 @@
     }
   }
 
+  .chrome .ui-pnotify-closer{
+    top:10px;
+  }
+
   .ui-pnotify-title {
     display: block;
     background-color: $gray;
@@ -93,6 +97,13 @@
     display: block;
   }
 
+.tablet, .mobile {
+  .ui-pnotify-closer {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+}
 
   /******************************
   PHOTO GALLERY
